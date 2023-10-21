@@ -1,0 +1,84 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IAirPollutionViewModel? ViewModel 
+@implements IDisposable
+
+<MudPaper Style="height:130px;">
+    <MudContainer Class="d-flex justify-content-between" Style="width:400px">
+        <MudText Typo="Typo.subtitle1" Class="mr-6">@Localizer["Outside Pollution"]</MudText>
+        <MudIconButton Size="Size.Small"
+                        Class="mt-0 mr-1"
+                       OnClick="@((e) => ShowAirPollutionDetails())"
+                       Icon="@Icons.Material.Outlined.Info"
+                       Color="@Color.Primary" />
+    </MudContainer>
+    
+    <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">                            
+    @if (this.Model != null)
+    {
+        <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">AQI</MudText>
+        <MudText Typo="Typo.h5" Class="ml-3 mr-10">@this.Model?.aqi</MudText>
+        if (this.Model?.aqi == 1) 
+        {
+            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Success">@Localizer["Good"]</MudText>
+        }
+        else if (this.Model?.aqi == 2)
+        {
+            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Fair"]</MudText>
+        }
+        else if (this.Model?.aqi == 3)
+        {
+            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Moderate"]</MudText>
+        }
+        else if (this.Model?.aqi == 4)
+        {
+            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Poor"]</MudText>
+        }
+        else if (this.Model?.aqi == 5)
+        {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
+        }
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+    }
+    </MudContainer>
+</MudPaper>
+
+@code 
+{
+    public AirPollutionModel? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.Model = await this.ViewModel.GetAirPollutionModel();
+            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.Refresh -= RefreshView;
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void RefreshView(object? sender, EventArgs e)
+    {
+        this.StateHasChanged();
+    }
+
+    public void ShowAirPollutionDetails()
+    {
+        if ((this.ViewModel != null) && (this.Model != null))
+        {
+            this.ViewModel.OpenDetails(this.Model);
+        }
+    }
+}

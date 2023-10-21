@@ -1,0 +1,83 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IAirPollutionViewModel ViewModel
+@implements IDisposable
+
+<div class="d-flex align-center gap-4">
+    <MudText Typo="Typo.h6" Color="Color.Primary">@Localizer["Outside Pollution"]</MudText>
+</div>
+
+<div class="mx-auto mt-2">
+    @if (this.Model != null)
+    {
+        <MudTable Items="@this.Model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
+            <ToolBarContent>
+                <div class="d-flex align-center">
+                    <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
+                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
+                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
+                </div>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>@Localizer["Pollutant"]</MudTh>
+                <MudTh>@Localizer["Value"]</MudTh>
+                <MudTh>@Localizer["Status"]</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
+                <MudTd DataLabel="@Localizer["Description"]">@context.Value</MudTd>
+                @if (context.Levels != null)
+                {
+                    <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetLevelColor()" Radius="15"></Circle></MudTd>
+                }
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public string Latitude { get; set; }
+
+    [Parameter]
+    public string Longitude { get; set; }
+
+    public AirPollutionModel Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Latitude != null) && (this.Longitude != null))
+        {
+            this.Model = await this.ViewModel.GetAirPollutionModel(this.Longitude, this.Latitude);
+            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.Refresh -= RefreshView;
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void RefreshView(object sender, EventArgs e)
+    {
+        this.StateHasChanged();
+    }
+}
+

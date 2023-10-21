@@ -1,0 +1,99 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject ISensorCO2ViewModel? ViewModel
+@implements IDisposable
+
+
+<MudPaper Style="height:130px;">
+    <MudText Class="ml-6" Typo="Typo.subtitle1">@Localizer["Inside Pollution"]</MudText>
+    <MudContainer Class="d-flex align-center gap-2" Style="height:80px;">
+        @if (this.Model != null)
+        {
+            <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">CO2</MudText>
+            if (this.Model.IsRunning == RunningStatus.Healthy)
+            {
+                <MudText Typo="Typo.h5" Class="mx-3">@this.Model?.CO2</MudText>
+                if (this.Model?.CO2 < (this.Model?.ThresholdCO2[0] - 200)) //600
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Success">@Localizer["AirQualityExcellent"]</MudText>
+                }
+                else if ((this.Model?.CO2 >= (this.Model?.ThresholdCO2[0] - 200))
+                        && (this.Model?.CO2 < (this.Model?.ThresholdCO2[0]))) //600 - 800
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Success">@Localizer["AirQualityGood"]</MudText>
+                }
+                else if ((this.Model?.CO2 >= (this.Model?.ThresholdCO2[0]))
+                        && (this.Model?.CO2 < (this.Model?.ThresholdCO2[0] + 100))) //800 - 900
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Warning">@Localizer["AirQualityAcceptable"]</MudText>
+                }
+                else if ((this.Model?.CO2 >= (this.Model?.ThresholdCO2[0] + 100))
+                        && (this.Model?.CO2 < (this.Model?.ThresholdCO2[1] - 100))) //900 - 1000
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Warning">@Localizer["AirQualityPoor"]</MudText>
+                }
+                else if ((this.Model?.CO2 >= (this.Model?.ThresholdCO2[1] - 100))
+                        && (this.Model?.CO2 < (this.Model?.ThresholdCO2[1]))) //1000 - 1100
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4"  Color="Color.Error">@Localizer["AirQualityBad"]</MudText>
+                }
+                else if ((this.Model?.CO2 >= (this.Model?.ThresholdCO2[1]))
+                        && (this.Model?.CO2 < (this.Model?.ThresholdCO2[1] + 400))) //1100 - 1400
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Error">@Localizer["AirQualityVeryBad"]</MudText>
+                }
+                else
+                {
+                    <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Error">@Localizer["AirQualityHazard"]</MudText>
+                }
+            }
+            else
+            {
+                <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
+            }
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        }   
+    </MudContainer>
+</MudPaper>
+
+@code 
+{
+    [Parameter]
+    public string? SensorName { get; set; }
+
+    public SensorCO2Model? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((string.IsNullOrEmpty(this.SensorName) == false) && (this.ViewModel != null))
+        {
+            this.Model = await this.ViewModel.GetSensorCO2Model(this.SensorName);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.Refresh -= RefreshView;
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void RefreshView(object? sender, EventArgs e)
+    {
+        this.StateHasChanged();
+    }
+}

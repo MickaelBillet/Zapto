@@ -1,0 +1,47 @@
+﻿@inject IDashboardViewModel ViewModel
+@implements IDisposable
+
+<div class="d-flex align-center gap-4 mb-2">
+    <MudText Typo="Typo.h5" Color="Color.Primary">@this.Location?.Name</MudText>
+    <MudIconButton Size="Size.Small"
+                    OnClick="@(async (e) => await TestNotificationButton())"
+                    Icon="@Icons.Material.Filled.NotificationsActive"
+                    Color="@Color.Info"/>
+</div>
+<Weather></Weather>
+<Pollution></Pollution>
+<RoomList Location="@this.Location"></RoomList>
+
+@code 
+{
+    public LocationModel? Location { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+#if DEBUG
+  //  await Task.Delay(5000);
+#endif
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.Location = await this.ViewModel.GetLocationModel();
+        }
+    }
+
+    public async Task TestNotificationButton()
+    {
+        if ((this.ViewModel != null) && (this.Location != null))
+        {
+            await this.ViewModel.TestNotification(this.Location?.Id);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+}

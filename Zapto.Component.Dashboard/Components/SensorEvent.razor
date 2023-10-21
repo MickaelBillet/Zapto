@@ -1,0 +1,56 @@
+﻿@inject ISensorEventViewModel? ViewModel
+@implements IDisposable
+
+<MudIconButton Size="Size.Medium"
+               OnClick="@(async (e) => await DisableLeakButton())"
+               Icon="@Icons.Material.Filled.WaterDrop"
+               Color="@Color.Info"
+               Disabled="@((this.Model != null) ? (this.Model.HasLeak == 0) : true)" />
+
+@code 
+{
+    [Parameter]
+    public SensorEventModel? Model { get; set; }
+
+    private bool HasLaunch = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.Model != null) && (this.ViewModel != null) && (this.HasLaunch == false))
+        {
+            this.HasLaunch = await this.ViewModel.ReceiveStatusAsync(this.Model);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.Refresh -= RefreshView;
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void RefreshView(object? sender, EventArgs e)
+    {
+        this.StateHasChanged();
+    }
+
+    public async Task DisableLeakButton()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.CancelLeakEvent(this.Model);
+        }
+    }
+}

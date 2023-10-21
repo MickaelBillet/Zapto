@@ -1,0 +1,73 @@
+﻿@inject IHealthCheckViewModel ViewModel
+@inject IStringLocalizer<Resource> Localizer
+
+<div class="d-flex align-center gap-4">
+    <MudText Typo="Typo.h5" Color="Color.Primary">@Localizer["Healthcheck"]</MudText>
+    <MudIconButton Icon="@Icons.Material.Outlined.Sync" Color="Color.Primary" Class="ml-4" Size="Size.Medium" OnClick="@(async () => await this.Synchronize())"></MudIconButton>
+</div>
+
+<div class="mx-auto mt-2">
+    <MudExpansionPanels>
+        @if (this.Model != null)
+        {
+            @foreach (HealthCheckModel model in this.Model)
+            {
+                <MudExpansionPanel>
+                    <TitleContent>
+                        <div class="d-flex">
+                            <Circle Color="@model.GetStatusColor()" Radius="15"></Circle>
+                            <MudText Style="font-weight:500" Align="Align.Left" Class="ml-8 mt-1">@model?.Name</MudText>                            
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                        @if (model.Items != null)
+                        {
+                            <MudTable Items="@model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>@Localizer["Service"]</MudTh>
+                                    <MudTh>@Localizer["Description"]</MudTh>
+                                    <MudTh>@Localizer["Status"]</MudTh>
+                                    <MudTh>@Localizer["Category"]</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
+                                    <MudTd DataLabel="@Localizer["Description"]">@context.Description</MudTd>
+                                    <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetStatusColor()" Radius="15"></Circle></MudTd>
+                                    <MudTd DataLabel="@Localizer["Category"]">@context.Tags</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        }
+                    </ChildContent>
+                </MudExpansionPanel>
+            }
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        }
+    </MudExpansionPanels>
+</div>
+
+@code
+{
+    public List<HealthCheckModel>? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.Model = await this.ViewModel.GetModelList();
+        }
+    }
+
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+    }
+
+    public async Task Synchronize()
+    {
+        this.Model = await this.ViewModel.GetModelList();
+    }
+}

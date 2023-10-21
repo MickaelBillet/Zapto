@@ -1,0 +1,8 @@
+﻿1) Lancement "firebase-tools-instant-win.exe"
+2) Firebase init : 
+	- Projet : zaptoweb
+	- Hosting
+	- public directory : wwwroot
+3) dotnet publish -c Release -o release .\Zapto.Web.Dashboard\Zapto.Web.Dashboard.csproj
+4) Copie "Release\wwwroot" vers "Firebase\wwwroot"
+5) Firebase deploy

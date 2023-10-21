@@ -1,0 +1,43 @@
+﻿@inject IPlugListViewModel? ViewModel
+@implements IDisposable
+
+@if (this.Plugs != null)
+{
+    @foreach(var plug in this.Plugs)
+    {
+        <Plug Model="plug"></Plug>
+    }         
+}
+
+@code 
+{
+    [Parameter]
+    public RoomModel? Model { get; set; }
+
+    public List<PlugModel>? Plugs { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if ((this.ViewModel != null) && (this.Model != null) && (this.Plugs == null))
+        {
+            this.Plugs = this.ViewModel.GetPlugModels(this.Model);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+}

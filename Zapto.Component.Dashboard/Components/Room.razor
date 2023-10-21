@@ -1,0 +1,77 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IRoomViewModel? ViewModel
+@implements IDisposable
+
+<MudItem xs="12" sm="12" md="6" Style="min-width:440px; width:contain">
+    <MudPaper  Class="d-flex flex-row" >
+        <MudGrid Spacing="0" Justify="Justify.Center">
+            <MudItem xs=12 sm=5 md=5 Style="min-width:230px">
+                <MudGrid Spacing="0" Justify="Justify.Center" Style="min-width:220px">
+                    <MudItem xs=12 sm=12 md=12 Style="min-height:40px">
+                        <MudIconButton Size="Size.Small"
+                                        Class="mt-1 ml-1"
+                                        OnClick="@((e) => ShowChartButton())"
+                                        Icon="@Icons.Material.Outlined.AreaChart"
+                                        Color="@Color.Primary" />
+                        <MudContainer Class="d-flex align-center justify-start gap-2">                            
+                            <img height="30" class="ml-8 my-2" src="@this.Model?.FileNameImage"/>
+                            <SensorEventList Model="@this.Model"></SensorEventList>
+                        </MudContainer>
+                    </MudItem>
+                    <MudItem xs=12 sm=12 md=12>
+                        <RoomStatus Model="@this.Model"></RoomStatus>
+                    </MudItem>
+                    <MudItem xs=12 sm=12 md=12>
+                        <RoomData Model="@this.Model"></RoomData>   
+                    </MudItem>  
+                    <MudItem xs=12 sm=12 md=12 Class="ml-4 mr-2">
+                        <SensorDataList Model="@this.Model"></SensorDataList>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs=12 sm=7 md=7 Style="height:max-content;" Class="mt-6">
+                <PlugList Model="@this.Model"></PlugList>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudItem>
+
+@code 
+{
+    [Parameter]
+    public RoomModel? Model { get; set; }
+    public bool HasLaunch = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+           await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.Model != null) && (this.ViewModel != null) && (this.HasLaunch == false))
+        {
+            this.HasLaunch = await this.ViewModel.ReceiveStatusAsync(this.Model);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void ShowChartButton()
+    {
+        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.Model?.Id) == false) && (string.IsNullOrEmpty(this.Model?.Name) == false))
+        {
+            this.ViewModel.OpenChart(this.Model.Id, this.Model.Name);
+        }
+    }
+}

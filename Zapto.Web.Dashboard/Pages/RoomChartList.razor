@@ -1,0 +1,15 @@
+﻿@page "/roomchartlist/{RoomId}/{RoomName}"
+
+<AuthorizeView Policy="administrator">
+    <Authorized>
+        <RoomChartListView RoomId="@RoomId" RoomName="@RoomName"></RoomChartListView>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string RoomId { get; set; } = string.Empty;
+
+    [Parameter]
+    public string RoomName { get; set; } = string.Empty;
+}

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AirZapto.Applications.Services\AirZapto.Application.Services.csproj" />
+    <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

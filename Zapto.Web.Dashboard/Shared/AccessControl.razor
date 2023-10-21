@@ -1,0 +1,43 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IAccessControlViewModel? ViewModel
+@implements IDisposable
+
+
+<AuthorizeView>
+    <Authorized>
+        <a style="color:white">@context?.User?.Identity?.Name</a>
+        <div class="mx-3"></div>
+        <a style="color:white" href="#" @onclick="SignOut">@Localizer["Log Out"]</a>
+    </Authorized>
+    <NotAuthorized>
+        <a style="color:white" href="authentication/login">@Localizer["Log In"]</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    private void SignOut(MouseEventArgs args)
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.SignOut();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+}

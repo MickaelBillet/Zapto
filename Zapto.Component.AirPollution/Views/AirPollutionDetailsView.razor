@@ -1,0 +1,18 @@
+﻿@inject DataService DataService
+@implements IDisposable
+
+<AirPollutionDetails Model="@AirPollutionModel"></AirPollutionDetails>
+@code 
+{
+    public AirPollutionModel? AirPollutionModel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.AirPollutionModel = this.DataService.Data as AirPollutionModel;
+    }
+
+    public void Dispose()
+    {
+        this.DataService = null;
+    }
+}

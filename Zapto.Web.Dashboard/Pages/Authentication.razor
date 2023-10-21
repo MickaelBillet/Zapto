@@ -1,0 +1,44 @@
+﻿@page "/authentication/{action}"
+@inject IAuthenticationViewModel? ViewModel
+@implements IDisposable
+
+@*This component manages the users' authentication status and interacts with the authorization server on the Auth0 side.
+    While the login interaction doesn't require any specific code, you need to manage the logout transaction*@
+<RemoteAuthenticatorView Action="@Action">
+    <LogOut>
+        @{
+            //To close your session on the Auth0 side, you need to explicitly call the logout endpoint, as shown in the code above.
+            this.SignOut();
+        }
+    </LogOut>
+</RemoteAuthenticatorView>
+
+@code
+{
+    [Parameter] public string? Action { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void SignOut()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.SignOut();
+        }
+    }
+}

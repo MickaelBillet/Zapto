@@ -1,0 +1,21 @@
+﻿@page "/privacy"
+@inject IStringLocalizer<Resource> Localizer
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Privacy</MudText>
+
+<AuthorizeView Policy="administrator">
+    <Authorized>
+        <h2>
+            Hello @context.User?.Identity?.Name,
+        </h2>
+        <ul>
+            @if ((context != null) && (context?.User?.Claims != null))
+            {
+                @foreach (var claim in context.User.Claims)
+                {
+                    <li><b>@claim.Type</b>: @claim.Value</li>
+                }
+            }
+        </ul>
+    </Authorized>
+</AuthorizeView>

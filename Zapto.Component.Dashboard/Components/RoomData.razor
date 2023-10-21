@@ -1,0 +1,39 @@
+﻿@implements IDisposable
+@inject IRoomViewModel? ViewModel
+
+<MudContainer Class="d-flex justify-space-center mt-3 mb-2 mx-1">
+    <MudText Typo="Typo.h6" Align="Align.Start">@this.Model?.Temperature</MudText>
+    <img height="22" class="d-flex align-self-center" src="Images/icons8temperature40.png"/>
+    <MudText Typo="Typo.h6" Align="Align.Start" Class="ml-3">@this.Model?.Humidity</MudText>
+    <img height="25" class="d-flex align-self-center" src="Images/icons8wet40.png"/>
+</MudContainer>
+
+@code
+{
+    [Parameter]
+    public RoomModel? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.Refresh -= RefreshView;
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+
+    public void RefreshView(object? sender, EventArgs e)
+    {
+        this.StateHasChanged();
+    }
+}

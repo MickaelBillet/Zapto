@@ -1,0 +1,12 @@
+﻿<svg height="@(Radius*2)" width="@(Radius*2)">
+    <circle cx="@Radius" cy="@Radius" r="@(Radius*0.8)" stroke="@Color" stroke-width="@(Radius *0.05)" fill="@Color" />
+</svg>
+
+
+@code {
+    [Parameter]
+    public int Radius { get; set; }
+
+    [Parameter]
+    public string? Color { get; set; }
+}

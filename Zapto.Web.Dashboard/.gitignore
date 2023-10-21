@@ -1,0 +1,15 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/bin/Debug/net6.0
+/obj
+/.vs/Zapto/v16
+/.vs/Zapto.Web.Dashboard/v16
+/.vs/Zapto.Web.Dashboard/v17
+/.vs/Zapto.Web.Dashboard/DesignTimeBuild
+/bin/Release/net6.0
+/release
+/Firebase/release/wwwroot
+/Firebase/release/Firebase/release/wwwroot
+/Firebase/firebase-tools-instant-win.exe

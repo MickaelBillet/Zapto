@@ -1,0 +1,43 @@
+﻿@inject ISensorDataListViewModel? ViewModel
+@implements IDisposable
+
+@if (this.Sensors != null)
+{
+    @foreach (var obj in this.Sensors)
+    {
+        <SensorData Model="@obj"></SensorData>
+    }
+}
+
+@code
+{
+    [Parameter]
+    public RoomModel? Model { get; set; }
+
+    public IEnumerable<SensorDataModel>? Sensors { get; set; } = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if ((this.ViewModel != null) && (this.Model != null) && (this.Sensors == null))
+        {
+            this.Sensors = this.ViewModel.GetSensorDataModels(this.Model);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel?.Dispose();
+            this.ViewModel = null;
+        }
+    }
+}

@@ -1,0 +1,44 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+
+<div class="d-flex align-center gap-4">
+    <MudText Typo="Typo.h6" Color="Color.Primary">@Localizer["Outside Pollution"]</MudText>
+</div>
+
+<div class="mx-auto mt-2">
+    @if (this.Model != null)
+    {
+        <MudTable Items="@this.Model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
+            <ToolBarContent>
+                <div class="d-flex align-center">
+                    <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
+                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
+                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
+                </div>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>@Localizer["Pollutant"]</MudTh>
+                <MudTh>@Localizer["Value"]</MudTh>
+                <MudTh>@Localizer["Status"]</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
+                <MudTd DataLabel="@Localizer["Description"]">@context.Value</MudTd>
+                @if (context.Levels != null)
+                {
+                    <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetLevelColor()" Radius="15"></Circle></MudTd>
+                }
+            </RowTemplate>
+        </MudTable>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public AirPollutionModel? Model { get; set; }
+}
+

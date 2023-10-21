@@ -1,0 +1,44 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject IHomeViewModel ViewModel
+@inject IPositionService PositionService
+@inject IJSRuntime JsRuntime
+@implements IDisposable
+
+<div class="d-flex align-center gap-4 mb-2">
+    <MudText Typo="Typo.h5" Color="Color.Primary">@this.Location?.Name</MudText>
+</div>
+<WeatherHome Longitude="@this.Longitude" Latitude="@this.Latitude"></WeatherHome>
+<AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
+
+@code
+{
+    public LocationModel Location { get; set; }
+    public string Longitude { get; set; }
+    public string Latitude { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+#if DEBUG
+    //await Task.Delay(5000);
+#endif
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+            await this.PositionService.GetCurrentPosition(JsRuntime, GetPositionAsync);
+        }
+    }
+
+    private async Task GetPositionAsync(double longitude, double latitude)
+    {
+        this.Longitude = longitude.ToString();
+        this.Latitude = latitude.ToString();
+        this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
+        this.StateHasChanged();
+
+    }
+
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+    }
+}

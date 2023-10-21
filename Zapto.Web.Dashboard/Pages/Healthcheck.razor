@@ -1,0 +1,7 @@
+﻿@page "/healthcheck"
+
+<AuthorizeView Policy="administrator">
+    <Authorized>
+        <HealthcheckView></HealthcheckView>
+    </Authorized>
+</AuthorizeView>
