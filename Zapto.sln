@@ -5,8 +5,6 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapto.Web.Dashboard", "Zapto.Web.Dashboard\Zapto.Web.Dashboard.csproj", "{C492FE36-B6C6-4128-82E2-2393D2CFC539}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapto.Component.Healthcheck", "Zapto.Web.HealthCheck\Zapto.Component.Healthcheck.csproj", "{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapto.Component.Services", "Zapto.Component.Services\Zapto.Component.Services.csproj", "{DB2E9939-D808-4BAC-AAEF-9F9FC72395A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapto.Component.Home", "Zapto.Component.Home\Zapto.Component.Home.csproj", "{4BBFA163-3F23-4D17-A989-091C3A7E4CC4}"
@@ -41,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirZapto.Domain", "AirZapto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirZapto.Application.Services", "AirZapto.Applications.Services\AirZapto.Application.Services.csproj", "{A120A787-8E55-4F38-9434-A607FA5A986D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapto.Component.Healthcheck", "Zapto.Component.HealthCheck\Zapto.Component.Healthcheck.csproj", "{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,14 +57,6 @@ Global
 		{C492FE36-B6C6-4128-82E2-2393D2CFC539}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C492FE36-B6C6-4128-82E2-2393D2CFC539}.Release|x86.ActiveCfg = Release|Any CPU
 		{C492FE36-B6C6-4128-82E2-2393D2CFC539}.Release|x86.Build.0 = Release|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Debug|x86.Build.0 = Debug|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Release|x86.ActiveCfg = Release|Any CPU
-		{FC0009B2-DBA4-4AD0-B4F2-C8334BDD6DFD}.Release|x86.Build.0 = Release|Any CPU
 		{DB2E9939-D808-4BAC-AAEF-9F9FC72395A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB2E9939-D808-4BAC-AAEF-9F9FC72395A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB2E9939-D808-4BAC-AAEF-9F9FC72395A2}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -201,6 +193,14 @@ Global
 		{A120A787-8E55-4F38-9434-A607FA5A986D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A120A787-8E55-4F38-9434-A607FA5A986D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A120A787-8E55-4F38-9434-A607FA5A986D}.Release|x86.Build.0 = Release|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Debug|x86.Build.0 = Debug|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Release|x86.ActiveCfg = Release|Any CPU
+		{3BE7DE0C-EC93-4B9B-9BF1-2787F249E0B8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
