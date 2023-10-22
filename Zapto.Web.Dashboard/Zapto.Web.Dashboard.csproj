@@ -50,9 +50,9 @@
 	  <ProjectReference Include="..\Zapto.Component.Charts\Zapto.Component.Charts.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Common\Zapto.Component.Common.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Dashboard\Zapto.Component.Dashboard.csproj" />
+	  <ProjectReference Include="..\Zapto.Component.HealthCheck\Zapto.Component.Healthcheck.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Home\Zapto.Component.Home.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Services\Zapto.Component.Services.csproj" />
-	  <ProjectReference Include="..\Zapto.Web.HealthCheck\Zapto.Component.Healthcheck.csproj" />
 	</ItemGroup>
 	
 	
