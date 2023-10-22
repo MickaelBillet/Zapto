@@ -33,3 +33,5 @@
 /Zapto.Web.Dashboard/bin/Debug/net7.0
 /Zapto.Web.HealthCheck/bin
 /Zapto.Web.HealthCheck/obj
+/Zapto.Component.HealthCheck/bin
+/Zapto.Component.HealthCheck/obj
