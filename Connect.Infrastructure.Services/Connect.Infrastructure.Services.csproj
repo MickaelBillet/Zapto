@@ -35,12 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto.Framework\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
-    <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
+    <ProjectReference Include="..\Connect.Domain\Connect.Domain.csproj" />
   </ItemGroup>
 
 </Project>

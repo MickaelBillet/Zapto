@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto.Framework\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
+    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

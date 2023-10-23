@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto.Framework\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\Zapto.Component.Common\Zapto.Component.Common.csproj" />
   </ItemGroup>
 

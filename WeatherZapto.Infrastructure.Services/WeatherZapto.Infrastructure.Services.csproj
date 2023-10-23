@@ -6,13 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto.Framework\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
-    <ProjectReference Include="..\WeatherZapto.Application.Services\WeatherZapto.Application.Services.csproj" />
-    <ProjectReference Include="..\WeatherZapto.Domain\WeatherZapto.Domain.csproj" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Application.Services\WeatherZapto.Application.Services.csproj" />
   </ItemGroup>
 
 </Project>
