@@ -150,6 +150,9 @@
   <data name="Check the performances of the servers" xml:space="preserve">
     <value>Check the performances of the servers</value>
   </data>
+  <data name="CO" xml:space="preserve">
+    <value>Carbon monoxide</value>
+  </data>
   <data name="Cuisine - Séjour" xml:space="preserve">
     <value>Living Room</value>
   </data>
@@ -204,11 +207,29 @@
   <data name="Moderate" xml:space="preserve">
     <value>Moderate</value>
   </data>
+  <data name="NH3" xml:space="preserve">
+    <value>Ammonia</value>
+  </data>
+  <data name="NO" xml:space="preserve">
+    <value>Nitrogen monoxide</value>
+  </data>
+  <data name="NO2" xml:space="preserve">
+    <value>Nitrogen dioxide</value>
+  </data>
   <data name="Not found" xml:space="preserve">
     <value>Not found</value>
   </data>
+  <data name="O3" xml:space="preserve">
+    <value>Ozone</value>
+  </data>
   <data name="Outside Pollution" xml:space="preserve">
     <value>Outside Pollution</value>
+  </data>
+  <data name="particulates10" xml:space="preserve">
+    <value>Particulates 10</value>
+  </data>
+  <data name="particulates2.5" xml:space="preserve">
+    <value>Particulates 2.5</value>
   </data>
   <data name="Petite chambre" xml:space="preserve">
     <value>Little Bedroom</value>
@@ -230,6 +251,9 @@
   </data>
   <data name="Service" xml:space="preserve">
     <value>Service</value>
+  </data>
+  <data name="SO2" xml:space="preserve">
+    <value>Sulphur dioxide</value>
   </data>
   <data name="Sorry, there's nothing at this address." xml:space="preserve">
     <value>Sorry, there's nothing at this address.</value>

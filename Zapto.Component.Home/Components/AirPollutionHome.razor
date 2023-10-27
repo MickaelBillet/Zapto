@@ -7,35 +7,52 @@
 </div>
 
 <div class="mx-auto mt-2">
-    @if (this.Model != null)
-    {
-        <MudTable Items="@this.Model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
-            <ToolBarContent>
-                <div class="d-flex align-center">
-                    <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
-                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
-                    <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
-                </div>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh>@Localizer["Pollutant"]</MudTh>
-                <MudTh>@Localizer["Value"]</MudTh>
-                <MudTh>@Localizer["Status"]</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
-                <MudTd DataLabel="@Localizer["Description"]">@context.Value</MudTd>
-                @if (context.Levels != null)
-                {
-                    <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetLevelColor()" Radius="15"></Circle></MudTd>
-                }
-            </RowTemplate>
-        </MudTable>
-    }
-    else
-    {
-        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-    }
+   <MudExpansionPanels>
+        @if (this.Model != null)
+        {
+            <MudExpansionPanel HideIcon="true" IsExpanded="true">
+                <TitleContent>
+                    <div class="d-flex align-center">
+                        <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
+                        <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
+                        <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
+                    </div>
+                </TitleContent>
+                <ChildContent>
+                    <MudExpansionPanels>
+                        @foreach (AirPollutionItemModel item in this.Model.Items)
+                        {
+                            <MudExpansionPanel>
+                                <TitleContent>
+                                    <div class="d-flex">
+                                        <MudText Style="font-weight:500" Align="Align.Left" Class="ml-8 mt-1">@item.Name</MudText>
+                                        <MudText Style="font-weight:500" Align="Align.Left" Class="ml-8 mt-1">@item.Value</MudText>
+                                        <Circle Color="@item.GetLevelColor()" Radius="15"></Circle>
+                                    </div>
+                                </TitleContent>
+                                <ChildContent>
+                                    <MudTable Items="@item.LevelDescriptions" Hover="true" Breakpoint="Breakpoint.Sm">
+                                        <HeaderContent>
+                                            <MudTh>@Localizer["Value"]</MudTh>
+                                            <MudTh>@Localizer["Status"]</MudTh>
+                                        </HeaderContent>
+                                        <RowTemplate>
+                                            <MudTd>@context.description</MudTd>
+                                            <Circle Color="@context.color" Radius="15"></Circle>
+                                        </RowTemplate>
+                                    </MudTable>
+                                </ChildContent>
+                            </MudExpansionPanel>
+                        }
+                    </MudExpansionPanels>                    
+                </ChildContent>
+            </MudExpansionPanel>       
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        }
+    </MudExpansionPanels>
 </div>
 
 @code
