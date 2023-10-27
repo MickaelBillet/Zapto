@@ -4,12 +4,15 @@ namespace Zapto.Component.Common.Models
 {
     public class AirPollutionItemModel : BaseModel
     {
+        #region Properties
         public string? Description { get; set; }
         public string? Name { get; set; }
         public double? Value { get; set; }
         public int[]? Levels { get; set; }
         public List<(string description, string color)>? LevelDescriptions { get; set; }
+        #endregion
 
+        #region Constructor
         public AirPollutionItemModel(string? name, string? description, double? value, int[]? levels) 
         {
             this.Name = name;
@@ -29,7 +32,9 @@ namespace Zapto.Component.Common.Models
                 };
             }
         }
+        #endregion
 
+        #region Methods
         public string GetLevelColor()
         {
             string color = string.Empty;
@@ -43,5 +48,6 @@ namespace Zapto.Component.Common.Models
             }
             return color;
         }
+        #endregion
     }
 }
