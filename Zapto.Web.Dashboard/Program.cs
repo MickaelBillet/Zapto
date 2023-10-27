@@ -53,12 +53,6 @@ builder.Services.AddHttpClient("WeatherZaptoClient", client =>
     client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
     client.DefaultRequestHeaders.Add("X-Forwarded-Path", WeatherZaptoConstants.Application_Prefix);
 });
-//.AddHttpMessageHandler(sp =>
-//{
-//    var handler = sp.GetRequiredService<AuthorizationMessageHandler>()
-//    .ConfigureHandler(authorizedUrls: new[] { $"{builder.Configuration["ProtocolController"]}://{builder.Configuration["BackEndUrl"]}:{builder.Configuration["PortHttpsWeatherZapto"]}" });
-//    return handler;
-//});
 
 builder.Services.AddHttpClient("OpenWeather", client =>
 {
