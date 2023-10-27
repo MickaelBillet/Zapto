@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.Models
         #endregion
 
         #region Constructor
-        public AirPollutionItemModel(string? name, string? description, double? value, int[]? levels) 
+        public AirPollutionItemModel(string? description, string? name, double? value, int[]? levels) 
         {
             this.Name = name;
             this.Value = value;

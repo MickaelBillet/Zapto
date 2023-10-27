@@ -225,14 +225,14 @@
   <data name="Outside Pollution" xml:space="preserve">
     <value>Outside Pollution</value>
   </data>
-  <data name="particulates10" xml:space="preserve">
-    <value>Particulates 10</value>
-  </data>
-  <data name="particulates2.5" xml:space="preserve">
-    <value>Particulates 2.5</value>
-  </data>
   <data name="Petite chambre" xml:space="preserve">
     <value>Little Bedroom</value>
+  </data>
+  <data name="PM10" xml:space="preserve">
+    <value>Particulates 10</value>
+  </data>
+  <data name="PM25" xml:space="preserve">
+    <value>Particulates 2.5</value>
   </data>
   <data name="Pollutant" xml:space="preserve">
     <value>Pollutant</value>
