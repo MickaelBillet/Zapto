@@ -150,6 +150,9 @@
   <data name="Check the performances of the servers" xml:space="preserve">
     <value>Vérifier la performance des serveurs</value>
   </data>
+  <data name="CO" xml:space="preserve">
+    <value>Monoxide de Carbone</value>
+  </data>
   <data name="Cuisine - Séjour" xml:space="preserve">
     <value>Cuisine - Séjour</value>
   </data>
@@ -204,11 +207,29 @@
   <data name="Moderate" xml:space="preserve">
     <value>Passable</value>
   </data>
+  <data name="NH3" xml:space="preserve">
+    <value>Ammoniaque</value>
+  </data>
+  <data name="NO" xml:space="preserve">
+    <value>Monoxide d'Azote</value>
+  </data>
+  <data name="NO2" xml:space="preserve">
+    <value>Dioxide d'Azote</value>
+  </data>
   <data name="Not found" xml:space="preserve">
     <value>Non trouvé</value>
   </data>
+  <data name="O3" xml:space="preserve">
+    <value>Ozone</value>
+  </data>
   <data name="Outside Pollution" xml:space="preserve">
     <value>Pollution extérieure</value>
+  </data>
+  <data name="particulates10" xml:space="preserve">
+    <value>Particules 10</value>
+  </data>
+  <data name="particulates2.5" xml:space="preserve">
+    <value>Particules 2.5</value>
   </data>
   <data name="Petite chambre" xml:space="preserve">
     <value>Petite chambre</value>
@@ -230,6 +251,9 @@
   </data>
   <data name="Service" xml:space="preserve">
     <value>Service</value>
+  </data>
+  <data name="SO2" xml:space="preserve">
+    <value>Dioxide de Soufre</value>
   </data>
   <data name="Sorry, there's nothing at this address." xml:space="preserve">
     <value>Désolé, il n'y a rien à cette adresse</value>

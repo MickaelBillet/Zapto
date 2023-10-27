@@ -1,9 +1,12 @@
-﻿using Framework.Core.Domain;
+﻿using Connect.Model;
+using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
+using Zapto.Component.Common.Resources;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -19,17 +22,19 @@ namespace Zapto.Component.Common.ViewModels
     {
         #region Properties
         private IApplicationAirPollutionService ApplicationAirPollutionService { get; }
+        public IStringLocalizer<Resource> Localizer { get; }
         #endregion
 
         #region Constructor
         public AirPollutionViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             ApplicationAirPollutionService = serviceProvider.GetRequiredService<IApplicationAirPollutionService>();
+            this.Localizer = serviceProvider.GetRequiredService<IStringLocalizer<Resource>>();
         }
-        #endregion
+    #endregion
 
-        #region Methods
-        public override async Task InitializeAsync(string? parameter)
+    #region Methods
+    public override async Task InitializeAsync(string? parameter)
         {
             await base.InitializeAsync(parameter);
         }
@@ -107,59 +112,14 @@ namespace Zapto.Component.Common.ViewModels
                 TimeStamp = zaptoAirPollution.TimeStamp,
             };
 
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "co",
-                Value = zaptoAirPollution.co,
-                Levels = new int[5] { 0, 4400, 9400, 12400, 15400 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "no2",
-                Value = zaptoAirPollution.no2,
-                Levels = new int[5] { 0, 40, 70, 150, 200 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "o3",
-                Value = zaptoAirPollution.o3,
-                Levels = new int[5] { 0, 60, 100, 140, 180 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "so2",
-                Value = zaptoAirPollution.so2,
-                Levels = new int[5] { 0, 20, 80, 250, 350 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "pm10",
-                Value = zaptoAirPollution.pm10,
-                Levels = new int[5] { 0, 20, 50, 100, 200 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "pm2_5",
-                Value = zaptoAirPollution.pm2_5,
-                Levels = new int[5] { 0, 10, 25, 50, 75 }
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "nh3",
-                Value = zaptoAirPollution.nh3,
-            });
-
-            model.Items?.Add(new AirPollutionItemModel()
-            {
-                Name = "no",
-                Value = zaptoAirPollution.no,
-            });
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["CO"], "co",   zaptoAirPollution.co, new int[5] { 0, 4400, 9400, 12400, 15400 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO2"], "no2", zaptoAirPollution.no2, new int[5] { 0, 40, 70, 150, 200 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["O3"], "o3", zaptoAirPollution.o3, new int[5] { 0, 60, 100, 140, 180 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["SO2"], "so2", zaptoAirPollution.so2, new int[5] { 0, 20, 80, 250, 350 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM10"], "pm10", zaptoAirPollution.pm10, new int[5] { 0, 20, 50, 100, 200 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM25"], "pm2_5", zaptoAirPollution.pm2_5, new int[5] { 0, 10, 25, 50, 75 }));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NH3"], "nh3", zaptoAirPollution.nh3, null));
+            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO"], "no", zaptoAirPollution.no, null));
 
             return model;
         }
