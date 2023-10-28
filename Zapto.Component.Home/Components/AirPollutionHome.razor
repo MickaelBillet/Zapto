@@ -46,23 +46,23 @@
                                         <div class="d-flex align-left">
                                             <MudText Typo="Typo.subtitle1" Align="Align.Left">[@item.Levels[0],@item.Levels[1])</MudText>
                                             <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="#27AE60" Radius="10"></Circle>
+                                                <Circle Color="@item.GetLevelColor(0)" Radius="10"></Circle>
                                             </MudContainer>
                                             <MudText Typo="Typo.subtitle1" Class="ml-4" Align="Align.Left">[@item.Levels[1],@item.Levels[2])</MudText>
                                             <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="#F1C40F" Radius="10"></Circle>
+                                                <Circle Color="@item.GetLevelColor(1)" Radius="10"></Circle>
                                             </MudContainer>
                                             <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[2],@item.Levels[3])</MudText>
                                             <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="#F39C12" Radius="10"></Circle>
+                                                <Circle Color="@item.GetLevelColor(2)" Radius="10"></Circle>
                                             </MudContainer>
                                             <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[3],@item.Levels[4])</MudText>
                                             <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="#E67E22" Radius="10"></Circle>
+                                                <Circle Color="@item.GetLevelColor(3)" Radius="10"></Circle>
                                             </MudContainer>
                                             <MudText Typo="Typo.subtitle1" Class="ml-4">>=@item.Levels[4]</MudText>
                                             <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="#E74C3C" Radius="10"></Circle>
+                                                <Circle Color="@item.GetLevelColor(4)" Radius="10"></Circle>
                                             </MudContainer>
                                         </div>
                                     }
