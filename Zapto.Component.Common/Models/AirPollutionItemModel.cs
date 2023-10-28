@@ -35,6 +35,17 @@ namespace Zapto.Component.Common.Models
             }
             return color;
         }
+
+        public string GetLevelColor(int level)
+        {
+            string color = string.Empty;
+            if (level == 0) { color = ZaptoColors.Green1; }
+            else if (level == 1) { color = ZaptoColors.Orange2; }
+            else if (level == 2) { color = ZaptoColors.Orange3; }
+            else if (level == 3) { color = ZaptoColors.Orange4; }
+            else if (level == 4) { color = ZaptoColors.Red5; }
+            return color;
+        }
         #endregion
     }
 }
