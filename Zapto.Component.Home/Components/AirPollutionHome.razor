@@ -31,23 +31,41 @@
                                         <MudItem xs="12" sm="6" md="3">
                                             <MudText Style="font-weight:500" Class="mx-8 mt-1">@item.Value</MudText>
                                         </MudItem>
-                                        <MudItem xs="12" sm="6" md="3">
-                                            <Circle Color="@item.GetLevelColor()" Radius="15"></Circle>
-                                        </MudItem>
-
+                                        @if ((item.Name != "no") && (item.Name != "nh3"))
+                                        {
+                                            <MudItem xs="12" sm="6" md="3">
+                                                <Circle Color="@item.GetLevelColor()" Radius="15"></Circle>
+                                            </MudItem>
+                                        }
                                     </MudGrid>
                                 </TitleContent>
                                 <ChildContent>
-                                    <MudTable Items="@item.LevelDescriptions" Hover="true" Breakpoint="Breakpoint.Sm">
-                                        <HeaderContent>
-                                            <MudTh>@Localizer["Value"]</MudTh>
-                                            <MudTh>@Localizer["Status"]</MudTh>
-                                        </HeaderContent>
-                                        <RowTemplate>
-                                            <MudTd>@context.description</MudTd>
-                                            <Circle Color="@context.color" Radius="15"></Circle>
-                                        </RowTemplate>
-                                    </MudTable>
+                                    <MudText Typo="Typo.subtitle1">@item.Description</MudText>
+                                    @if ((item.Name != "no") && (item.Name != "nh3"))
+                                    {
+                                        <div class="d-flex align-left">
+                                            <MudText Typo="Typo.subtitle1" Align="Align.Left">[@item.Levels[0],@item.Levels[1])</MudText>
+                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                <Circle Color="#27AE60" Radius="10"></Circle>
+                                            </MudContainer>
+                                            <MudText Typo="Typo.subtitle1" Class="ml-4" Align="Align.Left">[@item.Levels[1],@item.Levels[2])</MudText>
+                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                <Circle Color="#F1C40F" Radius="10"></Circle>
+                                            </MudContainer>
+                                            <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[2],@item.Levels[3])</MudText>
+                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                <Circle Color="#F39C12" Radius="10"></Circle>
+                                            </MudContainer>
+                                            <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[3],@item.Levels[4])</MudText>
+                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                <Circle Color="#E67E22" Radius="10"></Circle>
+                                            </MudContainer>
+                                            <MudText Typo="Typo.subtitle1" Class="ml-4">>=@item.Levels[4]</MudText>
+                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                <Circle Color="#E74C3C" Radius="10"></Circle>
+                                            </MudContainer>
+                                        </div>
+                                    }
                                 </ChildContent>
                             </MudExpansionPanel>
                         }
