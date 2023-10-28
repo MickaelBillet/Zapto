@@ -9,6 +9,7 @@ namespace Zapto.Component.Common.Models
         public string? Name { get; set; }
         public double? Value { get; set; }
         public int[]? Levels { get; set; }
+        public bool? HasStatus { get; set; }
         #endregion
 
         #region Constructor
@@ -17,6 +18,7 @@ namespace Zapto.Component.Common.Models
             this.Name = name;
             this.Value = value;
             this.Levels = levels;
+            this.HasStatus = (levels?.Any() == true) ? true : false;
             this.Description = description;
         }
         #endregion

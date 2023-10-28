@@ -41,7 +41,7 @@
                                 </TitleContent>
                                 <ChildContent>
                                     <MudText Typo="Typo.subtitle1">@item.Description</MudText>
-                                    @if ((item.Name != "no") && (item.Name != "nh3"))
+                                    @if (item.HasStatus == true)
                                     {
                                         <div class="d-flex align-left">
                                             <MudText Typo="Typo.subtitle1" Align="Align.Left">[@item.Levels[0],@item.Levels[1])</MudText>
