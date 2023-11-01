@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;NU1701;NETSDK1004;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;NU1701;NETSDK1004;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="IRepository\ClientAppRepository.cs" />
+    <Compile Remove="IRepository\ConditionRepository.cs" />
+    <Compile Remove="IRepository\ConfigurationRepository.cs" />
+    <Compile Remove="IRepository\ConnectedObjectRepository.cs" />
+    <Compile Remove="IRepository\LocationRepository.cs" />
+    <Compile Remove="IRepository\LogRepository.cs" />
+    <Compile Remove="IRepository\NotificationRepository.cs" />
+    <Compile Remove="IRepository\OperatingDataRepository.cs" />
+    <Compile Remove="IRepository\OperationRangeRepository.cs" />
+    <Compile Remove="IRepository\PlugRepository.cs" />
+    <Compile Remove="IRepository\ProgramRepository.cs" />
+    <Compile Remove="IRepository\RoomRepository.cs" />
+    <Compile Remove="IRepository\SensorRepository.cs" />
+    <Compile Remove="Supervisor\SupervisorLocatio.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Zapto.Framework\Framework.Data.Services\Framework.Data.Services.csproj" />
+    <ProjectReference Include="..\..\Zapto\Connect.Domain\Connect.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

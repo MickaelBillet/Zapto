@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\micka\source\zapto\Connect.WebServer\Connect.WebServer\bin\Release\net7.0\linux-arm\publish</_PublishTargetUrl>
+    <History>True|2023-01-14T15:21:35.2514788Z;True|2023-01-14T16:17:54.6187033+01:00;True|2022-12-20T17:01:36.5925371+01:00;True|2022-12-19T22:22:25.0366208+01:00;True|2022-12-19T22:13:29.9091527+01:00;True|2022-12-19T22:11:03.1395823+01:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
