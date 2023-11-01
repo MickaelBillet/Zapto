@@ -23,4 +23,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Connect.Domain\Connect.Domain.csproj" />
+    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -37,6 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Connect.WebServer.Services\Connect.WebServer.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Scripts\WindowsIot\startup.bat">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
