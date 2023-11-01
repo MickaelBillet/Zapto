@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirZapto.WebServer.Services\AirZapto.WebServer.Services.csproj" />
+    <ProjectReference Include="..\Serilog.Sqlite.Sinks\src\Serilog.Sinks.SQLite\Serilog.Sinks.SQLite.csproj" />
   </ItemGroup>
 
 </Project>
