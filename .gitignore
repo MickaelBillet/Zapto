@@ -58,3 +58,12 @@
 /AirZapto.Data.Services/obj
 /AirZapto.WebServer.Services/bin/Debug/net7.0
 /AirZapto.WebServer.Services/obj
+/WeatherZapto.Data/bin/Debug/net7.0
+/WeatherZapto.Data/obj
+/WeatherZapto.Data.Services/bin/Debug/net7.0
+/WeatherZapto.Data.Services/obj
+/WeatherZapto.WebServer/bin/Debug/net7.0
+/WeatherZapto.WebServer/.vs/WeatherZapto.WebServer/FileContentIndex
+/WeatherZapto.WebServer/obj
+/WeatherZapto.WebServer.Services/bin/Debug/net7.0
+/WeatherZapto.WebServer.Services/obj
