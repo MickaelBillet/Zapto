@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Connect.WebServer.Services\Connect.WebServer.Services.csproj" />
+    <ProjectReference Include="..\Serilog.Sqlite.Sinks\src\Serilog.Sinks.SQLite\Serilog.Sinks.SQLite.csproj" />
   </ItemGroup>
 
   <ItemGroup>
