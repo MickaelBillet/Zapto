@@ -49,3 +49,12 @@
 /Framework.Mobile.Services/bin
 /Framework.Mobile.Services/obj
 *.v2
+/AirZapto.WebServer/bin/Debug
+/AirZapto.WebServer/.vs/AirZapto.WebServer/FileContentIndex
+/AirZapto.WebServer/obj
+/AirZapto.Data/bin/Debug
+/AirZapto.Data/obj
+/AirZapto.Data.Services/bin/Debug/net7.0
+/AirZapto.Data.Services/obj
+/AirZapto.WebServer.Services/bin/Debug/net7.0
+/AirZapto.WebServer.Services/obj
