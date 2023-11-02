@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto\Connect.Domain\Connect.Domain.csproj" />
+    <ProjectReference Include="..\Connect.Domain\Connect.Domain.csproj" />
     <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
   </ItemGroup>
 

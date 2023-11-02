@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim-arm64v8 AS base
 WORKDIR /app
@@ -13,12 +13,23 @@ EXPOSE 5007/udp
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
+COPY ["Zapto/Connect.WebServer/Connect.WebServer.csproj", "Connect.WebServer/"]
+COPY ["Zapto/Connect.WebServer.Services/Connect.WebServer.Services.csproj", "Connect.WebServer.Services/"]
+COPY ["Zapto/Connect.Application.Services/Connect.Application.Services.csproj", "Connect.Application.Services/"]
+COPY ["Zapto/Connect.Domain/Connect.Domain.csproj", "Connect.Domain/"]
+COPY ["Zapto/Framework.Core/Framework.Core.csproj", "Framework.Core/"]
+COPY ["Zapto/Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
+COPY ["Zapto/Connect.Data/Connect.Data.csproj", "Connect.Data/"]
+COPY ["Zapto/Connect.Data.Services/Connect.Data.Services.csproj", "Connect.Data.Services/"]
+COPY ["Zapto/Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
+COPY ["Zapto/Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
+RUN dotnet restore "Connect.WebServer/Connect.WebServer.csproj"
 COPY . .
 WORKDIR "/src/Connect.WebServer"
-RUN dotnet build "Connect.WebServer/Connect.WebServer.csproj"  -c Release -o /app/build
+RUN dotnet build "Connect.WebServer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Connect.WebServer/Connect.WebServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Connect.WebServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

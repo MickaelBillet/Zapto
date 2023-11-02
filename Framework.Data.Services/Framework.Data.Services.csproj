@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto\Framework.Core\Framework.Core.csproj" />
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
   </ItemGroup>
 
 </Project>

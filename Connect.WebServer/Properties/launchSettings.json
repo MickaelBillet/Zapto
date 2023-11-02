@@ -33,7 +33,15 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://192.168.7.131:5000/"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "http://+:80"
+      },
+      "publishAllPorts": true
     }
-
   }
 }
