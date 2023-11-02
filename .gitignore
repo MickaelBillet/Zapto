@@ -68,3 +68,5 @@
 /WeatherZapto.WebServer.Services/bin/Debug/net7.0
 /WeatherZapto.WebServer.Services/obj
 /Connect.Data/bin/Release/net7.0
+/AirZapto.Application.Services/bin/Debug/netstandard2.1
+/AirZapto.Application.Services/obj

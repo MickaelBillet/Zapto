@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto\AirZapto.Applications.Services\AirZapto.Application.Services.csproj" />
+    <ProjectReference Include="..\AirZapto.Application.Services\AirZapto.Application.Services.csproj" />
     <ProjectReference Include="..\AirZapto.Data\AirZapto.Data.csproj" />
   </ItemGroup>
 

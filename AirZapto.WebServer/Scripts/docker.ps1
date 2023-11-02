@@ -1,4 +1,4 @@
-﻿cd ..\..\..
+﻿cd ../..
 
 Write-Output "Docker login..."
 
@@ -10,7 +10,7 @@ if($LASTEXITCODE -eq 0)
     # Success
     Write-Output "Docker Login Success"
     Write-Output "Docker Build Progress..."
-    $result = docker build -t mickabdocker/airzaptowebserver:v3 -f ./AirZapto.WebServer/AirZapto.WebServer/Dockerfile .
+    $result = docker build -t mickabdocker/airzaptowebserver:v3 -f ./AirZapto.WebServer/Dockerfile .
 
     # Evaluate success/failure
     if($LASTEXITCODE -eq 0)

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Zapto\WeatherZapto.Domain\WeatherZapto.Domain.csproj" />
     <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Domain\WeatherZapto.Domain.csproj" />
   </ItemGroup>
 
 </Project>
