@@ -13,18 +13,27 @@ EXPOSE 5007/udp
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Zapto/Connect.WebServer/Connect.WebServer.csproj", "Connect.WebServer/"]
-COPY ["Zapto/Connect.WebServer.Services/Connect.WebServer.Services.csproj", "Connect.WebServer.Services/"]
-COPY ["Zapto/Connect.Application.Services/Connect.Application.Services.csproj", "Connect.Application.Services/"]
-COPY ["Zapto/Connect.Domain/Connect.Domain.csproj", "Connect.Domain/"]
-COPY ["Zapto/Framework.Core/Framework.Core.csproj", "Framework.Core/"]
-COPY ["Zapto/Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
-COPY ["Zapto/Connect.Data/Connect.Data.csproj", "Connect.Data/"]
-COPY ["Zapto/Connect.Data.Services/Connect.Data.Services.csproj", "Connect.Data.Services/"]
-COPY ["Zapto/Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
-COPY ["Zapto/Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
+COPY ["Connect.WebServer/Connect.WebServer.csproj", "Connect.WebServer/"]
+COPY ["Connect.WebServer.Services/Connect.WebServer.Services.csproj", "Connect.WebServer.Services/"]
+COPY ["Connect.Application.Services/Connect.Application.Services.csproj", "Connect.Application.Services/"]
+COPY ["Connect.Domain/Connect.Domain.csproj", "Connect.Domain/"]
+COPY ["Framework.Core/Framework.Core.csproj", "Framework.Core/"]
+COPY ["Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
+COPY ["Connect.Data/Connect.Data.csproj", "Connect.Data/"]
+COPY ["Connect.Data.Services/Connect.Data.Services.csproj", "Connect.Data.Services/"]
+COPY ["Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
+COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 RUN dotnet restore "Connect.WebServer/Connect.WebServer.csproj"
-COPY . .
+COPY ["Connect.WebServer/*", "Connect.WebServer/"]
+COPY ["Connect.WebServer.Services/*", "Connect.WebServer.Services/"]
+COPY ["Connect.Application.Services/*", "Connect.Application.Services/"]
+COPY ["Connect.Domain/*", "Connect.Domain/"]
+COPY ["Framework.Core/*", "Framework.Core/"]
+COPY ["Framework.Infrastructure.Services/*", "Framework.Infrastructure.Services/"]
+COPY ["Connect.Data.Services/*", "Connect.Data.Services/"]
+COPY ["Connect.Data/*", "Connect.Data/"]
+COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
+COPY ["Serilog.Sqlite.Sinks/src/*", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 WORKDIR "/src/Connect.WebServer"
 RUN dotnet build "Connect.WebServer.csproj" -c Release -o /app/build
 
