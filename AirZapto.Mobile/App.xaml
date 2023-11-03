@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:AirZapto.Mobile.Converters"
+             x:Class="AirZapto.App">
+    <Application.Resources>
+        <ResourceDictionary Source="/Common/Styles/DefaultTheme.xaml">
+            <c:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <c:BooleanToBooleanConverter x:Key="BooleanToBooleanConverter" />
+            <c:ModeVisibilityConverter x:Key="ModeVisibilityConverter" />
+            <c:SensorVisibilityConverter x:Key="SensorVisibilityConverter" />
+            <c:CheckedEventArgsConverter x:Key="CheckedEventArgsConverter" />
+            <c:ChartVisibilityConverter x:Key="ChartVisibilityConverter" />
+
+            <Color x:Key="WarningColor">#FFB733</Color>
+
+            <Color x:Key="OrangeColorLight">#FFD500</Color>
+            <Color x:Key="OrangeColor">#FF9B00</Color>
+
+            <Color x:Key="RedColor">#CE2222</Color>
+            <Color x:Key="RedColorLight">#FF7B34</Color>
+
+            <Color x:Key="GreenColor">#37A921</Color>
+            <Color x:Key="GreenColorLight">#8AE379</Color>
+
+            <Color x:Key="NeutralColor">#C3C3C3</Color>
+
+            <Color x:Key="DarkBlue">#3F78E2</Color>
+            <Color x:Key="LightBlue">#32C5FF</Color>
+            <Color x:Key="VeryLightBlue">#440596FF</Color>
+
+            <LinearGradientBrush x:Key="OrangeGradient"
+                                 StartPoint="0,0"
+                                 EndPoint="1,1">
+                <GradientStop Color="{StaticResource OrangeColor}"
+                              Offset="0.0" />
+                <GradientStop Color="{StaticResource OrangeColorLight}"
+                              Offset="1.0" />
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="GreenGradient"
+                                 StartPoint="0,0"
+                                 EndPoint="1,1">
+                <GradientStop Color="{StaticResource GreenColor}"
+                              Offset="0.0" />
+                <GradientStop Color="{StaticResource GreenColorLight}"
+                              Offset="1.1" />
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="RedGradient"
+                                 StartPoint="0,0"
+                                 EndPoint="1,1">
+                <GradientStop Color="{StaticResource RedColor}"
+                              Offset="0.0" />
+                <GradientStop Color="{StaticResource RedColorLight}"
+                              Offset="1.0" />
+
+            </LinearGradientBrush>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:vm="clr-namespace:AirZapto.ViewModel"
+       mc:Ignorable="d"
+       FlyoutBehavior="Disabled"
+       xmlns:local="clr-namespace:AirZapto.View"
+       xmlns:app="clr-namespace:AirZapto"
+       xmlns:theme="clr-namespace:ThemeGallery"
+       Title="AirZapto"
+       x:Class="AirZapto.AppShell">
+
+    <ShellItem Route="MainView">
+        <ShellContent ContentTemplate="{DataTemplate local:MainView}" />
+    </ShellItem>
+</Shell>

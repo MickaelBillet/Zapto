@@ -1,0 +1,724 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:AirZapto.Helpers"
+             xmlns:model="clr-namespace:AirZapto.Model;assembly=AirZapto.Domain"
+             xmlns:view="clr-namespace:AirZapto.View"
+             xmlns:viewmodel="clr-namespace:AirZapto.ViewModel"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:behaviors="clr-namespace:AirZapto.View.Behaviors"
+             xmlns:theme="clr-namespace:ThemeGallery"
+             Shell.BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource NeutralDark}}"
+             Shell.ForegroundColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark=White}"
+             Shell.NavBarHasShadow="False"
+             x:Name="RootPage"
+             BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource NeutralDark}}"
+             x:DataType="viewmodel:MainViewModel"
+             x:Class="AirZapto.View.MainView">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame">
+                <Setter Property="HasShadow"
+                        Value="False" />
+                <Setter Property="CornerRadius"
+                        Value="20" />
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light=White, Dark=Black}" />
+            </Style>
+
+            <ControlTemplate x:Key="DurationRadioTemplate">
+                <Frame CornerRadius="10"
+                       Padding="5,5"
+                       WidthRequest="120"
+                       Margin="0"
+                       x:Name="ButtonContent"
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="CenterAndExpand">
+                    <ContentPresenter />
+
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CheckedStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter TargetName="ButtonContent"
+                                                Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light=DarkGray, Dark=Gray}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <VisualState.Setters>
+                                        <Setter TargetName="ButtonContent"
+                                                Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light=White, Dark=Black}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </Frame>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,30"
+              Margin="0"
+              RowSpacing="0"
+              Padding="0">
+            <Label Grid.Column="0"
+                   Margin="10,0,0,0"
+                   HorizontalOptions="StartAndExpand"
+                   VerticalOptions="CenterAndExpand">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Air "
+                              FontAttributes="Bold"
+                              FontSize="24"></Span>
+                        <Span FontFamily="Product"
+                              Text="Zapto"
+                              TextColor="{StaticResource DarkBlue}"
+                              FontSize="24"></Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Grid.Column="1"
+                   VerticalOptions="Center"
+                   Text="{x:Static theme:IconFont.Lightbulb}"
+                   FontSize="22"
+                   Margin="-10,0,0,0"
+                   FontFamily="FontAwesome">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureThemeTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid CompressedLayout.IsHeadless="true"
+          HorizontalOptions="FillAndExpand"
+          Margin="0"
+          RowSpacing="0"
+          Padding="0"
+          VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Grid.Row="0"
+                     Orientation="Vertical"
+                     Margin="0"
+                     x:DataType="viewmodel:BaseViewModel"
+                     HeightRequest="20"
+                     BackgroundColor="{StaticResource WarningColor}"
+                     IsVisible="{Binding Path=Message, Source={x:Static viewmodel:GlobalResources.Current}, Converter={StaticResource StringToBoolConverter}}"
+                     VerticalOptions="Center">
+            <Label x:Name="Error"
+                   FontAttributes="Bold"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   Text="{Binding Path=Message, Source={x:Static viewmodel:GlobalResources.Current}}"
+                   VerticalOptions="FillAndExpand" />
+        </StackLayout>
+
+        <Grid Grid.Row="1"
+              Margin="0,5,0,0"
+              BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource NeutralDark}}"
+              HorizontalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand">
+            <ActivityIndicator IsVisible="True"
+                               IsRunning="True"
+                               Color="DarkGray"
+                               VerticalOptions="CenterAndExpand">
+                <ActivityIndicator.Triggers>
+                    <DataTrigger TargetType="ActivityIndicator"
+                                 Binding="{Binding IsInitialized}"
+                                 Value="True">
+                        <Setter Property="IsRunning"
+                                Value="False" />
+                    </DataTrigger>
+                </ActivityIndicator.Triggers>
+            </ActivityIndicator>
+
+            <RefreshView IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                         RefreshColor="DarkGray"
+                         VerticalOptions="FillAndExpand"
+                         HorizontalOptions="FillAndExpand"
+                         Command="{Binding RefreshCommand}">
+                <CarouselView x:Name="carousel"
+                              ItemsSource="{Binding SensorViewModels}"
+                              Loop="False"             
+                              Margin="0"
+                              CurrentItem="{Binding Path=CurrentSensorViewModel, Mode=OneWayToSource}">
+                    <CarouselView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           SnapPointsAlignment="Center"                                           
+                                           SnapPointsType="Mandatory" />
+                    </CarouselView.ItemsLayout>
+
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodel:SensorViewModel">
+                            <Grid VerticalOptions="FillAndExpand"
+                                  HorizontalOptions="FillAndExpand">
+                                <Frame HasShadow="False"
+                                       BackgroundColor="{AppThemeBinding Light={StaticResource NeutralLight}, Dark={StaticResource NeutralPrimary}}"
+                                       BorderColor="Transparent"
+                                       CornerRadius="10"
+                                       Margin="15,0,15,15"
+                                       Padding="0"
+                                       HorizontalOptions="FillAndExpand"
+                                       VerticalOptions="FillAndExpand">
+                                    <Grid RowDefinitions="40,Auto,Auto,*"
+                                          VerticalOptions="FillAndExpand"
+                                          Margin="0"
+                                          Padding="0"
+                                          RowSpacing="0"
+                                          HorizontalOptions="FillAndExpand">
+
+                                        <Grid ColumnDefinitions="*,30"
+                                              HorizontalOptions="FillAndExpand"
+                                              Margin="15,0"
+                                              Padding="0"
+                                              Grid.Row="0"
+                                              RowSpacing="0"
+                                              ColumnSpacing="0">
+                                            <Label Grid.Column="0"
+                                                   FontAttributes="Bold"
+                                                   FontFamily="Product"
+                                                   FontSize="28"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   Margin="30,10,0,0"
+                                                   VerticalOptions="Fill"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Sensor.Description}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Column="1"
+                                                   Text="{x:Static theme:IconFont.Bars}"
+                                                   FontSize="22"
+                                                   Margin="0,12,0,0"
+                                                   VerticalOptions="FillAndExpand"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   FontFamily="FontAwesome">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="TapGestureMenuTapped" />
+                                                </Label.GestureRecognizers>
+
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="IsVisible"
+                                                                Value="False"></Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label"
+                                                                         Binding="{Binding Sensor.Mode, Converter={StaticResource SensorVisibilityConverter}}"
+                                                                         Value="{x:Static model:SensorMode.Measure}">
+                                                                <Setter Property="IsVisible"
+                                                                        Value="True" />
+                                                            </DataTrigger>
+
+                                                            <DataTrigger TargetType="Label"
+                                                                         Binding="{Binding Sensor.Mode, Converter={StaticResource SensorVisibilityConverter}}"
+                                                                         Value="{x:Static model:SensorMode.Calibration}">
+                                                                <Setter Property="IsVisible"
+                                                                        Value="True" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
+                                        </Grid>
+
+                                        <Grid Grid.Row="1"
+                                              VerticalOptions="Center"
+                                              HorizontalOptions="Center"
+                                              RowDefinitions="50,30,30,20,10,30,30"
+                                              Margin="0">
+                                            <AbsoluteLayout Padding="0,-100,0,-120"
+                                                         Grid.Row="0"
+                                                         Grid.RowSpan="7"
+                                                         VerticalOptions="CenterAndExpand">
+                                                <Path StrokeThickness="10"
+                                                      Scale="0.7"
+                                                      Margin="0,0,0,0"
+                                                      HorizontalOptions="FillAndExpand"
+                                                      VerticalOptions="CenterAndExpand"
+                                                      Data="M 149.35985,5.1745937 7.472128,150.20674 l 44.181519,-0.56067 1.000758,178.82014 c 0.06867,12.30256 13.154938,22.13729 29.341644,22.05275 l 140.457761,-0.73503 c 16.18657,-0.0854 29.16253,-10.05697 29.09366,-22.35944 l -1.00889,-180.29995 40.36429,-0.51247 z">
+                                                    <Path.Triggers>
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Status}"
+                                                                     Value="{x:Static model:SensorStatus.Good}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="{StaticResource GreenGradient}" />
+                                                        </DataTrigger>
+
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Status}"
+                                                                     Value="{x:Static model:SensorStatus.Average}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="{StaticResource OrangeGradient}" />
+                                                        </DataTrigger>
+
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Status}"
+                                                                     Value="{x:Static model:SensorStatus.Bad}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="{StaticResource RedGradient}" />
+                                                        </DataTrigger>
+
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Mode}"
+                                                                     Value="{x:Static model:SensorMode.Calibration}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="DarkGray" />
+                                                        </DataTrigger>
+
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Mode}"
+                                                                     Value="{x:Static model:SensorMode.Startup}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="DarkGray" />
+                                                        </DataTrigger>
+
+                                                        <DataTrigger TargetType="Path"
+                                                                     Binding="{Binding Sensor.Mode}"
+                                                                     Value="{x:Static model:SensorMode.Initial}">
+                                                            <Setter Property="Stroke"
+                                                                    Value="DarkGray" />
+                                                        </DataTrigger>
+                                                    </Path.Triggers>
+                                                </Path>
+                                            </AbsoluteLayout>
+
+                                            <Label Grid.Row="1"
+                                                   FontSize="30"
+                                                   FontFamily="Product"
+                                                   Margin="0,0,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="C0"></Span>
+                                                        <Span FontSize="20"
+                                                              Text="2"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="3"
+                                                   Grid.RowSpan="3"
+                                                   HorizontalTextAlignment="Center"
+                                                   FontSize="21"
+                                                   FontFamily="Product"
+                                                   LineBreakMode="WordWrap"
+                                                   WidthRequest="150"
+                                                   Margin="0,0,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Calibration}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{res:Translate CalibrationInProgress}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="3"
+                                                   Grid.RowSpan="3"
+                                                   HorizontalTextAlignment="Center"
+                                                   FontSize="21"
+                                                   FontFamily="Product"
+                                                   LineBreakMode="WordWrap"
+                                                   WidthRequest="150"
+                                                   Margin="0,0,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Startup}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{res:Translate StartupInProgress}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="3"
+                                                   Grid.RowSpan="3"
+                                                   HorizontalTextAlignment="Center"
+                                                   FontSize="21"
+                                                   FontFamily="Product"
+                                                   LineBreakMode="WordWrap"
+                                                   WidthRequest="150"
+                                                   Margin="0,0,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Initial}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{res:Translate ErrorDeviceNotConnected}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="2"
+                                                   FontAttributes="Bold"
+                                                   FontSize="32"
+                                                   FontFamily="norwester"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   Margin="0,0,0,0"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Sensor.CO2}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="3"
+                                                   FontAttributes="Bold"
+                                                   FontSize="20"
+                                                   FontFamily="Product"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   Margin="0,-10,0,0"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="ppm"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="5"
+                                                   FontFamily="Product"
+                                                   FontSize="20"
+                                                   Margin="0,0,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{res:Translate Temperature}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Grid.Row="6"
+                                                   FontFamily="norwester"
+                                                   FontSize="22"
+                                                   Margin="0,-10,0,0"
+                                                   IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                                   TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                   HorizontalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Sensor.Temperature}"></Span>
+                                                        <Span Text=" °C"
+                                                              FontSize="20"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+
+                                        <Label Margin="0,15,0,0"
+                                               HorizontalOptions="CenterAndExpand"
+                                               VerticalOptions="FillAndExpand"
+                                               Grid.Row="2"
+                                               IsVisible="{Binding Path=Sensor.Mode, Converter={StaticResource ModeVisibilityConverter}, ConverterParameter={x:Static model:SensorMode.Measure}}"
+                                               FontSize="20">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Good}">
+                                                    <Setter Property="TextColor"
+                                                            Value="{StaticResource GreenColor}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Average}">
+                                                    <Setter Property="TextColor"
+                                                            Value="{StaticResource OrangeColor}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Bad}">
+                                                    <Setter Property="TextColor"
+                                                            Value="{StaticResource RedColor}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Good}">
+                                                    <Setter Property="Text"
+                                                            Value="{res:Translate AirQualityGood}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Average}">
+                                                    <Setter Property="Text"
+                                                            Value="{res:Translate AirQualityAverage}" />
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Sensor.Status}"
+                                                             Value="{x:Static model:SensorStatus.Bad}">
+                                                    <Setter Property="Text"
+                                                            Value="{res:Translate AirQualityBad}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                        <Grid HorizontalOptions="FillAndExpand"
+                                              VerticalOptions="EndAndExpand"
+                                              Grid.Row="3"
+                                              Margin="0,10,0,0"
+                                              Padding="0"
+                                              RowDefinitions="Auto,Auto">
+
+                                            <Grid HorizontalOptions="FillAndExpand"
+                                                  VerticalOptions="FillAndExpand"
+                                                  Grid.Row="0"
+                                                  RowDefinitions="Auto,155,25,10"
+                                                  ColumnDefinitions="Auto,*,Auto">
+
+                                                <StackLayout HorizontalOptions="FillAndExpand"
+                                                             VerticalOptions="FillAndExpand"
+                                                             Orientation="Horizontal"
+                                                             Grid.ColumnSpan="3"
+                                                             Grid.Row="0">
+                                                    <Label FontAttributes="Bold"
+                                                           FontSize="16"
+                                                           VerticalOptions="FillAndExpand"
+                                                           FontFamily="norwester"
+                                                           IsVisible="{Binding Path=SensorDataLineChart.Entries, Converter={StaticResource ChartVisibilityConverter}, Mode=OneWay}"
+                                                           TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                           Margin="10,0"
+                                                           HorizontalOptions="CenterAndExpand">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="MAX "></Span>
+                                                                <Span Text="{Binding MaxCO2}"></Span>
+                                                                <Span Text=" ppm"></Span>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label FontAttributes="Bold"
+                                                           FontSize="16"
+                                                           FontFamily="norwester"
+                                                           IsVisible="{Binding Path=SensorDataLineChart.Entries, Converter={StaticResource ChartVisibilityConverter}, Mode=OneWay}"
+                                                           TextColor="{AppThemeBinding Light={StaticResource NeutralDark}, Dark={StaticResource NeutralLight}}"
+                                                           Margin="10,0"
+                                                           VerticalOptions="FillAndExpand"
+                                                           LineBreakMode="CharacterWrap"
+                                                           HorizontalOptions="CenterAndExpand">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="MIN "></Span>
+                                                                <Span Text="{Binding MinCO2}"></Span>
+                                                                <Span Text=" ppm"></Span>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+
+                                                <microcharts:ChartView x:Name="lineChartView"
+                                                                       Grid.Column="0"
+                                                                       Grid.ColumnSpan="3"
+                                                                       Grid.Row="1"
+                                                                       Grid.RowSpan="3"
+                                                                       HorizontalOptions="FillAndExpand"
+                                                                       VerticalOptions="FillAndExpand"
+                                                                       Margin="0,0"
+                                                                       Chart="{Binding SensorDataLineChart}" />
+                                                <Label Grid.Row="2"
+                                                       Grid.Column="0"
+                                                       IsVisible="{Binding StartDate, Converter={StaticResource StringToBoolConverter}}"
+                                                       Text="{Binding StartDate}"
+                                                       HorizontalTextAlignment="Start"
+                                                       Margin="12,0,0,0"></Label>
+                                                <Label Grid.Row="2"
+                                                       Grid.Column="2"
+                                                       IsVisible="{Binding EndDate, Converter={StaticResource StringToBoolConverter}}"
+                                                       Text="{Binding EndDate}"
+                                                       HorizontalTextAlignment="End"
+                                                       Margin="0,0,12,0"></Label>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1"
+                                                  Margin="5,-15,5,5"
+                                                  VerticalOptions="EndAndExpand"
+                                                  ColumnDefinitions="*,*,*,*,*">
+                                                <RadioButton  ControlTemplate="{StaticResource DurationRadioTemplate}"
+                                                              x:Name="OneHour"
+                                                              IsChecked="True"
+                                                              Grid.Column="0">
+                                                    <RadioButton.Behaviors>
+                                                        <behaviors:EventToCommandBehavior Command="{Binding SetDurationCommand}"
+                                                                                          CommandParameter="60"
+                                                                                          EventArgsConverter="{StaticResource CheckedEventArgsConverter}"
+                                                                                          EventName="CheckedChanged" />
+                                                    </RadioButton.Behaviors>
+
+                                                    <RadioButton.Content>
+                                                        <StackLayout HorizontalOptions="Center"
+                                                                     VerticalOptions="Center"
+                                                                     Padding="0"
+                                                                     Margin="1">
+                                                            <Label Padding="-5,0"
+                                                                   Margin="0">
+                                                                <Label.FormattedText>
+                                                                    <FormattedString>
+                                                                        <Span Text="1 "></Span>
+                                                                        <Span Text="{res:Translate Hour}"></Span>
+                                                                    </FormattedString>
+                                                                </Label.FormattedText>
+                                                            </Label>
+                                                        </StackLayout>
+                                                    </RadioButton.Content>
+                                                </RadioButton>
+
+                                                <RadioButton  ControlTemplate="{StaticResource DurationRadioTemplate}"
+                                                              x:Name="TwoHours"
+                                                              Grid.Column="1">
+                                                    <RadioButton.Behaviors>
+                                                        <behaviors:EventToCommandBehavior Command="{Binding SetDurationCommand}"
+                                                                                          CommandParameter="120"
+                                                                                          EventArgsConverter="{StaticResource CheckedEventArgsConverter}"
+                                                                                          EventName="CheckedChanged" />
+                                                    </RadioButton.Behaviors>
+
+                                                    <RadioButton.Content>
+                                                        <StackLayout HorizontalOptions="Center"
+                                                                     VerticalOptions="Center"
+                                                                     Padding="0"
+                                                                     Margin="0">
+                                                            <Label Padding="-5,0"
+                                                                   Margin="0">
+                                                                <Label.FormattedText>
+                                                                    <FormattedString>
+                                                                        <Span Text="2 "></Span>
+                                                                        <Span Text="{res:Translate Hours}"></Span>
+                                                                    </FormattedString>
+                                                                </Label.FormattedText>
+                                                            </Label>
+                                                        </StackLayout>
+                                                    </RadioButton.Content>
+                                                </RadioButton>
+
+                                                <RadioButton  ControlTemplate="{StaticResource DurationRadioTemplate}"
+                                                              x:Name="SixHours"
+                                                              Grid.Column="2">
+                                                    <RadioButton.Behaviors>
+                                                        <behaviors:EventToCommandBehavior Command="{Binding SetDurationCommand}"
+                                                                                          CommandParameter="360"
+                                                                                          EventArgsConverter="{StaticResource CheckedEventArgsConverter}"
+                                                                                          EventName="CheckedChanged" />
+                                                    </RadioButton.Behaviors>
+
+                                                    <RadioButton.Content>
+                                                        <StackLayout HorizontalOptions="Center"
+                                                                     VerticalOptions="Center"
+                                                                     Padding="0"
+                                                                     Margin="0">
+                                                            <Label Padding="-5,0"
+                                                                   Margin="0">
+                                                                <Label.FormattedText>
+                                                                    <FormattedString>
+                                                                        <Span Text="6 "></Span>
+                                                                        <Span Text="{res:Translate Hours}"></Span>
+                                                                    </FormattedString>
+                                                                </Label.FormattedText>
+                                                            </Label>
+                                                        </StackLayout>
+                                                    </RadioButton.Content>
+                                                </RadioButton>
+
+                                                <RadioButton  ControlTemplate="{StaticResource DurationRadioTemplate}"
+                                                              x:Name="OneDay"
+                                                              Grid.Column="3">
+                                                    <RadioButton.Behaviors>
+                                                        <behaviors:EventToCommandBehavior Command="{Binding SetDurationCommand}"
+                                                                                          CommandParameter="1440"
+                                                                                          EventArgsConverter="{StaticResource CheckedEventArgsConverter}"
+                                                                                          EventName="CheckedChanged" />
+                                                    </RadioButton.Behaviors>
+
+                                                    <RadioButton.Content>
+                                                        <StackLayout HorizontalOptions="Center"
+                                                                     VerticalOptions="Center"
+                                                                     Padding="0"
+                                                                     Margin="0">
+                                                            <Label Padding="-5,0"
+                                                                   Margin="0">
+                                                                <Label.FormattedText>
+                                                                    <FormattedString>
+                                                                        <Span Text="1 "></Span>
+                                                                        <Span Text="{res:Translate Day}"></Span>
+                                                                    </FormattedString>
+                                                                </Label.FormattedText>
+                                                            </Label>
+                                                        </StackLayout>
+                                                    </RadioButton.Content>
+                                                </RadioButton>
+
+                                                <RadioButton  ControlTemplate="{StaticResource DurationRadioTemplate}"
+                                                              x:Name="TwoDays"
+                                                              Grid.Column="4">
+                                                    <RadioButton.Behaviors>
+                                                        <behaviors:EventToCommandBehavior Command="{Binding SetDurationCommand}"
+                                                                                          CommandParameter="2880"
+                                                                                          EventArgsConverter="{StaticResource CheckedEventArgsConverter}"
+                                                                                          EventName="CheckedChanged" />
+                                                    </RadioButton.Behaviors>
+
+                                                    <RadioButton.Content>
+                                                        <StackLayout HorizontalOptions="Center"
+                                                                     VerticalOptions="Center"
+                                                                     Padding="0"
+                                                                     Margin="0">
+                                                            <Label Padding="-5,0"
+                                                                   Margin="0">
+                                                                <Label.FormattedText>
+                                                                    <FormattedString>
+                                                                        <Span Text="2 "></Span>
+                                                                        <Span Text="{res:Translate Days}"></Span>
+                                                                    </FormattedString>
+                                                                </Label.FormattedText>
+                                                            </Label>
+                                                        </StackLayout>
+                                                    </RadioButton.Content>
+                                                </RadioButton>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+            </RefreshView>
+        </Grid>
+
+        <BoxView x:Name="PageFader"
+                 Grid.Row="1"
+                 IsVisible="false"
+                 Opacity="0">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="PageFader_Tapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <view:MenuPopupView x:Name="MenuPopupView"
+                            Grid.Row="1"
+                            BindingContext="{Binding Source={x:Reference RootPage}, Path=BindingContext}"
+                            TranslationY="{Binding Source={x:Reference RootPage}, Path=Height}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,18 @@
+{
+  "BackEndUrl": "192.168.1.47", //PC Houilles 192.168.1.47  //Novacor 192.168.1.75
+  "PortHttp": 6000,
+  "PortHttps": 6000,
+  "ProtocolController": "http",
+  "ProtocolSignalR": "http",
+  "PathBase": "",
+  "PathBaseSignalR": "",
+  "User": "airzapto.mobile",
+  "Password": "airzapto",
+  "Keycloak": {
+    "realm": "Zapto",
+    "Authority": "https://connect-zapto.fr/auth/realms/zapto",
+    "client_id": "ZaptoOIDC",
+    "client_secret": "dab722c5-3411-4fbd-9af9-379d1d5c2332",
+    "token_endpoint_url": "/protocol/openid-connect/token"
+  }
+}

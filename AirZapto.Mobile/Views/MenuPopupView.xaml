@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:AirZapto.Helpers"
+             xmlns:model="clr-namespace:AirZapto.Model;assembly=AirZapto.Domain"
+             xmlns:viewmodel="clr-namespace:AirZapto.ViewModel"
+             x:DataType="viewmodel:MainViewModel"
+             x:Class="AirZapto.View.MenuPopupView">
+    <ContentView.Content>
+        <Grid RowSpacing="0"
+              VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="2" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <BoxView Grid.RowSpan="3"
+                     Grid.Row="0"
+                     x:Name="FirstSection"
+                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand"
+                     BackgroundColor="{StaticResource NeutralTertiaryAlt}"
+                     CornerRadius="25,25,0,0">
+            </BoxView>
+
+            <Label Grid.Row="0"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold"
+                   Margin="30,0"
+                   TextColor="{StaticResource NeutralDark}"
+                   Text="{res:Translate Menu}"
+                   FontSize="20" />
+
+            <BoxView Grid.Row="1"
+                     Margin="0"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource NeutralLight}, Dark={StaticResource NeutralPrimary}}"
+                     HeightRequest="10" />
+
+            <StackLayout HorizontalOptions="Fill"
+                  VerticalOptions="FillAndExpand"
+                  Grid.Row="2"
+                  BackgroundColor="{StaticResource NeutralTertiaryAlt}"
+                  Orientation="Vertical">
+                <Button VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource NeutralDark}"
+                        FontSize="20"
+                        IsVisible="False"
+                        BorderColor="Transparent"
+                        Command="{Binding RestartCommand}"
+                        BackgroundColor="Transparent"
+                        Text="{res:Translate Restart}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding CurrentSensorViewModel.Sensor.Mode}"
+                                     Value="{x:Static model:SensorMode.Measure}">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding CurrentSensorViewModel.Sensor.Mode}"
+                                     Value="{x:Static model:SensorMode.Calibration}">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button VerticalOptions="StartAndExpand"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="{StaticResource NeutralDark}"
+                        BackgroundColor="Transparent"
+                        Command="{Binding CalibrationCommand}"
+                        Text="{res:Translate Calibration}"
+                        IsVisible="False"
+                        BorderColor="Transparent"
+                        FontSize="20">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding CurrentSensorViewModel.Sensor.Mode}"
+                                     Value="{x:Static model:SensorMode.Measure}">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

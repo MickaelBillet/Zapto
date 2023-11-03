@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:res="clr-namespace:AirZapto.Helpers"
+                 x:Class="AirZapto.View.CalibrationPopupView">
+    <pages:PopupPage.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BorderWidth"
+                    Value="0" />
+            <Setter Property="CornerRadius"
+                    Value="20" />
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light=White, Dark=Black}" />
+            <Setter Property="HeightRequest"
+                    Value="30" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="TextColor"
+                    Value="{StaticResource NeutralDark}" />
+            <Setter Property="FontSize"
+                    Value="19"></Setter>
+            <Setter Property="FontAttributes"
+                    Value="None"></Setter>
+        </Style>
+    </pages:PopupPage.Resources>
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation DurationIn="400"
+                                   DurationOut="300"
+                                   EasingIn="SinOut"
+                                   EasingOut="SinIn"
+                                   HasBackgroundAnimation="True"
+                                   PositionIn="Center"
+                                   PositionOut="Center"
+                                   ScaleIn="1.2"
+                                   ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+
+    <Frame CornerRadius="20"
+           HorizontalOptions="Center"
+           HeightRequest="200"
+           WidthRequest="200"
+           VerticalOptions="Center"
+           HasShadow="True"
+           BackgroundColor="{AppThemeBinding Light={StaticResource NeutralLight}, Dark={StaticResource NeutralPrimary}}">
+        <StackLayout>
+            <Label Text="{res:Translate CalibrationMessage}"
+                   VerticalOptions="CenterAndExpand"
+                   FontSize="18"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center"
+                   LineHeight="1.1"
+                   HorizontalOptions="CenterAndExpand" />
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center">
+                <Button Text="{res:Translate Cancel}"
+                        Command="{Binding CloseCommand}"
+                        Margin="5,0"></Button>
+                <Button Text="{res:Translate Ok}"
+                        Command="{Binding CalibrateCommand}"
+                        Margin="5,0"
+                        TextColor="{StaticResource NeutralLighter}"
+                        BackgroundColor="{StaticResource DarkBlue}"></Button>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</pages:PopupPage>
