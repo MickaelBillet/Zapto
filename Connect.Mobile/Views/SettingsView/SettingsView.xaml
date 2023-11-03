@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<control:BasePage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+    xmlns:control="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:behaviors="clr-namespace:Connect.Mobile.View.Behaviors"
+    x:Class="Connect.Mobile.View.SettingsView"
+    xmlns:view="clr-namespace:Connect.Mobile.View"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    x:DataType="viewmodel:SettingsViewModel"
+    Title="{res:Translate Settings}"
+    x:Name="Page">
+
+    <control:BasePage.Resources>
+
+    </control:BasePage.Resources>
+ 
+    <control:BasePage.CustomToolbar>
+        <control:CustomToolbarItem
+            x:Name="Close"
+            IsVisible="True"
+            IconImageSource="ic_action_close.png"
+            Order="Primary"
+            Command="{Binding CloseCommand}"
+            Priority="0" />
+
+        <control:CustomToolbarItem
+            x:Name="Add"
+            IsVisible="{Binding IsItemVisible, Source={x:Reference Page}, Mode=TwoWay}"
+            Order="Secondary"
+            Priority="0"
+            Text="{res:Translate AddRange}"
+            Command="{Binding CreateOpRangeCommand}" />
+
+        <control:CustomToolbarItem
+            x:Name="DeleteAll"
+            IsVisible="{Binding IsItemVisible, Source={x:Reference Page}, Mode=TwoWay}"
+            Order="Secondary"
+            Priority="0"
+            Text="{res:Translate DeleteAll}"
+            Command="{Binding DeleteAllOpRangeCommand}" />
+    </control:BasePage.CustomToolbar>
+
+    <Grid
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"
+        Padding="0"
+        Margin="0"
+        CompressedLayout.IsHeadless="true">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackLayout
+            BackgroundColor="{StaticResource WarningColor}"
+            VerticalOptions="Start"
+            Grid.Row="0"
+            IsVisible="{Binding Path=Error, Converter={StaticResource StringToBoolConverter}}">
+            <Label x:Name="Error" 
+                    TextColor="White" 
+                    FontAttributes="Bold"
+                    VerticalOptions="FillAndExpand" 
+                    HorizontalOptions="Center"
+                    Text="{Binding Path=Error}"></Label>
+        </StackLayout>
+
+        <Grid
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Grid.Row="1">
+
+            <StackLayout
+                x:Name="ProgrammingLayout"
+                Margin="10,0"
+                Orientation="Vertical"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                Spacing="0">
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Visible">
+                            <VisualState.Setters>
+                                <Setter Property="IsVisible" Value="True" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState x:Name="Hidden">
+                            <VisualState.Setters>
+                                <Setter Property="IsVisible" Value="False" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <Grid VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand">
+
+                    <Grid  HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            ColumnSpacing="0"
+                            RowSpacing="0"
+                            BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                            IsVisible="{Binding LoadingTask.IsCompleted}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="DayGrid"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                RowSpacing="0"
+                                Margin="0"
+                                Padding="0"
+                                ColumnSpacing="0"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+
+                        <Grid x:Name="TimeGrid"
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Margin="0,0"
+                                Padding="0"
+                                RowSpacing="0"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+
+                        <control:OperationRangesCanvasView x:Name="OperationRangesCanvasView"
+                                                        HorizontalOptions="FillAndExpand"
+                                                        VerticalOptions="FillAndExpand"
+                                                        Grid.Column="1"
+                                                        Grid.Row="1"
+                                                        Margin="0,0"                                                      
+                                                        OperationRanges="{Binding Plug.Program.OperationRangeList, Converter={StaticResource OperationRangeConverter}}"
+                                                        PaintSurface="OnCanvasViewPaintSurface">
+                        </control:OperationRangesCanvasView>
+
+                        <Grid.Effects HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    Grid.Column="1"
+                                    Grid.Row="1">
+                            <view:TouchEffect Capture="True" TouchAction="OnTouchEffectAction" />
+                        </Grid.Effects>
+                    </Grid>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout x:Name="ManualLayout"
+                            Orientation="Vertical"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Visible">
+                            <VisualState.Setters>
+                                <Setter Property="IsVisible" Value="True" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState x:Name="Hidden">
+                            <VisualState.Setters>
+                                <Setter Property="IsVisible" Value="False" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <TableView Intent="Settings"
+                                    VerticalOptions="Start"
+                                    HeightRequest="155"
+                                    RowHeight="50" 
+                                    BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                                    Margin="20,0,20,5" >
+                    <TableRoot>
+                        <TableSection Title="{res:Translate Conditions}">
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" 
+                                                    Margin="20,0,10,0"
+                                                    HorizontalOptions="FillAndExpand"
+                                                    IsVisible="{Binding Path=Plug.ConditionType, ConverterParameter=Temperature, Converter={StaticResource ConditionTypeToVisibilityConverter}}">
+                                    
+                                    <Label Text="{res:Translate Temperature}" 
+                                                    IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                                    HorizontalOptions="Start"
+                                                    FontSize="Medium"
+                                                    VerticalOptions="CenterAndExpand"/>
+
+                                    <Entry Text="{Binding Plug.Condition.TemperatureOrder, Mode=TwoWay, Converter={StaticResource FloatNullableToStringConverter}}"
+                                                IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="CenterAndExpand"
+                                                HorizontalTextAlignment="Center"
+                                                Margin="10,5,0,5"
+                                                FontSize="Medium"
+                                                WidthRequest="50"/>
+
+                                    <Label Text="°C" 
+                                                    Margin="0"
+                                                    IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                                    HorizontalOptions="Start"
+                                                    FontSize="Medium"
+                                                    VerticalOptions="CenterAndExpand"/>
+
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                            VerticalOptions="CenterAndExpand"  
+                                            Margin="0,0,10,0"                                              
+                                            IsToggled="{Binding Plug.Condition.TemperatureOrderIsEnabled, Mode=TwoWay, Converter={StaticResource OrderToBooleanConverter}}"
+                                            x:Name="SwitchTemperature">
+                                    </Switch>
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" 
+                                                    Margin="20,0,10,0"
+                                                    HorizontalOptions="FillAndExpand"
+                                                    IsVisible="{Binding Path=Plug.ConditionType, ConverterParameter=Humidity, Converter={StaticResource ConditionTypeToVisibilityConverter}}">
+                                    <Label Text="{res:Translate Humidity}" 
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="CenterAndExpand"
+                                                    FontSize="Medium"
+                                                    IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"/>
+
+                                    <Entry Text="{Binding Plug.Condition.HumidityOrder, Mode=TwoWay, Converter={StaticResource FloatNullableToStringConverter}}"
+                                                IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="CenterAndExpand"
+                                                HorizontalTextAlignment="Center"
+                                                Margin="10,5,0,5"
+                                                FontSize="Medium"
+                                                WidthRequest="50"/>
+
+                                    <Label Text="%"
+                                                Margin="0"
+                                                IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="CenterAndExpand"
+                                                FontSize="Medium"/>
+
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                                VerticalOptions="CenterAndExpand"  
+                                                Margin="0,0,10,0"  
+                                                IsToggled="{Binding Plug.Condition.HumidityOrderIsEnabled , Mode=TwoWay, Converter={StaticResource OrderToBooleanConverter}}"
+                                                x:Name="SwitchHumidity">
+                                    </Switch>
+                                </StackLayout>
+                            </ViewCell>
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+            </StackLayout>
+        </Grid>
+
+        <Grid HorizontalOptions="FillAndExpand"
+                    VerticalOptions="End"
+                    Padding="0"
+                    Margin="0"
+                    Grid.Row="2"
+                    RowSpacing="0"
+                    BackgroundColor="{StaticResource Blue}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <ContentView Grid.Column="0"
+                            Grid.Row="0"
+                            x:Name="ProgrammingState"
+                            Margin="0">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource MediumGray}"  />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Blue}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </ContentView>
+
+            <ContentView Grid.Column="1"
+                            Grid.Row="0"
+                            x:Name="ManualState"
+                            Margin="0">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource MediumGray}" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Blue}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </ContentView>
+
+            <Button x:Name="ProgrammingButton"
+                            Grid.Column="0" 
+                            Grid.Row="1"
+                            Margin="0,0,0,3"      
+                            BackgroundColor="{StaticResource Blue}"    
+                            TextColor="White"                    
+                            BorderColor="{StaticResource Blue}" 
+                            Text="{res:Translate Programming}"
+                            Clicked="ProgrammingButtonClicked" >
+            </Button>
+
+            <Button x:Name="ManualButton"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Margin="0,0,0,3"                            
+                            BackgroundColor="{StaticResource Blue}"      
+                            TextColor="White"                    
+                             BorderColor="{StaticResource Blue}" 
+                            Text="{res:Translate Manual}"                            
+                            Clicked="ManualButtonClicked">
+            </Button>
+
+        </Grid>
+    </Grid>
+
+</control:BasePage>

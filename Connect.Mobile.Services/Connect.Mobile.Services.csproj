@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="akavache.core" Version="9.1.20" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Connect.Framework\Connect.Application.Services\Connect.Application.Services.csproj" />
+    <ProjectReference Include="..\..\Zapto.Framework\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+  </ItemGroup>
+
+</Project>

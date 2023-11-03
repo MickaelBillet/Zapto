@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705; NU1701; CS0618; XA0105; XA106</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <NoWarn>1701;1702;1705; NU1701; CS0618; XA0105; XA106</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\SettingsView\SettingsView.xaml - Copie.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Views\SettingsView\SettingsView - Copie.xaml" />
+    <EmbeddedResource Remove="Views\Base\Controls\PlugCellView.xaml" />
+    <EmbeddedResource Remove="Views\Base\Controls\SensorCellView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="UserSettings.Production.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="UserSettings.Production.json" />
+    <EmbeddedResource Include="UserSettings.Developpment.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="akavache" Version="9.1.20" />
+    <PackageReference Include="akavache.core" Version="9.1.20" />
+    <PackageReference Include="akavache.sqlite3" Version="9.1.20" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Plugin.PushNotification" Version="3.6.23" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Email" Version="2.4.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.6" />
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.12" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.7" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ConnectedObjectCellView\SensorCellView.xaml.cs">
+      <DependentUpon>SensorCellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainMenuView\DetailView.xaml.cs">
+      <DependentUpon>DetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainMenuView\DetailHomeView.xaml.cs">
+      <DependentUpon>DetailHomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainMenuView\MasterView.xaml.cs">
+      <DependentUpon>MasterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\NotificationView\NotificationPopupView.xaml.cs">
+      <DependentUpon>NotificationPopupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\NotificationView\NotificationView.xaml.cs">
+      <DependentUpon>NotificationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsView\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Base\Controls\ToogleImageButton.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SettingsView\SettingsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Base\Effects\" />
+    <Folder Include="Views\Base\Effects\TouchEffect\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
+    <ProjectReference Include="..\Connect.Infrastructure.Services\Connect.Infrastructure.Services.csproj" />
+    <ProjectReference Include="..\Framework.Mobile.Services\Framework.Mobile.Services.csproj" />
+  </ItemGroup>
+
+</Project>

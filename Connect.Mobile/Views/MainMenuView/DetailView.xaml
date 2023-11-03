@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<control:BasePage
+    x:Class="Connect.Mobile.View.DetailView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:control="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:view="clr-namespace:Connect.Mobile.View"
+    x:Name="MainView"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    x:DataType="viewmodel:DetailViewModel"
+    Title="{Binding Room.Name}">
+
+    <control:BasePage.Resources>
+        <ResourceDictionary>
+            <DataTemplate
+                x:Key="plugTemplate">
+                <ViewCell>
+                    <view:PlugCellView />
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate
+                x:Key="sensorTemplate">
+                <ViewCell>
+                    <view:SensorCellView />
+                </ViewCell>
+            </DataTemplate>
+            <view:ObjectTemplateSelector
+                x:Key="objectTemplateSelector"
+                PlugTemplate="{StaticResource plugTemplate}"
+                SensorTemplate="{StaticResource sensorTemplate}" />
+        </ResourceDictionary>
+    </control:BasePage.Resources>
+
+    <control:BasePage.CustomToolbar>
+        <control:CustomToolbarItem
+            IsVisible="True"
+            x:Name="Alerts"
+            IconImageSource="alert.png"
+            Order="Primary"
+            Command="{Binding NotificationCommand}"
+            Priority="0" />
+    </control:BasePage.CustomToolbar>
+
+    <Grid
+        CompressedLayout.IsHeadless="true"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <StackLayout
+            Grid.Row="0"
+            BackgroundColor="{StaticResource WarningColor}"
+            IsVisible="{Binding Path=Error, Converter={StaticResource StringToBoolConverter}}"
+            VerticalOptions="Start">
+            <Label
+                x:Name="Error"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                Text="{Binding Path=Error}"
+                TextColor="White"
+                VerticalOptions="FillAndExpand" />
+        </StackLayout>
+
+        <Grid
+            Grid.Row="1"
+            Padding="10,2"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <ActivityIndicator
+                IsVisible="True"
+                IsRunning="True"
+                VerticalOptions="CenterAndExpand">
+                <ActivityIndicator.Triggers>
+                    <DataTrigger
+                        TargetType="ActivityIndicator"
+                        Binding="{Binding IsInitialized}"
+                        Value="True">
+                        <Setter
+                            Property="IsRunning"
+                            Value="False" />
+                    </DataTrigger>
+                </ActivityIndicator.Triggers>
+            </ActivityIndicator>
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                RefreshColor="{StaticResource Blue}"
+                Command="{Binding RefreshCommand}">
+                <ListView
+                    x:Name="MenuItemsListView"
+                    CachingStrategy="RecycleElement"
+                    HasUnevenRows="true"
+                    IsVisible="{Binding LoadingTask.IsCompleted}"
+                    ItemTemplate="{StaticResource objectTemplateSelector}"
+                    ItemsSource="{Binding Room.ConnectedObjectsList}"
+                    SeparatorVisibility="None" />
+            </RefreshView>
+        </Grid>
+
+        <BoxView
+            Grid.Row="2"
+            Margin="0,0"
+            BackgroundColor="{StaticResource Gray}"
+            IsVisible="{Binding Room.DeviceType, Converter={StaticResource DeviceTypeToVisibilityConverter2}}"
+            VerticalOptions="EndAndExpand" />
+
+        <Grid
+            Grid.Row="3"
+            Margin="0,-8,0,0"
+            Padding="0"
+            BackgroundColor="{StaticResource LightGrayBackgroundColor}"
+            ColumnSpacing="0"
+            HorizontalOptions="FillAndExpand"
+            RowSpacing="0"
+            VerticalOptions="FillAndExpand">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2.5*" />
+            </Grid.ColumnDefinitions>
+
+            <StackLayout
+                Grid.Column="0"
+                Margin="15,-12,0,0"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding Path=Room.DeviceType, ConverterParameter=Temperature, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
+                Orientation="Horizontal"
+                VerticalOptions="CenterAndExpand">
+                <Label
+                    Margin="0,0,0,0"
+                    FontAttributes="None"
+                    FontSize="65"
+                    HorizontalOptions="Start"
+                    TextColor="{StaticResource LightBlue}"
+                    VerticalOptions="FillAndExpand">
+                    <Label.Text>
+                        <Binding Converter="{StaticResource DoubleToIntegerOrFractionnalPart}" Path="Room.Temperature">
+                            <Binding.ConverterParameter>
+                                <sys:String>&quot;Integer&quot;</sys:String>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Label.Text>
+                </Label>
+
+                <Label
+                    Margin="-8,0,0,0"
+                    FontAttributes="None"
+                    FontSize="65"
+                    HorizontalOptions="Start"
+                    Text="."
+                    TextColor="{StaticResource LightBlue}"
+                    VerticalOptions="FillAndExpand" />
+
+                <Grid
+                    Margin="-8,10,0,0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="FillAndExpand">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Margin="0,0,0,0"
+                        FontAttributes="None"
+                        FontSize="40"
+                        HorizontalOptions="Center"
+                        Text="°"
+                        TextColor="{StaticResource LightBlue}"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        Grid.Row="1"
+                        Margin="0,-20,0,0"
+                        FontAttributes="None"
+                        FontSize="40"
+                        HorizontalOptions="Start"
+                        TextColor="{StaticResource LightBlue}"
+                        VerticalOptions="Start">
+                        <Label.Text>
+                            <Binding Converter="{StaticResource DoubleToIntegerOrFractionnalPart}" Path="Room.Temperature">
+                                <Binding.ConverterParameter>
+                                    <sys:String>&quot;Fractionnal&quot;</sys:String>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </Label.Text>
+                    </Label>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,0"
+                HorizontalOptions="Start"
+                IsVisible="{Binding Path=Room.DeviceType, ConverterParameter=Humidity, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
+                Orientation="Horizontal"
+                VerticalOptions="EndAndExpand">
+                <Label
+                    Margin="10,0,0,0"
+                    FontAttributes="None"
+                    FontSize="40"
+                    HorizontalOptions="Center"
+                    Style="{StaticResource NormalLabelStyle}"
+                    TextColor="{StaticResource LightBlue}"
+                    VerticalOptions="CenterAndExpand">
+                    <Label.Text>
+                        <Binding Converter="{StaticResource DoubleToIntegerOrFractionnalPart}" Path="Room.Humidity">
+                            <Binding.ConverterParameter>
+                                <sys:String>&quot;Integer&quot;</sys:String>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Label.Text>
+                </Label>
+
+                <Label
+                    Margin="-5,0,0,0"
+                    FontAttributes="None"
+                    FontSize="40"
+                    HorizontalOptions="Start"
+                    Style="{StaticResource NormalLabelStyle}"
+                    Text="%"
+                    TextColor="{StaticResource LightBlue}"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="0,0,15,0"
+                HorizontalOptions="End"
+                IsVisible="{Binding Path=Room.DeviceType, ConverterParameter=Pressure, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
+                RowSpacing="0"
+                ColumnSpacing="0"
+                VerticalOptions="EndAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Margin="10,0,0,0"
+                    FontAttributes="None"
+                    FontSize="18"
+                    TextColor="{StaticResource LightBlue}"
+                    HorizontalOptions="EndAndExpand"
+                    Style="{StaticResource NormalLabelStyle}"
+                    Text="hPa"
+                    VerticalOptions="End" />
+
+                <Label
+                    Grid.Row="1"
+                    Margin="10,-16,0,0"
+                    FontAttributes="None"
+                    FontSize="40"
+                    HorizontalOptions="EndAndExpand"
+                    TextColor="{StaticResource LightBlue}"
+                    Style="{StaticResource NormalLabelStyle}"
+                    VerticalOptions="End">
+                    <Label.Text>
+                        <Binding
+                            Converter="{StaticResource DoubleToIntegerOrFractionnalPart}"
+                            Path="Room.Pressure">
+                            <Binding.ConverterParameter>
+                                <sys:String>&quot;Integer&quot;</sys:String>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Label.Text>
+                </Label>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</control:BasePage>

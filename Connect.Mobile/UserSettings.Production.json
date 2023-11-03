@@ -1,0 +1,19 @@
+{
+  "BackEndUrl": "connect-zapto.fr",
+  "PortHttp": 80,
+  "PortHttps": 443,
+  "ProtocolController": "https",
+  "ProtocolSignalR": "http",
+  "PathBase": "Connect/",
+  "PathBaseSignalR": "/SignalR",
+  "X-Forwarded-Path": "/Connect",
+  "User": "connect.mobile",
+  "Password": "connect",
+  "Keycloak": {
+    "realm": "Zapto",
+    "Authority": "https://connect-zapto.fr/auth/realms/zapto",
+    "client_id": "ZaptoOIDC",
+    "client_secret": "dab722c5-3411-4fbd-9af9-379d1d5c2332",
+    "token_endpoint_url": "/protocol/openid-connect/token"
+  }
+}

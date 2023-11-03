@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+    xmlns:controls="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Class="Connect.Mobile.View.PlugCellView"
+    xmlns:model="clr-namespace:Connect.Model;assembly=Connect.Domain"
+    x:DataType="model:ConnectedObject"
+    x:Name="MainPage"
+    BackgroundColor="{StaticResource WhiteBackgroundColor}">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <Grid
+            BackgroundColor="{StaticResource Gray}"
+            CompressedLayout.IsHeadless="true"
+            Margin="0,5"
+            Padding="0,1,1,1"
+            RowSpacing="1"
+            ColumnSpacing="1"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            IsEnabled="{Binding Path=PlugCellViewModel.IsConnected, Source={x:Reference Name=MainPage}}"
+            Opacity="{Binding Path=PlugCellViewModel.IsConnected, Source={x:Reference Name=MainPage}, Converter={StaticResource BooleanToOpacityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+
+            <BoxView  Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            WidthRequest="4"                      
+                            BackgroundColor="{Binding Path=. , Converter={StaticResource PlugTypeToColorConverter}}"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="StartAndExpand"/>
+
+            <ContentView Grid.Column="1"
+                                Padding="1"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="3"
+                                BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                                VerticalOptions="FillAndExpand"
+                                HorizontalOptions="FillAndExpand">
+
+                <Grid
+                    Margin="5,0,5,5"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    ColumnSpacing="10"
+                    RowSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Text="{Binding Name}" 
+                            Style="{StaticResource NormalLabelStyle}" 
+                            FontAttributes="None"
+                            FontSize="18"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            VerticalOptions="CenterAndExpand"/>
+
+                    <Label  Text="{Binding Plug.Name}" 
+                            Style="{StaticResource NormalLabelStyle}" 
+                            FontAttributes="Bold" 
+                            FontSize="14"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            VerticalOptions="StartAndExpand"/>
+
+                    <Image Source="LightningYellow.png"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Margin="5"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Image.IsVisible>
+                            <Binding Path="Plug.Self" Converter="{StaticResource StatusPlugConverter}">
+                                <Binding.ConverterParameter>
+                                    <sys:String>LightningYellow</sys:String>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </Image.IsVisible>
+                    </Image>
+
+                    <Image Source="LightningBlue.png"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Margin="5"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Image.IsVisible>
+                            <Binding Path="Plug.Self" Converter="{StaticResource StatusPlugConverter}">
+                                <Binding.ConverterParameter>
+                                    <sys:String>LightningBlue</sys:String>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </Image.IsVisible>
+                    </Image>
+
+                    <Image Source="LightningBlueEmpty.png"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Margin="5"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Image.IsVisible>
+                            <Binding Path="Plug.Self" Converter="{StaticResource StatusPlugConverter}">
+                                <Binding.ConverterParameter>
+                                    <sys:String>LightningBlueEmpty</sys:String>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </Image.IsVisible>
+                    </Image>
+
+                    <StackLayout
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalOptions="StartAndExpand">
+                        <Image Source="Clockmini.png"></Image>
+                        <Label
+                            Text="{Binding Plug.WorkingDuration, Converter={StaticResource DurationConverter}}"
+                            Style="{StaticResource NormalLabelStyle}"
+                            VerticalOptions="CenterAndExpand" />
+                    </StackLayout>
+
+                    <StackLayout
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        IsVisible="{Binding Path=Plug.Condition.Self , Converter={StaticResource TemperatureOrderConverter}}"
+                        Opacity="{Binding Path=Plug.Self, Converter={StaticResource StatusToOpacityConverter}}"
+                        Orientation="Horizontal"
+                        HorizontalOptions="StartAndExpand">
+                        <Image Source="icons8thermometer40.png" ></Image>
+                        <Label Text="{Binding Path=Plug.Condition.TemperatureOrder}" 
+                                   Style="{StaticResource NormalLabelStyle}"
+                                    VerticalOptions="CenterAndExpand"/>
+                        <Label Text="°C" 
+                                    Style="{StaticResource NormalLabelStyle}"
+                                    VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+
+                    <StackLayout
+                        Grid.Column="2"
+                        Grid.Row="2"
+                        IsVisible="{Binding Path=Plug.Condition.Self, Converter={StaticResource HumidityOrderConverter}}"
+                        Opacity="{Binding Path=Plug.Self, Converter={StaticResource StatusToOpacityConverter}}"
+                        Orientation="Horizontal"
+                        HorizontalOptions="StartAndExpand">
+                        <Image Source="icons8wet40Black.png" ></Image>
+                        <Label Text="{Binding Path=Plug.Condition.HumidityOrder}" 
+                                   Style="{StaticResource NormalLabelStyle}"
+                                    VerticalOptions="CenterAndExpand"/>
+                        <Label Text="%" 
+                                    Style="{StaticResource NormalLabelStyle}"
+                                    VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+
+                </Grid>
+            </ContentView>
+
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                Orientation="Horizontal"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+
+                <Label
+                    Text="{res:Translate On}"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Margin="0,0,0,0"></Label>
+
+                <controls:CustomSwitch
+                    x:Name="SwitchOnOff"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Margin="0,0,10,0"
+                    Command="{Binding Path=PlugCellViewModel.OnOffPlugCommand, Source={x:Reference Name=MainPage}}"
+                    CommandParameter="{Binding .}"
+                    Status="{Binding Path=Plug.OnOff, Mode=TwoWay}" />
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="2"
+                Orientation="Horizontal"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+
+                <Label
+                    Text="{res:Translate Programming}"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Margin="0,0,0,0" />
+
+                <controls:CustomSwitch
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Margin="0,0,10,0"
+                    IsEnabled="{Binding Path=IsToggled, Source={x:Reference SwitchOnOff}}"
+                    Command="{Binding Path=PlugCellViewModel.ProgrammingPlugCommand, Source={x:Reference Name=MainPage}}"
+                    CommandParameter="{Binding .}"
+                    Status="{Binding Path=Plug.Mode, Mode=TwoWay}" />
+            </StackLayout>
+
+            <ContentView
+                Grid.Row="1"
+                Grid.Column="3"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}">
+                <controls:ImageButton
+                    Source="Config.png"
+                    x:Name="SettingsButton"
+                    TapEvent="OnSettingsClickEvent"
+                    Margin="5">
+                </controls:ImageButton>
+            </ContentView>
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

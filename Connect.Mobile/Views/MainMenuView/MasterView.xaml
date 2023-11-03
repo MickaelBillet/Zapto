@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<controls:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:Connect.Mobile.View.Behaviors"
+    xmlns:controls="clr-namespace:Connect.Mobile.View.Controls"
+    x:Class="Connect.Mobile.View.MasterView"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    x:DataType="viewmodel:MasterViewModel"
+    Title="Master">
+    <StackLayout CompressedLayout.IsHeadless="true">
+        <ListView x:Name="MenuItemsListView"
+                SeparatorVisibility="None"
+                HasUnevenRows="true"
+                Margin="0"
+                VerticalOptions="FillAndExpand"
+                ItemsSource="{Binding Location.RoomsList}">
+            <ListView.Header>
+                <Grid Margin="0"
+                        Padding="0"
+                        RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2"/>
+                    </Grid.RowDefinitions>
+
+                    <StackLayout
+                        Grid.Row="0"
+                        Margin="5,5,5,10"
+                        BackgroundColor="{StaticResource Gray}"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand">
+                        <Button
+                            BackgroundColor="Transparent"
+                            Command="{Binding ClickLocationCommand}"
+                            Margin="5"
+                            HorizontalOptions="Center"
+                            WidthRequest="180"
+                            Padding="10"
+                            HeightRequest="100"
+                            Image="house2"
+                            Opacity="0.6"
+                            FontAttributes="Bold"
+                            Text="{Binding Location.City}"
+                            FontSize="20"
+                            ContentLayout="Left,0">
+                        </Button>
+                    </StackLayout>
+                    
+                    <BoxView Grid.Row="1"
+                        Margin="5, 0"
+                        BackgroundColor="{StaticResource Gray}">
+                    </BoxView>
+                </Grid>
+            </ListView.Header>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="15,10"
+                                     x:DataType="{x:Null}"
+                                     HorizontalOptions="FillAndExpand">
+                            <Label VerticalOptions="FillAndExpand" 
+                                VerticalTextAlignment="Center" 
+                                Text="{Binding Name}" 
+                                FontSize="24"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.Behaviors>
+                <behaviors:EventToCommandBehavior EventName="ItemTapped" 
+                                                    Command="{Binding SelectRoomCommand}"
+                                                    EventArgsConverter="{StaticResource ItemTappedConverter}">
+                </behaviors:EventToCommandBehavior>
+            </ListView.Behaviors>
+        </ListView>
+    </StackLayout>
+</controls:BasePage>

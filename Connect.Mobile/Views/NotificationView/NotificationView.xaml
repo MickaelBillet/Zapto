@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controls:BasePage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+    xmlns:controls="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:view="clr-namespace:Connect.Mobile.View"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Class="Connect.Mobile.View.NotificationView"
+    x:Name="RootPage"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    xmlns:model="clr-namespace:Connect.Model;assembly=Connect.Domain"
+    x:DataType="viewmodel:NotificationViewModel"
+    Title="{res:Translate Notifications}"
+    BackgroundColor="{StaticResource WhiteBackgroundColor}">
+    <controls:BasePage.Resources>
+        <ResourceDictionary>
+            
+        </ResourceDictionary>
+    </controls:BasePage.Resources>
+
+    <controls:BasePage.CustomToolbar>
+        <controls:CustomToolbarItem
+            x:Name="Close"
+            IsVisible="True"
+            IconImageSource="ic_action_close.png"
+            Order="Primary"
+            Command="{Binding CloseCommand}"
+            Priority="0" />
+
+        <controls:CustomToolbarItem
+            x:Name="Add"
+            Order="Secondary"
+            Priority="0"
+            Text="{res:Translate AddNotification}"
+            Command="{Binding CreateNotificationCommand}" />
+
+        <controls:CustomToolbarItem
+            x:Name="DeleteAll"
+            Order="Secondary"
+            Priority="0"
+            Text="{res:Translate DeleteAll}"
+            Command="{Binding DeleteAllNotificationCommand}" />
+    </controls:BasePage.CustomToolbar>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackLayout
+            Grid.Row="0"
+            BackgroundColor="{StaticResource WarningColor}"
+            IsVisible="{Binding Path=Error, Converter={StaticResource StringToBoolConverter}}"
+            VerticalOptions="Start">
+            <Label
+                x:Name="Error"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                Text="{Binding Path=Error}"
+                TextColor="White"
+                VerticalOptions="FillAndExpand" />
+        </StackLayout>
+
+        <Grid
+            Grid.Row="1"
+            Padding="10,2"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                RefreshColor="{StaticResource Blue}"
+                Command="{Binding RefreshCommand}">
+                <CollectionView
+                    x:Name="collectionView"
+                    HorizontalOptions="Center"
+                    SelectionMode="None"
+                    Margin="0,5"
+                    EmptyView="{res:Translate NoNotification}"
+                    ItemsSource="{Binding NotificationProvider.NotificationsList}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout
+                            Orientation="Vertical"
+                            ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="model:Notification">
+                            <SwipeView
+                                HeightRequest="70"
+                                Margin="0,0">
+                                <SwipeView.LeftItems>
+                                    <SwipeItems
+                                        Mode="Reveal">
+                                        <SwipeItem
+                                            Text="{res:Translate Edit}"
+                                            IconImageSource="edit.png"
+                                            BackgroundColor="LightGreen"
+                                            CommandParameter="{Binding Self}"
+                                            Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.EditNotificationCommand}" />
+                                        <SwipeItem
+                                            Text="{res:Translate Delete}"
+                                            IconImageSource="delete.png"
+                                            BackgroundColor="LightPink"
+                                            CommandParameter="{Binding Self}"
+                                            Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.DeleteNotificationCommand}" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+
+                                <Frame
+                                    BackgroundColor="White"
+                                    BorderColor="#F0F0F0"
+                                    Margin="0"
+                                    Padding="0"
+                                    HasShadow="True"
+                                    HorizontalOptions="FillAndExpand">
+                                    <StackLayout
+                                        VerticalOptions="FillAndExpand"
+                                        Orientation="Horizontal"
+                                        Margin="5,0,0,0"
+                                        Padding="0"
+                                        Spacing="0"
+                                        HorizontalOptions="FillAndExpand">
+                                        <Image
+                                            Source="{Binding Path=Parameter, Converter={StaticResource ParamImageConverter}, Mode=OneWay}"
+                                            Aspect="AspectFit"
+                                            Margin="0,5"
+                                            HeightRequest="35"
+                                            WidthRequest="35" />
+                                        <Label
+                                            HorizontalOptions="CenterAndExpand"
+                                            VerticalOptions="Center"
+                                            FontSize="22"
+                                            Text="{Binding Self, Converter={StaticResource NotificationConverter}, Mode=OneWay}"
+                                            FontAttributes="Bold" />
+                                        <controls:ToogleImageButton
+                                            Margin="0"
+                                            Padding="0"
+                                            ImageChecked="icons8_audio"
+                                            ImageUnChecked="icons8_noaudio"
+                                            TextChecked="{res:Translate ON_Upper}"
+                                            TextUnChecked="{res:Translate OFF_Upper}"
+                                            CommandParameter="{Binding Self}"
+                                            Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.OnOffNotificationCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            WidthRequest="80"
+                                            IsChecked="{Binding Path=IsEnabled, Mode=TwoWay}">
+                                        </controls:ToogleImageButton>
+                                    </StackLayout>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+
+        <BoxView
+            x:Name="PageFader"
+            Grid.Row="1"
+            IsVisible="false"
+            Opacity="0">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="PageFader_Tapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <view:NotificationPopUpView
+            x:Name="NotificationPopUpView"
+            Grid.Row="1"
+            TranslationY="{Binding Source={x:Reference RootPage}, Path=Height}" />
+    </Grid>
+</controls:BasePage>

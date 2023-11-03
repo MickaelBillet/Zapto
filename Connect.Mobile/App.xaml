@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Connect.Mobile.App"
+                    xmlns:c="clr-namespace:Connect.Mobile.Converters">
+  <Application.Resources >
+        <ResourceDictionary>
+
+            <c:SignConverter x:Key="SignConverter" />
+            <c:BooleanToBooleanConverter x:Key="BooleanToBooleanConverter" />
+            <c:BooleanToOpacityConverter x:Key="BooleanToOpacityConverter" />
+            <c:StringToIntConverter x:Key="StringToIntConverter"/>
+            <c:ItemTappedEventArgsConverter x:Key="ItemTappedConverter" />
+            <c:StringToDecimalConverter x:Key="StringToDecimalConverter" />
+            <c:StringCaseConverter x:Key="StringCaseConverter"/>
+            <c:DateTimeToStringUTCConverter x:Key="DateTimeToStringUTCConverter"/>
+            <c:DateTimeToStringLocalConverter x:Key="DateTimeToStringLocalConverter"/>
+            <c:LengthToIsVisibleConverter x:Key="LengthToIsVisibleConverter"/>
+            <c:StringDecimalToStringIntConverter x:Key="StringDecimalToStringIntConverter" />
+            <c:DecimalToStringDecimalConverter x:Key="DecimalToStringDecimalConverter"/>
+            <c:DecimalToStringIntConverter x:Key="DecimalToStringIntConverter"/>
+            <c:ToggledItemEventArgsConverter x:Key="ToggledItemEventConverter"/>
+            <c:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+            <c:DurationConverter x:Key="DurationConverter"/>
+            <c:PlugTypeToColorConverter x:Key="PlugTypeToColorConverter"/>
+            <c:StatusPlugConverter x:Key="StatusPlugConverter"/>
+            <c:StringToBoolConverter x:Key="StringToBoolConverter"/>
+            <c:DoubleToIntegerOrFractionnalPart x:Key="DoubleToIntegerOrFractionnalPart"/>
+            <c:UpperCaseConverter x:Key="UpperCaseConverter"/>
+            <c:DeviceTypeToVisibilityConverter x:Key="DeviceTypeToVisibilityConverter"/>
+            <c:DeviceTypeToVisibilityConverter2 x:Key="DeviceTypeToVisibilityConverter2"/>
+            <c:ConditionTypeToVisibilityConverter x:Key="ConditionTypeToVisibilityConverter"/>
+            <c:FloatNullableToStringConverter x:Key="FloatNullableToStringConverter"/>
+            <c:OrderToBooleanConverter x:Key="OrderToBooleanConverter"/>
+            <c:TemperatureOrderConverter x:Key="TemperatureOrderConverter"/>
+            <c:HumidityOrderConverter x:Key="HumidityOrderConverter"/>
+            <c:StatusToOpacityConverter x:Key="StatusToOpacityConverter"/>
+            <c:OperationRangeConverter
+                x:Key="OperationRangeConverter" />
+            <c:NotificationConverter
+                x:Key="NotificationConverter" />
+            <c:ParamImageConverter
+                x:Key="ParamImageConverter" />
+            <c:ParameterConverter
+                x:Key="ParameterConverter" />
+            <c:IntToStringConverter
+                x:Key="IntToStringConverter" />
+
+
+            <Color x:Key="MediumGray">#9F9F9F</Color> <!--Gris foncé-->
+            <Color x:Key="WarningColor">#FFB733</Color> <!--Orange-->
+            <Color x:Key="AlertColor">#E74C3C</Color> <!--Rouge-->
+            <Color x:Key="OffColor">#C5C5C5</Color> <!--Gris-->
+            <Color x:Key="OnColor">#4BB81F</Color> <!--Vert-->
+            <Color x:Key="Blue">#375587</Color> <!--Bleue foncé-->
+            <Color x:Key="LightBlue">#7A9DD7</Color> <!--Bleue-->
+            <Color x:Key="LightLightBlue">#CEE0FF</Color> <!--Bleue clair-->
+            <Color x:Key="LightTextColor">#383838</Color> <!--Noir clair-->
+            <Color x:Key="WhiteBackgroundColor">#F9F9F9</Color> <!--Blanc cassé-->
+            <Color x:Key="LightGrayBackgroundColor">#F0F0F0</Color> <!--Gris clair-->
+            <Color x:Key="Gray">#E3E3E3</Color> <!--Gris-->
+            <Color
+                x:Key="HighlightGradientStart">#EAEAEA</Color>
+            <Color
+                x:Key="HighlightGradientEnd">#AEAEAE</Color>
+            <Color
+                x:Key="NonHighlightGradientStart">#858585</Color>
+            <Color
+                x:Key="NonHighlightGradientEnd">#7B7B7B</Color>
+
+            <Color x:Key="StandardPlug">#D1D1D1</Color>
+            <Color x:Key="HumidityTemperaturePlug">#BBA1C4</Color>
+            <Color x:Key="HumidityPlug">#7A9DD7</Color>
+            <Color x:Key="TemperaturePlug">#DF9292</Color>
+
+            <Style x:Key="NavigationPageStyle"  TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource Blue}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+
+            <Style
+                x:Key="DetailLabelStyle"
+                TargetType="Label">
+                <Setter
+                    Property="FontSize"
+                    Value="8" />
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource MediumGray}" />
+            </Style>
+
+            <Style
+                x:Key="NormalLabelStyle"
+                TargetType="Label">
+                <Setter
+                    Property="FontSize"
+                    Value="14" />
+                <Setter
+                    Property="TextColor"
+                    Value="{StaticResource LightTextColor}" />
+            </Style>
+
+            <x:String x:Key="formatdatetimelong">ddMMMyy HH:mm:ss.fff tt</x:String>
+            <x:String x:Key="formattimewithoutseconds">{0:h:mm tt}</x:String>
+            <x:String x:Key="formatdatetimewithoutseconds">{0:M/d/yy h:mm tt}</x:String>
+            <x:String x:Key="formatdecimalzeroplaces">{0:0}</x:String>
+            <x:String x:Key="formatdecimaloneplaces">{0:F1}</x:String>
+            <x:String x:Key="formatdecimaltwoplaces">{0:F2}</x:String>
+            <x:String x:Key="formatdecimalthreeplaces">{0:F3}</x:String>
+            <x:String x:Key="formatdecimalfourplaces">{0:F4}</x:String>
+            <x:String x:Key="formatphonenumberusa">{0:(###) ###-####}</x:String>
+            <x:String
+                x:Key="formatcurrencyusa">{0:$#,##0.00;($#,##0.00);Zero}</x:String>
+            <x:String x:Key="formatpercent">{0:0%}</x:String>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

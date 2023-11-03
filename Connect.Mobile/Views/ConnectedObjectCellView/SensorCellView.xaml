@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+    xmlns:controls="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Class="Connect.Mobile.View.SensorCellView"
+    xmlns:model="clr-namespace:Connect.Model;assembly=Connect.Domain"
+    x:DataType="model:ConnectedObject"
+    x:Name="MainPage"
+    BackgroundColor="{StaticResource WhiteBackgroundColor}">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+  <ContentView.Content>
+        <Grid
+            BackgroundColor="{StaticResource Gray}"
+            CompressedLayout.IsHeadless="true"
+            Margin="0,5"
+            Padding="0,1,1,1"
+            RowSpacing="1"
+            ColumnSpacing="1"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            IsEnabled="{Binding Path=SensorCellViewModel.IsConnected, Source={x:Reference Name=MainPage}}"
+            Opacity="{Binding Path=SensorCellViewModel.IsConnected, Source={x:Reference Name=MainPage}, Converter={StaticResource BooleanToOpacityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+
+            <BoxView
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                WidthRequest="4"
+                BackgroundColor="{Binding Path=. , Converter={StaticResource PlugTypeToColorConverter}}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="StartAndExpand" />
+
+            <ContentView
+                Grid.Column="1"
+                Padding="1"
+                Grid.Row="0"
+                Grid.ColumnSpan="3"
+                BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand">
+
+                <Grid
+                    Margin="5,0,5,5"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    ColumnSpacing="10"
+                    RowSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Text="{Binding Name}" 
+                            Style="{StaticResource NormalLabelStyle}" 
+                            FontAttributes="None"
+                            FontSize="18"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            VerticalOptions="CenterAndExpand"/>
+
+                    <Label
+                        Text="{Binding Sensor.Name}"
+                        Style="{StaticResource NormalLabelStyle}"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        VerticalOptions="StartAndExpand" />
+
+                    <StackLayout
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Margin="5,0,0,0"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="CenterAndExpand">
+
+                        <Label
+                            Margin="-8,0,0,0"
+                            FontAttributes="None"
+                            FontSize="60"
+                            Opacity="0.7"
+                            HorizontalOptions="Start"
+                            VerticalOptions="FillAndExpand">
+                            <Label.Text>
+                                <Binding
+                                    Converter="{StaticResource DoubleToIntegerOrFractionnalPart}"
+                                    Path="Sensor.Temperature">
+                                    <Binding.ConverterParameter>
+                                        <sys:String>&quot;Integer&quot;</sys:String>
+                                    </Binding.ConverterParameter>
+                                </Binding>
+                            </Label.Text>
+                        </Label>
+
+                        <Label
+                            Margin="-8,0,0,0"
+                            FontAttributes="None"
+                            FontSize="60"
+                            Opacity="0.7"
+                            HorizontalOptions="Start"
+                            Text="."
+                            VerticalOptions="FillAndExpand" />
+
+                        <Grid
+                            Margin="-8,10,0,0"
+                            HorizontalOptions="Start"
+                            Opacity="0.7"
+                            VerticalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="30" />
+                                <RowDefinition
+                                    Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label
+                                Grid.Row="0"
+                                Margin="0,0,0,0"
+                                FontAttributes="None"
+                                FontSize="35"
+                                HorizontalOptions="Center"
+                                Text="°"
+                                VerticalOptions="Center" />
+
+                            <Label
+                                Grid.Row="1"
+                                Margin="0,-20,0,0"
+                                FontAttributes="None"
+                                FontSize="35"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Start">
+                                <Label.Text>
+                                    <Binding
+                                        Converter="{StaticResource DoubleToIntegerOrFractionnalPart}"
+                                        Path="Sensor.Temperature">
+                                        <Binding.ConverterParameter>
+                                            <sys:String>&quot;Fractionnal&quot;</sys:String>
+                                        </Binding.ConverterParameter>
+                                    </Binding>
+                                </Label.Text>
+                            </Label>
+                        </Grid>
+
+                        <Image
+                            Source="icons8temperature40.png"
+                            Opacity="0.8"
+                            WidthRequest="28"
+                            HeightRequest="28"
+                            VerticalOptions="CenterAndExpand"
+                            Margin="-5,-15,0,0">
+                        </Image>
+                    </StackLayout>
+
+                    <StackLayout
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalOptions="StartAndExpand">
+                        <Image
+                            Source="alert_gray.png"
+                            IsVisible="{Binding NotificationsList.Count, Converter={StaticResource LengthToIsVisibleConverter}}"></Image>
+
+                    </StackLayout>
+
+                </Grid>
+            </ContentView>
+
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                Orientation="Horizontal"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+            </StackLayout>
+
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="2"
+                Orientation="Horizontal"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand">
+            </StackLayout>
+
+            <ContentView
+                Grid.Row="1"
+                Grid.Column="3"
+                BackgroundColor="{StaticResource LightGrayBackgroundColor}">
+                <controls:ImageButton
+                    Source="Config.png"
+                    x:Name="SettingsButton"
+                    TapEvent="OnSettingsClickEvent"
+                    Margin="5">
+                </controls:ImageButton>
+            </ContentView>
+
+        </Grid>
+    </ContentView.Content>
+</ContentView>

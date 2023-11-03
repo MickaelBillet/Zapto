@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Connect.Mobile.View.DetailHomeView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:Connect.Mobile.View.Behaviors"
+    xmlns:view="clr-namespace:Connect.Mobile.View"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    x:DataType="viewmodel:DetailHomeViewModel"
+    Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="roomTemplate">
+                <ViewCell>
+                    <view:RoomCellView />
+                </ViewCell>
+            </DataTemplate>
+            <view:RoomTemplateSelector x:Key="roomTemplateSelector" RoomTemplate="{StaticResource roomTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout CompressedLayout.IsHeadless="true">
+        <StackLayout
+            BackgroundColor="{StaticResource WarningColor}"
+            IsVisible="{Binding Path=Error, Converter={StaticResource StringToBoolConverter}}"
+            VerticalOptions="Start">
+            <Label
+                x:Name="Error"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                Text="{Binding Path=Error}"
+                TextColor="White"
+                VerticalOptions="FillAndExpand" />
+        </StackLayout>
+
+        <Grid
+            Padding="0,2"
+            ColumnSpacing="0"
+            HorizontalOptions="FillAndExpand"
+            RowSpacing="0"
+            VerticalOptions="FillAndExpand">
+            <ActivityIndicator
+                IsVisible="True"
+                IsRunning="True"
+                VerticalOptions="CenterAndExpand">
+                <ActivityIndicator.Triggers>
+                    <DataTrigger
+                        TargetType="ActivityIndicator"
+                        Binding="{Binding IsInitialized}"
+                        Value="True">
+                        <Setter
+                            Property="IsRunning"
+                            Value="False" />
+                    </DataTrigger>
+                </ActivityIndicator.Triggers>
+            </ActivityIndicator>
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing, Mode=OneWay}"
+                RefreshColor="{StaticResource Blue}"
+                Command="{Binding RefreshCommand}">
+                <ListView
+                    x:Name="MenuItemsListView"
+                    CachingStrategy="RecycleElement"
+                    HasUnevenRows="False"
+                    IsVisible="{Binding LoadingTask.IsCompleted}"
+                    ItemTemplate="{StaticResource roomTemplateSelector}"
+                    ItemsSource="{Binding RoomsList}"
+                    RowHeight="150"
+                    SeparatorVisibility="None">
+                    <ListView.Behaviors>
+                        <behaviors:EventToCommandBehavior
+                            Command="{Binding SelectRoomCommand}"
+                            EventArgsConverter="{StaticResource ItemTappedConverter}"
+                            EventName="ItemTapped" />
+                    </ListView.Behaviors>
+                </ListView>
+            </RefreshView>
+        </Grid>
+    </StackLayout>
+</ContentPage>

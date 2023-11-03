@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="Connect.Mobile.View.Controls.ToogleImageButton"
+    x:DataType="Connect.Mobile.View.Controls.ToogleImageButton"
+    x:Name="ButtonView">
+    <ContentView.Content>
+        <Grid
+            Margin="0"
+            ColumnSpacing="0"
+            Padding="0"
+            HorizontalOptions="EndAndExpand">
+            <ImageButton
+                x:Name="Button"
+                HeightRequest="70"
+                WidthRequest="110"
+                Margin="0,-5,-10,-5"
+                Padding="20,12,20,30"
+                Aspect="AspectFit"
+                Opacity="0.8"
+                HorizontalOptions="Center"
+                Command="{Binding Source={x:Reference ButtonView}, Path=Command}"
+                CommandParameter="{Binding Source={x:Reference ButtonView}, Path=CommandParameter}"
+                Clicked="ImageButton_Clicked"
+                VerticalOptions="FillAndExpand">
+            </ImageButton>
+            <Label
+                x:Name="Label"
+                Margin="0,0,-10,8"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                TextColor="Black"
+                FontSize="Body">
+            </Label>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

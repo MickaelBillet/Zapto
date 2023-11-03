@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+    xmlns:controls="clr-namespace:Connect.Mobile.View.Controls"
+    xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+    xmlns:model="clr-namespace:Connect.Model;assembly=Connect.Domain"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Class="Connect.Mobile.View.NotificationPopUpView"
+    VerticalOptions="FillAndExpand"
+    x:DataType="viewmodel:NotificationViewModel"
+    x:Name="MainPage">
+
+    <ContentView.Resources>
+        <Style
+            x:Key="TBParameterStyle" TargetType="controls:ToggleButton">
+            <Setter
+                Property="ContentLayout"
+                Value="Top, 0" />
+
+            <Setter
+                Property="WidthRequest"
+                Value="150"></Setter>
+
+            <Setter
+                Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup
+                        Name="ToggleStates">
+                        <VisualState
+                            Name="ToggledOff">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="#C0C0C0" />
+                                <Setter
+                                    Property="TextColor"
+                                    Value="Black" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <VisualState
+                            Name="ToggledOn">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="#404040" />
+                                <Setter
+                                    Property="TextColor"
+                                    Value="White" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentView.Resources>
+
+    <Grid
+        RowSpacing="0"
+        VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="50" />
+            <RowDefinition
+                Height="2" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <BoxView
+            Grid.RowSpan="3"
+            x:Name="FirstSection"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            BackgroundColor="{StaticResource Gray}"
+            CornerRadius="25,25,0,0"
+            HeightRequest="450">
+
+        </BoxView>
+
+        <Label
+            Grid.Row="0"
+            x:Name="TitleLabel"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            FontAttributes="Bold"
+            Margin="30,0"
+            FontSize="20" />
+
+        <BoxView
+            Grid.Row="1"
+            Margin="0"
+            BackgroundColor="Gray"
+            HeightRequest="10" />
+
+        <StackLayout
+            HorizontalOptions="Fill"
+            VerticalOptions="FillAndExpand"
+            Grid.Row="2"
+            Margin="0,10"
+            Orientation="Vertical"
+            Spacing="10">
+
+            <Label
+                Text="{res:Translate SelectParameter}"
+                VerticalOptions="Center"
+                Margin="30,0"
+                FontSize="15" />
+
+            <ContentView
+                Margin="0,0">
+                <StackLayout
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <controls:ToggleButton
+                        HorizontalOptions="Center"
+                        Style="{StaticResource TBParameterStyle}"
+                        x:Name="TemperatureButton"
+                        CornerRadius="20"
+                        IsVisible="{Binding Path=NotificationProvider.DeviceType, ConverterParameter=Temperature, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
+                        IsToggled="{Binding Notification.Parameter, ConverterParameter=Temperature, Converter={StaticResource ParameterConverter}, Mode=OneWayToSource}"
+                        Text="{res:Translate Temperature}"
+                        Clicked="TemperatureButton_Clicked"
+                        ImageSource="icons8temperature40">
+
+                    </controls:ToggleButton>
+
+                    <controls:ToggleButton
+                        HorizontalOptions="Center"
+                        Style="{StaticResource TBParameterStyle}"
+                        x:Name="HumidityButton"
+                        CornerRadius="20"
+                        IsVisible="{Binding Path=NotificationProvider.DeviceType, ConverterParameter=Humidity, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
+                        IsToggled="{Binding Notification.Parameter, ConverterParameter=Humidity, Converter={StaticResource ParameterConverter}, Mode=OneWayToSource}"
+                        Text="{res:Translate Humidity}"
+                        Clicked="HumidityButton_Clicked"
+                        ImageSource="icons8wet40">
+                    </controls:ToggleButton>
+                </StackLayout>
+            </ContentView>
+
+            <Label
+                Text="{res:Translate SelectCondition}"
+                VerticalOptions="Center"
+                Margin="30,0"
+                FontSize="15"/>
+
+            <ContentView
+                Margin="0">
+                <StackLayout
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    Spacing="20"
+                    Orientation="Horizontal">
+                    <controls:ToggleButton
+                        HorizontalOptions="Center"
+                        Style="{StaticResource TBParameterStyle}"
+                        x:Name="LowerButton"
+                        CornerRadius="20"
+                        Clicked="LowerButton_Clicked"
+                        IsToggled="{Binding Notification.Sign, ConverterParameter=Lower, Converter={StaticResource SignConverter}, Mode=OneWayToSource}"
+                        Text="{res:Translate Lower}">
+                    </controls:ToggleButton>
+
+                    <controls:ToggleButton
+                        HorizontalOptions="Center"
+                        Style="{StaticResource TBParameterStyle}"
+                        x:Name="UpperButton"
+                        CornerRadius="20"
+                        Clicked="UpperButton_Clicked"
+                        IsToggled="{Binding Notification.Sign, ConverterParameter=Upper, Converter={StaticResource SignConverter}, Mode=OneWayToSource}"
+                        Text="{res:Translate Upper}">
+                    </controls:ToggleButton>
+                </StackLayout>
+            </ContentView>
+           
+            <Grid>
+                <StackLayout
+                    Orientation="Vertical"
+                    Spacing="0"
+                    IsVisible="{Binding IsToggled, Source={x:Reference HumidityButton}}"
+                    Margin="0">
+
+                    <Label
+                        Text="{res:Translate SelectValue}"
+                        VerticalOptions="Center"
+                        Margin="30,0,30,5"
+                        FontSize="15" />
+
+                    <StackLayout
+                        Margin="30,0"
+                        Orientation="Horizontal"
+                        HorizontalOptions="FillAndExpand">
+                        <Label
+                            Text="{Binding Minimum, Source={x:Reference HumiditySlider}}"
+                            FontSize="18"
+                            HorizontalOptions="Start">
+                        </Label>
+
+                        <StackLayout
+                            HorizontalOptions="CenterAndExpand"
+                            Orientation="Horizontal">
+                            <Label
+                                x:Name="HumidityLabel"
+                                HorizontalOptions="Center"
+                                FontSize="20"
+                                Text="{Binding Notification.Value, Mode=TwoWay, Converter={StaticResource IntToStringConverter}}" />
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="%"
+                                FontSize="20" />
+                        </StackLayout>
+
+                        <Label
+                            Text="{Binding Maximum, Source={x:Reference HumiditySlider}}"
+                            FontSize="18"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+
+                    <Slider
+                        x:Name="HumiditySlider"
+                        Minimum="0"
+                        Maximum="100"
+                        Margin="30,0"
+                        Value="{Binding Notification.Value, Mode=TwoWay}" />
+
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
+                    Spacing="0"
+                    IsVisible="{Binding IsToggled, Source={x:Reference TemperatureButton}}"
+                    Margin="0">
+
+                    <Label
+                        Text="{res:Translate SelectValue}"
+                        VerticalOptions="Center"
+                        Margin="30,0,30,5"
+                        FontSize="15" />
+
+                    <StackLayout
+                        Margin="30,0"
+                        Orientation="Horizontal"
+                        HorizontalOptions="FillAndExpand">
+                        <Label
+                            Text="{Binding Minimum, Source={x:Reference TemperatureSlider}}"
+                            FontSize="18"
+                            HorizontalOptions="Start">
+                        </Label>
+
+                        <StackLayout
+                            HorizontalOptions="CenterAndExpand"
+                            Orientation="Horizontal">
+                            <Label
+                                x:Name="TemperatureLabel"
+                                HorizontalOptions="Center"
+                                FontSize="20"
+                                Text="{Binding Notification.Value, Mode=TwoWay, Converter={StaticResource IntToStringConverter}}" />
+                            <Label
+                                HorizontalOptions="Center"
+                                Text="°C"
+                                FontSize="20" />
+                        </StackLayout>
+
+                        <Label
+                            Text="{Binding Maximum, Source={x:Reference TemperatureSlider}}"
+                            FontSize="18"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+
+                    <Slider
+                        x:Name="TemperatureSlider"
+                        Minimum="-20"
+                        Maximum="35"
+                        Margin="30,0"
+                        Value="{Binding Notification.Value, Mode=TwoWay}" />
+
+                </StackLayout>
+            </Grid>
+
+            <StackLayout
+                VerticalOptions="EndAndExpand"
+                Margin="20,5">
+                <Grid
+                    ColumnSpacing="20">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Text="{res:Translate Cancel}"
+                        Grid.Column="0"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="White"
+                        Command="{Binding CancelCommand}"
+                        BorderColor="{StaticResource Blue}"
+                        BackgroundColor="{StaticResource Blue}">
+                        <Button.FontSize>
+                            <OnPlatform
+                                x:TypeArguments="x:Double"
+                                Android="14"
+                                iOS="14" />
+                        </Button.FontSize>
+                    </Button>
+
+                    <Button
+                        Text="{res:Translate OK}"
+                        Grid.Column="1"
+                        HorizontalOptions="FillAndExpand"
+                        TextColor="White"
+                        x:Name="OkButton"
+                        Command="{Binding ConfirmCommand}"
+                        BorderColor="{StaticResource Blue}"
+                        BackgroundColor="{StaticResource Blue}">
+                        <Button.FontSize>
+                            <OnPlatform
+                                x:TypeArguments="x:Double"
+                                Android="14"
+                                iOS="14" />
+                        </Button.FontSize>
+                    </Button>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+</ContentView>

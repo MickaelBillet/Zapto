@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<control:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:res="clr-namespace:Connect.Mobile.Helpers"
+                  xmlns:control="clr-namespace:Connect.Mobile.View.Controls"
+                  xmlns:behaviors="clr-namespace:Connect.Mobile.View.Behaviors"
+                  xmlns:model="clr-namespace:Connect.Model;assembly=Connect.Domain"
+                  Title="{res:Translate OperatingRange}"
+                  xmlns:viewmodel="clr-namespace:Connect.Mobile.ViewModel"
+                  x:DataType="viewmodel:OperationRangeViewModel"
+                  x:Class="Connect.Mobile.View.OperationRangeView">
+    <control:BasePage.CustomToolbar>
+        <control:CustomToolbarItem
+            x:Name="Close"
+            IsVisible="True"
+            IconImageSource="ic_action_close.png"
+            Order="Primary"
+            Command="{Binding CancelCommand}"
+            Priority="0" />
+        
+        <control:CustomToolbarItem
+            x:Name="Delete"
+            IsVisible="{Binding Path=OperationRangeList.Count, Converter={StaticResource LengthToIsVisibleConverter}}"
+            Command="{Binding DeleteOpRangeCommand}"
+            IconImageSource="ic_action_delete.png"
+            Order="Primary"
+            Priority="0" />
+    </control:BasePage.CustomToolbar>
+    
+    <control:BasePage.Content>
+        <ScrollView BackgroundColor="{StaticResource LightGrayBackgroundColor}">
+            <StackLayout CompressedLayout.IsHeadless="true">
+                <TableView BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                           Margin="20,5,20,5"
+                           HeightRequest="406"
+                           RowHeight="48"
+                           VerticalOptions="Start"
+                           Intent="Settings">
+                    <TableRoot>
+                        <TableSection Title="{res:Translate Day}">
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate Day}"
+                                           IsEnabled="{Binding  CanSelectDay, Mode=OneWay}"
+                                           FontSize="Medium"
+                                           VerticalOptions="CenterAndExpand"
+                                           HorizontalOptions="StartAndExpand" />
+
+                                    <control:CustomPicker x:Name="pickerDay"
+                                                          IsEnabled="{Binding  CanSelectDay, Mode=OneWay}"
+                                                          Title="{res:Translate SelectDay}"
+                                                          ItemsSource="{x:Static model:DayTime.Days}"
+                                                          HorizontalOptions="End"
+                                                          VerticalOptions="FillAndExpand"
+                                                          SelectedItem="{Binding Day, Mode=TwoWay}"
+                                                          SelectedFontSize="16"
+                                                          FontSize="Medium"
+                                                          WidthRequest="120"
+                                                          Margin="5,0">
+                                    </control:CustomPicker>
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate Week}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           FontSize="Medium"
+                                           HorizontalTextAlignment="Start"
+                                           Margin="0,5,0,5" />
+                                    <Switch HorizontalOptions="EndAndExpand" IsToggled="{Binding Week, Mode=TwoWay}" />
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate Weekend}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           FontSize="Medium"
+                                           HorizontalTextAlignment="Start"
+                                           Margin="0,5,0,5" />
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                            IsToggled="{Binding WeekEnd, Mode=TwoWay}" />
+                                </StackLayout>
+                            </ViewCell>
+
+                        </TableSection>
+
+                        <TableSection Title="{res:Translate Hour}">
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate StartDate}"
+                                           IsEnabled="{Binding  CanSelectTime, Mode=OneWay}"
+                                           FontSize="Medium"
+                                           HorizontalOptions="StartAndExpand"
+                                           VerticalOptions="CenterAndExpand" />
+
+                                    <TimePicker IsEnabled="{Binding  CanSelectTime, Mode=OneWay}"
+                                                HorizontalOptions="EndAndExpand"
+                                                VerticalOptions="FillAndExpand"
+                                                MinimumWidthRequest="120"
+                                                Time="{Binding StartTime, Mode=TwoWay}"
+                                                FontSize="Medium"
+                                                Margin="5,0">
+                                    </TimePicker>
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate EndDate}"
+                                           IsEnabled="{Binding  CanSelectTime, Mode=OneWay}"
+                                           FontSize="Medium"
+                                           HorizontalOptions="StartAndExpand"
+                                           VerticalOptions="CenterAndExpand" />
+
+                                    <TimePicker IsEnabled="{Binding  CanSelectTime, Mode=OneWay}"
+                                                HorizontalOptions="EndAndExpand"
+                                                VerticalOptions="FillAndExpand"
+                                                MinimumWidthRequest="120"
+                                                Time="{Binding EndTime, Mode=TwoWay}"
+                                                FontSize="Medium"
+                                                Margin="5,0">
+                                    </TimePicker>
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand">
+                                    <Label Text="{res:Translate AllDay}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           FontSize="Medium"
+                                           HorizontalTextAlignment="Start"
+                                           Margin="0,5,0,5" />
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                            IsToggled="{Binding AllDay, Mode=TwoWay}" />
+                                </StackLayout>
+                            </ViewCell>
+
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+
+                <TableView Intent="Settings"
+                           VerticalOptions="Start"
+                           HeightRequest="150"
+                           BackgroundColor="{StaticResource WhiteBackgroundColor}"
+                           Margin="20,0,20,5">
+                    <TableRoot>
+                        <TableSection Title="{res:Translate Conditions}">
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand"
+                                             IsVisible="{Binding Path=Plug.ConditionType, ConverterParameter=Temperature, Converter={StaticResource ConditionTypeToVisibilityConverter}}">
+
+                                    <Label Text="{res:Translate Temperature}" 
+                                            IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="CenterAndExpand"
+                                            FontSize="Medium"
+                                            HorizontalTextAlignment="Start"/>
+
+                                    <Entry Text="{Binding TemperatureOrder, Mode=TwoWay, Converter={StaticResource FloatNullableToStringConverter}}"
+                                           IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           HorizontalTextAlignment="Center"
+                                           FontSize="Medium"
+                                           Margin="10,0,0,0"
+                                           WidthRequest="50" />
+
+                                    <Label Text="°C"
+                                           IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchTemperature}}"
+                                           Margin="0"
+                                           FontSize="Medium"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand" />
+
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                            VerticalOptions="CenterAndExpand"  
+                                            Margin="0,0,0,0"  
+                                            x:Name="SwitchTemperature"
+                                            IsToggled="{Binding TemperatureOrderIsEnabled , Mode=TwoWay, Converter={StaticResource OrderToBooleanConverter}}">
+                                    </Switch>
+                                   
+                                </StackLayout>
+                            </ViewCell>
+
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="20,0,10,0"
+                                             HorizontalOptions="FillAndExpand"
+                                             IsVisible="{Binding Path=Plug.ConditionType, ConverterParameter=Humidity, Converter={StaticResource ConditionTypeToVisibilityConverter}}">
+                                    <Label Text="{res:Translate Humidity}"
+                                           IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           HorizontalTextAlignment="Start"
+                                           FontSize="Medium" />
+
+                                    <Entry Text="{Binding HumidityOrder, Mode=TwoWay, Converter={StaticResource FloatNullableToStringConverter}}"
+                                           IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="CenterAndExpand"
+                                           HorizontalTextAlignment="Center"
+                                           Margin="10,0,0,0"
+                                           FontSize="Medium"
+                                           WidthRequest="50" />
+
+                                    <Label Text="%"
+                                           IsEnabled="{Binding  IsToggled, Source={x:Reference SwitchHumidity}}"
+                                           Margin="0"
+                                           HorizontalOptions="Start"
+                                           FontSize="Medium"
+                                           VerticalOptions="CenterAndExpand" />
+
+                                    <Switch HorizontalOptions="EndAndExpand"
+                                            VerticalOptions="CenterAndExpand"  
+                                            Margin="0,0,0,0"  
+                                            IsToggled="{Binding HumidityOrderIsEnabled , Mode=TwoWay, Converter={StaticResource OrderToBooleanConverter}}"
+                                            x:Name="SwitchHumidity">
+                                    </Switch>
+                                </StackLayout>
+                            </ViewCell>
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+
+                <StackLayout VerticalOptions="End"
+                                    Margin="20,5">
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="{res:Translate Cancel}"
+                                Grid.Column="0"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="White"
+                                Command="{Binding CancelCommand}"
+                                BorderColor="{StaticResource Blue}"
+                                BackgroundColor="{StaticResource Blue}">
+                            <Button.FontSize>
+                                <OnPlatform x:TypeArguments="x:Double"
+                                            Android="14"
+                                            iOS="14"/>
+                            </Button.FontSize>
+                        </Button>
+
+                        <Button Text="{res:Translate OK}"
+                                Grid.Column="1"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="White"
+                                Command="{Binding ConfirmCommand}"
+                                BorderColor="{StaticResource Blue}"
+                                BackgroundColor="{StaticResource Blue}">
+                            <Button.FontSize>
+                                <OnPlatform x:TypeArguments="x:Double"
+                                            Android="14"
+                                            iOS="14" />
+                            </Button.FontSize>
+                        </Button>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </control:BasePage.Content>
+</control:BasePage>

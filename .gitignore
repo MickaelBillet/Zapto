@@ -58,3 +58,7 @@
 /WeatherZapto.Data.Services
 /WeatherZapto.WebServer
 /WeatherZapto.WebServer.Services
+/Connect.Mobile/bin
+/Connect.Mobile/obj
+/Connect.Mobile.Android/bin
+/Connect.Mobile.Android/obj
