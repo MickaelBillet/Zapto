@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
+    <ProjectReference Include="..\Connect.Data\Connect.Data.csproj" />
   </ItemGroup>
 
 </Project>
