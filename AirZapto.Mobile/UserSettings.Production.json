@@ -4,7 +4,7 @@
   "PortHttps": 443,
   "ProtocolController": "https",
   "ProtocolSignalR": "http",
-  "PathBase": "Zapto/",
+  "PathBase": "AirZapto/",
   "PathBaseSignalR": "/SignalR",
   "User": "airzapto.mobile",
   "Password": "airzapto",
