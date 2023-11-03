@@ -10,12 +10,12 @@ namespace Connect.Model
 
         #region Property
 
-        public String? ProgramId
+        public string? ProgramId
         {
             get; set;
         }
 
-        public String? ConditionId 
+        public string? ConditionId 
 		{
             get; set;
 		}

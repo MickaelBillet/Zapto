@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Domain\WeatherZapto.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

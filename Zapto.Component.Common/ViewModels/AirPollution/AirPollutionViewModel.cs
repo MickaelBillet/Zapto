@@ -1,5 +1,4 @@
-﻿using Connect.Model;
-using Framework.Core.Domain;
+﻿using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System.Diagnostics;

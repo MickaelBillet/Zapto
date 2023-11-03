@@ -185,7 +185,7 @@ namespace Connect.Model
 
             if (SensorsList != null && SensorsList.Any())
             {
-                IEnumerable<Sensor> sensors = SensorsList.Where(sensor => ((sensor.Type & Model.DeviceType.Sensor_Water_Leak) != Model.DeviceType.Sensor_Water_Leak));
+                List<Sensor> sensors = SensorsList.Where(sensor => ((sensor.Type & Model.DeviceType.Sensor_Water_Leak) != Model.DeviceType.Sensor_Water_Leak)).ToList();
                 foreach (Sensor sensor in sensors)
                 {
                     if (sensor.IsRunning == RunningStatus.UnHealthy)

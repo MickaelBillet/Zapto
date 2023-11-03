@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AirZapto.Applications.Services\AirZapto.Application.Services.csproj" />
+    <ProjectReference Include="..\AirZapto.Application.Services\AirZapto.Application.Services.csproj" />
     <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
   </ItemGroup>
 

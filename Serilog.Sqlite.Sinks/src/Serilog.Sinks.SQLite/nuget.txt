@@ -1,0 +1,1 @@
+﻿Microsoft.Data.Sqlite.Core 6.0.10

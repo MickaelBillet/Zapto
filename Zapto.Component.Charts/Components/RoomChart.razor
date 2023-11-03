@@ -23,6 +23,8 @@
     private LineChartConfig? Config { get; set; }
     private Chart? Chart { get; set; }
     private string? HoverString { get; set; }
+    private const decimal TemperatureMargin = 10;
+    private const decimal HumidityMargin = 20;
 
     protected override void OnParametersSet()
     {
@@ -45,8 +47,8 @@
                                 {
                                     Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault()
                                 },
-                                SuggestedMax = 40,
-                                SuggestedMin = 0,
+                                SuggestedMax = this.Temperatures?.Max() + TemperatureMargin,
+                                SuggestedMin = this.Temperatures?.Min() - TemperatureMargin,
                             }
                         },
                         {
@@ -58,8 +60,8 @@
                                 {
                                     Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
                                 },
-                                SuggestedMax = 100,
-                                SuggestedMin = 0,
+                                SuggestedMax = this.Humidities?.Max() + HumidityMargin,
+                                SuggestedMin = this.Humidities?.Min() - HumidityMargin,
                             }
                         }
                     }
