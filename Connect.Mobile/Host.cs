@@ -1,4 +1,5 @@
 ﻿using Connect.Mobile.Services;
+using Connect.Model;
 using Framework.Mobile.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace Connect.Mobile
 		private IHost HostApplication { get; set; }
 		public static Host Current { get; }
 		static Host() { Current = new Host(); }
-        private static string Environment { get; } = "Developpment"; //"Production" "Developpment"
+        private static string Environment { get; } = "Production"; //"Production" "Developpment"
 		#endregion
 
 		#region Constructor
@@ -44,7 +45,7 @@ namespace Connect.Mobile
 						c.Timeout = new TimeSpan(100000000); //10 sec
 						c.DefaultRequestHeaders.Accept.Clear();
 						c.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-						c.DefaultRequestHeaders.Add("X-Forwarded-Path", context.Configuration["X-Forwarded-Path"]);
+						c.DefaultRequestHeaders.Add("X-Forwarded-Path", ConnectConstants.Application_Prefix);
 					})
 					.ConfigurePrimaryHttpMessageHandler(_ => new CustumHttpMessageHandler(context.Configuration["BackEndUrl"], "connect-zapto.fr"));
 

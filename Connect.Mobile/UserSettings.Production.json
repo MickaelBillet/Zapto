@@ -6,7 +6,6 @@
   "ProtocolSignalR": "http",
   "PathBase": "Connect/",
   "PathBaseSignalR": "/SignalR",
-  "X-Forwarded-Path": "/Connect",
   "User": "connect.mobile",
   "Password": "connect",
   "Keycloak": {
