@@ -92,7 +92,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
     <ProjectReference Include="..\Connect.Infrastructure.Services\Connect.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\Framework.Mobile.Services\Framework.Mobile.Services.csproj" />
   </ItemGroup>
