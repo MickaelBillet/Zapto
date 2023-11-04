@@ -7,7 +7,7 @@ namespace Zapto.Component.Common.ViewModels
 
 	}
 
-	public class MainViewModel : BaseViewModel, IMainViewModel
+	public sealed class MainViewModel : BaseViewModel, IMainViewModel
 	{
 		#region Properties
 		#endregion

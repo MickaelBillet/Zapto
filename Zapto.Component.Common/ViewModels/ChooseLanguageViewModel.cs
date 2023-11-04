@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
         public CultureInfo[]? Cultures { get; }
     }
 
-	public class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
+	public sealed class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
     {
 		#region Properties
 		private ILocalStorageService LocalStorageService { get; set; }

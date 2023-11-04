@@ -6,7 +6,7 @@
     }
 
 
-    public class PollutionViewModel : BaseViewModel, IPollutionViewModel
+    public sealed class PollutionViewModel : BaseViewModel, IPollutionViewModel
     {
         #region Properties
 

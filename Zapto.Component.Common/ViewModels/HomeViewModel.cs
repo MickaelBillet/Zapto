@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<LocationModel?> GetLocationModel(string latitude, string longitude);
     }
 
-    public class HomeViewModel : BaseViewModel, IHomeViewModel
+    public sealed class HomeViewModel : BaseViewModel, IHomeViewModel
     {
         #region Properties
         private IApplicationLocationService ApplicationLocationService { get; }

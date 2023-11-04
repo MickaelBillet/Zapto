@@ -72,11 +72,14 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     RoomChartModel model = new RoomChartModel();
                     IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
-                    model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
-                    model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
-                    model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
-                    model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
-                    data.Add(model);
+                    if ((operatingData != null) && operatingData.Any())
+                    {
+                        model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
+                        model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
+                        model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
+                        model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
+                        data.Add(model);
+                    }
                 }
             }
             return data;

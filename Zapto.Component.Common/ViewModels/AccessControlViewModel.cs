@@ -5,7 +5,7 @@
 		public void SignOut();
 	}
 
-	public class AccessControlViewModel : BaseViewModel, IAccessControlViewModel
+	public sealed class AccessControlViewModel : BaseViewModel, IAccessControlViewModel
 	{
 		#region Properties
 		#endregion

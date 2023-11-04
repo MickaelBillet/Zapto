@@ -3,7 +3,6 @@ using AirZapto.Model.Healthcheck;
 using Connect.Application;
 using Connect.Model.Healthcheck;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model.Healthcheck;
@@ -16,7 +15,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<List<HealthCheckModel>?> GetModelList();
     }
 
-	public class HealthCheckViewModel : BaseViewModel, IHealthCheckViewModel
+	public sealed class HealthCheckViewModel : BaseViewModel, IHealthCheckViewModel
     {
         #region Properties
         private IApplicationHealthCheckConnectServices ApplicationHealthCheckConnectServices { get; }

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using Zapto.Component.Common.Models;
-
-namespace Zapto.Component.Common.ViewModels
+﻿namespace Zapto.Component.Common.ViewModels
 {
     public interface IRoomChartViewModel : IBaseViewModel
     {

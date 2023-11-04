@@ -8,7 +8,7 @@ namespace Zapto.Component.Common.ViewModels
         public void SignIn();
     }
 
-    public class AuthenticationViewModel : BaseViewModel, IAuthenticationViewModel
+    public sealed class AuthenticationViewModel : BaseViewModel, IAuthenticationViewModel
     {
 		#region Properties
         private string? Authority { get; }

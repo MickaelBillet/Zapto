@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
 		Task TestNotification(string? locationId);
     }
 
-	public class DashboardViewModel : BaseViewModel, IDashboardViewModel
+	public sealed class DashboardViewModel : BaseViewModel, IDashboardViewModel
 	{
 		#region Properties
 		private ILocationViewModel	LocationViewModel { get; }
