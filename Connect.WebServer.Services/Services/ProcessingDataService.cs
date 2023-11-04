@@ -54,7 +54,7 @@ namespace Connect.WebServer.Services
                 ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
-                IEnumerable<Plug> plugs = await supervisorPlug.GetPlugs();
+                List<Plug> plugs = (await supervisorPlug.GetPlugs()).ToList();
 
                 foreach (Plug plug in plugs)
                 {
@@ -101,7 +101,7 @@ namespace Connect.WebServer.Services
         private async Task ProcessSensorStatus(IServiceScope scope)
         {
             ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-            IEnumerable<Sensor> sensors = await supervisor.GetSensors();
+            List<Sensor> sensors = (await supervisor.GetSensors()).ToList();
 
             //30 minutes
             int period = 30;

@@ -11,7 +11,6 @@ namespace Connect.Data.Mappers
             {
                 CreationDateTime = model.Date,
                 Id = model.Id,
-                ConnectedObjectId = model.ConnectedObjectId,
                 HumidityOrder = model.HumidityOrder,
                 HumidityOrderIsEnabled = model.HumidityOrderIsEnabled,
                 OperationRangetId = model.OperationRangetId,
@@ -27,7 +26,6 @@ namespace Connect.Data.Mappers
             {
                 Date = entity.CreationDateTime,
                 Id = entity.Id,
-                ConnectedObjectId = entity.ConnectedObjectId,
                 HumidityOrder = entity.HumidityOrder,
                 HumidityOrderIsEnabled = entity.HumidityOrderIsEnabled,
                 OperationRangetId = entity.OperationRangetId,

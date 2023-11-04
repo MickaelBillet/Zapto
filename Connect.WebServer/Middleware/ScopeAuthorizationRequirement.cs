@@ -26,7 +26,6 @@ namespace Connect.WebApi.Middleware
             if (context.User != null)
             {
                 IEnumerable<Claim> scopeClaims = context.User.Claims.Where(c => string.Equals(c.Type, "scope", StringComparison.OrdinalIgnoreCase));
-
                 if (scopeClaims != null)
                 {
                     foreach (Claim claim in scopeClaims)

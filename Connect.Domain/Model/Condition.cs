@@ -12,8 +12,6 @@ namespace Connect.Model
 
         #region Property
 
-        public string? ConnectedObjectId { get; set; }
-
         public string? OperationRangetId { get; set; }
 
         public float? HumidityOrder

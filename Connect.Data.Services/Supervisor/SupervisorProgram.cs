@@ -69,7 +69,7 @@ namespace Connect.Data.Supervisors
                 IEnumerable<OperationRangeEntity> entities = await this.OperationRangeRepository.GetCollectionAsync((operationRange) => operationRange.ProgramId == id);
                 if (entities != null)
                 {
-                    IEnumerable<OperationRange> operationRanges = entities.Select(item => OperationRangeMapper.Map(item));
+                    List<OperationRange> operationRanges = entities.Select(item => OperationRangeMapper.Map(item)).ToList();
                     if (operationRanges != null)
                     {
                         foreach (OperationRange operationRange in operationRanges)

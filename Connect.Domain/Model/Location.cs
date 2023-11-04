@@ -12,7 +12,7 @@ namespace Connect.Model
         private string country = string.Empty;
         private string description = string.Empty;
 
-        private IEnumerable<Room> roomsList = new ObservableCollection<Room>();
+        private IEnumerable<Room>? roomsList = null;
 
         #region Property
 
@@ -53,11 +53,11 @@ namespace Connect.Model
             set { SetProperty<string>(ref description, value); }
         }
 
-        public IEnumerable<Room> RoomsList
+        public IEnumerable<Room>? RoomsList
         {
             get { return roomsList; }
 
-            set { SetProperty<IEnumerable<Room>>(ref roomsList, value); }
+            set { SetProperty<IEnumerable<Room>?>(ref roomsList, value); }
         }
 
         #endregion
@@ -66,6 +66,7 @@ namespace Connect.Model
 
         public Location() : base()
         {
+            this.RoomsList = new ObservableCollection<Room>();
         }
 
         #endregion

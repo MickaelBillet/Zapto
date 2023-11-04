@@ -27,7 +27,7 @@ namespace Connect.Data.Database
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {
                 ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                IEnumerable<Plug> plugs = await supervisor.GetPlugs();
+                List<Plug> plugs = (await supervisor.GetPlugs()).ToList();
                 foreach (Plug plug in plugs)
                 {
                     plug.WorkingDuration = 0;
@@ -503,7 +503,6 @@ namespace Connect.Data.Database
                 TemperatureOrder = null,
                 HumidityOrder = null,
                 OperationRangetId = null,
-                ConnectedObjectId = plug1.Id,
                 TemperatureOrderIsEnabled = 0,
                 HumidityOrderIsEnabled = 0,
             };
@@ -516,7 +515,6 @@ namespace Connect.Data.Database
                 TemperatureOrder = null,
                 HumidityOrder = null,
                 OperationRangetId = null,
-                ConnectedObjectId = plug2.Id,
                 TemperatureOrderIsEnabled = 0,
                 HumidityOrderIsEnabled = 0,
             };
@@ -529,7 +527,6 @@ namespace Connect.Data.Database
                 TemperatureOrder = null,
                 HumidityOrder = null,
                 OperationRangetId = null,
-                ConnectedObjectId = plugA1.Id,
                 TemperatureOrderIsEnabled = 0,
                 HumidityOrderIsEnabled = 0,
             };
@@ -542,7 +539,6 @@ namespace Connect.Data.Database
                 TemperatureOrder = null,
                 HumidityOrder = null,
                 OperationRangetId = null,
-                ConnectedObjectId = plugA2.Id,
                 TemperatureOrderIsEnabled = 0,
                 HumidityOrderIsEnabled = 0,
             };
