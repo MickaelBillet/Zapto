@@ -1,21 +1,25 @@
-﻿@inject IStringLocalizer<Resource> Localizer
+﻿@inject ISelectDateViewModel ViewModel
+@inject IStringLocalizer<Resource> Localizer
 @implements IDisposable
 
-<MudGrid Class="mb-4 mt-5" Style="align-items: center;">
-    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center gap-4" Style="height:90px;">
-            <MudDatePicker Label="@Localizer["StartDate"]" Editable="true" MinDate="@MinDate" MaxDate="@MaxDate" @bind-Date="StartDate" Placeholder="@Localizer["SelectDate"]" Class="mx-10" />
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center gap-4" Style="height:90px;">
-            <MudDatePicker Label="@Localizer["EndDate"]" Editable="true" MinDate="@MinDate" MaxDate="@MaxDate" @bind-Date="EndDate" Placeholder="@Localizer["SelectDate"]" Class="mx-10" />
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3" Style="min-width:400px" Class="ml-6">
-        <MudButton Variant="Variant.Filled" OnClick=@SelectDatesClick Color="MudBlazor.Color.Primary">@Localizer["DisplayCharts"]</MudButton>
-    </MudItem>
-</MudGrid>
+@if ((this.MinDate != null) && (this.MaxDate != null))
+{
+    <MudGrid Class="mb-4 mt-5" Style="align-items: center;">
+        <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+            <MudPaper Class="d-flex align-center gap-4" Style="height:90px;">
+                <MudDatePicker Label="@Localizer["StartDate"]" Editable="true" MinDate="@MinDate.Value.Date" MaxDate="@MaxDate.Value.Date" @bind-Date="StartDate" Placeholder="@Localizer["SelectDate"]" Class="mx-10" />
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+            <MudPaper Class="d-flex align-center gap-4" Style="height:90px;">
+                <MudDatePicker Label="@Localizer["EndDate"]" Editable="true" MinDate="@MinDate.Value.Date" MaxDate="@MaxDate.Value.Date" @bind-Date="EndDate" Placeholder="@Localizer["SelectDate"]" Class="mx-10" />
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3" Style="min-width:400px" Class="ml-6">
+            <MudButton Variant="Variant.Filled" OnClick=@SelectDatesClick Color="MudBlazor.Color.Primary">@Localizer["DisplayCharts"]</MudButton>
+        </MudItem>
+    </MudGrid>
+}
 
 @code
 {
@@ -40,12 +44,20 @@
     [Parameter]
     public EventCallback<DateTime?> EndDateChanged { get; set; }
 
+    [Parameter]
+    public bool IsClicked { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> IsClickedChanged { get; set; }
+
     public void Dispose()
     {
     }
     public async Task SelectDatesClick()
     {
+        this.IsClicked = true;
         await this.StartDateChanged.InvokeAsync(this.StartDate);
         await this.EndDateChanged.InvokeAsync(this.EndDate);
+        await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }

@@ -4,7 +4,7 @@
 
 <h3>@RoomName</h3>
 
-<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate></SelectDates>
+<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsDisplayed></SelectDates>
 
 @if ((this.Models != null) && (this.Models.Any() == true))
 {
@@ -20,8 +20,7 @@ else
 
 @code 
 {
-    private DateTime? startdate = DateTime.Today;
-    private DateTime? enddate = DateTime.Today;
+    private bool isdisplayed = false;
 
     public event EventHandler? PropertyChanged;
 
@@ -35,31 +34,29 @@ else
 
     public DateTime? MinDate { get; set; }
 
-    public DateTime? StartDate 
-    { 
-        get { return startdate; }
-        set 
-        {
-            startdate = value;
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged.Invoke(this, new EventArgs());
-            }
-        } 
-    } 
-
-    private DateTime? EndDate
+    public bool IsDisplayed
     {
-        get { return enddate; }
+        get
+        {
+            return isdisplayed;
+        }
+
         set
         {
-            enddate = value;
-            if (this.PropertyChanged != null)
+            if (isdisplayed != value)
             {
-                this.PropertyChanged.Invoke(this, new EventArgs());
+                isdisplayed = value;
+                if ((this.PropertyChanged != null) && (isdisplayed == true))
+                {
+                    this.PropertyChanged.Invoke(this, new EventArgs());
+                }
             }
         }
     }
+
+    public DateTime? StartDate { get; set; } = DateTime.Today;
+
+    private DateTime? EndDate { get; set; } = DateTime.Today;
 
     private IEnumerable<RoomChartModel>? Models { get; set; }
 
@@ -96,10 +93,13 @@ else
         {
             this.Models = null;
         }
+
+        this.IsDisplayed = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
         await this.DisplayCharts();
+        this.StateHasChanged();
     }
 }
 
