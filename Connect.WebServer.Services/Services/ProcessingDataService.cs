@@ -55,7 +55,6 @@ namespace Connect.WebServer.Services
                 ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
                 List<Plug> plugs = (await supervisorPlug.GetPlugs()).ToList();
-
                 foreach (Plug plug in plugs)
                 {
                     ResultCode resultCode = ResultCode.CouldNotUpdateItem;
