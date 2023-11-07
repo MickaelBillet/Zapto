@@ -33,7 +33,7 @@ namespace Connect.Application.Services
 
         #region Methods
         /// <summary>
-        /// Notify the sensors that they must communicate with the WebServer
+        /// Send the sensor configuration to the arduino server
         /// </summary>
         /// <returns></returns>
         public async Task<int?> Notify(Sensor sensor)

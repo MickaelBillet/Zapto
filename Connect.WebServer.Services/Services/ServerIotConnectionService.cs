@@ -25,7 +25,8 @@ namespace Connect.WebServer.Services
         #region Methods 
 
         /// <summary>
-        /// Process the data in a scoped service which is launched at the startup of the app
+        /// Scoped service which is launched at the startup of the app
+        /// Receive the status of the Arduino Server (Iot Server)
         /// </summary>
         /// <returns></returns>
         public override async Task ProcessInScope(IServiceScope scope)
@@ -36,7 +37,6 @@ namespace Connect.WebServer.Services
             {                
                 IApplicationServerIotServices applicationServerIotServices = scope.ServiceProvider.GetRequiredService<IApplicationServerIotServices>();
                 SystemStatus? status = await applicationServerIotServices.ReceiveStatusAsync();
-
                 if (status != null)
 				{
                     if (this.HostedServiceHealthCheck != null)
