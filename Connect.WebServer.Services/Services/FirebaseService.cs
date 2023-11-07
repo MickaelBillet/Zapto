@@ -18,7 +18,7 @@ namespace Connect.WebServer.Services
         #endregion
 
         #region Constructor
-        public FirebaseService(IServiceCollection services, string fileConfigName)
+        public FirebaseService(IServiceScope scope, string fileConfigName)
         {
             if (FirebaseService.FirebaseApp == null)
             {
@@ -29,8 +29,7 @@ namespace Connect.WebServer.Services
                 });
             }
 
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorClientApps>();
+            this.Supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorClientApps>();
 
             Log.Information(FirebaseService.FirebaseApp.Name); // "[DEFAULT]"
         }
