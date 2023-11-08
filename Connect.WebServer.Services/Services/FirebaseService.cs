@@ -13,12 +13,12 @@ namespace Connect.WebServer.Services
     public class FirebaseService : Application.Infrastructure.IFirebaseService
     {
         #region Properties
-        ISupervisorClientApps Supervisor { get; }
         private static FirebaseApp? FirebaseApp { get; set; }
+        private IServiceProvider ServiceProvider { get; }
         #endregion
 
         #region Constructor
-        public FirebaseService(IServiceScope scope, string fileConfigName)
+        public FirebaseService(IServiceProvider serviceProvider, string fileConfigName)
         {
             if (FirebaseService.FirebaseApp == null)
             {
@@ -29,7 +29,7 @@ namespace Connect.WebServer.Services
                 });
             }
 
-            this.Supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorClientApps>();
+            this.ServiceProvider = serviceProvider;
 
             Log.Information(FirebaseService.FirebaseApp.Name); // "[DEFAULT]"
         }
@@ -74,17 +74,21 @@ namespace Connect.WebServer.Services
 
             try
             {
-                IEnumerable<ClientApp>?clientApps = await this.Supervisor.GetClientApps();
-                if (clientApps != null)
+                using (IServiceScope scope = this.ServiceProvider.CreateScope())
                 {
-                    foreach (ClientApp clientApp in clientApps)
+                    ISupervisorClientApps supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorClientApps>();
+                    IEnumerable<ClientApp>? clientApps = await supervisor.GetClientApps();
+                    if (clientApps != null)
                     {
-                        if (clientApp.LocationId == locationId)
+                        foreach (ClientApp clientApp in clientApps)
                         {
-                            string id = await this.SendNotificationAsync(title, body, clientApp.Token);
-                            if (string.IsNullOrEmpty(id))
+                            if (clientApp.LocationId == locationId)
                             {
-                                Log.Information($"Impossible de notifier : {locationId}({title}");
+                                string id = await this.SendNotificationAsync(title, body, clientApp.Token);
+                                if (string.IsNullOrEmpty(id))
+                                {
+                                    Log.Information($"Impossible de notifier : {locationId}({title}");
+                                }
                             }
                         }
                     }
