@@ -11,7 +11,6 @@ namespace Connect.WebServer.Services
 		#region Properties
 		private ISupervisorSensor Supervisor { get; }
 		#endregion
-		public string Name => "system_check";
 
 		#region Constructor
 

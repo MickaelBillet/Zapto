@@ -13,6 +13,7 @@ namespace AirZapto.WebServer.Services
 		private ISupervisorLogs Supervisor { get; }
 
 		#endregion
+
 		#region Constructor
 		public ErrorHealthCheck(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
@@ -26,20 +27,12 @@ namespace AirZapto.WebServer.Services
 														CancellationToken cancellationToken = default(CancellationToken))
         {
 			(ResultCode code, IEnumerable<Logs>? logs) = await this.Supervisor.GetLogsInf24HAsync();
-            if ((code == ResultCode.Ok) && (logs != null)) 
+            int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
+            int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
+            if (countError + countFatal > 0)
             {
-                int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
-                int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
-                if (countError + countFatal > 0)
-                {
-                    return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
-                }
+                return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
             }
-            else
-            {
-                return (HealthCheckResult.Degraded("Error Db"));
-            }
-
             return (HealthCheckResult.Healthy("No Error"));
         }
 		#endregion

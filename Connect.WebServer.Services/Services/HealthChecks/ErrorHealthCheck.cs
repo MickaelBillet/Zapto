@@ -30,7 +30,6 @@ namespace Connect.WebServer.Services
 			{
 				return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
 			}
-
             return (HealthCheckResult.Healthy("No Error"));
         }
 		#endregion
