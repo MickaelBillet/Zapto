@@ -12,7 +12,7 @@
             if (this.Model.IsRunning == RunningStatus.Healthy)
             {
                 <MudText Typo="Typo.h5" Class="mx-3">@this.Model?.CO2</MudText>
-                if (this.Model?.CO2 < (this.Model?.ThresholdCO2[0] - 200)) //600
+                if (this.Model?.CO2 < (this.Model?.ThresholdCO2[0] - 200)) // < 600
                 {
                     <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Success">@Localizer["AirQualityExcellent"]</MudText>
                 }
@@ -41,9 +41,13 @@
                 {
                     <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Error">@Localizer["AirQualityVeryBad"]</MudText>
                 }
-                else
+                else if (this.Model?.CO2 >= (this.Model?.ThresholdCO2[1] + 400)) // >= 1400
                 {
                     <MudText Align="Align.Center" Typo="Typo.h6" Class="mr-4" Color="Color.Error">@Localizer["AirQualityHazard"]</MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
                 }
             }
             else
