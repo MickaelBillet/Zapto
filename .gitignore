@@ -68,3 +68,5 @@
 /AirZapto.Application.Services/bin/Release/netstandard2.1
 /AirZapto.Mobile/bin
 /AirZapto.Mobile/obj
+/Zapto.Web.Test/bin/Debug/net7.0
+/Zapto.Web.Test/obj
