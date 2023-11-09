@@ -61,6 +61,10 @@ namespace Connect.Data.Database
                     Log.Information($"softwareVersion : {softwareVersion}");
                     if (softwareVersion > dbVersion)
                     {
+                        if (softwareVersion.CompareTo(new Version(0, 0, 0)) > 0)
+                        {
+
+                        }
                     }
                     ResultCode result = await supervisor.UpdateVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
                     res = (result == ResultCode.Ok) ? true : false;
