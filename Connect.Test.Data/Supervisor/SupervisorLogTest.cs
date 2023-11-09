@@ -1,4 +1,5 @@
-﻿using Connect.Data.Supervisors;
+﻿using Connect.Data;
+using Connect.Data.Supervisors;
 using Connect.Model;
 using Framework.Core.Base;
 
@@ -9,7 +10,7 @@ namespace Connect.Test.Data.Supervisor
         [Fact]
         public async Task CollectionGetLogsCollection()
         {
-            ISupervisor supervisor = new Connect.Data.Supervisors.Supervisor(this.ServiceProvider, this.CreateContext());
+            ISupervisorLog supervisor = new SupervisorLog(this.ServiceProvider, this.CreateContext());
             IEnumerable<Logs> logs = await supervisor.GetLogsCollection();
 
             Assert.NotNull(logs);

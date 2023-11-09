@@ -22,7 +22,8 @@ namespace Connect.WebServer.Services
 
         #region Methods 
         /// <summary>
-        /// Process the data in a scoped service which is launched at the startup of the app
+        /// Scoped service which is launched at the startup of the app
+        /// Read the Sensor Event
         /// </summary>
         /// <returns></returns>
         public override async Task ProcessInScope(IServiceScope scope)

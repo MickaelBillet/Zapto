@@ -38,7 +38,6 @@ namespace Connect.WebServer.Services
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
                 IEnumerable<Sensor> sensors = await supervisor.GetSensors();
-            
                 foreach(Sensor sensor in sensors)
                 {
                     await applicationSensorServices.Notify(sensor);

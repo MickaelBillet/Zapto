@@ -41,10 +41,7 @@ namespace Connect.WebServer.Services
             try
             {
                 ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-				IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
-				IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
 				IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
-
 				SensorData? data = await applicationSensorServices.ReceiveDataAsync();
 				if (data != null)
 				{
@@ -55,54 +52,17 @@ namespace Connect.WebServer.Services
 							&& (await this.CheckTemperatureValue(scope, data.Temperature, sensor.RoomId)))
 						{
 							sensor.ProcessData(data.Temperature, data.Humidity, data.Pressure);
-
-							//Update in database the data of the sensor
 							(resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
 							if (resultCode == ResultCode.Ok)
 							{
-                                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-								ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
-                                Room? room = null;
 								//Test if the sensor is linked with a room or a connectedobject
 								if (string.IsNullOrEmpty(sensor.RoomId) == false)
 								{
-									room = await supervisorRoom.GetRoom(sensor.RoomId);
-									if (room != null)
-									{
-										int validityPeriod = 0;
-
-										if ((this.Configuration != null) && (this.Configuration["ValidityPeriod"] != null))
-										{
-											int.TryParse(this.Configuration["ValidityPeriod"], out validityPeriod);
-										}
-
-										//Compute the data (Temperature, Humidity, Pressure) of the room
-										room.ComputeData(validityPeriod);
-
-										//Send Data to the client app (Mobile, Web...)
-										await applicationRoomServices.SendDataToClientAsync(room.LocationId, room);
-
-										//Send Notification to the Firebase app
-										await applicationRoomServices.NotifiyRoomCondition(room.LocationId, room.NotificationsList, room);
-										await supervisorNotification.UpdateNotifications(room.NotificationsList);
-										await supervisorRoom.UpdateRoom(room);
-									}
+									await this.ProcessRoomData(scope, sensor);
 								}
-								else if (sensor.ConnectedObjectId != null)
+								else if (string.IsNullOrEmpty(sensor.ConnectedObjectId) == false)
 								{
-									ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
-									ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId, true);
-									if (connectedObject != null)
-                                    {
-										room = await supervisorRoom.GetRoom(connectedObject.RoomId);
-
-										//Send data to the client app
-										await applicationConnectedObjectServices.SendDataToClientAsync(room.LocationId, connectedObject);
-
-										//Send Notification to the Firebase app
-										await applicationConnectedObjectServices.NotifiyConnectedObjectCondition(connectedObject.NotificationsList, room, connectedObject);
-										await supervisorNotification.UpdateNotifications(connectedObject.NotificationsList);
-									}
+									await this.ProcessConnectedObjectData(scope, sensor);    
 								}
 							}
 							else
@@ -119,7 +79,57 @@ namespace Connect.WebServer.Services
             }
         }
 
-		private async Task<bool> CheckTemperatureValue(IServiceScope scope, float temperature, string roomId)
+		private async Task ProcessRoomData(IServiceScope scope, Sensor sensor)
+		{
+            ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+            ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
+            IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
+            Room room = await supervisorRoom.GetRoom(sensor.RoomId);
+            if (room != null)
+            {
+                int validityPeriod = 0;
+
+                if ((this.Configuration != null) && (this.Configuration["ValidityPeriod"] != null))
+                {
+                    int.TryParse(this.Configuration["ValidityPeriod"], out validityPeriod);
+                }
+
+                //Compute the data (Temperature, Humidity, Pressure) of the room
+                room.ComputeData(validityPeriod);
+
+                //Send Data to the client app (Mobile, Web...)
+                await applicationRoomServices.SendDataToClientAsync(room.LocationId, room);
+
+                //Send Notification to the Firebase app
+                await applicationRoomServices.NotifiyRoomCondition(room.LocationId, room.NotificationsList, room);
+                await supervisorNotification.UpdateNotifications(room.NotificationsList);
+                await supervisorRoom.UpdateRoom(room);
+            }
+        }
+
+        private async Task ProcessConnectedObjectData(IServiceScope scope, Sensor sensor)
+        {
+            ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+            ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+            IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
+            ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
+            ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId, true);
+            if (connectedObject != null)
+            {
+                Room room = await supervisorRoom.GetRoom(connectedObject.RoomId);
+                if (room != null)
+                {
+                    //Send data to the client app
+                    await applicationConnectedObjectServices.SendDataToClientAsync(room.LocationId, connectedObject);
+
+                    //Send Notification to the Firebase app
+                    await applicationConnectedObjectServices.NotifiyConnectedObjectCondition(connectedObject.NotificationsList, room, connectedObject);
+                    await supervisorNotification.UpdateNotifications(connectedObject.NotificationsList);
+                }
+            }
+        }
+
+        private async Task<bool> CheckTemperatureValue(IServiceScope scope, float temperature, string roomId)
 		{
 			bool isValid = false;
 			IEnumerable<(double?, DateTime)> temperatures = (await scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>().GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Temperature, x.Date));

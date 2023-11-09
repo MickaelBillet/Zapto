@@ -9,18 +9,17 @@ namespace Framework.Infrastructure.Services
 {
     public class HostedServiceHealthCheck : IHealthCheck
     {
-		#region Properties
-		private SystemStatus Status { get; set; } = null;
+		private const int timeout = 10; //10 minutes
+
+        #region Properties
+        private SystemStatus Status { get; set; } = null;
 		#endregion
-		public string Name => "service_check";
 
 		#region Constructor
-
 		public HostedServiceHealthCheck()
 		{
 
 		}
-
 		#endregion
 
 		#region Methods
@@ -34,7 +33,7 @@ namespace Framework.Infrastructure.Services
         {
             if (this.Status != null)
             {
-				if (this.Status.Date + new TimeSpan(0, 10, 0) > Clock.Now)
+				if (this.Status.Date + new TimeSpan(0, timeout, 0) > Clock.Now)
 				{
 					return Task.FromResult(HealthCheckResult.Healthy("The service Arduino is started"));
 				}
