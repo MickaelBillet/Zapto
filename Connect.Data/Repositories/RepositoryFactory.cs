@@ -14,6 +14,11 @@ namespace Connect.Data.Repositories
         {
             return (context != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(context)) : null;
         }
+
+        public Lazy<IServerIotStatusRepository>? CreateServerIotStatusRepository(IDataContext context) 
+        {
+            return (context != null) ? new Lazy<IServerIotStatusRepository>(() => new ServerIotStatusRepository(context)) : null;
+        }
     }
 }
  

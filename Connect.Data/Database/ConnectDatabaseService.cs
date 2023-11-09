@@ -63,7 +63,8 @@ namespace Connect.Data.Database
                     {
                         if (softwareVersion.CompareTo(new Version(0, 0, 0)) > 0)
                         {
-
+                            ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorServerIotStatus>();
+                            int tmp = await supervisorServerIotStatus.CreateTable();
                         }
                     }
                     ResultCode result = await supervisor.UpdateVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);

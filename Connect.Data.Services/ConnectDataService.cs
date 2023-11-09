@@ -21,6 +21,7 @@ namespace Connect.Data
             services.AddScoped<ISupervisorRoom, SupervisorRoom>();
             services.AddScoped<ISupervisorSensor, SupervisorSensor>();
             services.AddScoped<ISupervisorVersion, SupervisorVersion>();
+            services.AddScoped<ISupervisorServerIotStatus, SupervisorServerIotStatus>();    
         }
     }
 }

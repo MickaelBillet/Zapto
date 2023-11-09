@@ -8,5 +8,6 @@ namespace Connect.Data.Services.Repositories
 	{
         Lazy<IRepository<T>>? CreateRepository<T>(IDataContext context) where T : ItemEntity;
         Lazy<IRoomRepository>? CreateRoomRepository(IDataContext context);
+        Lazy<IServerIotStatusRepository>? CreateServerIotStatusRepository(IDataContext context);
     }
 }
