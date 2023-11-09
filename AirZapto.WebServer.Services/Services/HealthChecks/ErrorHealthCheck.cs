@@ -27,12 +27,20 @@ namespace AirZapto.WebServer.Services
 														CancellationToken cancellationToken = default(CancellationToken))
         {
 			(ResultCode code, IEnumerable<Logs>? logs) = await this.Supervisor.GetLogsInf24HAsync();
-            int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
-            int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
-            if (countError + countFatal > 0)
+            if (logs != null)
             {
-                return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
+                int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
+                int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
+                if (countError + countFatal > 0)
+                {
+                    return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
+                }
             }
+            else
+            {
+                return (HealthCheckResult.Degraded("Error Db"));
+            }
+
             return (HealthCheckResult.Healthy("No Error"));
         }
 		#endregion
