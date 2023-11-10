@@ -4,6 +4,7 @@ using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AirZapto.Data.DataContext
 {
@@ -79,6 +80,8 @@ namespace AirZapto.Data.DataContext
 
             base.Dispose();
         }
+
+        public virtual async Task<int> ExecuteNonQueryAsync(string sql) => await Task.FromResult<int>(-1);
 
         #endregion
     }
