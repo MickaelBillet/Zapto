@@ -1,6 +1,6 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Services.Repositories;
-using Framework.Data.Abstractions;
+using Connect.Data.Session;
 using Microsoft.EntityFrameworkCore;
 
 namespace Connect.Data.Repositories
@@ -8,7 +8,7 @@ namespace Connect.Data.Repositories
     public class RoomRepository : Repository<RoomEntity>, IRoomRepository
     {
         #region Constructor
-        public RoomRepository(IDataContext dataContext) : base(dataContext) 
+        public RoomRepository(IDalSession session) : base(session) 
         { }
         #endregion
 

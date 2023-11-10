@@ -1,10 +1,10 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,26 +36,16 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorRoom(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorRoom(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                _lazyRoomRepository = repositoryFactory?.CreateRoomRepository(context);
-                _lazySensorRepository = repositoryFactory.CreateRepository<SensorEntity>(context);
-                _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(context);
-                _lazyConnectedObjectRepository = repositoryFactory.CreateRepository<ConnectedObjectEntity>(context);
-                _lazyPlugRepository = repositoryFactory.CreateRepository<PlugEntity>(context);
-                _lazyNotificationRepository = repositoryFactory.CreateRepository<NotificationEntity>(context); 
-                _lazyConfigurationRepository = repositoryFactory.CreateRepository<ConfigurationEntity>(context);
-                _lazyConditionRepository = repositoryFactory.CreateRepository<ConditionEntity>(context);
-            }
+            _lazyRoomRepository = repositoryFactory?.CreateRoomRepository(session);
+            _lazySensorRepository = repositoryFactory.CreateRepository<SensorEntity>(session);
+            _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(session);
+            _lazyConnectedObjectRepository = repositoryFactory.CreateRepository<ConnectedObjectEntity>(session);
+            _lazyPlugRepository = repositoryFactory.CreateRepository<PlugEntity>(session);
+            _lazyNotificationRepository = repositoryFactory.CreateRepository<NotificationEntity>(session);
+            _lazyConfigurationRepository = repositoryFactory.CreateRepository<ConfigurationEntity>(session);
+            _lazyConditionRepository = repositoryFactory.CreateRepository<ConditionEntity>(session);
         }
         #endregion
         

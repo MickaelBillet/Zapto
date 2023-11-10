@@ -1,4 +1,6 @@
 ﻿using Connect.Application;
+using Connect.Data;
+using Connect.Model;
 using Framework.Core.Base;
 using Framework.Core.Model;
 using Framework.Infrastructure.Services;
@@ -36,6 +38,7 @@ namespace Connect.WebServer.Services
             try
             {                
                 IApplicationServerIotServices applicationServerIotServices = scope.ServiceProvider.GetRequiredService<IApplicationServerIotServices>();
+                ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorServerIotStatus>();
                 SystemStatus? status = await applicationServerIotServices.ReceiveStatusAsync();
                 if (status != null)
 				{
@@ -43,6 +46,13 @@ namespace Connect.WebServer.Services
                     {
                         status.Date = Clock.Now;
                         this.HostedServiceHealthCheck.SetStatus(status);
+                        await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            IpAddress = status.IpAddress,
+                            ConnectionDate = status.Date,
+                            Date = Clock.Now,                            
+                        });
                     }
                 }
             }

@@ -1,10 +1,10 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,22 +28,12 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorProgram(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorProgram(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                _lazyConditionRepository = repositoryFactory?.CreateRepository<ConditionEntity>(context);
-                _lazyOperationRangeRepository = repositoryFactory.CreateRepository<OperationRangeEntity>(context);
-                _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(context);
-                _lazyConnectedObjectRepository = repositoryFactory.CreateRepository<ConnectedObjectEntity>(context);
-            }
+            _lazyConditionRepository = repositoryFactory?.CreateRepository<ConditionEntity>(session);
+            _lazyOperationRangeRepository = repositoryFactory.CreateRepository<OperationRangeEntity>(session);
+            _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(session);
+            _lazyConnectedObjectRepository = repositoryFactory.CreateRepository<ConnectedObjectEntity>(session);
         }
         #endregion
 

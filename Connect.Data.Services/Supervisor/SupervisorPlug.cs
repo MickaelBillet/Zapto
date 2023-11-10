@@ -1,10 +1,10 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,23 +30,13 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorPlug(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorPlug(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                _lazyPlugRepository = repositoryFactory.CreateRepository<PlugEntity>(context);
-                _lazyConfigurationRepository = repositoryFactory?.CreateRepository<ConfigurationEntity>(context);
-                _lazyConditionRepository = repositoryFactory?.CreateRepository<ConditionEntity>(context);
-                _lazyOperationRangeRepository = repositoryFactory.CreateRepository<OperationRangeEntity>(context);
-                _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(context);
-            }
+            _lazyPlugRepository = repositoryFactory.CreateRepository<PlugEntity>(session);
+            _lazyConfigurationRepository = repositoryFactory?.CreateRepository<ConfigurationEntity>(session);
+            _lazyConditionRepository = repositoryFactory?.CreateRepository<ConditionEntity>(session);
+            _lazyOperationRangeRepository = repositoryFactory.CreateRepository<OperationRangeEntity>(session);
+            _lazyProgramRepository = repositoryFactory.CreateRepository<ProgramEntity>(session);
         }
         #endregion
 

@@ -1,9 +1,8 @@
 ﻿using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
-using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -18,19 +17,9 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorServerIotStatus(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorServerIotStatus(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                _lazyServerIotStatusRepository = repositoryFactory.CreateServerIotStatusRepository(context);
-            }
+            _lazyServerIotStatusRepository = repositoryFactory.CreateServerIotStatusRepository(session);
         }
         #endregion
 

@@ -1,10 +1,12 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,20 +25,10 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorOperatingData(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorOperatingData(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                _lazyOperatingDataRepository = repositoryFactory.CreateRepository<OperatingDataEntity>(context);
-                _lazyPlugRepository = repositoryFactory?.CreateRepository<PlugEntity>(context);
-            }
+            _lazyOperatingDataRepository = repositoryFactory.CreateRepository<OperatingDataEntity>(session);
+            _lazyPlugRepository = repositoryFactory?.CreateRepository<PlugEntity>(session);
         }
         #endregion
 
