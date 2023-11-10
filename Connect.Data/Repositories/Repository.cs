@@ -1,7 +1,12 @@
 ﻿using Connect.Data.DataContext;
+using Connect.Data.Session;
 using Framework.Core.Data;
 using Framework.Data.Abstractions;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Data;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace Connect.Data.Repositories
@@ -11,13 +16,15 @@ namespace Connect.Data.Repositories
 		#region Properties
 		protected ConnectContext? DataContext { get; } = null;
 		protected DbSet<T>? Table { get; } = null;
+        protected IDbConnection? DbConnection { get; } = null;
 		#endregion
 
 		#region Constructor
-		public Repository(IDataContext dataContext)
+		public Repository(IDalSession session)
 		{
-			this.DataContext = dataContext as ConnectContext;
-			this.Table = dataContext.Set<T>();
+			this.DataContext = session.DataContext as ConnectContext;
+			this.Table = this.DataContext?.Set<T>();
+            this.DbConnection = session.Connection;
 		}
         #endregion
 
@@ -132,6 +139,26 @@ namespace Connect.Data.Repositories
 		{
 			this.DataContext?.Dispose();
 		}
-		#endregion
-	}
+
+        public async Task<int> CreateTable(string sql)
+        {
+            int res = -1;
+
+            try
+            {
+                if (this.DataContext != null)
+                {
+                    res = await this.DataContext.ExecuteNonQueryAsync(sql);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            return res;
+        }
+  
+        #endregion
+    }
 }

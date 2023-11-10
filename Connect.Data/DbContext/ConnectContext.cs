@@ -24,6 +24,7 @@ namespace Connect.Data.DataContext
 		public DbSet<PlugEntity> PlugEntities { get; set; }
 		public DbSet<ProgramEntity> ProgramEntities { get; set; }
 		public DbSet<RoomEntity> RoomEntities { get; set; }
+		public DbSet<ServerIotStatusEntity> ServerIotStatusEntities { get; set; }		
 
 		public IDbConnection? Connection
 		{
@@ -97,6 +98,8 @@ namespace Connect.Data.DataContext
 			base.Dispose();
 		}
 
-		#endregion
-	}
+		public virtual async Task<int> ExecuteNonQueryAsync(string sql) => await Task.FromResult<int>(-1);
+
+        #endregion
+    }
 }

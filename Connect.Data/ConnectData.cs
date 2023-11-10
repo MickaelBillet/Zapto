@@ -1,6 +1,7 @@
 ﻿using Connect.Data.DataContext;
 using Connect.Data.Repositories;
 using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ namespace Connect.Data.Repository
 		{
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataContextFactory, DataContextFactory>();
+            services.AddTransient<IDalSession, DalSession>();
         }
     }
 }

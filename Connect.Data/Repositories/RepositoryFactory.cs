@@ -1,4 +1,6 @@
 ﻿using Connect.Data.Services.Repositories;
+using Connect.Data.Session;
+using Framework.Core.Base;
 using Framework.Core.Data;
 using Framework.Data.Abstractions;
 
@@ -6,13 +8,26 @@ namespace Connect.Data.Repositories
 {
     public class RepositoryFactory : IRepositoryFactory
     {
-		public Lazy<IRepository<T>>? CreateRepository<T>(IDataContext context) where T : ItemEntity
+		public Lazy<IRepository<T>>? CreateRepository<T>(IDalSession session) where T : ItemEntity
         {
-			return (context != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(context)) : null;
+			return (session != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(session)) : null;
 		}
-        public Lazy<IRoomRepository>? CreateRoomRepository(IDataContext context)
+        public Lazy<IRoomRepository>? CreateRoomRepository(IDalSession session)
         {
-            return (context != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(context)) : null;
+            return (session != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(session)) : null;
+        }
+
+        public Lazy<IServerIotStatusRepository>? CreateServerIotStatusRepository(IDalSession session) 
+        {
+            Lazy<IServerIotStatusRepository>? serverIotStatusRepository = null;
+            if (session != null)
+            {
+                if (session.ConnectionType?.ServerType == ServerType.SqlLite)
+                {
+                    serverIotStatusRepository = new Lazy<IServerIotStatusRepository>(() => new ServerIotStatusRepositorySqlite(session));
+                }
+            }
+            return serverIotStatusRepository;
         }
     }
 }
