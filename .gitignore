@@ -68,3 +68,11 @@
 /Framework.Data.Services/obj
 /Framework.Mobile.Services/bin/Debug/netstandard2.1
 /Framework.Mobile.Services/obj
+/WeatherZapto.Data/obj
+/WeatherZapto.Data.Services/obj
+/WeatherZapto.WebServer/obj
+/WeatherZapto.WebServer.Services/obj
+/WeatherZapto.Data/bin/Debug/net7.0
+/WeatherZapto.Data.Services/bin/Debug/net7.0
+/WeatherZapto.WebServer/bin/Debug/net7.0
+/WeatherZapto.WebServer.Services/bin/Debug/net7.0

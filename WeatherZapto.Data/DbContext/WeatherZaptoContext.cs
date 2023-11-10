@@ -83,6 +83,8 @@ namespace WeatherZapto.Data.DataContext
 			base.Dispose();
 		}
 
-		#endregion
-	}
+        public virtual async Task<int> ExecuteNonQueryAsync(string sql) => await Task.FromResult<int>(-1);
+
+        #endregion
+    }
 }
