@@ -8,7 +8,6 @@
         public static readonly int PortSensorData = 5003;
         public static readonly int PortConnectionData = 5004;
 		public static readonly int PortServerIotStatus = 5005;
-		public static readonly int PortConnectionEvent = 5006;
 		public static readonly int PortSensorEvent = 5007;
 
 		//URL of REST service
