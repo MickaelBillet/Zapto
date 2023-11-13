@@ -5,7 +5,9 @@ namespace Framework.Core.Model
 	public class SystemStatus
 	{
         public DateTime Date
-        { get; set; }
+        { 
+            get; set;
+        }
 
         public string IpAddress
         {
@@ -16,5 +18,10 @@ namespace Framework.Core.Model
         {
             get; set;
         }        
+
+        public string Status
+        {
+            get; set;
+        }
     }
 }

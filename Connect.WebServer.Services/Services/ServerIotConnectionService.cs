@@ -46,13 +46,17 @@ namespace Connect.WebServer.Services
                     {
                         status.Date = Clock.Now;
                         this.HostedServiceHealthCheck.SetStatus(status);
-                        await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
+
+                        if (status.Status == Domain.SystemStatus.STARTED)
                         {
-                            Id = Guid.NewGuid().ToString(),
-                            IpAddress = status.IpAddress,
-                            ConnectionDate = status.Date,
-                            Date = Clock.Now,                            
-                        });
+                            await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                IpAddress = status.IpAddress,
+                                ConnectionDate = status.Date,
+                                Date = Clock.Now,
+                            });
+                        }
                     }
                 }
             }

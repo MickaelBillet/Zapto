@@ -39,7 +39,7 @@ namespace Connect.Application.Services
                     if (data!.Length > 0)
                     {
                         result = JsonSerializer.Deserialize<SystemStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-                        Log.Warning("ReceiveStatusAsync - SystemStatus : " + result?.IpAddress + "/" + result?.RSSI);
+                        Log.Warning("ReceiveStatusAsync - SystemStatus : " + result?.IpAddress + "/" + result?.RSSI + "/" + result?.Status);
                     }
                     else
                     {
