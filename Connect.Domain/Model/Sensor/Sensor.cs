@@ -110,7 +110,7 @@ namespace Connect.Model
             };
 
             json = JsonSerializer.Serialize<SensorConfiguration>(configuration);
-            port = ConnectConstants.PortConnectionEvent;
+            port = ConnectConstants.PortConnectionData;
 
             return (json, port);
         }
