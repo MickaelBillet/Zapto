@@ -12,6 +12,7 @@ namespace WeatherZapto.WebServer.Controllers
     public class WeatherController : Controller
     {
         #region Properties
+        private IApplicationOWServiceCache? ApplicationOWServiceCache { get; }
         private IApplicationOWService? ApplicationOWService { get; }
         private IConfiguration? Configuration { get; }
         #endregion
@@ -19,7 +20,8 @@ namespace WeatherZapto.WebServer.Controllers
         #region Constructor
         public WeatherController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
+            this.ApplicationOWServiceCache = serviceProvider.GetRequiredService<IApplicationOWServiceCache>();
+            this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>(); 
             this.Configuration = configuration;
         }
         #endregion
@@ -32,12 +34,12 @@ namespace WeatherZapto.WebServer.Controllers
 
             try
             {
-                if ((this.ApplicationOWService != null) && (this.Configuration != null))
+                if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
                     ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
                     if (zaptoLocation != null)
                     {
-                        zaptoWeather = await this.ApplicationOWService.GetCurrentWeatherWithCache(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude, culture.Substring(0,2));
+                        zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude, culture.Substring(0,2));
                         if (zaptoWeather != null)
                         {
                             return StatusCode(200, zaptoWeather);
@@ -75,9 +77,9 @@ namespace WeatherZapto.WebServer.Controllers
 
             try
             {
-                if ((this.ApplicationOWService != null) && (this.Configuration != null))
+                if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    zaptoWeather = await this.ApplicationOWService.GetCurrentWeatherWithCache(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude, culture.Substring(0,2));
+                    zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude, culture.Substring(0,2));
                     if (zaptoWeather != null)
                     {
                         return StatusCode(200, zaptoWeather);

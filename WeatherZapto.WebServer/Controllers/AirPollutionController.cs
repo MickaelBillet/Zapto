@@ -12,6 +12,7 @@ namespace WeatherZapto.WebServer.Controllers
     public class AirPollutionController : Controller
     {
         #region Properties
+        private IApplicationOWServiceCache? ApplicationOWServiceCache { get; }
         private IApplicationOWService? ApplicationOWService { get; }
         private IConfiguration? Configuration { get; }
         #endregion
@@ -19,6 +20,7 @@ namespace WeatherZapto.WebServer.Controllers
         #region Constructor
         public AirPollutionController(IServiceProvider serviceProvider, IConfiguration configuration) 
         {
+            this.ApplicationOWServiceCache = serviceProvider.GetRequiredService<IApplicationOWServiceCache>();
             this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
             this.Configuration = configuration;
         }
@@ -32,12 +34,12 @@ namespace WeatherZapto.WebServer.Controllers
 
             try
             {
-                if ((this.Configuration != null) && (this.ApplicationOWService != null))
+                if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
                     ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
                     if (zaptoLocation != null)
                     {
-                        zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollutionWithCache(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude);
+                        zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude);
                         if (zaptoAirPollution != null)
                         {
                             return StatusCode(200, zaptoAirPollution);
@@ -75,9 +77,9 @@ namespace WeatherZapto.WebServer.Controllers
 
             try
             {
-                if ((this.ApplicationOWService != null) && (this.Configuration != null))
+                if ((this.ApplicationOWService != null) && (this.Configuration != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollutionWithCache(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude);
+                    zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude);
                     if (zaptoAirPollution != null)
                     {
                         return StatusCode(200, zaptoAirPollution);
