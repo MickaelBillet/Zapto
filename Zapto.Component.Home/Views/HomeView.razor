@@ -11,10 +11,13 @@
 <AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
 
 @code
-{
+    {
     public LocationModel Location { get; set; }
     public string Longitude { get; set; }
     public string Latitude { get; set; }
+
+    [CascadingParameter]
+    public Zapto.Component.Common.Components.Error Error { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,10 +33,17 @@
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
-        this.Longitude = longitude.ToString();
-        this.Latitude = latitude.ToString();
-        this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
-        this.StateHasChanged();
+        try
+        {
+            this.Longitude = longitude.ToString();
+            this.Latitude = latitude.ToString();
+            this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
+            this.StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            Error?.ProcessError(ex);
+        }
 
     }
 

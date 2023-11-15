@@ -94,5 +94,7 @@ builder.Services.AddViewModels();
 builder.Services.AddBlazoredLocalStorage();
 
 WebAssemblyHost host = builder.Build();
+var logger = host.Services.GetRequiredService<ILoggerFactory>().CreateLogger<Program>();
+logger.LogInformation("Application Started");
 await host.SetDefaultCulture();
 await host.RunAsync();

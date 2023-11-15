@@ -1,5 +1,4 @@
-﻿using Framework.Core.Base;
-using Serilog;
+﻿using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
