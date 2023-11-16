@@ -16,9 +16,6 @@
 {
     public LocationModel? Location { get; set; } 
 
-    [CascadingParameter]
-    public Zapto.Component.Common.Components.Error? Error { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
 #if DEBUG

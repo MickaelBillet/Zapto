@@ -4,26 +4,31 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
+
 <div class="d-flex align-center gap-4 mb-2">
     <MudText Typo="Typo.h5" Color="Color.Primary">@this.Location?.Name</MudText>
 </div>
 <WeatherHome Longitude="@this.Longitude" Latitude="@this.Latitude"></WeatherHome>
-<AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
+
+<ErrorBoundary @ref="ErrorBoundaryRef">
+    <ChildContent>
+        <AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
+    </ChildContent>
+    <ErrorContent>
+        <p class="error-message">Uh oh! Something went wrong</p>
+        <button class="btn btn-warning" @onclick="ResetError">Reset</button>
+    </ErrorContent>
+</ErrorBoundary>
 
 @code
-    {
+{
     public LocationModel Location { get; set; }
     public string Longitude { get; set; }
     public string Latitude { get; set; }
-
-    [CascadingParameter]
-    public Zapto.Component.Common.Components.Error Error { get; set; }
+    private ErrorBoundary ErrorBoundaryRef;
 
     protected override async Task OnInitializedAsync()
     {
-#if DEBUG
-    //await Task.Delay(5000);
-#endif
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
@@ -33,22 +38,24 @@
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
-        try
-        {
-            this.Longitude = longitude.ToString();
-            this.Latitude = latitude.ToString();
-            this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
-            this.StateHasChanged();
-        }
-        catch(Exception ex)
-        {
-            Error?.ProcessError(ex);
-        }
-
+        this.Longitude = longitude.ToString();
+        this.Latitude = latitude.ToString();
+        this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
+        this.StateHasChanged();
     }
 
     public void Dispose()
     {
         this.ViewModel?.Dispose();
+    }
+
+    protected override void OnParametersSet()
+    {
+        ErrorBoundaryRef?.Recover();
+    }
+
+    private void ResetError()
+    {
+        ErrorBoundaryRef?.Recover();
     }
 }

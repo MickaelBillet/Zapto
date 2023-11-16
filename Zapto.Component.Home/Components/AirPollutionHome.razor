@@ -7,7 +7,7 @@
 </div>
 
 <div class="mx-auto mt-2">
-   <MudExpansionPanels>
+    <MudExpansionPanels>
         @if (this.Model != null)
         {
             <MudExpansionPanel HideIcon="true" IsExpanded="true">
@@ -80,6 +80,7 @@
     </MudExpansionPanels>
 </div>
 
+
 @code
 {
     [Parameter]
@@ -104,6 +105,11 @@
         {
             this.Model = await this.ViewModel.GetAirPollutionModel(this.Longitude, this.Latitude);
             this.ViewModel.Refresh += RefreshView;
+
+            if (this.Model == null)
+            {
+                throw new Exception("Pas de Service Web");
+            }
         }
     }
 
