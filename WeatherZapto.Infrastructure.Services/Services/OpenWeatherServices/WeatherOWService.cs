@@ -1,6 +1,5 @@
 ﻿using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -39,63 +38,42 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
 
 		public async Task<OpenWeather> GetWeather(string APIKey, string longitude, string latitude, string language)
 		{
-			OpenWeather current = null;
-
-			try
-			{
-				current = await this.WebService.GetAsync<OpenWeather>(string.Format(WeatherZaptoConstants.UrlOWWeatherCurrentLang, latitude, longitude, APIKey, language), 
-																		null, 
-																		this.SerializerOptions, 
-																		new CancellationToken());
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex.Message);
-			}
-
-			return current;
+			return await this.WebService.GetAsync<OpenWeather>(string.Format(WeatherZaptoConstants.UrlOWWeatherCurrentLang, latitude, longitude, APIKey, language),
+                                                                        null,
+                                                                        this.SerializerOptions,
+                                                                        new CancellationToken()); ;
 		}
 
 		public async Task<Stream> GetWeatherImage(string code)
 		{
 			Stream stream = null;
-
-			try
+			using (HttpClient client = new HttpClient())
 			{
-				using (HttpClient client = new HttpClient())
-				{
-					client.Timeout = new TimeSpan(100000000); //10 sec
+				client.Timeout = new TimeSpan(100000000); //10 sec
 
-					using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{string.Format(WeatherZaptoConstants.UrlOWWeatherImage, code)}"))
+				using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{string.Format(WeatherZaptoConstants.UrlOWWeatherImage, code)}"))
+				{
+					using (HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None))
 					{
-						using (HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None))
+						//GET
+						if (response != null)
 						{
-							//GET
-							if (response != null)
+							if (response.IsSuccessStatusCode == true)
 							{
-								if (response.IsSuccessStatusCode == true)
-								{
-									stream = await response.Content.ReadAsStreamAsync();
-								}
-								else
-								{
-									throw new HttpRequestException();			
-								}
+								stream = await response.Content.ReadAsStreamAsync();
 							}
-							else 
+							else
 							{
-								throw new HttpRequestException();
+								throw new HttpRequestException();			
 							}
+						}
+						else 
+						{
+							throw new HttpRequestException();
 						}
 					}
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Error(ex.Message);
-				throw ex;
-			}
-
 			return stream;
 		}
 

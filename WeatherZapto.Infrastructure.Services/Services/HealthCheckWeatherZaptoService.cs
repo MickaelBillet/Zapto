@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,17 +19,7 @@ namespace WeatherZapto.Infrastructure.WebServices
         #region Method  
         public async Task<HealthCheckWeatherZapto> GetHealthCheckWeatherZapto(CancellationToken token = default)
         {
-            HealthCheckWeatherZapto healthCheck = null;
-            try
-            {
-                healthCheck = await WebService.GetAsync<HealthCheckWeatherZapto>(WeatherZaptoConstants.RestUrlHealthCheck, null, null, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return healthCheck;
+            return await WebService.GetAsync<HealthCheckWeatherZapto>(WeatherZaptoConstants.RestUrlHealthCheck, null, null, token); ;
         }
         #endregion
     }
