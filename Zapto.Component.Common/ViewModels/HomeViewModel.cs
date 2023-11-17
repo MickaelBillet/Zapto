@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -30,8 +31,16 @@ namespace Zapto.Component.Common.ViewModels
         }
         public async Task<LocationModel?> GetLocationModel(string latitude, string longitude)
         {
-            ZaptoLocation location = await this.ApplicationLocationService.GetLocation(longitude, latitude);
-            return (location != null) ? new LocationModel() { Name = location.Location } : null;
+            try
+            {
+                ZaptoLocation location = await this.ApplicationLocationService.GetLocation(longitude, latitude);
+                return (location != null) ? new LocationModel() { Name = location.Location } : null;
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                throw ex;
+            }
         }
         #endregion
     }

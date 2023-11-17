@@ -186,6 +186,9 @@
   <data name="Home" xml:space="preserve">
     <value>Acceuil</value>
   </data>
+  <data name="HS" xml:space="preserve">
+    <value>ne répond pas</value>
+  </data>
   <data name="Humidity" xml:space="preserve">
     <value>Humidité</value>
   </data>

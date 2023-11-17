@@ -65,6 +65,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw ex;
             }
 
             return items;
@@ -100,10 +101,8 @@ namespace Zapto.Component.Common.ViewModels
                 Exception = healthCheckWeatherZapto?.Entries?.PostGreSql?.Exception?.ToString(),
                 Tags = healthCheckWeatherZapto?.Entries?.PostGreSql?.Tags?.Aggregate((workingSentence, next) => workingSentence + " " + next),
             });
-
             return weatherZapto;
         }
-
         private HealthCheckModel GetModel(HealthCheckConnect healthCheckConnect)
         {
             HealthCheckModel connect = new HealthCheckModel();

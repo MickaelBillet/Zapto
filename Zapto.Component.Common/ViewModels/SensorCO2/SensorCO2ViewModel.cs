@@ -49,6 +49,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw ex;
             }
             return model;
         }

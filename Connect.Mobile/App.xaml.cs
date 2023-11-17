@@ -85,9 +85,6 @@ namespace Connect.Mobile
                     Host.Current.GetService<IFirebaseMobileService>().Subscribe(App.LocationId);
 
                 });
-
-
-                //Must be call in App.xaml.cs
             }
             catch (Exception ex)
             {

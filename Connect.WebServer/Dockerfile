@@ -8,7 +8,6 @@ EXPOSE 5002/udp
 EXPOSE 5003/udp
 EXPOSE 5004/udp
 EXPOSE 5005/udp
-EXPOSE 5006/udp
 EXPOSE 5007/udp
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build

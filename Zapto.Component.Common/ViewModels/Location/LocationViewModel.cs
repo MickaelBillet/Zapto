@@ -35,9 +35,10 @@ namespace Zapto.Component.Common.ViewModels
 		}
 		public async Task<LocationModel?> GetLocationModel()
 		{
+			LocationModel? model = null;
 			try
 			{
-				return (await this.ApplicationLocationServices.GetLocations())?.Select((location) => new LocationModel()
+				model = (await this.ApplicationLocationServices.GetLocations())?.Select((location) => new LocationModel()
 				{
 					Name = location.City,
 					Id = location.Id
@@ -46,9 +47,9 @@ namespace Zapto.Component.Common.ViewModels
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
+				throw ex;
 			}
-
-			return null;
+			return model;
 		}
 		#endregion
 	}

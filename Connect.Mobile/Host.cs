@@ -17,7 +17,7 @@ namespace Connect.Mobile
 		private IHost HostApplication { get; set; }
 		public static Host Current { get; }
 		static Host() { Current = new Host(); }
-        private static string Environment { get; } = "Developpment"; //"Production" "Developpment"
+        private static string Environment { get; } = "Production"; //"Production" "Developpment"
 		#endregion
 
 		#region Constructor

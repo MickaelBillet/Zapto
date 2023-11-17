@@ -32,100 +32,103 @@ namespace Zapto.Component.Common.ViewModels
         }
     #endregion
 
-    #region Methods
-    public override async Task InitializeAsync(string? parameter)
-        {
-            await base.InitializeAsync(parameter);
-        }
-
-        public void OpenDetails(AirPollutionModel model)
-        {
-            this.NavigationService.NavigateTo($"/airpollutiondetails", model);
-        }
-
-        public async Task<AirPollutionModel?> GetAirPollutionModel()
-        {
-            AirPollutionModel? model = null;
-            try
+        #region Methods
+        public override async Task InitializeAsync(string? parameter)
             {
-                ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
-                if (user != null)
+                await base.InitializeAsync(parameter);
+            }
+
+            public void OpenDetails(AirPollutionModel model)
+            {
+                this.NavigationService.NavigateTo($"/airpollutiondetails", model);
+            }
+
+            public async Task<AirPollutionModel?> GetAirPollutionModel()
+            {
+                AirPollutionModel? model = null;
+                try
                 {
-                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
+                    ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
+                    if (user != null)
+                    {
+                        ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
+                        if (zaptoAirPollution != null)
+                        {
+                            model = this.GetModel(zaptoAirPollution);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    throw ex;
+                }
+                return model;
+            }
+
+            public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
+            {
+                AirPollutionModel? model = null;
+                try
+                {
+                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
                     if (zaptoAirPollution != null)
                     {
                         model = this.GetModel(zaptoAirPollution);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            return model;
-        }
-
-        public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
-        {
-            AirPollutionModel? model = null;
-            try
-            {
-                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
-                if (zaptoAirPollution != null)
+                catch (Exception ex)
                 {
-                    model = this.GetModel(zaptoAirPollution);
+                    Debug.WriteLine(ex);
+                    throw ex;
                 }
+                return model;
             }
-            catch (Exception ex)
+            public async Task<AirPollutionModel?> GetAirPollutionModel(string longitude, string latitude)
             {
-                Debug.WriteLine(ex);
-            }
-            return model;
-        }
-        public async Task<AirPollutionModel?> GetAirPollutionModel(string longitude, string latitude)
-        {
-            AirPollutionModel? model = null;
-            try
-            {
-                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
-                if (zaptoAirPollution != null)
+                AirPollutionModel? model = null;
+                try
                 {
-                    model = this.GetModel(zaptoAirPollution);
+                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
+                    if (zaptoAirPollution != null)
+                    {
+                        model = this.GetModel(zaptoAirPollution);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    throw ex;
+                }
+                return model;
             }
-            catch (Exception ex)
+            private AirPollutionModel GetModel(ZaptoAirPollution zaptoAirPollution)
             {
-                Debug.WriteLine(ex);
+                AirPollutionModel model = new AirPollutionModel()
+                {
+                    Id = zaptoAirPollution.Id,
+                    aqi = zaptoAirPollution.aqi,
+                    Location = zaptoAirPollution.Location,
+                    Longitude = zaptoAirPollution.Longitude,
+                    Latitude = zaptoAirPollution.Latitude,
+                    TimeStamp = zaptoAirPollution.TimeStamp,
+                };
+
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["CO"], "co",   zaptoAirPollution.co, new int[5] { 0, 4400, 9400, 12400, 15400 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO2"], "no2", zaptoAirPollution.no2, new int[5] { 0, 40, 70, 150, 200 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["O3"], "o3", zaptoAirPollution.o3, new int[5] { 0, 60, 100, 140, 180 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["SO2"], "so2", zaptoAirPollution.so2, new int[5] { 0, 20, 80, 250, 350 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM10"], "pm10", zaptoAirPollution.pm10, new int[5] { 0, 20, 50, 100, 200 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM25"], "pm2_5", zaptoAirPollution.pm2_5, new int[5] { 0, 10, 25, 50, 75 }));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["NH3"], "nh3", zaptoAirPollution.nh3, null));
+                model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO"], "no", zaptoAirPollution.no, null));
+
+                return model;
             }
-            return model;
-        }
-        private AirPollutionModel GetModel(ZaptoAirPollution zaptoAirPollution)
-        {
-            AirPollutionModel model = new AirPollutionModel()
+            public override void Dispose()
             {
-                Id = zaptoAirPollution.Id,
-                aqi = zaptoAirPollution.aqi,
-                Location = zaptoAirPollution.Location,
-                Longitude = zaptoAirPollution.Longitude,
-                Latitude = zaptoAirPollution.Latitude,
-                TimeStamp = zaptoAirPollution.TimeStamp,
-            };
-
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["CO"], "co",   zaptoAirPollution.co, new int[5] { 0, 4400, 9400, 12400, 15400 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO2"], "no2", zaptoAirPollution.no2, new int[5] { 0, 40, 70, 150, 200 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["O3"], "o3", zaptoAirPollution.o3, new int[5] { 0, 60, 100, 140, 180 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["SO2"], "so2", zaptoAirPollution.so2, new int[5] { 0, 20, 80, 250, 350 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM10"], "pm10", zaptoAirPollution.pm10, new int[5] { 0, 20, 50, 100, 200 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["PM25"], "pm2_5", zaptoAirPollution.pm2_5, new int[5] { 0, 10, 25, 50, 75 }));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NH3"], "nh3", zaptoAirPollution.nh3, null));
-            model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO"], "no", zaptoAirPollution.no, null));
-
-            return model;
-        }
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
-        #endregion
+                base.Dispose();
+            }
+            #endregion
     }
 }

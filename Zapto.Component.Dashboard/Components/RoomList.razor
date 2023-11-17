@@ -27,9 +27,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (this.Location != null) && (this.Rooms == null))
+        if ((this.ViewModel != null) && (this.Location != null))
         {
             this.Rooms = (await this.ViewModel.GetRoomModels(this.Location.Id));
+            if (this.Rooms == null)
+            {
+                throw new Exception("Connect Service KO");
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace Connect.Model
 {
-    public class SensorEventConfiguration
+    public class SensorConfiguration
     {
         #region Property
 

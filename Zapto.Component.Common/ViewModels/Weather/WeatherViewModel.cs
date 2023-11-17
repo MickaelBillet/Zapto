@@ -70,23 +70,20 @@ namespace Zapto.Component.Common.ViewModels
 								}
 							}
 						}
-						else { }
 					}
-					else
-					{ }
 				}
-				else { }
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex);
-			}
-			return model;
+                throw ex;
+            }
+            return model;
 		}
 
         public async Task<WeatherModel?> GetWeatherModel(string latitude, string longitude)
         {
-            WeatherModel model = new WeatherModel();
+			WeatherModel? model = null;
             try
             {
                 string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
@@ -95,6 +92,7 @@ namespace Zapto.Component.Common.ViewModels
                     ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(longitude, latitude, culture);
                     if (weather != null)
                     {
+						model = new WeatherModel();
                         model.Temperature = weather.Temperature;
                         model.WeatherText = weather.WeatherText;
                         model.WindSpeed = weather.WindSpeed;
@@ -111,14 +109,12 @@ namespace Zapto.Component.Common.ViewModels
                             }
                         }
                     }
-                    else { }
                 }
-                else
-                { }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+				throw ex;
             }
             return model;
         }

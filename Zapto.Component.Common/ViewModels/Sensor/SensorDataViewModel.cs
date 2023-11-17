@@ -1,5 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -35,17 +36,25 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<bool> ReceiveStatusAsync(SensorDataModel model)
         {
-            return await this.SignalRService.StartAsync(model.LocationId,
-            null,
-            null,
-            (sensorStatus) =>
+            try
             {
-                if (sensorStatus.SensorId == model.Id)
+                return await this.SignalRService.StartAsync(model.LocationId,
+                null,
+                null,
+                (sensorStatus) =>
                 {
-                    this.OnRefresh(new EventArgs());
-                }
-            },
-            null);
+                    if (sensorStatus.SensorId == model.Id)
+                    {
+                        this.OnRefresh(new EventArgs());
+                    }
+                },
+                null);
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                throw ex;
+            }
         }
 
         #endregion

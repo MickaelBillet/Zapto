@@ -9,7 +9,6 @@ namespace Connect.Model
         private double? humidity = null;
         private double? temperature = null;
         private double? pressure = null;
-        private string period = string.Empty;
         private string channel = string.Empty;
         private int leakDetected = 0;
         private string parameter = string.Empty;
@@ -64,13 +63,6 @@ namespace Connect.Model
             set { SetProperty<double?>(ref pressure, value); }
         }
 
-        public string Period
-        {
-            get { return period; }
-
-            set { SetProperty<string>(ref period, value); }
-        }
-
         public string Parameter
         {
             get { return parameter; }
@@ -110,30 +102,15 @@ namespace Connect.Model
             string? json = null;
             int port = 0;
 
-            if ((this.Name == ConnectConstants.Type_F007th) || (this.Name == ConnectConstants.Type_HTUD21DF))
+            SensorConfiguration configuration = new SensorConfiguration()
             {
-                SensorDataConfiguration configuration = new SensorDataConfiguration()
-                {
-                    Type = this.Name,
-                    Channel = this.Channel,
-                    Period = this.Period,
-                };
+                Type = this.Name,
+                Channel = this.Channel,
+                Parameter = this.Parameter,
+            };
 
-                json = JsonSerializer.Serialize<SensorDataConfiguration>(configuration);
-                port = ConnectConstants.PortConnectionData;
-            }
-            else if (this.Name == ConnectConstants.Type_MC22_1527)
-            {
-                SensorEventConfiguration configuration = new SensorEventConfiguration()
-                {
-                    Type = this.Name,
-                    Channel = this.Channel,
-                    Parameter = this.Parameter,
-                };
-
-                json = JsonSerializer.Serialize<SensorEventConfiguration>(configuration);
-                port = ConnectConstants.PortConnectionEvent;
-            }
+            json = JsonSerializer.Serialize<SensorConfiguration>(configuration);
+            port = ConnectConstants.PortConnectionData;
 
             return (json, port);
         }

@@ -7,6 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\Chart.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\chart.esm.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\chart.esm.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\chart.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\chart.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\chart.mjs" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\helpers.esm.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\helpers.esm.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\Chart.js\helpers.mjs" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-datalabels\chartjs-plugin-datalabels.esm.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-datalabels\chartjs-plugin-datalabels.esm.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-datalabels\chartjs-plugin-datalabels.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-datalabels\chartjs-plugin-datalabels.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-zoom\chartjs-plugin-zoom.esm.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-zoom\chartjs-plugin-zoom.esm.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-zoom\chartjs-plugin-zoom.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\chartjs-plugin-zoom\chartjs-plugin-zoom.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\hammer.js\hammer.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\hammer.js\hammer.min.js" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\hammer.js\hammer.min.js.map" />
+    <Content Remove="C:\Users\mbillet.NOVACATH\.nuget\packages\psc.blazor.components.chartjs\6.0.43\contentFiles\any\net6.0\wwwroot\lib\hammer.js\hammer.min.map" />
     <Content Remove="C:\Users\micka\.nuget\packages\psc.blazor.components.chartjs\6.0.40\contentFiles\any\net6.0\psc_ico.ico" />
   </ItemGroup>
 
@@ -16,11 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.14" />
     <PackageReference Include="MudBlazor" Version="6.11.0" />
-    <PackageReference Include="PSC.Blazor.Components.Chartjs" Version="6.0.41" />
+    <PackageReference Include="PSC.Blazor.Components.Chartjs" Version="6.0.43" />
   </ItemGroup>
 
   <ItemGroup>
