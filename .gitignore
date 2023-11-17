@@ -87,3 +87,9 @@
 /Framework.Data.Services/bin
 /Framework.Mobile.Services/bin/Release/netstandard2.1
 /WeatherZapto.WebServer/.vs/WeatherZapto.WebServer
+/Authentication.Application.Services/bin/Debug/netstandard2.1
+/Authentication.Application.Services/obj
+/Authentication.Domain/bin/Debug/netstandard2.1
+/Authentication.Domain/obj
+/Authentication.Infrastructure.Services/bin/Debug/netstandard2.1
+/Authentication.Infrastructure.Services/obj
