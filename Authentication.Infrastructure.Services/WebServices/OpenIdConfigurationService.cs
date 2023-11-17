@@ -1,4 +1,4 @@
-﻿using Authentication;
+﻿using AirZapto.Infrastructure.WebServices;
 using Authentication.Application.Infrastructure;
 using Authentication.Model;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AirZapto.Infrastructure.WebServices
+namespace Authentication.Infrastructure.WebServices
 {
     internal sealed class OpenIdConfigurationService : AuthenticationWebService, IOpenIdConfigurationService
     {

@@ -7,7 +7,7 @@ namespace Authentication.Application
 	{
 		public static void AddApplicationAirZaptoServices(this IServiceCollection services)
 		{
-			services.AddTransient<IApplicationOpenIdConfigurationServicecs, ApplicationOpenIdConfigurationService>();
+			services.AddTransient<IApplicationOpenIdConfigurationServices, ApplicationOpenIdConfigurationService>();
         }   
     }
 }

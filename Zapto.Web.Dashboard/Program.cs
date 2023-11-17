@@ -62,6 +62,14 @@ builder.Services.AddHttpClient("OpenWeather", client =>
 	client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 });
 
+builder.Services.AddHttpClient("KeycloackClient", client =>
+{
+    client.BaseAddress = new Uri($"{builder.Configuration["ProtocolController"]}://{builder.Configuration["BackEndUrl"]}/");
+    client.Timeout = new TimeSpan(100000000); //10 sec
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+});
+
 builder.Services.AddOidcAuthentication(options =>
 {
     options.ProviderOptions.MetadataUrl = builder.Configuration["Keycloak:MetadataUrl"];

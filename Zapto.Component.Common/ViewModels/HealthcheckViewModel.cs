@@ -1,5 +1,7 @@
 ﻿using AirZapto.Application;
 using AirZapto.Model.Healthcheck;
+using Authentication.Application;
+using Authentication.Model;
 using Connect.Application;
 using Connect.Model.Healthcheck;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,7 @@ namespace Zapto.Component.Common.ViewModels
         private IApplicationHealthCheckConnectServices ApplicationHealthCheckConnectServices { get; }
         private IApplicationHealthCheckAirZaptoServices ApplicationHealthCheckAirZaptoServices { get; }
         private IApplicationHealthCheckWeatherZaptoServices ApplicationHealthCheckWeatherZaptoServices { get; }
+        private IApplicationOpenIdConfigurationServices  ApplicationOpenIdConfigurationServices { get; }
         #endregion
 
         #region Constructor
@@ -29,6 +32,7 @@ namespace Zapto.Component.Common.ViewModels
             this.ApplicationHealthCheckConnectServices = serviceProvider.GetRequiredService<IApplicationHealthCheckConnectServices>();
             this.ApplicationHealthCheckAirZaptoServices = serviceProvider.GetRequiredService<IApplicationHealthCheckAirZaptoServices>();
             this.ApplicationHealthCheckWeatherZaptoServices = serviceProvider.GetRequiredService<IApplicationHealthCheckWeatherZaptoServices>();
+            this.ApplicationOpenIdConfigurationServices = serviceProvider.GetRequiredService<IApplicationOpenIdConfigurationServices>();
         }
         #endregion
 
@@ -61,6 +65,12 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     items.Add(this.GetModel(healthCheckWeatherZapto));
                 }
+
+                OpenIdConfiguration? openIdConfiguration = await this.ApplicationOpenIdConfigurationServices.GetOpenIdConfiguration();
+                if (openIdConfiguration != null) 
+                {
+                    items.Add(this.GetModel(openIdConfiguration));
+                }
             }
             catch (Exception ex)
             {
@@ -71,6 +81,33 @@ namespace Zapto.Component.Common.ViewModels
             return items;
         }
 
+        private HealthCheckModel GetModel(OpenIdConfiguration openIdConfiguration)
+        {
+            HealthCheckModel authentication = new HealthCheckModel();
+            authentication.Name = "Keycloack";
+            authentication.Status = (openIdConfiguration != null) ? 2 : 0;
+            authentication.Items = new List<HealthcheckItemModel>();
+            authentication.Items?.Add(new HealthcheckItemModel
+            {
+                Name = nameof(openIdConfiguration.AuthorizationEndpoint),
+                Description = openIdConfiguration?.AuthorizationEndpoint,
+                Status = String.IsNullOrEmpty(openIdConfiguration!.AuthorizationEndpoint) ? 0 : 2,
+            });
+            authentication.Items?.Add(new HealthcheckItemModel
+            {
+                Name = nameof(openIdConfiguration.TokenEndpoint),
+                Description = openIdConfiguration?.TokenEndpoint,
+                Status = String.IsNullOrEmpty(openIdConfiguration!.TokenEndpoint) ? 0 : 2,
+            });
+            authentication.Items?.Add(new HealthcheckItemModel
+            {
+                Name = nameof(openIdConfiguration.UserInfoEndpoint),
+                Description = openIdConfiguration?.UserInfoEndpoint,
+                Status = String.IsNullOrEmpty(openIdConfiguration!.UserInfoEndpoint) ? 0 : 2,
+            });
+            return authentication;
+
+        }
         private HealthCheckModel GetModel(HealthCheckWeatherZapto healthCheckWeatherZapto)
         {
             HealthCheckModel weatherZapto = new HealthCheckModel();

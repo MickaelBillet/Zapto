@@ -49,6 +49,8 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddAirZaptoWebServices(configuration, "AirZaptoClient");
 			services.AddOpenWeatherWebServices(configuration, "OpenWeather");
 			services.AddWeatherZaptoWebServices(configuration, "WeatherZaptoClient");
+			services.AddOpenWeatherWebServices(configuration, "KeycloackClient");
+            services.AddApplicationAirZaptoServices();
             services.AddApplicationConnectServices();
 			services.AddApplicationAirZaptoServices();
 			services.AddApplicationWeaterZaptoServices();

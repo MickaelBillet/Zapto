@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AirZapto.Application.Services
 {
-    internal class ApplicationOpenIdConfigurationService : IApplicationOpenIdConfigurationServicecs
+    internal class ApplicationOpenIdConfigurationService : IApplicationOpenIdConfigurationServices
     {
         #region Services
         private IOpenIdConfigurationService? OpenIdConfigurationService { get; }
@@ -21,7 +21,7 @@ namespace AirZapto.Application.Services
         #endregion
 
         #region Methods
-        public async Task<OpenIdConfiguration?> GetHealthCheckAirZapto()
+        public async Task<OpenIdConfiguration?> GetOpenIdConfiguration()
         {
             return (this.OpenIdConfigurationService != null) ? await this.OpenIdConfigurationService.GetOpenIdConfiguration() : null;
         }
