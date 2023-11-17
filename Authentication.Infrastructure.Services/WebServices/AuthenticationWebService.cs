@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace AirZapto.Infrastructure.WebServices
 {
-    internal abstract class AirZaptoWebService
+    internal abstract class AuthenticationWebService
 	{
         #region Property
         protected IWebService WebService { get; private set; }
@@ -14,7 +14,7 @@ namespace AirZapto.Infrastructure.WebServices
         #endregion
 
         #region Constructor
-        public AirZaptoWebService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName)
+        public AuthenticationWebService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName)
 		{
             this.WebService = WebServiceFactory.CreateWebService(serviceProvider, httpClientName);
             this.Configuration = configuration;
