@@ -1,6 +1,5 @@
 ﻿using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -36,20 +35,9 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
         #region Methods
         public async Task<IEnumerable<Location>> GetLocations(string APIKey, string longitude, string latitude)
         {
-            IEnumerable<Location> location = null;
-
-            try
-            {
-                location = await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocation, latitude, longitude, LIMIT, APIKey),
+            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocation, latitude, longitude, LIMIT, APIKey),
                                                                                 this.SerializerOptions,
-                                                                                new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return location;
+                                                                                new CancellationToken()); ;
         }
         #endregion
     }

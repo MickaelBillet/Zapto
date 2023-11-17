@@ -24,18 +24,7 @@ namespace Connect.Infrastructure.WebServices
         /// </summary>
         public async Task<bool?> Leak(string? sensorId, string status)
         {
-            bool? res = false;
-
-            try
-            {
-                res = await WebService.PutAsync<string>(ConnectConstants.RestUrlSensorNoLeak, status, sensorId);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return res;
+            return await WebService.PutAsync<string>(ConnectConstants.RestUrlSensorNoLeak, status, sensorId); ;
         }
 
         #endregion

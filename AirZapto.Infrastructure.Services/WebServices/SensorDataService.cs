@@ -1,7 +1,6 @@
 ﻿using AirZapto.Application.Infrastructure;
 using AirZapto.Model;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -25,22 +24,9 @@ namespace AirZapto.Infrastructure.WebServices
 
         public async Task<IEnumerable<AirZaptoData>?> GetSensorData(string? sensorId, int duration)
         {
-            IEnumerable<AirZaptoData>? data = null;
-
-            try
-            {
-                //Call the webservice
-                data = await this.WebService.GetCollectionAsync<AirZaptoData>(string.Format(AirZaptoConstants.RestUrlSensorData, sensorId, duration), 
-                                                                                this.SerializerOptions, 
+            return await this.WebService.GetCollectionAsync<AirZaptoData>(string.Format(AirZaptoConstants.RestUrlSensorData, sensorId, duration),
+                                                                                this.SerializerOptions,
                                                                                 new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-                throw;
-            }
-
-            return data;
         }
 
 		#endregion

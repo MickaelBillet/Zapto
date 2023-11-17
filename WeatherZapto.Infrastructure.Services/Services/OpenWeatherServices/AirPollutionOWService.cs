@@ -1,6 +1,5 @@
 ﻿using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Text.Json;
 using System.Threading;
@@ -34,21 +33,10 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
         #region Methods
         public async Task<AirPollution> GetAirPollution(string APIKey, string longitude, string latitude)
         {
-            AirPollution airPollution = null;
-
-            try
-            {
-                airPollution = await this.WebService.GetAsync<AirPollution>(string.Format(WeatherZaptoConstants.UrlOWAirPollutionCurrent, latitude, longitude, APIKey),
+            return await this.WebService.GetAsync<AirPollution>(string.Format(WeatherZaptoConstants.UrlOWAirPollutionCurrent, latitude, longitude, APIKey),
                                                                                                     null,
                                                                                                     this.SerializerOptions,
-                                                                                                    new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return airPollution;
+                                                                                                    new CancellationToken()); ;
         }
         #endregion
     }

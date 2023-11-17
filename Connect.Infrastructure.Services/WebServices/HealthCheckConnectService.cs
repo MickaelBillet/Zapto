@@ -2,7 +2,6 @@
 using Connect.Model;
 using Connect.Model.Healthcheck;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,17 +20,7 @@ namespace Connect.Infrastructure.WebServices
         #region Method  
         public async Task<HealthCheckConnect?> GetHealthCheckConnect(CancellationToken token = default)
         {
-            HealthCheckConnect? healthCheck = null;
-            try
-            {
-                healthCheck = await WebService.GetAsync<HealthCheckConnect>(ConnectConstants.RestUrlHealthCheck, null, null, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return healthCheck;
+            return await WebService.GetAsync<HealthCheckConnect>(ConnectConstants.RestUrlHealthCheck, null, null, token);
         }
         #endregion
     }
