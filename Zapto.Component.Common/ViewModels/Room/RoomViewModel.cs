@@ -1,5 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -37,19 +38,27 @@ namespace Zapto.Component.Common.ViewModels
 
 		public async Task<bool> ReceiveStatusAsync(RoomModel model)
 		{
-			return await this.SignalRService.StartAsync(model.LocationId,
-			null,
-			(roomStatus) =>
+			try
 			{
-				if (model?.Id == roomStatus.RoomId)
+				return await this.SignalRService.StartAsync(model.LocationId,
+				null,
+				(roomStatus) =>
 				{
-					model.Humidity = (roomStatus.Humidity != null) ? roomStatus.Humidity.Value.ToString("00") : null;
-					model.Temperature = (roomStatus.Temperature != null) ? roomStatus.Temperature.Value.ToString("00.0") : null;
-					this.OnRefresh(new EventArgs());
-				}
-			},
-			null,
-			null);
+					if (model?.Id == roomStatus.RoomId)
+					{
+						model.Humidity = (roomStatus.Humidity != null) ? roomStatus.Humidity.Value.ToString("00") : null;
+						model.Temperature = (roomStatus.Temperature != null) ? roomStatus.Temperature.Value.ToString("00.0") : null;
+						this.OnRefresh(new EventArgs());
+					}
+				},
+				null,
+				null);
+			}
+			catch (Exception ex) 
+			{
+				Debug.WriteLine(ex);
+				throw ex;
+			}
 		}
 
 		public override void Dispose()

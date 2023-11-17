@@ -2,6 +2,7 @@
 using Connect.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 using Zapto.Component.Common.Resources;
 
@@ -36,20 +37,28 @@ namespace Zapto.Component.Common.ViewModels
 
 		public async Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId)
 		{
-			return (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
+			try
 			{
-				Name = this.Localizer[room.Name],
-				LocationId = room.LocationId,
-				Type = room.Type,
-				Description = room.Description,
-				Humidity = (room.Humidity != null) ? room.Humidity.Value.ToString("00") : null,
-				Temperature = (room.Temperature != null) ? room.Temperature.Value.ToString("0.0") : null,
-				DeviceType = room.DeviceType,
-				ConnectedObjectsList = room.ConnectedObjectsList.OrderBy((arg) => (arg.DeviceType)).ToList<ConnectedObject>(),
-				Sensors = room.SensorsList,
-				StatusSensors = room.StatusSensors,
-				Id = room.Id,
-			})?.OrderByDescending((room) => room.ConnectedObjectsList?.Count);
+				return (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
+				{
+					Name = this.Localizer[room.Name],
+					LocationId = room.LocationId,
+					Type = room.Type,
+					Description = room.Description,
+					Humidity = (room.Humidity != null) ? room.Humidity.Value.ToString("00") : null,
+					Temperature = (room.Temperature != null) ? room.Temperature.Value.ToString("0.0") : null,
+					DeviceType = room.DeviceType,
+					ConnectedObjectsList = room.ConnectedObjectsList.OrderBy((arg) => (arg.DeviceType)).ToList<ConnectedObject>(),
+					Sensors = room.SensorsList,
+					StatusSensors = room.StatusSensors,
+					Id = room.Id,
+				})?.OrderByDescending((room) => room.ConnectedObjectsList?.Count);
+			}
+			catch (Exception ex) 
+			{
+				Debug.WriteLine(ex);
+				throw ex;
+			}
 		}
 		#endregion
 	}

@@ -1,89 +1,81 @@
 ﻿@inject IWeatherViewModel ViewModel 
 @implements IDisposable
 
-<ErrorBoundary @ref="ErrorBoundaryRef">
-    <ChildContent>
-        <MudGrid Class="mb-2">
-            <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-                <MudContainer Class="d-flex align-center gap-4" Style="height:100px;">
-                   @if (this.Model != null)
-                   {
-                        <MudImage Src="@this.Model?.Image"></MudImage>            
-                        <MudText Typo="Typo.h6" Align="Align.Left">@this.Model?.WeatherText</MudText>  
-                   }
-                   else
-                   {
-                        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-                   }            
-                </MudContainer>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-                <MudContainer Class="d-flex align-center" Style="height:100px;">
-                    @if (this.Model != null)
-                    {
-                        <MudIcon Icon="@Icons.Material.Filled.Thermostat" Class="mx-2" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.Temperature</MudText>
-                        <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">°C</MudText>
-                    }
-                    else
-                    {
-                        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-                    }   
-                </MudContainer>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-                <MudContainer Class="d-flex align-center" Style="height:100px;">
-                    @if (this.Model != null)
-                    {
-                        if ((this.Model.WindDirection >= 22) && (this.Model.WindDirection < 67))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.NorthEast" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 67) && (this.Model.WindDirection < 112))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.East" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 112) && (this.Model.WindDirection < 157))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.SouthEast" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 157) && (this.Model.WindDirection < 202))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.South" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 202) && (this.Model.WindDirection < 247))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.SouthWest" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 247) && (this.Model.WindDirection < 292))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.West" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else if ((this.Model.WindDirection >= 292) && (this.Model.WindDirection < 337))
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.NorthWest" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
-                        else 
-                        {
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.North" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                        }
+<MudGrid Class="mb-2">
+    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+        <MudContainer Class="d-flex align-center gap-4" Style="height:100px;">
+            @if (this.Model != null)
+            {
+                <MudImage Src="@this.Model?.Image"></MudImage>            
+                <MudText Typo="Typo.h6" Align="Align.Left">@this.Model?.WeatherText</MudText>  
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+            }            
+        </MudContainer>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+        <MudContainer Class="d-flex align-center" Style="height:100px;">
+            @if (this.Model != null)
+            {
+                <MudIcon Icon="@Icons.Material.Filled.Thermostat" Class="mx-2" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.Temperature</MudText>
+                <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">°C</MudText>
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+            }   
+        </MudContainer>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+        <MudContainer Class="d-flex align-center" Style="height:100px;">
+            @if (this.Model != null)
+            {
+                if ((this.Model.WindDirection >= 22) && (this.Model.WindDirection < 67))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.NorthEast" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 67) && (this.Model.WindDirection < 112))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.East" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 112) && (this.Model.WindDirection < 157))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.SouthEast" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 157) && (this.Model.WindDirection < 202))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.South" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 202) && (this.Model.WindDirection < 247))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.SouthWest" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 247) && (this.Model.WindDirection < 292))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.West" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else if ((this.Model.WindDirection >= 292) && (this.Model.WindDirection < 337))
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.NorthWest" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
+                else 
+                {
+                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.North" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
+                }
 
-                        <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.WindSpeed</MudText>
-                        <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">km/h</MudText>
-                    }
-                    else
-                    {
-                        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-                    }
-                </MudContainer>
-            </MudItem>
-        </MudGrid>
-    </ChildContent>
-    <ErrorContent>
-        <p class="error-message">Uh oh! Something went wrong</p>
-        <button class="btn btn-warning" @onclick="ResetError">Reset</button>
-    </ErrorContent>
-</ErrorBoundary>
+                <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.WindSpeed</MudText>
+                <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">km/h</MudText>
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+            }
+        </MudContainer>
+    </MudItem>
+</MudGrid>
 
 @code 
 {
@@ -94,8 +86,6 @@
     public string Longitude { get; set; }
 
     public WeatherModel Model { get; set; }
-
-    private ErrorBoundary ErrorBoundaryRef;
 
     protected override async Task OnInitializedAsync()
     {
@@ -111,6 +101,11 @@
         {
             this.Model = await this.ViewModel.GetWeatherModel(this.Latitude, this.Longitude);
             this.ViewModel.Refresh += RefreshView;
+
+            if (this.Model == null)
+            {
+                throw new Exception("Weather Service KO");
+            }
         }
     }
 
@@ -127,15 +122,5 @@
     public void RefreshView(object sender, EventArgs e)
     {
         this.StateHasChanged();
-    }
-
-    protected override void OnParametersSet()
-    {
-        ErrorBoundaryRef?.Recover();
-    }
-
-    private void ResetError()
-    {
-        ErrorBoundaryRef?.Recover();
     }
 }

@@ -105,10 +105,9 @@
         {
             this.Model = await this.ViewModel.GetAirPollutionModel(this.Longitude, this.Latitude);
             this.ViewModel.Refresh += RefreshView;
-
             if (this.Model == null)
             {
-                throw new Exception("Pas de Service Web");
+                throw new Exception("AirPollution Service KO");
             }
         }
     }

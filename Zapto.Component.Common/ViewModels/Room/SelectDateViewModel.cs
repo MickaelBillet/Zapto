@@ -43,8 +43,8 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw ex;
             }
-            return null;
         }
 
         public async Task<DateTime?> GetRoomMinDate(string roomId)
@@ -56,8 +56,8 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw ex;
             }
-            return null;
         }
         #endregion
     }

@@ -2,6 +2,7 @@
 using Connect.Application.Infrastructure;
 using Connect.Model;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -36,52 +37,68 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<bool> ReceiveStatusAsync(PlugModel model)
         {
-            return await this.SignalRService.StartAsync(model.LocationId,
-            (plugStatus) =>
-            {
-                if (model?.Id == plugStatus.PlugId)
-                {
-                    model.Status = Plug.GetStatus(plugStatus.Status, plugStatus.Order);
-                    model.WorkingDuration = plugStatus.WorkingDuration;
-                    model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
-                    this.OnRefresh(new EventArgs());
-                }
-            },
-            null,
-            null,
-			null);
+			try
+			{
+				return await this.SignalRService.StartAsync(model.LocationId,
+				(plugStatus) =>
+				{
+					if (model?.Id == plugStatus.PlugId)
+					{
+						model.Status = Plug.GetStatus(plugStatus.Status, plugStatus.Order);
+						model.WorkingDuration = plugStatus.WorkingDuration;
+						model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
+						this.OnRefresh(new EventArgs());
+					}
+				},
+				null,
+				null,
+				null);
+			}
+			catch(Exception ex) 
+			{
+				Debug.WriteLine(ex);
+				throw ex;
+			}
         }
 
         public async Task <bool?> SendCommandAsync(int? command, string? id)
 		{
 			bool? res = null;
 
-			if (command == 1)
+			try
 			{
-				res = await this.ApplicationPlugServices.ChangeMode(new Plug()
+				if (command == 1)
 				{
-					Id = id,
-					OnOff = Status.OFF,
-					Mode = Mode.Manual,
-				});
+					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
+					{
+						Id = id,
+						OnOff = Status.OFF,
+						Mode = Mode.Manual,
+					});
+				}
+				else if (command == 2)
+				{
+					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
+					{
+						Id = id,
+						OnOff = Status.ON,
+						Mode = Mode.Manual,
+					});
+				}
+				else if (command == 3)
+				{
+					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
+					{
+						Id = id,
+						OnOff = Status.ON,
+						Mode = Mode.Programing,
+					});
+				}
 			}
-			else if (command == 2)
+			catch(Exception ex) 
 			{
-				res = await this.ApplicationPlugServices.ChangeMode(new Plug()
-				{
-					Id = id,
-					OnOff = Status.ON,
-					Mode = Mode.Manual,
-				});
-			}
-			else if (command == 3)
-			{
-				res = await this.ApplicationPlugServices.ChangeMode(new Plug()
-				{
-					Id = id,
-					OnOff = Status.ON,
-					Mode = Mode.Programing,
-				});
+				Debug.WriteLine(ex);
+				throw ex;
 			}
 			return res;
 		}		

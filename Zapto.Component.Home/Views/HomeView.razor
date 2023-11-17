@@ -8,15 +8,28 @@
 <div class="d-flex align-center gap-4 mb-2">
     <MudText Typo="Typo.h5" Color="Color.Primary">@this.Location?.Name</MudText>
 </div>
-<WeatherHome Longitude="@this.Longitude" Latitude="@this.Latitude"></WeatherHome>
 
-<ErrorBoundary @ref="ErrorBoundaryRef">
+<ErrorBoundary @ref="ErrorBoundaryWeather">
+    <ChildContent>
+        <WeatherHome Longitude="@this.Longitude" Latitude="@this.Latitude"></WeatherHome>
+    </ChildContent>
+    <ErrorContent>
+        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+            <MudText Typo="Typo.h6" Class="mr-4">Weather @this.Localizer["HS"]</MudText>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorWeather" Color="Color.Warning">Reload</MudButton>
+        </MudContainer>
+    </ErrorContent>
+</ErrorBoundary>
+
+<ErrorBoundary @ref="ErrorBoundaryAirPollution">
     <ChildContent>
         <AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
     </ChildContent>
     <ErrorContent>
-        <p class="error-message">Uh oh! Something went wrong</p>
-        <button class="btn btn-warning" @onclick="ResetError">Reset</button>
+        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+            <MudText Typo="Typo.h6" Class="mr-4">AirPollution @this.Localizer["HS"]</MudText>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
+        </MudContainer>
     </ErrorContent>
 </ErrorBoundary>
 
@@ -25,7 +38,8 @@
     public LocationModel Location { get; set; }
     public string Longitude { get; set; }
     public string Latitude { get; set; }
-    private ErrorBoundary ErrorBoundaryRef;
+    private ErrorBoundary ErrorBoundaryAirPollution;
+    private ErrorBoundary ErrorBoundaryWeather;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,11 +65,17 @@
 
     protected override void OnParametersSet()
     {
-        ErrorBoundaryRef?.Recover();
+        ErrorBoundaryWeather?.Recover();
+        ErrorBoundaryAirPollution?.Recover();
     }
 
-    private void ResetError()
+    private void ResetErrorWeather()
     {
-        ErrorBoundaryRef?.Recover();
+        ErrorBoundaryWeather?.Recover();
+    }
+
+    private void ResetErrorAirPollution()
+    {
+        ErrorBoundaryAirPollution?.Recover();
     }
 }

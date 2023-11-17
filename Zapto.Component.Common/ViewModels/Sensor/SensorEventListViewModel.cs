@@ -1,4 +1,5 @@
 ﻿using Connect.Model;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -22,13 +23,21 @@ namespace Zapto.Component.Common.ViewModels
         #region Methods
         public IEnumerable<SensorEventModel>? GetSensorEventModels(RoomModel? roomModel)
         {
-            return roomModel?.Sensors?.Where((obj) => ((obj.Type & DeviceType.Sensor_Water_Leak) == DeviceType.Sensor_Water_Leak)).Select((obj) => new SensorEventModel()
+            try
             {
-                Name = obj.Name,
-                LocationId = roomModel.LocationId,
-                Id = obj.Id,
-                HasLeak = obj.LeakDetected,
-            });
+                return roomModel?.Sensors?.Where((obj) => ((obj.Type & DeviceType.Sensor_Water_Leak) == DeviceType.Sensor_Water_Leak)).Select((obj) => new SensorEventModel()
+                {
+                    Name = obj.Name,
+                    LocationId = roomModel.LocationId,
+                    Id = obj.Id,
+                    HasLeak = obj.LeakDetected,
+                });
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                throw ex;
+            }
         }
 
         public override void Dispose()
