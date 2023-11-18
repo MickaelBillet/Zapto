@@ -4,10 +4,17 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-
-<div class="d-flex align-center gap-4 mb-2">
-    <MudText Typo="Typo.h5" Color="Color.Primary">@this.Location?.Name</MudText>
-</div>
+<ErrorBoundary @ref="ErrorBoundaryLocation">
+    <ChildContent>
+        <LocationHome Latitude="@this.Latitude" Longitude="@this.Longitude"></LocationHome>
+    </ChildContent>
+    <ErrorContent>
+        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+            <MudText Typo="Typo.h6" Class="mr-4">Location @this.Localizer["HS"]</MudText>
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocation" Color="Color.Warning">Reload</MudButton>
+        </MudContainer>
+    </ErrorContent>
+</ErrorBoundary>
 
 <ErrorBoundary @ref="ErrorBoundaryWeather">
     <ChildContent>
@@ -34,39 +41,55 @@
 </ErrorBoundary>
 
 @code
-{
-    public LocationModel Location { get; set; }
+    {
     public string Longitude { get; set; }
     public string Latitude { get; set; }
     private ErrorBoundary ErrorBoundaryAirPollution;
     private ErrorBoundary ErrorBoundaryWeather;
+    private ErrorBoundary ErrorBoundaryLocation;
 
     protected override async Task OnInitializedAsync()
     {
+        #if DEBUG
+    //await Task.Delay(5000);
+        #endif
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            await this.PositionService.GetCurrentPosition(JsRuntime, GetPositionAsync);
         }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        ErrorBoundaryWeather?.Recover();
+        ErrorBoundaryAirPollution?.Recover();
+        ErrorBoundaryLocation?.Recover();
+
+    if ((this.ViewModel != null) && (this.PositionService != null))
+        {
+            await this.PositionService.GetCurrentPosition(JsRuntime, GetPositionAsync, GetErrorAsync);
+        }
+    }
+
+    private async Task GetErrorAsync(string error)
+    {
+        await Task.FromResult<string>(error);
     }
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
         this.Longitude = longitude.ToString();
         this.Latitude = latitude.ToString();
-        this.Location = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
+
+        //Warning don't delete this line
         this.StateHasChanged();
+
+        await Task.FromResult<bool>(true);
     }
 
     public void Dispose()
     {
         this.ViewModel?.Dispose();
-    }
-
-    protected override void OnParametersSet()
-    {
-        ErrorBoundaryWeather?.Recover();
-        ErrorBoundaryAirPollution?.Recover();
     }
 
     private void ResetErrorWeather()
@@ -77,5 +100,10 @@
     private void ResetErrorAirPollution()
     {
         ErrorBoundaryAirPollution?.Recover();
+    }
+
+    private void ResetErrorLocation()
+    {
+        ErrorBoundaryLocation?.Recover();
     }
 }

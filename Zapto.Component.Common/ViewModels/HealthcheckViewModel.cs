@@ -42,8 +42,6 @@ namespace Zapto.Component.Common.ViewModels
         {
             List<HealthCheckModel> items = new List<HealthCheckModel>();
 
-            try
-            {
                 HealthCheckConnect? healthcheckConnect = await this.ApplicationHealthCheckConnectServices.GetHealthCheckConnect();
                 if (healthcheckConnect != null)
                 {                    
@@ -61,12 +59,6 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     items.Add(this.GetModel(healthCheckWeatherZapto));
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
 
             return items;
         }

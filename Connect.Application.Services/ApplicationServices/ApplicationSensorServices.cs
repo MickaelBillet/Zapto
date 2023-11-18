@@ -39,85 +39,58 @@ namespace Connect.Application.Services
         public async Task<int?> Notify(Sensor sensor)
         {
             int? res = 0;
-
-            try
+            (string? data, int port) = sensor.GetSensorConfiguration();
+            if (this.UdpCommunicationService != null)
             {
-                (string? data, int port) = sensor.GetSensorConfiguration();
-                if (this.UdpCommunicationService != null)
+                res = await this.UdpCommunicationService.SendMessage(data, port, sensor.IpAddress);
+                if (res > 0)
                 {
-                    res = await this.UdpCommunicationService.SendMessage(data, port, sensor.IpAddress);
-                    if (res > 0)
-                    {
-                        Log.Warning("Notify Sensor : " + sensor.IpAddress + " " + ConnectConstants.PortConnectionData);
-                    }
-                    else
-                    {
-                        Log.Error("Error Notification : " + sensor.IpAddress + " " + ConnectConstants.PortConnectionData);
-                    }
+                    Log.Warning("Notify Sensor : " + sensor.IpAddress + " " + ConnectConstants.PortConnectionData);
+                }
+                else
+                {
+                    Log.Error("Error Notification : " + sensor.IpAddress + " " + ConnectConstants.PortConnectionData);
                 }
             }
-            catch(Exception ex)
-			{
-                Log.Fatal(ex.Message);
-            }
-
             return res;
         }
 
         public async Task<SensorData?> ReceiveDataAsync()
         {
             SensorData? result = null;
-
-            try
+            if (this.UdpCommunicationService != null)
             {
-                if (this.UdpCommunicationService != null)
-                {
-                    byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortSensorData);
+                byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortSensorData);
 
-                    if (data!.Length > 0)
-                    {
-                        result = JsonSerializer.Deserialize<SensorData>(Encoding.UTF8.GetString(data, 0, data.Length));
-                        Log.Warning("ReceiveDataAsync - SensorData : " + result?.Type + "/" + result?.Channel + " Temperature : " + result?.Temperature + " Humidity : " + result?.Humidity);
-                    }
-                    else
-                    {
-                        Log.Error("ReceiveDataAsync - No data");
-                    }
+                if (data!.Length > 0)
+                {
+                    result = JsonSerializer.Deserialize<SensorData>(Encoding.UTF8.GetString(data, 0, data.Length));
+                    Log.Warning("ReceiveDataAsync - SensorData : " + result?.Type + "/" + result?.Channel + " Temperature : " + result?.Temperature + " Humidity : " + result?.Humidity);
+                }
+                else
+                {
+                    Log.Error("ReceiveDataAsync - No data");
                 }
             }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex.Message);
-            }
-
             return result;
         }
 
         public async Task<SensorEvent?> ReceiveEventAsync()
         {
             SensorEvent? result = null;
-
-            try
+            if (this.UdpCommunicationService != null)
             {
-                if (this.UdpCommunicationService != null)
+                byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortSensorEvent);
+                if (data!.Length > 0)
                 {
-                    byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortSensorEvent);
-                    if (data!.Length > 0)
-                    {
-                        result = JsonSerializer.Deserialize<SensorEvent>(Encoding.UTF8.GetString(data, 0, data.Length));
-                        Log.Warning("ReceiveEventAsync - SensorEvent : " + result?.Type + "/" + result?.Channel + " Leak : " + result?.Leak);
-                    }
-                    else
-                    {
-                        Log.Error("ReceiveEventAsync - No data");
-                    }
+                    result = JsonSerializer.Deserialize<SensorEvent>(Encoding.UTF8.GetString(data, 0, data.Length));
+                    Log.Warning("ReceiveEventAsync - SensorEvent : " + result?.Type + "/" + result?.Channel + " Leak : " + result?.Leak);
+                }
+                else
+                {
+                    Log.Error("ReceiveEventAsync - No data");
                 }
             }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex.Message);
-            }
-
             return result;
         }
 
