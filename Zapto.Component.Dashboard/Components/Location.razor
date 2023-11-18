@@ -38,7 +38,14 @@
         if (this.ViewModel != null)
         {
             this.Model = await this.ViewModel.GetConnectLocationModel();
-            await this.ModelChanged.InvokeAsync(this.Model);
+            if (this.Model == null)
+            {
+                throw new Exception("Location Service KO");
+            }
+            else
+            {
+                await this.ModelChanged.InvokeAsync(this.Model);
+            }
         }
     }
 

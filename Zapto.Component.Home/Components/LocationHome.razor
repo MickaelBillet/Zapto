@@ -37,7 +37,6 @@
         if (this.ViewModel != null)
         {
             this.Model = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
-
             if (this.Model == null)
             {
                 throw new Exception("Location Service KO");
