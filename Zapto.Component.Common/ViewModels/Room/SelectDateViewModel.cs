@@ -1,6 +1,5 @@
 ﻿using Connect.Application;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -24,40 +23,14 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-        public override async Task InitializeAsync(string? parameter)
-        {
-            await base.InitializeAsync(parameter);
-        }
-
-        public override void Dispose()
-        {           
-            base.Dispose();
-        }
-
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
         }
 
         public async Task<DateTime?> GetRoomMinDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
         }
         #endregion
     }

@@ -1,7 +1,6 @@
 ﻿using Connect.Application;
 using Connect.Model;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -39,58 +38,33 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
         }
 
         public async Task<DateTime?> GetRoomMinDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
         }
 
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
         {
             List<RoomChartModel>? data = null;
-
-            try
+            if (this.ApplicationOperationDataService != null)
             {
-                if (this.ApplicationOperationDataService != null)
+                data = new List<RoomChartModel>();
+                for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
                 {
-                    data = new List<RoomChartModel>();
-                    for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
+                    RoomChartModel model = new RoomChartModel();
+                    IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
+                    if ((operatingData != null) && operatingData.Any())
                     {
-                        RoomChartModel model = new RoomChartModel();
-                        IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
-                        if ((operatingData != null) && operatingData.Any())
-                        {
-                            model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
-                            model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
-                            model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
-                            model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
-                            data.Add(model);
-                        }
+                        model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
+                        model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
+                        model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
+                        model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
+                        data.Add(model);
                     }
                 }
-            }
-            catch(Exception ex) 
-            {
-                Debug.WriteLine(ex);
-                throw ex;
             }
             return data;
         }

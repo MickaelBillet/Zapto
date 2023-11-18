@@ -17,10 +17,7 @@
 		#endregion
 
 		#region Methods
-		public override async Task InitializeAsync(string? parameter)
-		{
-			await base.InitializeAsync(parameter);
-		}
+
         #endregion
     }
 }
