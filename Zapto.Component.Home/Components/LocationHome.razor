@@ -4,7 +4,7 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-<MudContainer class="d-flex align-center gap-4 mb-2">
+<MudDivider class="d-flex align-center gap-4 mb-2">
     @if (this.Model != null)
     {
         <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
@@ -13,7 +13,7 @@
     {
         <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
     }
-</MudContainer>
+</MudDivider>
 
 @code {
     [Parameter]
