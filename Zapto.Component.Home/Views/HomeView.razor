@@ -10,7 +10,7 @@
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">Location @this.Localizer["HS"]</MudText>
+            <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocation" Color="Color.Warning">Reload</MudButton>
         </MudContainer>
     </ErrorContent>
@@ -22,7 +22,7 @@
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">Weather @this.Localizer["HS"]</MudText>
+            <MudText Typo="Typo.h6" Class="mr-4">Weather Service @this.Localizer["HS"]</MudText>
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorWeather" Color="Color.Warning">Reload</MudButton>
         </MudContainer>
     </ErrorContent>
@@ -34,7 +34,7 @@
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">AirPollution @this.Localizer["HS"]</MudText>
+            <MudText Typo="Typo.h6" Class="mr-4">AirPollution Service @this.Localizer["HS"]</MudText>
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
         </MudContainer>
     </ErrorContent>
@@ -61,13 +61,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        ErrorBoundaryWeather?.Recover();
-        ErrorBoundaryAirPollution?.Recover();
-        ErrorBoundaryLocation?.Recover();
-
-    if ((this.ViewModel != null) && (this.PositionService != null))
+        if ((this.ViewModel != null) && (this.PositionService != null))
         {
             await this.PositionService.GetCurrentPosition(JsRuntime, GetPositionAsync, GetErrorAsync);
+
+            ErrorBoundaryWeather?.Recover();
+            ErrorBoundaryAirPollution?.Recover();
+            ErrorBoundaryLocation?.Recover();
         }
     }
 

@@ -4,7 +4,7 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-<div class="d-flex align-center gap-4 mb-2">
+<MudContainer class="d-flex align-center gap-4 mb-2">
     @if (this.Model != null)
     {
         <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
@@ -13,7 +13,7 @@
     {
         <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
     }
-</div>
+</MudContainer>
 
 @code {
     [Parameter]
@@ -34,7 +34,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (this.ViewModel != null)
+        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.Latitude) == false) && (string.IsNullOrEmpty(this.Longitude) == false))
         {
             this.Model = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
             if (this.Model == null)
