@@ -18,7 +18,7 @@ namespace WeatherZapto.WebServer.Middleware
         (context, _) =>
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-            Log.Warning($"Request rejected by {nameof(RateLimiterPolicy)}");
+            Log.Error($"Request rejected by {nameof(RateLimiterPolicy)}");
             return new ValueTask();
         };
 

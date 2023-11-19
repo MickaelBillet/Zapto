@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationLocationServices : IApplicationLocationServices
+    internal class ApplicationConnectLocationServices : IApplicationConnectLocationServices
 	{
 		#region Services
 
@@ -17,7 +17,7 @@ namespace Connect.Application.Services
 
 		#region Constructor
 
-		public ApplicationLocationServices(IServiceProvider serviceProvider)
+		public ApplicationConnectLocationServices(IServiceProvider serviceProvider)
 		{
 			this.LocationService = serviceProvider.GetService<ILocationService>();
 		}

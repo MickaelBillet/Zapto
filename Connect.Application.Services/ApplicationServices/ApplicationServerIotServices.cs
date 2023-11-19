@@ -30,28 +30,19 @@ namespace Connect.Application.Services
         public async Task<SystemStatus?> ReceiveStatusAsync()
         {
             SystemStatus? result = null;
-
-            try
+            if (this.UdpCommunicationService != null)
             {
-                if (this.UdpCommunicationService != null)
+                byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortServerIotStatus);
+                if (data!.Length > 0)
                 {
-                    byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortServerIotStatus);
-                    if (data!.Length > 0)
-                    {
-                        result = JsonSerializer.Deserialize<SystemStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-                        Log.Warning("ReceiveStatusAsync - SystemStatus : " + result?.IpAddress + "/" + result?.RSSI + "/" + result?.Status);
-                    }
-                    else
-                    {
-                        Log.Error("ReceiveStatusAsync - No data");
-                    }
+                    result = JsonSerializer.Deserialize<SystemStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
+                    Log.Warning("ReceiveStatusAsync - SystemStatus : " + result?.IpAddress + "/" + result?.RSSI + "/" + result?.Status);
+                }
+                else
+                {
+                    Log.Error("ReceiveStatusAsync - No data");
                 }
             }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex.Message);
-            }
-
             return result;
         }
 

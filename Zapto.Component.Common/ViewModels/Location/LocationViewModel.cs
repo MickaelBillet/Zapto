@@ -1,56 +1,55 @@
 ﻿using Connect.Application;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using WeatherZapto.Application;
+using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
 {
     public interface ILocationViewModel : IBaseViewModel
     {
-		Task<LocationModel?> GetLocationModel();
-	}
+		Task<LocationModel?> GetConnectLocationModel();
+        Task<LocationModel?> GetLocationModel(string latitude, string longitude);
+        Task TestNotification(string? locationId);
+    }
 
-	public class LocationViewModel : BaseViewModel, ILocationViewModel
+    public class LocationViewModel : BaseViewModel, ILocationViewModel
 	{
 		#region Properties
-		private IApplicationLocationServices ApplicationLocationServices { get; }
-
+		private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
+		private IApplicationLocationService ApplicationLocationServices { get; }
 		#endregion
 
 		#region Constructor
 		public LocationViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-			this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationServices>();
+			this.ApplicationConnectLocationServices = serviceProvider.GetRequiredService<IApplicationConnectLocationServices>();
+			this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationService>();
 		}
 		#endregion
 
 		#region Methods
-		public override async Task InitializeAsync(string? parameter)
+
+		public async Task<LocationModel?> GetConnectLocationModel()
 		{
-			await base.InitializeAsync(parameter);
+			return (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
+            {
+                Name = location.City,
+                Id = location.Id
+            }).FirstOrDefault(); ;
 		}
-		public override void Dispose()
-		{
-			base.Dispose();
-		}
-		public async Task<LocationModel?> GetLocationModel()
-		{
-			LocationModel? model = null;
-			try
-			{
-				model = (await this.ApplicationLocationServices.GetLocations())?.Select((location) => new LocationModel()
-				{
-					Name = location.City,
-					Id = location.Id
-				}).FirstOrDefault();
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex);
-				throw ex;
-			}
-			return model;
-		}
-		#endregion
-	}
+        public async Task<LocationModel?> GetLocationModel(string latitude, string longitude)
+        {
+            ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(longitude, latitude);
+            return (location != null) ? new LocationModel() { Name = location.Location } : null; ;
+        }
+        public async Task TestNotification(string? locationId)
+        {
+            if (locationId != null)
+            {
+                await this.ApplicationConnectLocationServices.TestNotication(locationId);
+            }
+        }
+        #endregion
+    }
 }

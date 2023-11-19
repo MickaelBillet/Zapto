@@ -19,7 +19,7 @@ namespace Zapto.Web.Test.ViewModels
         protected IServiceCollection ServiceCollection { get; }
         protected Mock<ILocationViewModel> LocationViewModel { get; }
         protected Mock<IWeatherViewModel> WeatherViewModel { get; }
-        protected Mock<IApplicationLocationServices> ApplicationLocationServices { get; }
+        protected Mock<IApplicationConnectLocationServices> ApplicationLocationServices { get; }
         protected Mock<IApplicationHealthCheckConnectServices> ApplicationHealthCheckConnectServices { get; }
         protected Mock<IApplicationHealthCheckAirZaptoServices> ApplicationHealthCheckAirZaptoServices { get; }
         protected Mock<ILocalStorageService> LocalStorageService { get; }
@@ -46,7 +46,7 @@ namespace Zapto.Web.Test.ViewModels
             this.HealthCheckConnectService = new Mock<IHealthCheckConnectService>();
             this.ApplicationHealthCheckConnectServices = new Mock<IApplicationHealthCheckConnectServices>();
             this.ApplicationHealthCheckAirZaptoServices = new Mock<IApplicationHealthCheckAirZaptoServices>();
-            this.ApplicationLocationServices = new Mock<IApplicationLocationServices>();
+            this.ApplicationLocationServices = new Mock<IApplicationConnectLocationServices>();
             this.ApplicationWeatherService = new Mock<IApplicationWeatherService>();
             this.ApplicationSensorServices = new Mock<IApplicationSensorServices>();
             this.SignalRService = new Mock<ISignalRService>();
@@ -58,7 +58,7 @@ namespace Zapto.Web.Test.ViewModels
             this.ServiceCollection.AddTransient<AuthenticationStateProvider>(_ => this.AuthenticationStateProvider.Object);
             this.ServiceCollection.AddTransient<IAuthenticationService>(_ => this.AuthenticationService.Object);
             this.ServiceCollection.AddTransient<IWeatherViewModel>(_ => this.WeatherViewModel.Object);
-            this.ServiceCollection.AddTransient<IApplicationLocationServices>(_ => this.ApplicationLocationServices.Object);
+            this.ServiceCollection.AddTransient<IApplicationConnectLocationServices>(_ => this.ApplicationLocationServices.Object);
             this.ServiceCollection.AddTransient<ILocalStorageService>(_ => this.LocalStorageService.Object);
             this.ServiceCollection.AddTransient<IApplicationWeatherService>(_ => this.ApplicationWeatherService.Object);
             this.ServiceCollection.AddTransient<ILocationService>(_ => this.LocationService.Object);

@@ -1,0 +1,64 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject ILocationViewModel ViewModel
+@implements IDisposable
+
+<div class="d-flex align-center gap-4 mb-2">
+    @if (this.Model != null)
+    {
+        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+        <MudIconButton Size="Size.Small"
+                        OnClick="@(async (e) => await TestNotificationButton())"
+                        Icon="@Icons.Material.Filled.NotificationsActive"
+                        Color="@Color.Info" />
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+    }
+</div>
+
+@code 
+{
+    [Parameter]
+    public EventCallback<LocationModel?> ModelChanged { get; set; }
+
+    [Parameter]
+    public LocationModel? Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            this.Model = await this.ViewModel.GetConnectLocationModel();
+            if (this.Model == null)
+            {
+                throw new Exception("Location Service KO");
+            }
+            else
+            {
+                await this.ModelChanged.InvokeAsync(this.Model);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+    }
+
+    public async Task TestNotificationButton()
+    {
+        if ((this.ViewModel != null) && (this.Model != null))
+        {
+            await this.ViewModel.TestNotification(this.Model?.Id);
+        }
+    }
+}

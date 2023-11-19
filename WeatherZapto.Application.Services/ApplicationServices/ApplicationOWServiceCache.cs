@@ -31,7 +31,6 @@ namespace WeatherZapto.Application.Services
         #endregion
 
         #region Methods
-
         public async Task<ZaptoAirPollution> GetCurrentAirPollution(string APIKey, string locationName, string longitude, string latitude)
 		{
             ZaptoAirPollution zaptoAirPollution = null;

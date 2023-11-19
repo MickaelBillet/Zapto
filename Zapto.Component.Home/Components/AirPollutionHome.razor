@@ -2,82 +2,84 @@
 @inject IAirPollutionViewModel ViewModel
 @implements IDisposable
 
-<div class="d-flex align-center gap-4">
-    <MudText Typo="Typo.h6" Color="Color.Primary">@Localizer["Outside Pollution"]</MudText>
-</div>
+<div>
+    @if (this.Model != null)
+    {
+        <div class="d-flex align-center gap-4">
+            <MudText Typo="Typo.h6" Color="Color.Primary">@Localizer["Outside Pollution"]</MudText>
+        </div>
 
-<div class="mx-auto mt-2">
-    <MudExpansionPanels>
-        @if (this.Model != null)
-        {
-            <MudExpansionPanel HideIcon="true" IsExpanded="true">
-                <TitleContent>
-                    <div class="d-flex align-center">
-                        <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
-                        <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
-                        <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
-                    </div>
-                </TitleContent>
-                <ChildContent>
-                    <MudExpansionPanels>
-                        @foreach (AirPollutionItemModel item in this.Model.Items)
-                        {
-                            <MudExpansionPanel>
-                                <TitleContent>
-                                    <MudGrid>
-                                        <MudItem xs="12" sm="6" md="3">
-                                            <MudText Style="font-weight:500" Class="mx-8 mt-1">@item.Name</MudText>
-                                        </MudItem>
-                                        <MudItem xs="12" sm="6" md="3">
-                                            <MudText Style="font-weight:500" Class="mx-8 mt-1">@item.Value</MudText>
-                                        </MudItem>
-                                        @if ((item.Name != "no") && (item.Name != "nh3"))
-                                        {
+        <div class="mx-auto mt-2">
+            <MudExpansionPanels>
+                <MudExpansionPanel HideIcon="true" IsExpanded="true">
+                    <TitleContent>
+                        <div class="d-flex align-center">
+                            <Circle Color="@this.Model.GetAQIColor()" Radius="15"></Circle>
+                            <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">AQI</MudText>
+                            <MudText Style="font-weight:500" Typo="Typo.h6" Align="Align.Left" Class="ml-8">@this.Model.aqi</MudText>
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                        <MudExpansionPanels>
+                            @foreach (AirPollutionItemModel item in this.Model.Items)
+                            {
+                                <MudExpansionPanel>
+                                    <TitleContent>
+                                        <MudGrid>
                                             <MudItem xs="12" sm="6" md="3">
-                                                <Circle Color="@item.GetLevelColor()" Radius="15"></Circle>
+                                                <MudText Style="font-weight:500" Class="mx-8 mt-1">@item.Name</MudText>
                                             </MudItem>
+                                            <MudItem xs="12" sm="6" md="3">
+                                                <MudText Style="font-weight:500" Class="mx-8 mt-1">@item.Value</MudText>
+                                            </MudItem>
+                                            @if ((item.Name != "no") && (item.Name != "nh3"))
+                                            {
+                                                <MudItem xs="12" sm="6" md="3">
+                                                    <Circle Color="@item.GetLevelColor()" Radius="15"></Circle>
+                                                </MudItem>
+                                            }
+                                        </MudGrid>
+                                    </TitleContent>
+                                    <ChildContent>
+                                        <MudText Typo="Typo.subtitle1">@item.Description</MudText>
+                                        @if (item.HasStatus == true)
+                                        {
+                                            <div class="d-flex align-left">
+                                                <MudText Typo="Typo.subtitle1" Align="Align.Left">[@item.Levels[0],@item.Levels[1])</MudText>
+                                                <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                    <Circle Color="@item.GetLevelColor(0)" Radius="10"></Circle>
+                                                </MudContainer>
+                                                <MudText Typo="Typo.subtitle1" Class="ml-4" Align="Align.Left">[@item.Levels[1],@item.Levels[2])</MudText>
+                                                <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                    <Circle Color="@item.GetLevelColor(1)" Radius="10"></Circle>
+                                                </MudContainer>
+                                                <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[2],@item.Levels[3])</MudText>
+                                                <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                    <Circle Color="@item.GetLevelColor(2)" Radius="10"></Circle>
+                                                </MudContainer>
+                                                <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[3],@item.Levels[4])</MudText>
+                                                <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                    <Circle Color="@item.GetLevelColor(3)" Radius="10"></Circle>
+                                                </MudContainer>
+                                                <MudText Typo="Typo.subtitle1" Class="ml-4">>=@item.Levels[4]</MudText>
+                                                <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
+                                                    <Circle Color="@item.GetLevelColor(4)" Radius="10"></Circle>
+                                                </MudContainer>
+                                            </div>
                                         }
-                                    </MudGrid>
-                                </TitleContent>
-                                <ChildContent>
-                                    <MudText Typo="Typo.subtitle1">@item.Description</MudText>
-                                    @if (item.HasStatus == true)
-                                    {
-                                        <div class="d-flex align-left">
-                                            <MudText Typo="Typo.subtitle1" Align="Align.Left">[@item.Levels[0],@item.Levels[1])</MudText>
-                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="@item.GetLevelColor(0)" Radius="10"></Circle>
-                                            </MudContainer>
-                                            <MudText Typo="Typo.subtitle1" Class="ml-4" Align="Align.Left">[@item.Levels[1],@item.Levels[2])</MudText>
-                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="@item.GetLevelColor(1)" Radius="10"></Circle>
-                                            </MudContainer>
-                                            <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[2],@item.Levels[3])</MudText>
-                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="@item.GetLevelColor(2)" Radius="10"></Circle>
-                                            </MudContainer>
-                                            <MudText Typo="Typo.subtitle1" Class="ml-4">[@item.Levels[3],@item.Levels[4])</MudText>
-                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="@item.GetLevelColor(3)" Radius="10"></Circle>
-                                            </MudContainer>
-                                            <MudText Typo="Typo.subtitle1" Class="ml-4">>=@item.Levels[4]</MudText>
-                                            <MudContainer Class="mt-1" MaxWidth="MaxWidth.ExtraSmall">
-                                                <Circle Color="@item.GetLevelColor(4)" Radius="10"></Circle>
-                                            </MudContainer>
-                                        </div>
-                                    }
-                                </ChildContent>
-                            </MudExpansionPanel>
-                        }
-                    </MudExpansionPanels>                    
-                </ChildContent>
-            </MudExpansionPanel>       
-        }
-        else
-        {
-            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-        }
-    </MudExpansionPanels>
+                                    </ChildContent>
+                                </MudExpansionPanel>
+                            }
+                        </MudExpansionPanels>                    
+                    </ChildContent>
+                </MudExpansionPanel>       
+            </MudExpansionPanels>
+        </div>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+    }
 </div>
 
 

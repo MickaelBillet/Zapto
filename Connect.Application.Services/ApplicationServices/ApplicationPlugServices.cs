@@ -85,30 +85,21 @@ namespace Connect.Application.Services
 		public async Task<CommandStatus?> ReceiveCommandStatus()
 		{
 			CommandStatus? status = null;
-
-			try
+			if (this.UdpCommunicationService != null)
 			{
-				if (this.UdpCommunicationService != null)
+				byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortPlugStatus);
+
+				if (data?.Length > 0)
 				{
-					byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortPlugStatus);
+					status = JsonSerializer.Deserialize<CommandStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
 
-					if (data?.Length > 0)
-					{
-						status = JsonSerializer.Deserialize<CommandStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-
-						Log.Information("ReceiveCommandStatus - CommandStatus Address " + status?.Address + " Unit " + status?.Unit + " Status " + status?.Status);
-					}
-					else
-					{
-						Log.Warning("ReceiveCommandStatus - No data");
-					}
+					Log.Information("ReceiveCommandStatus - CommandStatus Address " + status?.Address + " Unit " + status?.Unit + " Status " + status?.Status);
+				}
+				else
+				{
+					Log.Warning("ReceiveCommandStatus - No data");
 				}
 			}
-			catch (Exception ex)
-			{
-				Log.Fatal(ex.Message);
-			}
-
 			return status;
 		}
 

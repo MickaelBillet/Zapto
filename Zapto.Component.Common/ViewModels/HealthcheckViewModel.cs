@@ -42,30 +42,22 @@ namespace Zapto.Component.Common.ViewModels
         {
             List<HealthCheckModel> items = new List<HealthCheckModel>();
 
-            try
-            {
-                HealthCheckConnect? healthcheckConnect = await this.ApplicationHealthCheckConnectServices.GetHealthCheckConnect();
-                if (healthcheckConnect != null)
-                {                    
-                    items.Add(this.GetModel(healthcheckConnect));
-                }
-
-                HealthCheckAirZapto? healthcheckAirZapto = await this.ApplicationHealthCheckAirZaptoServices.GetHealthCheckAirZapto();
-                if (healthcheckAirZapto != null)
-                {                   
-                    items.Add(this.GetModel(healthcheckAirZapto));
-                }
-
-                HealthCheckWeatherZapto? healthCheckWeatherZapto = await this.ApplicationHealthCheckWeatherZaptoServices.GetHealthCheckWeatherZapto();
-                if (healthCheckWeatherZapto != null)
-                {
-                    items.Add(this.GetModel(healthCheckWeatherZapto));
-                }
+            HealthCheckConnect? healthcheckConnect = await this.ApplicationHealthCheckConnectServices.GetHealthCheckConnect();
+            if (healthcheckConnect != null)
+            {                    
+                items.Add(this.GetModel(healthcheckConnect));
             }
-            catch (Exception ex)
+
+            HealthCheckAirZapto? healthcheckAirZapto = await this.ApplicationHealthCheckAirZaptoServices.GetHealthCheckAirZapto();
+            if (healthcheckAirZapto != null)
+            {                   
+                items.Add(this.GetModel(healthcheckAirZapto));
+            }
+
+            HealthCheckWeatherZapto? healthCheckWeatherZapto = await this.ApplicationHealthCheckWeatherZaptoServices.GetHealthCheckWeatherZapto();
+            if (healthCheckWeatherZapto != null)
             {
-                Debug.WriteLine(ex);
-                throw ex;
+                items.Add(this.GetModel(healthCheckWeatherZapto));
             }
 
             return items;
