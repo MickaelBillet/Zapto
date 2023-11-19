@@ -2,7 +2,7 @@
 @inject ILocationViewModel ViewModel
 @implements IDisposable
 
-<div class="d-flex align-center gap-4 mb-2">
+<MudDivider class="d-flex align-center gap-4 mb-2">
     @if (this.Model != null)
     {
         <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
@@ -13,9 +13,9 @@
     }
     else
     {
-        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
     }
-</div>
+</MudDivider>
 
 @code 
 {
