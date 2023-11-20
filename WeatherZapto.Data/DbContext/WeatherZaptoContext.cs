@@ -13,6 +13,7 @@ namespace WeatherZapto.Data.DataContext
 		public DbSet<LogsEntity> LogsEntities { get; set; }
 		public DbSet<AirPollutionEntity> AirPollutionEntities { get; set; }
 		public DbSet<WeatherEntity> WeatherEntities { get; set; }
+		public DbSet<CallEntity> CallEntities { get; set; }
 		public IDbConnection? Connection
 		{
 			get; private set;

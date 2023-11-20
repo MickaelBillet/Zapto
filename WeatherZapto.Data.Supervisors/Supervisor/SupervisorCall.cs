@@ -40,7 +40,7 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOW()
         {
             int res = 0;
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date == Clock.Now.Date);
+            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date.ToUniversalTime() == Clock.Now.Date.ToUniversalTime());
             if (entity != null) 
             {
                 entity.Count++;
@@ -51,7 +51,7 @@ namespace WeatherZapto.Data.Supervisors
                 res = await this.CallRepository.InsertAsync(new CallEntity()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    CreationDateTime = Clock.Now,
+                    CreationDateTime = Clock.Now.ToUniversalTime(),
                     Count = 1,
                 });                
             }

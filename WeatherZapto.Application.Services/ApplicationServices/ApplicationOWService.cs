@@ -22,7 +22,7 @@ namespace WeatherZapto.Application.Services
 			this.AirPollutionOWService = serviceProvider.GetService<IAirPollutionOWService>();
             this.WeatherOWService = serviceProvider.GetService<IWeatherOWService>();
             this.LocationOWService = serviceProvider.GetService<ILocationOWService>();
-            this.SupervisorCall = serviceProvider.GetService<ISupervisorCall>();
+            this.SupervisorCall = serviceProvider.CreateScope().ServiceProvider.GetService<ISupervisorCall>();
 		}
         #endregion
 
