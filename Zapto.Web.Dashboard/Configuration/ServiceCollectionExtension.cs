@@ -33,7 +33,6 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IAuthenticationViewModel, AuthenticationViewModel>();
 			services.AddTransient<IMainViewModel, MainViewModel>();
 			services.AddTransient<ISensorCO2ViewModel, SensorCO2ViewModel>();
-			services.AddTransient<IPollutionViewModel, PollutionViewModel>();
 			services.AddTransient<IAirPollutionViewModel, AirPollutionViewModel>();
 			services.AddTransient<IChooseLanguageViewModel, ChooseLanguageViewModel>();
 			services.AddTransient<IWeatherViewModel, WeatherViewModel>();
