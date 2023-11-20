@@ -16,9 +16,9 @@ namespace Connect.Application
 			services.AddScoped<IApplicationSensorServices, ApplicationSensorServices>();
 			services.AddScoped<IApplicationNotificationServices, ApplicationNotificationServices>();
 			services.AddScoped<IApplicationServerIotServices, ApplicationServerIotServices>();
-			services.AddScoped<IApplicationHealthCheckConnectServices, ApplicationHealthConnectCheckService>();
 			services.AddScoped<IApplicationClientAppServices, ApplicationClientAppServices>();
 			services.AddScoped<IApplicationOperationDataService, ApplicationOperationDataService>();
-		}       
+            services.AddTransient<IApplicationHealthCheckConnectServices, ApplicationHealthConnectCheckService>();
+        }
     }
 }
