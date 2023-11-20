@@ -86,11 +86,9 @@ else
         if ((this.ViewModel != null) && (this.Latitude != null) && (this.Longitude != null))
         {
             this.Model = await this.ViewModel.GetWeatherModel(this.Latitude, this.Longitude);
-            this.ViewModel.Refresh += RefreshView;
-
-            if (this.Model == null)
+            if (this.Model != null)
             {
-                throw new Exception("Weather Service KO");
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }

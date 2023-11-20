@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -41,36 +42,46 @@ namespace Zapto.Component.Common.ViewModels
 		}
 		public async Task<WeatherModel?> GetWeatherModel()
 		{
-			WeatherModel model = new WeatherModel();
-
-			ZaptoUser user = await this.AuthenticationService.GetAuthenticatedUser();
-			if (user != null)
+			WeatherModel? model = null;
+			try
 			{
-				string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
-				if (string.IsNullOrEmpty(culture) == false)
+				ZaptoUser user = await this.AuthenticationService.GetAuthenticatedUser();
+				if (user != null)
 				{
-					ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(user.LocationName, user.LocationLongitude, user.LocationLatitude, culture);
-					if (weather != null)
+					string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+					if (string.IsNullOrEmpty(culture) == false)
 					{
-						model.Temperature = weather.Temperature;
-						model.WeatherText = weather.WeatherText;
-						model.WindSpeed = weather.WindSpeed;
-						model.WindDirection = weather.WindDirection;
-						model.Location = weather.Location;
-
-						using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+						ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(user.LocationName, user.LocationLongitude, user.LocationLatitude, culture);
+						if (weather != null)
 						{
-							byte[]? byteArray = (stream as MemoryStream)?.ToArray();
-							if (byteArray != null)
+							model = new WeatherModel()
 							{
-								string? b64String = Convert.ToBase64String(byteArray);
-								model.Image = "data:image/png;base64," + b64String;
+								Temperature = weather.Temperature,
+								WeatherText = weather.WeatherText,
+								WindSpeed = weather.WindSpeed,
+								WindDirection = weather.WindDirection,
+								Location = weather.Location,
+							};
+
+							using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+							{
+								byte[]? byteArray = (stream as MemoryStream)?.ToArray();
+								if (byteArray != null)
+								{
+									string? b64String = Convert.ToBase64String(byteArray);
+									model.Image = "data:image/png;base64," + b64String;
+								}
 							}
 						}
 					}
 				}
 			}
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                throw new Exception("Weather Service Exception");
 
+            }
             return model;
 		}
 
@@ -78,31 +89,41 @@ namespace Zapto.Component.Common.ViewModels
         {
 			WeatherModel? model = null;
 
-            string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
-            if (string.IsNullOrEmpty(culture) == false)
+            try
             {
-                ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(longitude, latitude, culture);
-                if (weather != null)
+                string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                if (string.IsNullOrEmpty(culture) == false)
                 {
-					model = new WeatherModel();
-                    model.Temperature = weather.Temperature;
-                    model.WeatherText = weather.WeatherText;
-                    model.WindSpeed = weather.WindSpeed;
-                    model.WindDirection = weather.WindDirection;
-                    model.Location = weather.Location;
-
-                    using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+                    ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(longitude, latitude, culture);
+                    if (weather != null)
                     {
-                        byte[]? byteArray = (stream as MemoryStream)?.ToArray();
-                        if (byteArray != null)
+                        model = new WeatherModel()
                         {
-                            string? b64String = Convert.ToBase64String(byteArray);
-                            model.Image = "data:image/png;base64," + b64String;
+                            Temperature = weather.Temperature,
+                            WeatherText = weather.WeatherText,
+                            WindSpeed = weather.WindSpeed,
+                            WindDirection = weather.WindDirection,
+                            Location = weather.Location,
+                        };
+
+                        using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+                        {
+                            byte[]? byteArray = (stream as MemoryStream)?.ToArray();
+                            if (byteArray != null)
+                            {
+                                string? b64String = Convert.ToBase64String(byteArray);
+                                model.Image = "data:image/png;base64," + b64String;
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                throw new Exception("Weather Service Exception");
 
+            }
             return model;
         }
         #endregion

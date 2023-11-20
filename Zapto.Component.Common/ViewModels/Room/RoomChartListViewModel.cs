@@ -1,6 +1,7 @@
 ﻿using Connect.Application;
 using Connect.Model;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -49,22 +50,30 @@ namespace Zapto.Component.Common.ViewModels
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
         {
             List<RoomChartModel>? data = null;
-            if (this.ApplicationOperationDataService != null)
+            try
             {
-                data = new List<RoomChartModel>();
-                for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
+                if (this.ApplicationOperationDataService != null)
                 {
-                    RoomChartModel model = new RoomChartModel();
-                    IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
-                    if ((operatingData != null) && operatingData.Any())
+                    data = new List<RoomChartModel>();
+                    for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
                     {
-                        model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
-                        model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
-                        model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
-                        model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
-                        data.Add(model);
+                        RoomChartModel model = new RoomChartModel();
+                        IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
+                        if ((operatingData != null) && operatingData.Any())
+                        {
+                            model.Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
+                            model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
+                            model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
+                            model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
+                            data.Add(model);
+                        }
                     }
                 }
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("Charts Data Exception : " + ex.Message);
             }
             return data;
         }

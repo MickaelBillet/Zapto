@@ -82,11 +82,9 @@
         if ((string.IsNullOrEmpty(this.SensorName) == false) && (this.ViewModel != null))
         {
             this.Model = await this.ViewModel.GetSensorCO2Model(this.SensorName);
-            this.ViewModel.Refresh += RefreshView;
-
-            if (this.Model == null)
+            if (this.Model != null)
             {
-                throw new Exception("AirZapto Service KO");
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }

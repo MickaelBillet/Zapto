@@ -17,9 +17,5 @@ namespace Zapto.Component.Common.ViewModels
 		{
 		}
 		#endregion
-
-		#region Methods
-
-		#endregion
 	}
 }
