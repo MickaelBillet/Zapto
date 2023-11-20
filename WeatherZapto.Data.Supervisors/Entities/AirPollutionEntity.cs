@@ -15,7 +15,7 @@ namespace WeatherZapto.Data.Entities
         public double? pm2_5 { get; set; }
         public double? pm10 { get; set; }
         public double? nh3 { get; set; }
-        public string? Location { get; set; }
+        public string Location { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public DateTime? TimeStamp { get; set; }

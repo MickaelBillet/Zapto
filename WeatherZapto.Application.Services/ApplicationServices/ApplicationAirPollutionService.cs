@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Model;
 

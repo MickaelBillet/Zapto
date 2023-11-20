@@ -30,12 +30,6 @@ namespace Zapto.Component.Common.ViewModels
                 HasLeak = obj.LeakDetected,
             });
         }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
-
         #endregion
     }
 }

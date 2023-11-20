@@ -1,6 +1,7 @@
 ﻿using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -40,14 +41,22 @@ namespace Zapto.Component.Common.ViewModels
         public async Task<AirPollutionModel?> GetAirPollutionModel()
         {
             AirPollutionModel? model = null;
-            ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
-            if (user != null)
+            try
             {
-                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
-                if (zaptoAirPollution != null)
+                ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
+                if (user != null)
                 {
-                    model = this.GetModel(zaptoAirPollution);
+                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
+                    if (zaptoAirPollution != null)
+                    {
+                        model = this.GetModel(zaptoAirPollution);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("AirPollution Service Exception");
             }
             return model;
         }
@@ -55,20 +64,36 @@ namespace Zapto.Component.Common.ViewModels
         public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
         {
             AirPollutionModel? model = null;
-            ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
-            if (zaptoAirPollution != null)
+            try
+            { 
+                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
+                if (zaptoAirPollution != null)
+                {
+                    model = this.GetModel(zaptoAirPollution);
+                }
+            }
+            catch (Exception ex)
             {
-                model = this.GetModel(zaptoAirPollution);
+                Debug.WriteLine(ex);
+                throw new Exception("AirPollution Service Exception");
             }
             return model;
         }
         public async Task<AirPollutionModel?> GetAirPollutionModel(string longitude, string latitude)
         {
             AirPollutionModel? model = null;
-            ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
-            if (zaptoAirPollution != null)
+            try
             {
-                model = this.GetModel(zaptoAirPollution);
+                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
+                if (zaptoAirPollution != null)
+                {
+                    model = this.GetModel(zaptoAirPollution);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("AirPollution Service Exception");
             }
             return model;
         }

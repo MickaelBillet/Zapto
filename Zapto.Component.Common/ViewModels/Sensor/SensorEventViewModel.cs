@@ -1,6 +1,7 @@
 ﻿using Connect.Application;
 using Connect.Application.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -51,21 +52,32 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<bool> ReceiveStatusAsync(SensorEventModel model)
         {
-            return await this.SignalRService.StartAsync(model.LocationId,
-            null,
-            null,
-            (sensorStatus) =>
+            bool res = false;
+            try
             {
-                if (sensorStatus.SensorId == model.Id)
-                {
-                    if (sensorStatus.LeakDetected != 0)
-                    {
-                        model.HasLeak = (sensorStatus.LeakDetected != null) ? (int)sensorStatus.LeakDetected : 0;
-                        this.OnRefresh(new EventArgs());
-                    }
-                }
-            },
-            null);
+                res = await this.SignalRService.StartAsync(model.LocationId,
+                                                                null,
+                                                                null,
+                                                                (sensorStatus) =>
+                                                                {
+                                                                    if (sensorStatus.SensorId == model.Id)
+                                                                    {
+                                                                        if (sensorStatus.LeakDetected != 0)
+                                                                        {
+                                                                            model.HasLeak = (sensorStatus.LeakDetected != null) ? (int)sensorStatus.LeakDetected : 0;
+                                                                            this.OnRefresh(new EventArgs());
+                                                                        }
+                                                                    }
+                                                                },
+                                                                null);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                throw new Exception("SignalR Exception");
+
+            }
+            return res;
         }
 
         #endregion

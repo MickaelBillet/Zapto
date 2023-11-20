@@ -1,5 +1,6 @@
 ﻿using Connect.Application;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -29,25 +30,51 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-
 		public async Task<LocationModel?> GetConnectLocationModel()
 		{
-			return (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
+            LocationModel? model = null;
+            try
             {
-                Name = location.City,
-                Id = location.Id
-            }).FirstOrDefault(); ;
+                model = (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
+                {
+                    Name = location.City,
+                    Id = location.Id
+                }).FirstOrDefault();
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("Location Service Exception");
+            }
+            return model;
 		}
         public async Task<LocationModel?> GetLocationModel(string latitude, string longitude)
         {
-            ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(longitude, latitude);
-            return (location != null) ? new LocationModel() { Name = location.Location } : null; ;
+            LocationModel? model = null;
+            try
+            {
+                ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(longitude, latitude);
+                model = (location != null) ? new LocationModel() { Name = location.Location } : null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("Location Service Exception");
+            }
+            return model;
         }
         public async Task TestNotification(string? locationId)
         {
-            if (locationId != null)
+            try
             {
-                await this.ApplicationConnectLocationServices.TestNotication(locationId);
+                if (locationId != null)
+                {
+                    await this.ApplicationConnectLocationServices.TestNotication(locationId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
             }
         }
         #endregion

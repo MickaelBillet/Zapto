@@ -94,11 +94,9 @@
         if (this.ViewModel != null)
         {
             this.Model = await this.ViewModel.GetWeatherModel();
-            this.ViewModel.Refresh += RefreshView;
-
-            if (this.Model == null)
+            if (this.Model != null)
             {
-                throw new Exception("Weather Service KO");
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }

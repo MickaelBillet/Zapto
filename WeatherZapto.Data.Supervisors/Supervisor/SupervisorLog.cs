@@ -10,14 +10,14 @@ namespace WeatherZapto.Data.Supervisors
 {
     public partial class SupervisorLogs : ISupervisorLogs
 	{
-        private readonly Lazy<IRepository<LogsEntity>>? _lazyLogsRepository;
+        private readonly Lazy<IRepository<LogsEntity>> _lazyLogsRepository;
 
         #region Properties
-        private IRepository<LogsEntity>? LogsRepository => _lazyLogsRepository?.Value;
+        private IRepository<LogsEntity> LogsRepository => _lazyLogsRepository?.Value;
         #endregion
 
         #region Constructor
-        public SupervisorLogs(IDataContextFactory dataContextFactory, IRepositoryFactory? repositoryFactory, IConfiguration configuration)
+        public SupervisorLogs(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
         {
             ConnectionType type = new ConnectionType()
             {
@@ -25,7 +25,7 @@ namespace WeatherZapto.Data.Supervisors
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
+            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
             if (context != null)
             {
                 if (repositoryFactory != null)

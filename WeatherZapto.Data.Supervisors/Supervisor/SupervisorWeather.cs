@@ -10,14 +10,14 @@ namespace WeatherZapto.Data.Supervisors
 {
     public class SupervisorWeather : ISupervisorWeather
     {
-        private readonly Lazy<IRepository<WeatherEntity>>? _lazyWeatherRepository;
+        private readonly Lazy<IRepository<WeatherEntity>> _lazyWeatherRepository;
 
         #region Properties
-        private IRepository<WeatherEntity>? WeatherRepository => _lazyWeatherRepository?.Value;
+        private IRepository<WeatherEntity> WeatherRepository => _lazyWeatherRepository?.Value;
         #endregion
 
         #region Constructor
-        public SupervisorWeather(IDataContextFactory dataContextFactory, IRepositoryFactory? repositoryFactory, IConfiguration configuration)
+        public SupervisorWeather(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
         {
             ConnectionType type = new ConnectionType()
             {
@@ -25,7 +25,7 @@ namespace WeatherZapto.Data.Supervisors
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
+            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
             if (context != null)
             {
                 if (repositoryFactory != null)
@@ -39,18 +39,25 @@ namespace WeatherZapto.Data.Supervisors
         #region Methods
         public async Task<ResultCode> WeatherExists(string id)
         {
-            return (await this.WeatherRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
+            return ((this.WeatherRepository != null) && (await this.WeatherRepository.GetAsync(id) != null)) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
         public async Task<ResultCode> AddWeatherAsync(ZaptoWeather weather)
         {
-            ResultCode result = await this.WeatherExists(weather?.Id);
+            ResultCode result = await this.WeatherExists(weather!.Id);
             if (result == ResultCode.ItemNotFound)
             {
-                weather.Id = string.IsNullOrEmpty(weather.Id) ? Guid.NewGuid().ToString() : weather.Id;
-                weather.Date = Clock.Now.ToUniversalTime();
-                int res = await this.WeatherRepository.InsertAsync(OpenWeatherMapper.Map(weather));
-                result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+                if (this.WeatherRepository != null)
+                {
+                    weather.Id = string.IsNullOrEmpty(weather.Id) ? Guid.NewGuid().ToString() : weather.Id;
+                    weather.Date = Clock.Now.ToUniversalTime();
+                    int res = await this.WeatherRepository.InsertAsync(OpenWeatherMapper.Map(weather));
+                    result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+                }
+                else
+                {
+                    result = ResultCode.CouldNotCreateItem;
+                }
             }
             else
             {
@@ -62,7 +69,7 @@ namespace WeatherZapto.Data.Supervisors
 
         public async Task<ResultCode> DeleteWeatherAsync(ZaptoWeather weather)
         {
-            return (await this.WeatherRepository.DeleteAsync(OpenWeatherMapper.Map(weather)) > 0) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
+            return ((this.WeatherRepository != null) && (await this.WeatherRepository!.DeleteAsync(OpenWeatherMapper.Map(weather)) > 0)) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
         }
         #endregion
     }

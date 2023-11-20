@@ -1,5 +1,6 @@
 ﻿using AirZapto.Application;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -31,16 +32,24 @@ namespace Zapto.Component.Common.ViewModels
         public async Task<SensorCO2Model?> GetSensorCO2Model(string sensorName)
         {
             SensorCO2Model? model = null;
-            if (this.ApplicationSensorServices != null)
+            try
             {
-                model = (await this.ApplicationSensorServices.GetSensorsAsync())?.Select((sensor) => new SensorCO2Model()
+                if (this.ApplicationSensorServices != null)
                 {
-                    Id = sensor.Id,
-                    CO2 = sensor.CO2,
-                    Description = sensor.Description,
-                    Mode = sensor.Mode,
-                    IsRunning = sensor.IsRunning,
-                })?.FirstOrDefault((arg) => (arg.Description != null) ? arg.Description.Equals(sensorName, StringComparison.Ordinal) : false);
+                    model = (await this.ApplicationSensorServices.GetSensorsAsync())?.Select((sensor) => new SensorCO2Model()
+                    {
+                        Id = sensor.Id,
+                        CO2 = sensor.CO2,
+                        Description = sensor.Description,
+                        Mode = sensor.Mode,
+                        IsRunning = sensor.IsRunning,
+                    })?.FirstOrDefault((arg) => (arg.Description != null) ? arg.Description.Equals(sensorName, StringComparison.Ordinal) : false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                throw new Exception("Sensor CO2 Service Exception");
             }
 
             return model;

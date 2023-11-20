@@ -10,14 +10,14 @@ namespace WeatherZapto.Data.Supervisors
 {
     public partial class SupervisorAirPollution : ISupervisorAirPollution
     {
-        private readonly Lazy<IRepository<AirPollutionEntity>>? _lazyAirPollutionRepository;
+        private readonly Lazy<IRepository<AirPollutionEntity>> _lazyAirPollutionRepository;
 
         #region Properties
-        private IRepository<AirPollutionEntity>? AirPollutionRepository => _lazyAirPollutionRepository?.Value;
+        private IRepository<AirPollutionEntity> AirPollutionRepository => _lazyAirPollutionRepository?.Value;
         #endregion
 
         #region Constructor
-        public SupervisorAirPollution(IDataContextFactory dataContextFactory, IRepositoryFactory? repositoryFactory, IConfiguration configuration)
+        public SupervisorAirPollution(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
         {
             ConnectionType type = new ConnectionType()
             {
@@ -25,7 +25,7 @@ namespace WeatherZapto.Data.Supervisors
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
+            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
             if (context != null)
             {
                 if (repositoryFactory != null)

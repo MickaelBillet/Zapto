@@ -1,6 +1,5 @@
 ﻿using Framework.Core.Domain;
 using WeatherZapto.Data.Entities;
-using WeatherZapto.Model;
 
 namespace WeatherZapto.Data.Mappers
 {

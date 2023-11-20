@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using WeatherZapto.Model;
+﻿using WeatherZapto.Model;
 
 namespace WeatherZapto.Application
 {

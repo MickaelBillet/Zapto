@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using WeatherZapto.Data;
 
-namespace Connect.Data.Database
+namespace WeatherZapto.Data.Services
 {
     public sealed class WeatherZaptoDatabaseService : DatabaseService
     {
