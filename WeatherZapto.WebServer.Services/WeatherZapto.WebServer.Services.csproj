@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WeatherZapto.Application.Services\WeatherZapto.Application.Services.csproj" />
-    <ProjectReference Include="..\WeatherZapto.Data\WeatherZapto.Data.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Data\WeatherZapto.Data.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

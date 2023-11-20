@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Core", "Framework
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Infrastructure.Services", "Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj", "{87104082-6ADC-4BA4-B870-E8B2E60C7E11}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherZapto.Data", "WeatherZapto.Data\WeatherZapto.Data.csproj", "{88E300D9-F53C-40DC-AED2-5890BD28731F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherZapto.Data.Repositories", "WeatherZapto.Data\WeatherZapto.Data.Repositories.csproj", "{88E300D9-F53C-40DC-AED2-5890BD28731F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherZapto.Data.Services", "WeatherZapto.Data.Services\WeatherZapto.Data.Services.csproj", "{9F4E7959-068A-4C6A-9576-7D5FED2E3CDF}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherZapto.Infrastructure.Services", "WeatherZapto.Infrastructure.Services\WeatherZapto.Infrastructure.Services.csproj", "{A280B2EA-7724-41E9-8BB4-09F052918661}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.SQLite", "Serilog.Sqlite.Sinks\src\Serilog.Sinks.SQLite\Serilog.Sinks.SQLite.csproj", "{4FEBA060-7396-490F-9E99-59ED905A0BA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherZapto.Data.Supervisors", "WeatherZapto.Data.Supervisors\WeatherZapto.Data.Supervisors.csproj", "{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,14 @@ Global
 		{4FEBA060-7396-490F-9E99-59ED905A0BA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4FEBA060-7396-490F-9E99-59ED905A0BA8}.Release|x86.ActiveCfg = Release|Any CPU
 		{4FEBA060-7396-490F-9E99-59ED905A0BA8}.Release|x86.Build.0 = Release|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +155,7 @@ Global
 		{2BA766EF-6C02-4FE6-99E4-711A5B9C2B6B} = {86BA45B3-EE98-4AB1-8E78-097FB6588E11}
 		{A280B2EA-7724-41E9-8BB4-09F052918661} = {8A8C9898-8F0B-4360-AF2F-C115D32ED8B8}
 		{4FEBA060-7396-490F-9E99-59ED905A0BA8} = {EE3B8FA1-31BD-409C-BC70-F4E998D4B7F3}
+		{C4C0ECB9-88DC-4CC2-AA8A-DADDEB0EB695} = {35449D5C-28F2-4D69-850B-AF859807FD1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B8CB93F6-292A-4578-AB75-EEAB66EBDBE6}

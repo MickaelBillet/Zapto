@@ -8,14 +8,14 @@ namespace WeatherZapto.Data.Supervisors
 {
     public class SupervisorVersion : ISupervisorVersion
     {
-        private readonly Lazy<IRepository<VersionEntity>>? _lazyVersionRepository;
+        private readonly Lazy<IRepository<VersionEntity>> _lazyVersionRepository;
 
         #region Properties
-        private IRepository<VersionEntity>? VersionRepository => _lazyVersionRepository?.Value;
+        private IRepository<VersionEntity> VersionRepository => _lazyVersionRepository?.Value;
         #endregion
 
         #region Constructor
-        public SupervisorVersion(IDataContextFactory dataContextFactory, IRepositoryFactory? repositoryFactory, IConfiguration configuration)
+        public SupervisorVersion(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
         {
             ConnectionType type = new ConnectionType()
             {
@@ -23,7 +23,7 @@ namespace WeatherZapto.Data.Supervisors
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
+            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
             if (context != null)
             {
                 if (repositoryFactory != null)

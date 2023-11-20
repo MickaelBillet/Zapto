@@ -10,14 +10,14 @@ namespace WeatherZapto.Data.Supervisors
 {
     public partial class SupervisorCall : ISupervisorCall
 	{
-        private readonly Lazy<IRepository<CallEntity>>? _lazyCallRepository;
+        private readonly Lazy<IRepository<CallEntity>> _lazyCallRepository;
 
         #region Properties
-        private IRepository<CallEntity>? CallRepository => _lazyCallRepository?.Value;
+        private IRepository<CallEntity> CallRepository => _lazyCallRepository?.Value;
         #endregion
 
         #region Constructor
-        public SupervisorCall(IDataContextFactory dataContextFactory, IRepositoryFactory? repositoryFactory, IConfiguration configuration)
+        public SupervisorCall(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
         {
             ConnectionType type = new ConnectionType()
             {
@@ -25,7 +25,7 @@ namespace WeatherZapto.Data.Supervisors
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            IDataContext? context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
+            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
             if (context != null)
             {
                 if (repositoryFactory != null)
@@ -40,7 +40,7 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOW()
         {
             int res = 0;
-            CallEntity? entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date == Clock.Now.Date);
+            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date == Clock.Now.Date);
             if (entity != null) 
             {
                 entity.Count++;
