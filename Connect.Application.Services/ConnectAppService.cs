@@ -9,7 +9,7 @@ namespace Connect.Application
 		{
 			services.AddScoped<IApplicationConditionServices, ApplicationConditionServices>();
 			services.AddScoped<IApplicationConnectedObjectServices, ApplicationConnectedObjectServices>();
-			services.AddScoped<IApplicationLocationServices, ApplicationLocationServices>();
+			services.AddScoped<IApplicationConnectLocationServices, ApplicationConnectLocationServices>();
 			services.AddScoped<IApplicationPlugServices, ApplicationPlugServices>();
 			services.AddScoped<IApplicationProgramServices, ApplicationProgramServices>();
 			services.AddScoped<IApplicationRoomServices, ApplicationRoomServices>();

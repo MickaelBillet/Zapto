@@ -45,7 +45,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\AirZapto.Infrastructure.Services\AirZapto.Infrastructure.Services.csproj" />
-	  <ProjectReference Include="..\Authentication.Infrastructure.Services\Authentication.Infrastructure.Services.csproj" />
 	  <ProjectReference Include="..\Connect.Infrastructure.Services\Connect.Infrastructure.Services.csproj" />
 	  <ProjectReference Include="..\WeatherZapto.Infrastructure.Services\WeatherZapto.Infrastructure.Services.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.AirPollution\Zapto.Component.AirPollution.csproj" />

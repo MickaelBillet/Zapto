@@ -1,7 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,50 +25,17 @@ namespace Connect.Infrastructure.WebServices
 
         public async Task<bool?> AddClientAppAsync(ClientApp clientApp, CancellationToken token = default)
         {
-            bool? res = false;
-
-            try
-            {
-                res = await WebService.PostAsync<ClientApp>(ConnectConstants.RestUrlClientApps, clientApp, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return res;
+            return await WebService.PostAsync<ClientApp>(ConnectConstants.RestUrlClientApps, clientApp, token); ;
         }
 
         public async Task<ClientApp?> GetClientAppAsync(string? firebaseToken, CancellationToken token = default)
         {
-            ClientApp? res = null;
-
-            try
-            {
-                res = await WebService.GetAsync<ClientApp>(ConnectConstants.RestUrlClientAppsToken, firebaseToken, SerializerOptions, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return res;
+            return await WebService.GetAsync<ClientApp>(ConnectConstants.RestUrlClientAppsToken, firebaseToken, SerializerOptions, token); ;
         }
 
         public async Task<bool?> DeleteClientAppAsync(string? firebaseToken, CancellationToken token = default)
         {
-            bool? res = null;
-
-            try
-            {
-                res = await WebService.DeleteAsync<ClientApp>(ConnectConstants.RestUrlClientAppsToken, firebaseToken, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return res;
+            return await WebService.DeleteAsync<ClientApp>(ConnectConstants.RestUrlClientAppsToken, firebaseToken, token); ;
         }
 
         #endregion

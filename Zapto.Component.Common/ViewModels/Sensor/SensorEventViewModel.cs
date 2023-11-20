@@ -39,50 +39,45 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task CancelLeakEvent(SensorEventModel? model)
         {
-            try
+            if (model != null)
             {
-                if (model != null)
-                {
-                    model.HasLeak = 0;
+                model.HasLeak = 0;
 
-                    if (await this.ApplicationSensorServices.Leak(model.Id, model.HasLeak) == true)
-                    {
-                        this.OnRefresh(new EventArgs());
-                    }
+                if (await this.ApplicationSensorServices.Leak(model.Id, model.HasLeak) == true)
+                {
+                    this.OnRefresh(new EventArgs());
                 }
-            }
-            catch (Exception ex) 
-            {
-                Debug.WriteLine(ex);
-                throw ex;
             }
         }
 
         public async Task<bool> ReceiveStatusAsync(SensorEventModel model)
         {
+            bool res = false;
             try
             {
-                return await this.SignalRService.StartAsync(model.LocationId,
-                null,
-                null,
-                (sensorStatus) =>
-                {
-                    if (sensorStatus.SensorId == model.Id)
-                    {
-                        if (sensorStatus.LeakDetected != 0)
-                        {
-                            model.HasLeak = (sensorStatus.LeakDetected != null) ? (int)sensorStatus.LeakDetected : 0;
-                            this.OnRefresh(new EventArgs());
-                        }
-                    }
-                },
-                null);
+                res = await this.SignalRService.StartAsync(model.LocationId,
+                                                                null,
+                                                                null,
+                                                                (sensorStatus) =>
+                                                                {
+                                                                    if (sensorStatus.SensorId == model.Id)
+                                                                    {
+                                                                        if (sensorStatus.LeakDetected != 0)
+                                                                        {
+                                                                            model.HasLeak = (sensorStatus.LeakDetected != null) ? (int)sensorStatus.LeakDetected : 0;
+                                                                            this.OnRefresh(new EventArgs());
+                                                                        }
+                                                                    }
+                                                                },
+                                                                null);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                throw ex;
+                Debug.Write(ex);
+                throw new Exception("SignalR Exception");
+
             }
+            return res;
         }
 
         #endregion

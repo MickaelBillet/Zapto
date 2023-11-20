@@ -22,7 +22,7 @@ namespace Connect.Application.Services
         #region Methods
         public async Task<HealthCheckConnect?> GetHealthCheckConnect()
         {
-            return (this.HealthCheckService != null) ? await this.HealthCheckService.GetHealthCheckConnect() : null;
+            return (this.HealthCheckService != null) ? await this.HealthCheckService.GetHealthCheckConnect() : null; ;  
         }
         #endregion
     }

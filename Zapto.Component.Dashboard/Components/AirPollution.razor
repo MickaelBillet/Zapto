@@ -62,11 +62,9 @@
         if (this.ViewModel != null)
         {
             this.Model = await this.ViewModel.GetAirPollutionModel();
-            this.ViewModel.Refresh += RefreshView;
-
-            if (this.Model == null)
+            if (this.Model != null)
             {
-                throw new Exception("AirPollution Service KO");
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }

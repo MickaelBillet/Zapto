@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application
 {
-	public interface IApplicationLocationServices
+	public interface IApplicationConnectLocationServices
 	{
 		Task<IEnumerable<Location>?> GetLocationCache();
 		Task<IEnumerable<Location>?> GetLocations();

@@ -30,16 +30,12 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-		public override async Task InitializeAsync(string? parameter)
-		{
-			await base.InitializeAsync(parameter);
-		}
-
 		public async Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId)
 		{
+			IEnumerable<RoomModel>? models = null;
 			try
 			{
-				return (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
+				models = (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
 				{
 					Name = this.Localizer[room.Name],
 					LocationId = room.LocationId,
@@ -55,10 +51,11 @@ namespace Zapto.Component.Common.ViewModels
 				})?.OrderByDescending((room) => room.ConnectedObjectsList?.Count);
 			}
 			catch (Exception ex) 
-			{
+			{ 
 				Debug.WriteLine(ex);
-				throw ex;
+				new Exception("Location Service Exception");
 			}
+			return models;
 		}
 		#endregion
 	}

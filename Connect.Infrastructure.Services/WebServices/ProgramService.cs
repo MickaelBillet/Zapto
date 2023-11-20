@@ -1,7 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
 using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -25,18 +24,7 @@ namespace Connect.Infrastructure.WebServices
 
         public async Task<Program?> GetProgram(string programId)
         {
-            Program? program = null;
-
-            try
-            {
-                program = await WebService.GetAsync<Program>(ConnectConstants.RestUrlProgramsId, programId, SerializerOptions);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return program;
+            return await WebService.GetAsync<Program>(ConnectConstants.RestUrlProgramsId, programId, SerializerOptions); ;
         }
 
         #endregion

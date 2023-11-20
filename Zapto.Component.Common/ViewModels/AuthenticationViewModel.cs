@@ -26,8 +26,6 @@ namespace Zapto.Component.Common.ViewModels
 		#region Methods
         public void SignOut()
         {
-            //this.NavigationService.NavigateTo($"{this.Authority}/v2/logout?client_id={this.ClientId}");
-
             this.NavigationService.NavigateTo($"{this.Authority}/protocol/openid-connect/logout?client_id={this.ClientId}");
         }
 

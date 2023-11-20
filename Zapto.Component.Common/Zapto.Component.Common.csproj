@@ -37,7 +37,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirZapto.Application.Services\AirZapto.Application.Services.csproj" />
-    <ProjectReference Include="..\Authentication.Application.Services\Authentication.Application.Services.csproj" />
     <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
     <ProjectReference Include="..\WeatherZapto.Application.Services\WeatherZapto.Application.Services.csproj" />
   </ItemGroup>

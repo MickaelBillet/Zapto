@@ -5,7 +5,7 @@ using Status = Connect.Model.Status;
 
 namespace Zapto.Component.Common.ViewModels
 {
-	public interface IPlugListViewModel : IBaseViewModel
+    public interface IPlugListViewModel : IBaseViewModel
 	{
 		List<PlugModel>? GetPlugModels(RoomModel roomModel);
     }
@@ -22,16 +22,13 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-        public override async Task InitializeAsync(string? parameter)
-		{
-			await base.InitializeAsync(parameter);
-		}
 
 		public List<PlugModel>? GetPlugModels(RoomModel roomModel)
 		{
+            List<PlugModel>? models = null;
 			try
 			{
-				return roomModel.ConnectedObjectsList?.Where((obj) => obj.Plug != null).Select((obj) => new PlugModel()
+				models = roomModel.ConnectedObjectsList?.Where((obj) => obj.Plug != null).Select((obj) => new PlugModel()
 				{
 					Name = obj.Name,
 					LocationId = roomModel.LocationId,
@@ -45,8 +42,8 @@ namespace Zapto.Component.Common.ViewModels
 			catch (Exception ex) 
 			{
 				Debug.WriteLine(ex);
-				throw ex;
 			}
+			return models;
 		}
 
         #endregion

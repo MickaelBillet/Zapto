@@ -3,7 +3,6 @@ using Connect.Model;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
@@ -34,23 +33,16 @@ namespace Connect.Infrastructure.WebServices
             IEnumerable<Location>? locations = null;
             if (forceRefresh)
             {
-                try
+                //Call the webservice
+                locations = await WebService.GetCollectionAsync<Location>(ConnectConstants.RestUrlLocations, SerializerOptions, token);
+                if (locations != null && this.CacheService != null)
                 {
-                    //Call the webservice
-                    locations = await WebService.GetCollectionAsync<Location>(ConnectConstants.RestUrlLocations, SerializerOptions, token);
-                    if (locations != null && this.CacheService != null)
+                    //Save the rooms in database
+                    foreach (Location location in locations)
                     {
-                        //Save the rooms in database
-                        foreach (Location location in locations)
-                        {
-                            //Insert the objets in to the database
-                            await this.CacheService.InsertObject<Location>("locations", location);
-                        }
+                        //Insert the objets in to the database
+                        await this.CacheService.InsertObject<Location>("locations", location);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message);
                 }
             }
             return locations;
@@ -58,24 +50,12 @@ namespace Connect.Infrastructure.WebServices
 
         public async Task<IEnumerable<Location>?> GetLocationsCacheAsync()
         {
-            IEnumerable<Location>? locations = this.CacheService != null ? await this.CacheService.GetAllObjects<Location>() : null;
-            return locations;
+            return this.CacheService != null ? await this.CacheService.GetAllObjects<Location>() : null; ;
         }
 
         public async Task<bool?> TestNotification(string locationId, CancellationToken token = default)
         {
-            bool? res = false;
-
-            try
-            {
-                res = await WebService.PostAsync<string>(ConnectConstants.RestUrlLocationTest, locationId, token);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-            return res;
+            return await WebService.PostAsync<string>(ConnectConstants.RestUrlLocationTest, locationId, token); ;
         }
 
         public IObservable<Location> GetLocation(string locationId, bool forceRefresh = true, CancellationToken token = default)
@@ -118,7 +98,6 @@ namespace Connect.Infrastructure.WebServices
                 catch (Exception ex)
                 {
                     observer.OnError(ex);
-                    Log.Error(ex.Message);
                 }
 
                 observer.OnCompleted();

@@ -38,9 +38,10 @@ namespace Zapto.Component.Common.ViewModels
 
 		public async Task<bool> ReceiveStatusAsync(RoomModel model)
 		{
-			try
-			{
-				return await this.SignalRService.StartAsync(model.LocationId,
+            bool res = false;
+            try
+            {
+                res = await this.SignalRService.StartAsync(model.LocationId,
 				null,
 				(roomStatus) =>
 				{
@@ -53,13 +54,16 @@ namespace Zapto.Component.Common.ViewModels
 				},
 				null,
 				null);
-			}
-			catch (Exception ex) 
-			{
-				Debug.WriteLine(ex);
-				throw ex;
-			}
-		}
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                throw new Exception("SignalR Exception");
+
+            }
+			return res;
+
+        }
 
 		public override void Dispose()
 		{

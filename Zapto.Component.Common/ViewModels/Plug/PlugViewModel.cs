@@ -30,41 +30,38 @@ namespace Zapto.Component.Common.ViewModels
 
         #region Methods
 
-        public override async Task InitializeAsync(string? parameter)
-		{		
-			await base.InitializeAsync(parameter);
-		}
-
         public async Task<bool> ReceiveStatusAsync(PlugModel model)
         {
-			try
-			{
-				return await this.SignalRService.StartAsync(model.LocationId,
-				(plugStatus) =>
-				{
-					if (model?.Id == plugStatus.PlugId)
+            bool res = false;
+            try
+            {
+                res = await this.SignalRService.StartAsync(model.LocationId,
+					(plugStatus) =>
 					{
-						model.Status = Plug.GetStatus(plugStatus.Status, plugStatus.Order);
-						model.WorkingDuration = plugStatus.WorkingDuration;
-						model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
-						this.OnRefresh(new EventArgs());
-					}
-				},
-				null,
-				null,
-				null);
-			}
-			catch(Exception ex) 
-			{
-				Debug.WriteLine(ex);
-				throw ex;
-			}
+						if (model?.Id == plugStatus.PlugId)
+						{
+							model.Status = Plug.GetStatus(plugStatus.Status, plugStatus.Order);
+							model.WorkingDuration = plugStatus.WorkingDuration;
+							model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
+							this.OnRefresh(new EventArgs());
+						}
+					},
+					null,
+					null,
+					null);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+				throw new Exception("SignalR Exception");
+
+            }
+            return res;
         }
 
         public async Task <bool?> SendCommandAsync(int? command, string? id)
 		{
 			bool? res = null;
-
 			try
 			{
 				if (command == 1)
@@ -95,10 +92,10 @@ namespace Zapto.Component.Common.ViewModels
 					});
 				}
 			}
-			catch(Exception ex) 
+			catch (Exception ex)
 			{
-				Debug.WriteLine(ex);
-				throw ex;
+				Debug.Write(ex);
+				throw new Exception("Send Plug Command Exception");
 			}
 			return res;
 		}		

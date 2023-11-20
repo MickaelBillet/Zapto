@@ -12,7 +12,7 @@
             var viewModel = new LocationViewModel(this.ServiceCollection.BuildServiceProvider());
 
             // Act
-            var result = await viewModel.GetLocationModel();
+            var result = await viewModel.GetConnectLocationModel();
 
             // Assert
             Assert.NotNull(result);

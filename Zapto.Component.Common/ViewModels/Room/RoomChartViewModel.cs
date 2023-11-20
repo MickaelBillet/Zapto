@@ -18,15 +18,7 @@
         #endregion
 
         #region Methods
-        public override async Task InitializeAsync(string? parameter)
-        {
-            await base.InitializeAsync(parameter);
-        }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
         #endregion
     }
 }

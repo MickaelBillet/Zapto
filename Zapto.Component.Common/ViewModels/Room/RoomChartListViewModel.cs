@@ -39,34 +39,17 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
         }
 
         public async Task<DateTime?> GetRoomMinDate(string roomId)
         {
-            try
-            {
-                return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw ex;
-            }
+            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
         }
 
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
         {
             List<RoomChartModel>? data = null;
-
             try
             {
                 if (this.ApplicationOperationDataService != null)
@@ -87,10 +70,10 @@ namespace Zapto.Component.Common.ViewModels
                     }
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex) 
             {
                 Debug.WriteLine(ex);
-                throw ex;
+                throw new Exception("Charts Data Exception : " + ex.Message);
             }
             return data;
         }

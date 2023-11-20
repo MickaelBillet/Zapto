@@ -48,9 +48,10 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                throw ex;
+                Debug.Write(ex);
+                throw new Exception("Sensor CO2 Service Exception");
             }
+
             return model;
         }
 

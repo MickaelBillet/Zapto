@@ -36,25 +36,28 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<bool> ReceiveStatusAsync(SensorDataModel model)
         {
+            bool res = false;
             try
             {
-                return await this.SignalRService.StartAsync(model.LocationId,
-                null,
-                null,
-                (sensorStatus) =>
-                {
-                    if (sensorStatus.SensorId == model.Id)
-                    {
-                        this.OnRefresh(new EventArgs());
-                    }
-                },
-                null);
+                res = await this.SignalRService.StartAsync(model.LocationId,
+                        null,
+                        null,
+                        (sensorStatus) =>
+                        {
+                            if (sensorStatus.SensorId == model.Id)
+                            {
+                                this.OnRefresh(new EventArgs());
+                            }
+                        },
+                        null);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                throw ex;
+                Debug.Write(ex);
+                throw new Exception("SignalR Exception");
+
             }
+            return res;
         }
 
         #endregion

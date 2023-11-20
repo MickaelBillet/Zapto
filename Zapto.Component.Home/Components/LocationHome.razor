@@ -1,0 +1,51 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject ILocationViewModel ViewModel
+@inject IPositionService PositionService
+@inject IJSRuntime JsRuntime
+@implements IDisposable
+
+<div class="d-flex align-center gap-4 mb-2">
+    @if (this.Model != null)
+    {
+        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Longitude { get; set; }
+
+    [Parameter]
+    public string Latitude { get; set; }
+
+    public LocationModel Model { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.Latitude) == false) && (string.IsNullOrEmpty(this.Longitude) == false))
+        {
+            this.Model = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
+            if (this.Model == null)
+            {
+                throw new Exception("Location Service KO");
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+    }
+}

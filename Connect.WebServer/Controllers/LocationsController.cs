@@ -50,7 +50,7 @@ namespace Connect.WebApi.Controllers
 
                 if (this.AlertService != null)
                 {
-                    await this.AlertService.SendAlertAsync(locationId, "Test", "Location ID" + locationId);
+                    await this.AlertService.SendAlertAsync(locationId, "Coucou", "Location " + locationId);
                     return Ok();
                 }
                 else
