@@ -36,8 +36,8 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
         public async Task<IEnumerable<Location>> GetLocations(string APIKey, string longitude, string latitude)
         {
             return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocation, latitude, longitude, LIMIT, APIKey),
-                                                                                this.SerializerOptions,
-                                                                                new CancellationToken()); ;
+                                                                                            this.SerializerOptions,
+                                                                                            new CancellationToken());
         }
         #endregion
     }

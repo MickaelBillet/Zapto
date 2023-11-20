@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using WeatherZapto.Data;
 using WeatherZapto.Model;
 
 namespace WeatherZapto.Application.Services
@@ -15,12 +16,14 @@ namespace WeatherZapto.Application.Services
         private IMemoryCache Cache { get; }
         private CacheSignal CacheSignal { get; }
         private MemoryCacheEntryOptions MemoryCacheEntryOptions { get; }
+        private ISupervisorCall SupervisorCall { get; }
         #endregion
 
         #region Constructor
         public ApplicationOWServiceCache(IServiceProvider serviceProvider)
 		{
-			this.ApplicationOWService = serviceProvider.GetService<IApplicationOWService>();
+            this.SupervisorCall = serviceProvider.GetService<ISupervisorCall>();
+            this.ApplicationOWService = serviceProvider.GetService<IApplicationOWService>();
             this.Cache = serviceProvider.GetService<IMemoryCache>();
 			this.CacheSignal = serviceProvider.GetService<CacheSignal>();
             this.MemoryCacheEntryOptions = new MemoryCacheEntryOptions()
@@ -46,7 +49,11 @@ namespace WeatherZapto.Application.Services
                     else
                     {
                         zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(APIKey, locationName, longitude, latitude);
-                        this.Cache.Set<ZaptoAirPollution>($"AirPollution-{locationName}", zaptoAirPollution, this.MemoryCacheEntryOptions);
+                        if (zaptoAirPollution != null)
+                        {
+                            await this.SupervisorCall.AddCallOW();
+                            this.Cache.Set<ZaptoAirPollution>($"AirPollution-{locationName}", zaptoAirPollution, this.MemoryCacheEntryOptions);
+                        }
                     }
                 }
                 finally
@@ -72,7 +79,11 @@ namespace WeatherZapto.Application.Services
                     else
                     {
                         zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(APIKey, locationName, longitude, latitude, language);
-                        this.Cache.Set<ZaptoWeather>($"OpenWeather-{locationName}", zaptoWeather, this.MemoryCacheEntryOptions);
+                        if (zaptoWeather != null)
+                        {
+                            await this.SupervisorCall.AddCallOW();
+                            this.Cache.Set<ZaptoWeather>($"OpenWeather-{locationName}", zaptoWeather, this.MemoryCacheEntryOptions);
+                        }
                     }
                 }
                 finally

@@ -1,11 +1,8 @@
 ﻿using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using WeatherZapto.Application.Infrastructure;
+using WeatherZapto.Data;
 using WeatherZapto.Model;
 
 namespace WeatherZapto.Application.Services
@@ -16,6 +13,7 @@ namespace WeatherZapto.Application.Services
         private ILocationOWService LocationOWService { get; }
         private IAirPollutionOWService AirPollutionOWService { get; }
         private IWeatherOWService WeatherOWService { get; }
+        private ISupervisorCall SupervisorCall { get; }
         #endregion
 
         #region Constructor
@@ -24,6 +22,7 @@ namespace WeatherZapto.Application.Services
 			this.AirPollutionOWService = serviceProvider.GetService<IAirPollutionOWService>();
             this.WeatherOWService = serviceProvider.GetService<IWeatherOWService>();
             this.LocationOWService = serviceProvider.GetService<ILocationOWService>();
+            this.SupervisorCall = serviceProvider.GetService<ISupervisorCall>();
 		}
         #endregion
 
@@ -34,6 +33,7 @@ namespace WeatherZapto.Application.Services
             Location location = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, longitude, latitude)).FirstOrDefault() : null;
             if (location != null)
             {
+                await this.SupervisorCall.AddCallOW();
                 zaptoLocation = new ZaptoLocation()
                 {
                     Latitude = location.lat,
@@ -50,6 +50,7 @@ namespace WeatherZapto.Application.Services
             AirPollution airPollution = (this.AirPollutionOWService != null) ? await this.AirPollutionOWService.GetAirPollution(APIKey, longitude, latitude) : null;
             if (airPollution != null)
             {
+                await this.SupervisorCall.AddCallOW();
                 zaptoAirPollution = new ZaptoAirPollution()
                 {
                     aqi = (airPollution?.list != null) ? airPollution?.list[0]?.main?.aqi : null,
@@ -76,6 +77,7 @@ namespace WeatherZapto.Application.Services
             OpenWeather weather = (this.WeatherOWService != null) ? await this.WeatherOWService.GetWeather(APIKey, longitude, latitude, language) : null;
             if (weather != null)
             {
+                await this.SupervisorCall.AddCallOW();
                 zaptoWeather = new ZaptoWeather()
                 {
                     TimeSpam = DateTimeHelper.ParseUnixTimestamp(weather.dt),

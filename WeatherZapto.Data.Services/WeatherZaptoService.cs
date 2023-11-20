@@ -11,6 +11,7 @@ namespace WeatherZapto.Data
             services.AddScoped<ISupervisorVersion, SupervisorVersion>();
             services.AddScoped<ISupervisorAirPollution, SupervisorAirPollution>();
             services.AddScoped<ISupervisorWeather, SupervisorWeather>();
+            services.AddScoped<ISupervisorCall, SupervisorCall>();      
         }
     }
 }
