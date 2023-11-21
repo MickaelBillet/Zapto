@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @inject IMainViewModel? ViewModel
-@inject ILogger<MainLayout> Logger
 @implements IDisposable
 
 <MudThemeProvider Theme="_theme" />
@@ -65,7 +64,6 @@
     {
         if (this.ViewModel != null)
         {
-            this.Logger.LogInformation("Starting");
             await this.ViewModel.InitializeAsync(null);
         }
     }

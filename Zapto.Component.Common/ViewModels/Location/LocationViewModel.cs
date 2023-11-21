@@ -9,7 +9,6 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface ILocationViewModel : IBaseViewModel
     {
-		Task<LocationModel?> GetConnectLocationModel();
         Task<LocationModel?> GetLocationModel(string latitude, string longitude);
         Task TestNotification(string? locationId);
     }
@@ -17,37 +16,19 @@ namespace Zapto.Component.Common.ViewModels
     public class LocationViewModel : BaseViewModel, ILocationViewModel
 	{
 		#region Properties
-		private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
 		private IApplicationLocationService ApplicationLocationServices { get; }
-		#endregion
+        private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
+        #endregion
 
-		#region Constructor
-		public LocationViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
+        #region Constructor
+        public LocationViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-			this.ApplicationConnectLocationServices = serviceProvider.GetRequiredService<IApplicationConnectLocationServices>();
 			this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationService>();
-		}
-		#endregion
+            this.ApplicationConnectLocationServices = serviceProvider.GetRequiredService<IApplicationConnectLocationServices>();
+        }
+        #endregion
 
-		#region Methods
-		public async Task<LocationModel?> GetConnectLocationModel()
-		{
-            LocationModel? model = null;
-            try
-            {
-                model = (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
-                {
-                    Name = location.City,
-                    Id = location.Id
-                }).FirstOrDefault();
-            }
-            catch (Exception ex) 
-            {
-                Debug.WriteLine(ex);
-                throw new Exception("Location Service Exception : " + ex.Message);
-            }
-            return model;
-		}
+        #region Methods
         public async Task<LocationModel?> GetLocationModel(string latitude, string longitude)
         {
             LocationModel? model = null;
@@ -63,6 +44,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             return model;
         }
+
         public async Task TestNotification(string? locationId)
         {
             try

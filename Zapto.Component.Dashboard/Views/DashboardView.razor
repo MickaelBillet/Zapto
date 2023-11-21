@@ -4,7 +4,7 @@
 
 <ErrorBoundary @ref="ErrorBoundaryLocation">
     <ChildContent>
-        <Location @bind-Model="@this.Location"></Location>
+        <Location Model="@this.Location"></Location>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -63,6 +63,7 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
+            this.Location = await this.ViewModel.GetLocationModel();
         }
     }
 
