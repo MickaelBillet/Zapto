@@ -30,18 +30,15 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
+            this.Model = await this.ViewModel.GetConnectLocationModel();
         }
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (this.ViewModel != null)
+        if ((this.ViewModel != null) && (this.Model != null))
         {
-            this.Model = await this.ViewModel.GetConnectLocationModel();
-            if (this.Model != null)
-            {
-                await this.ModelChanged.InvokeAsync(this.Model);
-            }
+            await this.ModelChanged.InvokeAsync(this.Model);
         }
     }
 
