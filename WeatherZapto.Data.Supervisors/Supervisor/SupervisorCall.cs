@@ -2,9 +2,7 @@
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using WeatherZapto.Data.Entities;
-using WeatherZapto.Data.Mappers;
 using WeatherZapto.Data.Services.Repositories;
-using WeatherZapto.Model;
 
 namespace WeatherZapto.Data.Supervisors
 {

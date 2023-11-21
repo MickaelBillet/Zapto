@@ -3,7 +3,6 @@ using Framework.Data.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using WeatherZapto.Data;
 
 namespace WeatherZapto.Data.Services
 {
