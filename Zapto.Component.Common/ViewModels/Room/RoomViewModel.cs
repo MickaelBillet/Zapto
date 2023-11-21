@@ -59,7 +59,6 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.Write(ex);
                 throw new Exception("SignalR Exception");
-
             }
 			return res;
 

@@ -48,13 +48,27 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     items.Add(this.Map(healthcheckConnect));
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
 
+            try
+            { 
                 HealthCheckAirZapto? healthcheckAirZapto = await this.ApplicationHealthCheckAirZaptoServices.GetHealthCheckAirZapto();
                 if (healthcheckAirZapto != null)
                 {
                     items.Add(this.Map(healthcheckAirZapto));
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
 
+            try
+            { 
                 HealthCheckWeatherZapto? healthCheckWeatherZapto = await this.ApplicationHealthCheckWeatherZaptoServices.GetHealthCheckWeatherZapto();
                 if (healthCheckWeatherZapto != null)
                 {

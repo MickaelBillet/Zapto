@@ -68,10 +68,13 @@
 
     protected override void OnParametersSet()
     {
-        ErrorBoundaryWeather?.Recover();
-        ErrorBoundaryAirPollution?.Recover();
-        ErrorBoundaryConnect?.Recover();
-        ErrorBoundaryLocation?.Recover();
+        if ((this.ViewModel != null) && (this.Location != null))
+        {
+            ErrorBoundaryWeather?.Recover();
+            ErrorBoundaryAirPollution?.Recover();
+            ErrorBoundaryConnect?.Recover();
+            ErrorBoundaryLocation?.Recover();
+        }
     }
 
     private void ResetErrorWeather()

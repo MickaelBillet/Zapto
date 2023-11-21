@@ -14,7 +14,7 @@
     [Parameter]
     public RoomModel? Model { get; set; }
 
-    public List<PlugModel>? Plugs { get; set; } = null;
+    public IEnumerable<PlugModel>? Plugs { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {

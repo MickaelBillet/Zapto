@@ -13,8 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
-    <ProjectReference Include="..\WeatherZapto.Data.Services\WeatherZapto.Data.Services.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Data.Supervisors\WeatherZapto.Data.Supervisors.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,11 @@
-﻿using Connect.Data.Database;
-using Framework.Data.Abstractions;
+﻿using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
 using WeatherZapto.Data.Repository;
-using WeatherZapto.WebServer.Services;
+using WeatherZapto.Data.Services;
 using WeatherZapto.Infrastructure.Services;
+using WeatherZapto.WebServer.Services;
 
 namespace WeatherZapto.WebServer.Configuration
 {

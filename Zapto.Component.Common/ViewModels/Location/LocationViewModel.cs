@@ -44,7 +44,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex) 
             {
                 Debug.WriteLine(ex);
-                throw new Exception("Location Service Exception");
+                throw new Exception("Location Service Exception : " + ex.Message);
             }
             return model;
 		}
@@ -59,7 +59,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                throw new Exception("Location Service Exception");
+                throw new Exception("Location Service Exception : " + ex.Message);
             }
             return model;
         }
