@@ -23,6 +23,9 @@
 
   <ItemGroup>
     <BlazorWebAssemblyLazyLoad Include="Zapto.Component.Dashboard.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Zapto.Component.Charts.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Zapto.Component.Healthcheck.dll" />
+    <BlazorWebAssemblyLazyLoad Include="Zapto.Component.AirPollution.dll" />
   </ItemGroup>
 
   <ItemGroup>

@@ -57,6 +57,13 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (this.ViewModel != null)
+        {
             this.Model = await this.ViewModel.GetModelList();
         }
     }
