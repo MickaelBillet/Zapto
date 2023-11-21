@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Serilog.Sqlite.Sinks\src\Serilog.Sinks.SQLite\Serilog.Sinks.SQLite.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Data.Repositories\WeatherZapto.Data.Repositories.csproj" />
     <ProjectReference Include="..\WeatherZapto.Infrastructure.Services\WeatherZapto.Infrastructure.Services.csproj" />
     <ProjectReference Include="..\WeatherZapto.WebServer.Services\WeatherZapto.WebServer.Services.csproj" />
   </ItemGroup>

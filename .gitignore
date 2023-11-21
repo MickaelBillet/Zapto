@@ -95,3 +95,5 @@
 /Authentication.Infrastructure.Services/obj
 /WeatherZapto.Data.Supervisors/bin/Debug/net7.0
 /WeatherZapto.Data.Supervisors/obj
+/WeatherZapto.Data.Repositories/bin/Debug/net7.0
+/WeatherZapto.Data.Repositories/obj
