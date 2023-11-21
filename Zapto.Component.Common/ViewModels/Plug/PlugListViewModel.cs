@@ -7,7 +7,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IPlugListViewModel : IBaseViewModel
 	{
-		List<PlugModel>? GetPlugModels(RoomModel roomModel);
+        IEnumerable<PlugModel>? GetPlugModels(RoomModel roomModel);
     }
 
 	public class PlugListViewModel : BaseViewModel, IPlugListViewModel
@@ -23,9 +23,9 @@ namespace Zapto.Component.Common.ViewModels
 
         #region Methods
 
-		public List<PlugModel>? GetPlugModels(RoomModel roomModel)
+		public IEnumerable<PlugModel>? GetPlugModels(RoomModel roomModel)
 		{
-            List<PlugModel>? models = null;
+            IEnumerable<PlugModel>? models = null;
 			try
 			{
 				models = roomModel.ConnectedObjectsList?.Where((obj) => obj.Plug != null).Select((obj) => new PlugModel()

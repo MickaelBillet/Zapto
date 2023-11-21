@@ -49,14 +49,14 @@ namespace Zapto.Component.Common.ViewModels
                     ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
                     if (zaptoAirPollution != null)
                     {
-                        model = this.GetModel(zaptoAirPollution);
+                        model = this.Map(zaptoAirPollution);
                     }
                 }
             }
             catch(Exception ex)
             {
                 Debug.WriteLine(ex);
-                throw new Exception("AirPollution Service Exception");
+                throw new Exception("AirPollution Service Exception : " + ex.Message);
             }
             return model;
         }
@@ -69,13 +69,13 @@ namespace Zapto.Component.Common.ViewModels
                 ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
                 if (zaptoAirPollution != null)
                 {
-                    model = this.GetModel(zaptoAirPollution);
+                    model = this.Map(zaptoAirPollution);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                throw new Exception("AirPollution Service Exception");
+                throw new Exception("AirPollution Service Exception : " + ex.Message);
             }
             return model;
         }
@@ -87,17 +87,17 @@ namespace Zapto.Component.Common.ViewModels
                 ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
                 if (zaptoAirPollution != null)
                 {
-                    model = this.GetModel(zaptoAirPollution);
+                    model = this.Map(zaptoAirPollution);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                throw new Exception("AirPollution Service Exception");
+                throw new Exception("AirPollution Service Exception : " + ex.Message);
             }
             return model;
         }
-        private AirPollutionModel GetModel(ZaptoAirPollution zaptoAirPollution)
+        private AirPollutionModel Map(ZaptoAirPollution zaptoAirPollution)
         {
             AirPollutionModel model = new AirPollutionModel()
             {

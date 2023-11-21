@@ -53,7 +53,7 @@ namespace Zapto.Component.Common.ViewModels
 			catch (Exception ex) 
 			{ 
 				Debug.WriteLine(ex);
-				new Exception("Location Service Exception");
+				new Exception("Room Service Exception : " + ex.Message);
 			}
 			return models;
 		}
