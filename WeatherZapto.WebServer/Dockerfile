@@ -27,8 +27,8 @@ COPY ["WeatherZapto.Application.Services/*", "WeatherZapto.Application.Services/
 COPY ["Framework.Infrastructure.Services/*", "Framework.Infrastructure.Services/"]
 COPY ["WeatherZapto.Domain/*", "WeatherZapto.Domain/"]
 COPY ["WeatherZapto.WebServer.Services/*", "WeatherZapto.WebServer.Services/"]
-COPY ["WeatherZapto.Data.Repositories.csproj", "WeatherZapto.Data.Repositories/"]
-COPY ["WeatherZapto.Data.Supervisors.csproj", "WeatherZapto.Data.Supervisors/"]
+COPY ["WeatherZapto.Data.Repositories/*", "WeatherZapto.Data.Repositories/"]
+COPY ["WeatherZapto.Data.Supervisors/*", "WeatherZapto.Data.Supervisors/"]
 COPY ["WeatherZapto.Data.Services/*", "WeatherZapto.Data.Services/"]
 COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
 WORKDIR "/src/WeatherZapto.WebServer"
