@@ -14,7 +14,8 @@ COPY ["WeatherZapto.Application.Services/WeatherZapto.Application.Services.cspro
 COPY ["Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
 COPY ["WeatherZapto.Domain/WeatherZapto.Domain.csproj", "WeatherZapto.Domain/"]
 COPY ["WeatherZapto.WebServer.Services/WeatherZapto.WebServer.Services.csproj", "WeatherZapto.WebServer.Services/"]
-COPY ["WeatherZapto.Data/WeatherZapto.Data.csproj", "WeatherZapto.Data/"]
+COPY ["WeatherZapto.Data.Repositories/WeatherZapto.Data.Repositories.csproj", "WeatherZapto.Data.Repositories/"]
+COPY ["WeatherZapto.Data.Supervisors/WeatherZapto.Data.Supervisors.csproj", "WeatherZapto.Data.Supervisors/"]
 COPY ["WeatherZapto.Data.Services/WeatherZapto.Data.Services.csproj", "WeatherZapto.Data.Services/"]
 COPY ["Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
 RUN dotnet restore "WeatherZapto.WebServer/WeatherZapto.WebServer.csproj"
@@ -26,7 +27,8 @@ COPY ["WeatherZapto.Application.Services/*", "WeatherZapto.Application.Services/
 COPY ["Framework.Infrastructure.Services/*", "Framework.Infrastructure.Services/"]
 COPY ["WeatherZapto.Domain/*", "WeatherZapto.Domain/"]
 COPY ["WeatherZapto.WebServer.Services/*", "WeatherZapto.WebServer.Services/"]
-COPY ["WeatherZapto.Data/*", "WeatherZapto.Data/"]
+COPY ["WeatherZapto.Data.Repositories.csproj", "WeatherZapto.Data.Repositories/"]
+COPY ["WeatherZapto.Data.Supervisors.csproj", "WeatherZapto.Data.Supervisors/"]
 COPY ["WeatherZapto.Data.Services/*", "WeatherZapto.Data.Services/"]
 COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
 WORKDIR "/src/WeatherZapto.WebServer"

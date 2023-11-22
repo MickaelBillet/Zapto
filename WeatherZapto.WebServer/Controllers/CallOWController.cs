@@ -1,7 +1,5 @@
-﻿using Framework.Core.Base;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using WeatherZapto.Data;
 
 namespace WeatherZapto.WebApi.Controllers
