@@ -44,6 +44,20 @@ namespace WeatherZapto.Data.Supervisors
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
+
+        public async Task<long?> GetDayCallsCount(DateOnly date)
+        {
+            long? count = null;
+
+            return count;
+        }
+
+        public async Task<long?> GetLast30DaysCallsCount()
+        {
+            long? count = null;
+
+            return count;
+        }
         #endregion
     }
 }
