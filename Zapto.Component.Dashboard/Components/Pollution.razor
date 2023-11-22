@@ -1,14 +1,48 @@
-﻿
+﻿@inject IStringLocalizer<Resource> Localizer
+
 <MudGrid Class="mb-2">
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <SensorCO2 SensorName="Houilles"></SensorCO2>
+        <ErrorBoundary @ref="ErrorBoundarySensorCO2">
+            <ChildContent>
+                <SensorCO2 SensorName="Houilles"></SensorCO2>
+            </ChildContent>
+            <ErrorContent>
+                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+                    <MudText Typo="Typo.h6" Class="mr-4">AirPollution @this.Localizer["HS"]</MudText>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
+                </MudContainer>
+            </ErrorContent>
+        </ErrorBoundary>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <AirPollution></AirPollution>
+        <ErrorBoundary @ref="ErrorBoundaryAirPollution">
+            <ChildContent>
+                <AirPollution></AirPollution>
+            </ChildContent>
+            <ErrorContent>
+                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+                    <MudText Typo="Typo.h6" Class="mr-4">AirPollution @this.Localizer["HS"]</MudText>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
+                </MudContainer>
+            </ErrorContent>
+        </ErrorBoundary>
     </MudItem>
 </MudGrid>
 
 @code 
-{
+    {
+    private ErrorBoundary? ErrorBoundaryAirPollution;
+    private ErrorBoundary? ErrorBoundarySensorCO2;
 
+    protected override void OnParametersSet()
+    {
+        ErrorBoundaryAirPollution?.Recover();
+        ErrorBoundarySensorCO2?.Recover();
+    }
+
+    private void ResetErrorAirPollution()
+    {
+        ErrorBoundaryAirPollution?.Recover();
+        ErrorBoundarySensorCO2?.Recover();
+    }
 }

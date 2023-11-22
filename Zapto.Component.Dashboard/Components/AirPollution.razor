@@ -13,35 +13,35 @@
     </MudContainer>
     
     <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">                            
-    @if (this.Model != null)
-    {
-        <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">AQI</MudText>
-        <MudText Typo="Typo.h5" Class="ml-3 mr-10">@this.Model?.aqi</MudText>
-        if (this.Model?.aqi == 1) 
+        @if (this.Model != null)
         {
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Success">@Localizer["Good"]</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">AQI</MudText>
+            <MudText Typo="Typo.h5" Class="ml-3 mr-10">@this.Model?.aqi</MudText>
+            if (this.Model?.aqi == 1) 
+            {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Success">@Localizer["Good"]</MudText>
+            }
+            else if (this.Model?.aqi == 2)
+            {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Fair"]</MudText>
+            }
+            else if (this.Model?.aqi == 3)
+            {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Moderate"]</MudText>
+            }
+            else if (this.Model?.aqi == 4)
+            {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Poor"]</MudText>
+            }
+            else if (this.Model?.aqi == 5)
+            {
+                <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
+            }
         }
-        else if (this.Model?.aqi == 2)
+        else
         {
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Fair"]</MudText>
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
         }
-        else if (this.Model?.aqi == 3)
-        {
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Warning">@Localizer["Moderate"]</MudText>
-        }
-        else if (this.Model?.aqi == 4)
-        {
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Poor"]</MudText>
-        }
-        else if (this.Model?.aqi == 5)
-        {
-            <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
-        }
-    }
-    else
-    {
-        <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-    }
     </MudContainer>
 </MudPaper>
 

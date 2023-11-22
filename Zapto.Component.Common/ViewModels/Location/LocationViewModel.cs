@@ -11,6 +11,7 @@ namespace Zapto.Component.Common.ViewModels
     {
         Task<LocationModel?> GetLocationModel(string latitude, string longitude);
         Task TestNotification(string? locationId);
+        Task<LocationModel?> GetLocationModel();
     }
 
     public class LocationViewModel : BaseViewModel, ILocationViewModel
@@ -58,6 +59,25 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.WriteLine(ex);
             }
+        }
+
+        public async Task<LocationModel?> GetLocationModel()
+        {
+            LocationModel? model = null;
+            try
+            {
+                model = (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
+                {
+                    Name = location.City,
+                    Id = location.Id
+                }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                throw new Exception("Location Service Exception : " + ex.Message);
+            }
+            return model;
         }
         #endregion
     }

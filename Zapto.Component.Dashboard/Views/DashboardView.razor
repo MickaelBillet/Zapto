@@ -4,7 +4,7 @@
 
 <ErrorBoundary @ref="ErrorBoundaryLocation">
     <ChildContent>
-        <Location Model="@this.Location"></Location>
+        <Location @bind-Model="@this.Location"></Location>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -26,17 +26,7 @@
     </ErrorContent>
 </ErrorBoundary>
 
-<ErrorBoundary @ref="ErrorBoundaryAirPollution">
-    <ChildContent>
-        <Pollution></Pollution>
-    </ChildContent>
-    <ErrorContent>
-        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">AirPollution @this.Localizer["HS"]</MudText>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
-        </MudContainer>
-    </ErrorContent>
-</ErrorBoundary>
+<Pollution></Pollution>
 
 <ErrorBoundary @ref="ErrorBoundaryConnect">
     <ChildContent>
@@ -53,7 +43,6 @@
 @code 
 {
     public LocationModel? Location { get; set; } 
-    private ErrorBoundary? ErrorBoundaryAirPollution;
     private ErrorBoundary? ErrorBoundaryWeather;
     private ErrorBoundary? ErrorBoundaryConnect;
     private ErrorBoundary? ErrorBoundaryLocation;
@@ -63,7 +52,6 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            this.Location = await this.ViewModel.GetLocationModel();
         }
     }
 
@@ -72,7 +60,6 @@
         if ((this.ViewModel != null) && (this.Location != null))
         {
             ErrorBoundaryWeather?.Recover();
-            ErrorBoundaryAirPollution?.Recover();
             ErrorBoundaryConnect?.Recover();
             ErrorBoundaryLocation?.Recover();
         }
@@ -81,11 +68,6 @@
     private void ResetErrorWeather()
     {
         ErrorBoundaryWeather?.Recover();
-    }
-
-    private void ResetErrorAirPollution()
-    {
-        ErrorBoundaryAirPollution?.Recover();
     }
 
     private void ResetErrorConnect()
