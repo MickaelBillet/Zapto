@@ -1,5 +1,4 @@
 ﻿using Framework.Core.Data;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +13,7 @@ namespace Connect.Data.Entities
         }
 
         [MaxLength(16)]
-        public string? IpAddress
+        public string IpAddress
         {
             get; set;
         }

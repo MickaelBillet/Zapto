@@ -85,7 +85,7 @@ namespace Connect.Data.Supervisors
             return rooms;
         }
 
-        public async Task<Room> GetRoom(string? id)
+        public async Task<Room> GetRoom(string id)
         {
             Room room = RoomMapper.Map(await this.RoomRepository.GetAsync(id));
             if (room != null)

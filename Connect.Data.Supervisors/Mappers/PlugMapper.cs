@@ -17,7 +17,7 @@ namespace Connect.Data.Mappers
                 ConfigurationId = model.ConfigurationId,
                 Status = model.Status,
                 ConnectedObjectId = model.ConnectedObjectId,
-                LastDateTimeOn = model.LastDateTimeOn,
+                LastDateTimeOn = model.LastDateTimeOn.Value,
                 Mode = model.Mode,
                 OnOff = model.OnOff,
                 Order = model.Order,

@@ -97,3 +97,6 @@
 /WeatherZapto.Data.Supervisors/obj
 /WeatherZapto.Data.Repositories/bin/Debug/net7.0
 /WeatherZapto.Data.Repositories/obj
+/Connect.Data.Supervisors/bin/Debug/net7.0
+/Connect.Data.Supervisors/obj
+/Connect.Data/obj

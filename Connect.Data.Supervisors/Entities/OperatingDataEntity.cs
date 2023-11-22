@@ -7,7 +7,7 @@ namespace Connect.Data.Entities
     [Table("OperatingData")]
     public class OperatingDataEntity : ItemEntity
     {
-        public string? ConnectedObjectId { get; set; }
+        public string ConnectedObjectId { get; set; }
         public int? PlugOrder { get; set; }
         public int? PlugStatus { get; set; }
         public double? Temperature { get; set; }

@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Connect.Data.Services\Connect.Data.Services.csproj" />
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+    <ProjectReference Include="..\Connect.Data.Supervisors\Connect.Data.Supervisors.csproj" />
   </ItemGroup>
 
 </Project>

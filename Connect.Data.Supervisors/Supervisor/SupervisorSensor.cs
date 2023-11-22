@@ -5,10 +5,6 @@ using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Connect.Data.Supervisors
 {
@@ -58,7 +54,7 @@ namespace Connect.Data.Supervisors
             return result;
         }
 
-        public async Task<Sensor> GetSensor(string? type, string? channel)
+        public async Task<Sensor> GetSensor(string type, string channel)
         {
             return SensorMapper.Map(await this.SensorRepository.GetAsync(arg => (arg.Name == type) && (arg.Channel == channel)));
         }

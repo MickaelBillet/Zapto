@@ -20,7 +20,7 @@ namespace Connect.Data.Mappers
                 Humidity = model.Humidity,
                 IpAddress = model.IpAddress,
                 IsRunning = (model.IsRunning == RunningStatus.Healthy) ? true : false,
-                LastDateTimeOn = model.LastDateTimeOn,
+                LastDateTimeOn = model.LastDateTimeOn.Value,
                 LeakDetected = model.LeakDetected,
                 Parameter = model.Parameter,
                 Period = string.Empty,

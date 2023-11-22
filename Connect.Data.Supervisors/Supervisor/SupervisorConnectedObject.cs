@@ -5,11 +5,7 @@ using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Connect.Data.Supervisors
 {
@@ -85,7 +81,7 @@ namespace Connect.Data.Supervisors
             return (await this.ConnectedObjectRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<ConnectedObject> GetConnectedObject(string? id, bool loadDependants)
+        public async Task<ConnectedObject> GetConnectedObject(string id, bool loadDependants)
         {
             ConnectedObject obj = ConnectedObjectMapper.Map(await this.ConnectedObjectRepository.GetAsync(id));
             if ((obj != null) && (loadDependants == true))
