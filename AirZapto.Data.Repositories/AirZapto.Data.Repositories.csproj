@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AirZapto.Data.Services\AirZapto.Data.Services.csproj" />
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+    <ProjectReference Include="..\AirZapto.Data.Supervisors\AirZapto.Data.Supervisors.csproj" />
   </ItemGroup>
 
 </Project>

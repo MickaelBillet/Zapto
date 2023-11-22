@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirZapto.Application.Services\AirZapto.Application.Services.csproj" />
-    <ProjectReference Include="..\AirZapto.Data\AirZapto.Data.csproj" />
+    <ProjectReference Include="..\AirZapto.Data.Repositories\AirZapto.Data.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
