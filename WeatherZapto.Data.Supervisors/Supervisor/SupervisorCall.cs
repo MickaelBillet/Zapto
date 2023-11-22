@@ -1,6 +1,5 @@
 ﻿using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using WeatherZapto.Data.Entities;
 using WeatherZapto.Data.Services.Repositories;
 
@@ -15,27 +14,15 @@ namespace WeatherZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorCall(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorCall(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
+            _lazyCallRepository = repositoryFactory?.CreateRepository<CallEntity>(session);
 
-            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                if (repositoryFactory != null)
-                {
-                    _lazyCallRepository = repositoryFactory?.CreateRepository<CallEntity>(context);
-                }
-            }
         }
         #endregion
 
         #region Methods
-        public async Task<ResultCode> AddCallOW()
+        public async Task<ResultCode> AddCallOpenWeather()
         {
             int res = 0;
             CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date.ToUniversalTime() == Clock.Now.Date.ToUniversalTime());

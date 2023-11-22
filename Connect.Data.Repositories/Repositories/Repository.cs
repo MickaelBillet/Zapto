@@ -1,10 +1,7 @@
 ﻿using Connect.Data.DataContext;
-using Connect.Data.Session;
 using Framework.Core.Data;
 using Framework.Data.Abstractions;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 using System.Diagnostics;
 using System.Linq.Expressions;

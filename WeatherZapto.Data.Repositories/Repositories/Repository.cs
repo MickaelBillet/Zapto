@@ -1,6 +1,7 @@
 ﻿using Framework.Core.Data;
 using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Linq.Expressions;
 using WeatherZapto.Data.DataContext;
 
@@ -11,14 +12,16 @@ namespace WeatherZapto.Data.Repositories
 		#region Properties
 		protected WeatherZaptoContext? DataContext { get; } = null;
 		protected DbSet<T>? Table { get; } = null;
-		#endregion
+        protected IDbConnection? DbConnection { get; } = null;
+        #endregion
 
-		#region Constructor
-		public Repository(IDataContext dataContext)
+        #region Constructor
+        public Repository(IDalSession session)
 		{
-			this.DataContext = dataContext as WeatherZaptoContext;
-			this.Table = dataContext.Set<T>();
-		}
+            this.DataContext = session.DataContext as WeatherZaptoContext;
+            this.Table = this.DataContext?.Set<T>();
+            this.DbConnection = session.Connection;
+        }
         #endregion
 
         #region Methods

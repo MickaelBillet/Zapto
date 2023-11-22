@@ -1,4 +1,4 @@
-﻿using Connect.Data.Session;
+﻿using Framework.Data.Abstractions;
 using System.Diagnostics;
 
 namespace Connect.Data.Repositories

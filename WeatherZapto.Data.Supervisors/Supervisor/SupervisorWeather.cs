@@ -1,6 +1,5 @@
 ﻿using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 using WeatherZapto.Data.Entities;
 using WeatherZapto.Data.Mappers;
 using WeatherZapto.Data.Services.Repositories;
@@ -17,22 +16,9 @@ namespace WeatherZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorWeather(IDataContextFactory dataContextFactory, IRepositoryFactory repositoryFactory, IConfiguration configuration)
+        public SupervisorWeather(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            ConnectionType type = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
-            IDataContext context = dataContextFactory.CreateDbContext(type.ConnectionString, type.ServerType)?.context;
-            if (context != null)
-            {
-                if (repositoryFactory != null)
-                {
-                    _lazyWeatherRepository = repositoryFactory?.CreateRepository<WeatherEntity>(context);
-                }
-            }
+            _lazyWeatherRepository = repositoryFactory?.CreateRepository<WeatherEntity>(session);
         }
         #endregion
 

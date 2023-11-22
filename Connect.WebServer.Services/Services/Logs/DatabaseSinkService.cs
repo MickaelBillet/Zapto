@@ -2,11 +2,11 @@
 using Connect.Data.DataContext;
 using Connect.Data.Repositories;
 using Connect.Data.Supervisors;
+using Framework.Core.Domain;
+using Framework.Data.Session;
 using Microsoft.Extensions.Configuration;
 using Serilog.Core;
 using Serilog.Events;
-using Framework.Core.Domain;
-using Connect.Data.Session;
 
 namespace Connect.WebServer.Services
 {

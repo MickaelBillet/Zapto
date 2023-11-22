@@ -3,7 +3,7 @@ using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
-namespace Connect.Data.Session
+namespace Framework.Data.Session
 {
     public sealed class DalSession : IDalSession
     {
@@ -39,8 +39,11 @@ namespace Connect.Data.Session
             if (!string.IsNullOrEmpty(this.ConnectionType?.ConnectionString))
             {
                 (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                this.Connection = obj?.connection;
-                this.DataContext = obj?.context;
+                if (obj != null)
+                {
+                    this.Connection = obj?.connection;
+                    this.DataContext = obj?.context;
+                }
             }
         }
 

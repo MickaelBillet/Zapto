@@ -7,9 +7,9 @@ namespace Connect.Data.Repositories
 {
     public class RepositoryFactory : IRepositoryFactory
     {
-        public Lazy<IRepository<T>>? CreateRepository<T>(IDataContext context) where T : ItemEntity
+        public Lazy<IRepository<T>>? CreateRepository<T>(IDalSession session) where T : ItemEntity
         {
-            return (context != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(context)) : null;
+            return (session != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(session)) : null;
         }
     }
 }

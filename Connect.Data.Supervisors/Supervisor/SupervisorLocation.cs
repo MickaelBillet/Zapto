@@ -1,15 +1,10 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Mappers;
 using Connect.Data.Services.Repositories;
-using Connect.Data.Session;
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Connect.Data.Supervisors
 {

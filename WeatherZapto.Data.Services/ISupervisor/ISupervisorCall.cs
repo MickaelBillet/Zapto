@@ -4,6 +4,6 @@ namespace WeatherZapto.Data
 {
     public interface ISupervisorCall
     {
-        Task<ResultCode> AddCallOW();
+        Task<ResultCode> AddCallOpenWeather();
     }
 }

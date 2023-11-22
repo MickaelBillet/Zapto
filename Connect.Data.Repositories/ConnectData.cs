@@ -1,8 +1,8 @@
 ﻿using Connect.Data.DataContext;
 using Connect.Data.Repositories;
 using Connect.Data.Services.Repositories;
-using Connect.Data.Session;
 using Framework.Data.Abstractions;
+using Framework.Data.Session;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Repository

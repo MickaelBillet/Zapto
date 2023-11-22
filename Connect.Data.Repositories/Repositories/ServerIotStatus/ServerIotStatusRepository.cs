@@ -1,6 +1,6 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Services.Repositories;
-using Connect.Data.Session;
+using Framework.Data.Abstractions;
 
 namespace Connect.Data.Repositories
 {

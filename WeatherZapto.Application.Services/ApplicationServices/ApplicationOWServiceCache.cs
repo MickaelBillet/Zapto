@@ -49,7 +49,7 @@ namespace WeatherZapto.Application.Services
                         zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(APIKey, locationName, longitude, latitude);
                         if (zaptoAirPollution != null)
                         {
-                            await this.SupervisorCall.AddCallOW();
+                            await this.SupervisorCall.AddCallOpenWeather();
                             this.Cache.Set<ZaptoAirPollution>($"AirPollution-{locationName}", zaptoAirPollution, this.MemoryCacheEntryOptions);
                         }
                     }
@@ -79,7 +79,7 @@ namespace WeatherZapto.Application.Services
                         zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(APIKey, locationName, longitude, latitude, language);
                         if (zaptoWeather != null)
                         {
-                            await this.SupervisorCall.AddCallOW();
+                            await this.SupervisorCall.AddCallOpenWeather();
                             this.Cache.Set<ZaptoWeather>($"OpenWeather-{locationName}", zaptoWeather, this.MemoryCacheEntryOptions);
                         }
                     }

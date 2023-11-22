@@ -1,5 +1,4 @@
-﻿using Connect.Data.Session;
-using Framework.Core.Data;
+﻿using Framework.Core.Data;
 using Framework.Data.Abstractions;
 
 namespace Connect.Data.Services.Repositories

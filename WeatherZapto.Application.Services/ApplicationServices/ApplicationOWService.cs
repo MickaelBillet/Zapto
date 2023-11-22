@@ -33,7 +33,7 @@ namespace WeatherZapto.Application.Services
             Location location = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, longitude, latitude)).FirstOrDefault() : null;
             if (location != null)
             {
-                await this.SupervisorCall.AddCallOW();
+                await this.SupervisorCall.AddCallOpenWeather();
                 zaptoLocation = new ZaptoLocation()
                 {
                     Latitude = location.lat,
@@ -50,7 +50,7 @@ namespace WeatherZapto.Application.Services
             AirPollution airPollution = (this.AirPollutionOWService != null) ? await this.AirPollutionOWService.GetAirPollution(APIKey, longitude, latitude) : null;
             if (airPollution != null)
             {
-                await this.SupervisorCall.AddCallOW();
+                await this.SupervisorCall.AddCallOpenWeather();
                 zaptoAirPollution = new ZaptoAirPollution()
                 {
                     aqi = (airPollution?.list != null) ? airPollution?.list[0]?.main?.aqi : null,
@@ -77,7 +77,7 @@ namespace WeatherZapto.Application.Services
             OpenWeather weather = (this.WeatherOWService != null) ? await this.WeatherOWService.GetWeather(APIKey, longitude, latitude, language) : null;
             if (weather != null)
             {
-                await this.SupervisorCall.AddCallOW();
+                await this.SupervisorCall.AddCallOpenWeather();
                 zaptoWeather = new ZaptoWeather()
                 {
                     TimeSpam = DateTimeHelper.ParseUnixTimestamp(weather.dt),

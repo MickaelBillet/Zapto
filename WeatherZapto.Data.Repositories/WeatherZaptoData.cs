@@ -1,5 +1,6 @@
 ﻿using Connect.Data.Repositories;
 using Framework.Data.Abstractions;
+using Framework.Data.Session;
 using Microsoft.Extensions.DependencyInjection;
 using WeatherZapto.Data.DataContext;
 using WeatherZapto.Data.Services.Repositories;
@@ -12,6 +13,7 @@ namespace WeatherZapto.Data.Repository
 		{
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataContextFactory, DataContextFactory>();
+            services.AddTransient<IDalSession, DalSession>();
         }
     }
 }
