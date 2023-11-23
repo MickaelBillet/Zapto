@@ -36,7 +36,7 @@ namespace Framework.Data.Session
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
             };
 
-            if (!string.IsNullOrEmpty(this.ConnectionType?.ConnectionString))
+            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {
                 (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
                 if (obj != null)
