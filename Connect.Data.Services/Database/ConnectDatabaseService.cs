@@ -139,8 +139,8 @@ namespace Connect.Data.Database
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
-                Address = "28109046",
-                Period = 255,
+                Address = "374231",
+                Period = 253,
                 Pin0 = 10,
                 Unit = "0"
             };
