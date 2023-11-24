@@ -84,7 +84,6 @@ namespace Connect.Data.Supervisors
                 plug.Configuration = ConfigurationMapper.Map(await this.ConfigurationRepository.GetAsync((arg) => arg.Id == plug.ConfigurationId));
                 plug.Program = ProgramMapper.Map(await this.ProgramRepository.GetAsync((arg) => arg.Id == plug.ProgramId));
                 plug.Condition = ConditionMapper.Map(await this.ConditionRepository.GetAsync((arg) => arg.Id == plug.ConditionId));
-
                 if (plug.Program != null)
                 {
                     //Read the operation ranges of the program

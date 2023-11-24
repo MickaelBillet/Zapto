@@ -15,7 +15,6 @@ namespace Connect.Data.Repositories
         {
             return (session != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(session)) : null;
         }
-
         public Lazy<IServerIotStatusRepository>? CreateServerIotStatusRepository(IDalSession session) 
         {
             Lazy<IServerIotStatusRepository>? serverIotStatusRepository = null;

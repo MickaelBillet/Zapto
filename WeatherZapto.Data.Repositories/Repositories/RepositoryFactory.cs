@@ -11,6 +11,10 @@ namespace Connect.Data.Repositories
         {
             return (session != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(session)) : null;
         }
+        public Lazy<ICallRepository>? CreateCallRepository(IDalSession session)
+        {
+            return (session != null) ? new Lazy<ICallRepository>(() => new CallRepository(session)) : null;
+        }
     }
 }
  

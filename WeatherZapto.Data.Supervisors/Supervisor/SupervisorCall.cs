@@ -7,16 +7,16 @@ namespace WeatherZapto.Data.Supervisors
 {
     public partial class SupervisorCall : ISupervisorCall
 	{
-        private readonly Lazy<IRepository<CallEntity>> _lazyCallRepository;
+        private readonly Lazy<ICallRepository> _lazyCallRepository;
 
         #region Properties
-        private IRepository<CallEntity> CallRepository => _lazyCallRepository?.Value;
+        private ICallRepository CallRepository => _lazyCallRepository?.Value;
         #endregion
 
         #region Constructor
         public SupervisorCall(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            _lazyCallRepository = repositoryFactory?.CreateRepository<CallEntity>(session);
+            _lazyCallRepository = repositoryFactory?.CreateCallRepository(session);
 
         }
         #endregion
@@ -47,15 +47,13 @@ namespace WeatherZapto.Data.Supervisors
 
         public async Task<long?> GetDayCallsCount(DateOnly date)
         {
-            long? count = null;
-
+            long? count = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.Date.Equals(date))).Count;
             return count;
         }
 
         public async Task<long?> GetLast30DaysCallsCount()
         {
-            long? count = null;
-
+            long? count = await this.CallRepository.GetLast30DaysCallsCount();
             return count;
         }
         #endregion
