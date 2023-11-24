@@ -3,6 +3,7 @@ using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
 using WeatherZapto.Model;
@@ -48,6 +49,10 @@ namespace WeatherZapto.WebServer.Services
                             if (this.DatabaseService.IsInitialized == true)
                             {
                                 ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorAirPollution>().AddAirPollutionAsync(zaptoAirPollution);
+                                if (code != ResultCode.CouldNotCreateItem)
+                                {
+                                    Log.Error("Error : No Storage for AirPollution");
+                                }
                             }
                         }
                     }

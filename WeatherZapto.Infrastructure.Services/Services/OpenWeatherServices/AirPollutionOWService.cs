@@ -1,9 +1,6 @@
 ﻿using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Model;
 

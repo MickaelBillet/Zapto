@@ -20,7 +20,11 @@
             @if (this.Model != null)
             {
                 <MudIcon Icon="@Icons.Material.Filled.Thermostat" Class="mx-2" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.Temperature</MudText>
+                <MudStack>
+                    <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMax</MudText>
+                    <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.Temperature</MudText>
+                    <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMin</MudText>
+                </MudStack>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">°C</MudText>
             }
             else
@@ -68,6 +72,20 @@
 
                 <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.WindSpeed</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">km/h</MudText>
+            }
+            else
+            {
+                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+            }
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
+        <MudPaper Class="d-flex align-center" Style="height:100px;">
+            @if (this.Model != null)
+            {
+                <MudText Typo="Typo.h4" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">P</MudText>
+                <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.Pressure</MudText>
+                <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
             }
             else
             {

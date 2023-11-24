@@ -4,6 +4,6 @@ namespace WeatherZapto.Model
 {
     public class Call : Item
     {
-        public int  Count { get; set; }
+        public int Count { get; set; }
     }
 }

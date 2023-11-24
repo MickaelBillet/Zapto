@@ -11,7 +11,7 @@
                 Id = "0",
                 Name = "Maison",
             };
-            this.LocationViewModel.Setup(x => x.GetConnectLocationModel()).ReturnsAsync(model);
+         //   this.LocationViewModel.Setup(x => x.GetConnectLocationModel()).ReturnsAsync(model);
 
             //Act
             IDashboardViewModel vm = new DashboardViewModel(this.ServiceCollection.BuildServiceProvider());

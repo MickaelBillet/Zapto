@@ -3,6 +3,7 @@ using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
 using WeatherZapto.Model;
@@ -49,6 +50,10 @@ namespace WeatherZapto.WebServer.Services
                             if (this.DatabaseService.IsInitialized == true)
                             {
                                 ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorWeather>().AddWeatherAsync(zaptoWeather);
+                                if (code != ResultCode.CouldNotCreateItem)
+                                {
+                                    Log.Error("Error : No Storage for Weather");
+                                }
                             }
                         }
                     }

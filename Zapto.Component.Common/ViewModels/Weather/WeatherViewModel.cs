@@ -57,6 +57,10 @@ namespace Zapto.Component.Common.ViewModels
 							model = new WeatherModel()
 							{
 								Temperature = weather.Temperature,
+                                TemperatureMax = weather.TemperatureMax, 
+                                TemperatureMin = weather.TemperatureMin,
+                                FeelsLike = weather.FeelsLike,
+                                Pressure = weather.Pressure,
 								WeatherText = weather.WeatherText,
 								WindSpeed = weather.WindSpeed,
 								WindDirection = weather.WindDirection,
@@ -100,6 +104,10 @@ namespace Zapto.Component.Common.ViewModels
                         model = new WeatherModel()
                         {
                             Temperature = weather.Temperature,
+                            TemperatureMax = weather.TemperatureMax,
+                            TemperatureMin = weather.TemperatureMin,
+                            FeelsLike = weather.FeelsLike,
+                            Pressure = weather.Pressure,
                             WeatherText = weather.WeatherText,
                             WindSpeed = weather.WindSpeed,
                             WindDirection = weather.WindDirection,

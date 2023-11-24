@@ -1,6 +1,4 @@
-﻿
-
-using WeatherZapto.Model;
+﻿using WeatherZapto.Model;
 
 namespace Zapto.Web.Test.ViewModels
 {
