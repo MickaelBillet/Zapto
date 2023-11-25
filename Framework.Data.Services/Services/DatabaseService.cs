@@ -20,12 +20,39 @@ namespace Framework.Data.Services
 		#region Constructor
 		public DatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
 		{
+
 			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
 			this.Configuration = configuration;
 		}
         #endregion
 
         #region Methods
+
+        public async Task ConfigureDatabase()
+        {
+            ConnectionType connectionType = new ConnectionType()
+            {
+                ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
+                ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
+            };
+
+            bool isCreated = false;
+            if (this.DatabaseExist(connectionType) == false)
+            {
+                isCreated = this.CreateDatabase(connectionType);
+
+                if (isCreated == true)
+                {
+                    await this.FeedDataAsync();
+                }
+            }
+
+            if (this.DatabaseExist(connectionType) == true)
+            {
+                bool isUpgraded = await this.UpgradeDatabaseAsync();
+                await this.InitializeDataAsync();
+            }
+        }
 
         public virtual async Task InitializeDataAsync()
         {

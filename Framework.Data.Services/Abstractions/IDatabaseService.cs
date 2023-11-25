@@ -13,5 +13,6 @@ namespace Framework.Data.Abstractions
 		Task FeedDataAsync();
 		Task InitializeDataAsync();
 		Task<bool> UpgradeDatabaseAsync();
+		Task ConfigureDatabase();
     }
 }

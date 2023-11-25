@@ -3,11 +3,11 @@
 
 <MudGrid Class="mb-2">
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center gap-4" Style="height:100px;">
+        <MudPaper Class="d-flex align-center gap-4" Style="height:110px;">
            @if (this.Model != null)
            {
                 <MudImage Src="@this.Model?.Image"></MudImage>            
-                <MudText Typo="Typo.h6" Align="Align.Left">@this.Model?.WeatherText</MudText>  
+                <MudText Typo="Typo.h5" Align="Align.Left">@this.Model?.WeatherText</MudText>  
            }
            else
            {
@@ -16,16 +16,24 @@
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center" Style="height:100px;">
+        <MudPaper Class="d-flex align-items-center justify-content-start" Style="height:110px;">
             @if (this.Model != null)
             {
                 <MudIcon Icon="@Icons.Material.Filled.Thermostat" Class="mx-2" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
-                <MudStack>
-                    <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMax</MudText>
-                    <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.Temperature</MudText>
-                    <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMin</MudText>
-                </MudStack>
-                <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">°C</MudText>
+                <div class="d-flex align-items-start flex-column my-4">
+                    <div class="d-flex flex-row align-items-center">
+                        <MudText Typo="Typo.body1" Class="ml-4">Max</MudText>
+                        <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMax</MudText>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Temperature</MudText>
+                        <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">°C</MudText>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <MudText Typo="Typo.body1" Class="ml-4">Min</MudText>
+                        <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.TemperatureMin</MudText>
+                    </div>
+                </div>
             }
             else
             {
@@ -34,7 +42,7 @@
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center" Style="height:100px;">
+        <MudPaper Class="d-flex align-center" Style="height:110px;">
             @if (this.Model != null)
             {
                 if ((this.Model.WindDirection >= 22) && (this.Model.WindDirection < 67))
@@ -70,7 +78,7 @@
                     <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.North" Color="Color.Primary" Style="width:54px; height:54px;"></MudIcon>
                 }
 
-                <MudText Typo="Typo.h5" Class="ml-4">@this.Model?.WindSpeed</MudText>
+                <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.WindSpeed</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">km/h</MudText>
             }
             else
@@ -80,11 +88,11 @@
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
-        <MudPaper Class="d-flex align-center" Style="height:100px;">
+        <MudPaper Class="d-flex align-center" Style="height:110px;">
             @if (this.Model != null)
             {
                 <MudText Typo="Typo.h4" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">P</MudText>
-                <MudText Typo="Typo.h6" Class="ml-4">@this.Model?.Pressure</MudText>
+                <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Pressure</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
             }
             else

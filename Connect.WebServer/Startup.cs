@@ -246,7 +246,6 @@ namespace Connect.WebServer
             });
 
             Log.Logger = app.ConfigureLogger(this.Configuration);
-            app.ConfigureDatabase(this.Configuration);
         }
         #endregion
     }

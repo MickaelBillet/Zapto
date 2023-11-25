@@ -9,7 +9,7 @@ namespace Connect.Data.Entities
         public string ConnectedObjectId { get; set; } = string.Empty;
         [MaxLength(32)] public string Name { get; set; } = string.Empty;
         public int Type { get; set; }
-        public DateTime LastDateTimeOn { get; set; }
+        public DateTime? LastDateTimeOn { get; set; }
         public double WorkingDuration { get; set; }
     }
 }

@@ -30,6 +30,7 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, SensorDataService>();
             services.AddSingleton<IHostedService, SensorEventService>();
             services.AddSingleton<IHostedService, ServerIotConnectionService>();
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddSingleton<IFirebaseService, FirebaseService>((provider) => new FirebaseService(provider, "./connect-notification-9314f-firebase-adminsdk-m70fo-6cfc9a1076.json"));
         }
     }

@@ -55,7 +55,13 @@ namespace Connect.Data.Supervisors
 
         public async Task<Sensor> GetSensor(string type, string channel)
         {
-            return SensorMapper.Map(await this.SensorRepository.GetAsync(arg => (arg.Name == type) && (arg.Channel == channel)));
+            Sensor sensor = null;
+            SensorEntity entity = await this.SensorRepository.GetAsync(arg => (arg.Name == type) && (arg.Channel == channel));
+            if (entity != null) 
+            {
+                sensor = SensorMapper.Map(entity);
+            }
+            return sensor;
         }
 
         public async Task<(ResultCode, Sensor)> UpdateSensor(Sensor sensor)

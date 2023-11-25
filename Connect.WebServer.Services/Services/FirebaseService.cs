@@ -1,4 +1,5 @@
-﻿using Connect.Data;
+﻿using Connect.Application.Infrastructure;
+using Connect.Data;
 using Connect.Model;
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
@@ -10,7 +11,7 @@ using Notification = FirebaseAdmin.Messaging.Notification;
 
 namespace Connect.WebServer.Services
 {
-    public class FirebaseService : Application.Infrastructure.IFirebaseService
+    public class FirebaseService : IFirebaseService
     {
         #region Properties
         private static FirebaseApp? FirebaseApp { get; set; }

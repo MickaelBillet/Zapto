@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore;
+﻿using Framework.Infrastructure.Services;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.IO;
@@ -27,6 +29,13 @@ namespace Connect.WebServer
             try
             {
                 IWebHost host = BuildWebHost(args).Build();
+
+                var startupTasks = host.Services.GetServices<IStartupTask>();
+                foreach (var startupTask in startupTasks) 
+                {
+                    await startupTask.Execute();
+                }
+
                 await host.RunAsync();
             }
             catch (Exception ex)
