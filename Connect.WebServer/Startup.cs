@@ -244,8 +244,6 @@ namespace Connect.WebServer
                 await context.Response.WriteAsync(error);
                 Log.Error(error);
             });
-
-            Log.Logger = app.ConfigureLogger(this.Configuration);
         }
         #endregion
     }

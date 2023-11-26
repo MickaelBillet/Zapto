@@ -14,13 +14,12 @@ namespace Framework.Data.Services
 		#region Properties
 		protected IDataContextFactory? DataContextFactory { get; }
 		protected IConfiguration Configuration { get; }
-		public bool IsInitialized { get; private set; }
+        protected bool IsInitialized { get; private set; }
 		#endregion
 
 		#region Constructor
 		public DatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
 		{
-
 			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
 			this.Configuration = configuration;
 		}
@@ -40,7 +39,6 @@ namespace Framework.Data.Services
             if (this.DatabaseExist(connectionType) == false)
             {
                 isCreated = this.CreateDatabase(connectionType);
-
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync();
@@ -54,17 +52,17 @@ namespace Framework.Data.Services
             }
         }
 
-        public virtual async Task InitializeDataAsync()
+        protected virtual async Task InitializeDataAsync()
         {
             this.IsInitialized = await Task.FromResult<bool>(true);
         }
 
-        public virtual async Task<bool> UpgradeDatabaseAsync()
+        protected virtual async Task<bool> UpgradeDatabaseAsync()
         {
             return await Task.FromResult<bool>(true);
         }
 
-        public bool DropDatabase(ConnectionType connectionType)
+        protected bool DropDatabase(ConnectionType connectionType)
 		{
 			bool res = false;
 
@@ -82,7 +80,7 @@ namespace Framework.Data.Services
 			return res;
 		}
 
-		public bool CreateDatabase(ConnectionType connectionType)
+        protected bool CreateDatabase(ConnectionType connectionType)
 		{
 			bool res = false;
 
@@ -100,7 +98,7 @@ namespace Framework.Data.Services
 			return res;
 		}
 
-		public bool DatabaseExist(ConnectionType connectionType)
+        protected bool DatabaseExist(ConnectionType connectionType)
 		{
 			bool res = false;
 
@@ -118,12 +116,12 @@ namespace Framework.Data.Services
 			return res;
 		}
 
-		public bool DatabaseIsInitialized()
+        protected bool DatabaseIsInitialized()
 		{
 			return this.IsInitialized;
 		}
 
-		public virtual async Task FeedDataAsync()
+        protected virtual async Task FeedDataAsync()
 		{
 			await Task.FromResult(0);
 		}

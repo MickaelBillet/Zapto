@@ -21,7 +21,7 @@ namespace Connect.Data.Database
         #endregion
 
         #region Methods
-        public override async Task<bool> InitializeDataAsync()
+        protected override async Task<bool> InitializeDataAsync()
         {
             bool res = true;
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -46,7 +46,7 @@ namespace Connect.Data.Database
             }
             return res;
         }
-        public override async Task<bool> UpgradeDatabaseAsync()
+        protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -73,7 +73,7 @@ namespace Connect.Data.Database
             }
             return res;
         }
-        public override async Task FeedDataAsync()
+        protected override async Task FeedDataAsync()
         {
             #region Location
 

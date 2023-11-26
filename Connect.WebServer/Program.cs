@@ -29,7 +29,6 @@ namespace Connect.WebServer
             try
             {
                 IWebHost host = BuildWebHost(args).Build();
-
                 var startupTasks = host.Services.GetServices<IStartupTask>();
                 foreach (var startupTask in startupTasks) 
                 {

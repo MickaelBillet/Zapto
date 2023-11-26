@@ -9,14 +9,19 @@ namespace Connect.WebServer.Services
         #region Services
         private IDatabaseService DatabaseService { get; }
         #endregion
+
+        #region Constructor
         public CreateDatabaseStartupTask(IServiceProvider serviceProvider)
         {
             this.DatabaseService = serviceProvider.GetRequiredService<IDatabaseService>();  
         }
+        #endregion
 
+        #region
         public async Task Execute()
         {
             await this.DatabaseService.ConfigureDatabase();
         }
+        #endregion
     }
 }
