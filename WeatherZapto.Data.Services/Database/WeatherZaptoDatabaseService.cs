@@ -21,7 +21,7 @@ namespace WeatherZapto.Data.Services
 
         #region Methods
 
-        public override async Task<bool> UpgradeDatabaseAsync()
+        protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())

@@ -7,7 +7,9 @@
 <div class="d-flex align-center gap-4 mb-2">
     @if (this.Model != null)
     {
-        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+        <MudContainer Class="d-flex justify-content-between" Style="width:400px">
+            <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+        </MudContainer>
     }
     else
     {
