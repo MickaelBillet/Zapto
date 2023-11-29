@@ -1,6 +1,8 @@
+using Framework.Infrastructure.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.IO;
@@ -28,6 +30,11 @@ namespace AirZapto.WebServer
             try
             {
                 IWebHost host = BuildWebHost(args).Build();
+                var startupTasks = host.Services.GetServices<IStartupTask>();
+                foreach (var task in startupTasks)
+                {
+                    await task.Execute();
+                }
                 await host.RunAsync();
             }
             catch (Exception ex)

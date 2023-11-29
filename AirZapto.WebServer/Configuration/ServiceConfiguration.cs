@@ -3,6 +3,7 @@ using AirZapto.Data;
 using AirZapto.Data.Database;
 using AirZapto.WebServer.Services;
 using Framework.Data.Abstractions;
+using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +24,8 @@ namespace AirZapto.WebServices.Configuration
 			services.AddSingleton<IHostedService, SensorConnectionService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, DailyService>();
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+            services.AddTransient<IStartupTask, ConfigureLoggerStartupTask>();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 
-namespace Connect.WebServer.Services
+namespace Framework.Data.Services
 {
     public class CreateDatabaseStartupTask : IStartupTask
     {

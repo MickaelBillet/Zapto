@@ -12,7 +12,9 @@ namespace WeatherZapto.WebServer.Services
 {
     public sealed class HomeWeatherAcquisitionService : BackgroundService
     {
-        private readonly TimeSpan _updateInterval = TimeSpan.FromMinutes(15);
+        #region Properties
+        private TimeSpan AcquisitionPeriod { get; init; }
+        #endregion
 
         #region Services
         private IConfiguration Configuration { get; }
@@ -28,6 +30,7 @@ namespace WeatherZapto.WebServer.Services
             this.ApplicationOWService = serviceProvider?.GetRequiredService<IApplicationOWService>();
             this.DatabaseService = serviceProvider?.GetRequiredService<IDatabaseService>();
             this.ServiceScopeFactory = serviceScopeFactory;
+            this.AcquisitionPeriod = new TimeSpan(0, int.Parse(this.Configuration["AcquisitionPeriod"]), 0);
         }
         #endregion
 
@@ -50,7 +53,7 @@ namespace WeatherZapto.WebServer.Services
                             if (this.DatabaseService.DatabaseIsInitialized())
                             {
                                 ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorWeather>().AddWeatherAsync(zaptoWeather);
-                                if (code != ResultCode.CouldNotCreateItem)
+                                if (code != ResultCode.Ok)
                                 {
                                     Log.Error("Error : No Storage for Weather");
                                 }
@@ -58,7 +61,7 @@ namespace WeatherZapto.WebServer.Services
                         }
                     }
 
-                    await Task.Delay(_updateInterval, stoppingToken);
+                    await Task.Delay(this.AcquisitionPeriod, stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {

@@ -232,9 +232,6 @@ namespace AirZapto.WebServer
 				await context.Response.WriteAsync(error);
                 Log.Error(error);
             });
-
-            Log.Logger = app.UseSerilog(this.Configuration);
-            app.ConfigureDatabase(this.Configuration);
         }
 		#endregion
 	}

@@ -4,6 +4,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -203,8 +204,11 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-Log.Logger = app.UseSerilog(builder.Configuration);
-app.ConfigureDatabase(builder.Configuration);
+var startupTasks = app.Services.GetServices<IStartupTask>();
+foreach (var task in startupTasks)
+{
+    await task.Execute();
+}
 
 app.Run();
 

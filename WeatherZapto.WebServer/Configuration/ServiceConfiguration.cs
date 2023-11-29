@@ -1,4 +1,5 @@
 ﻿using Framework.Data.Abstractions;
+using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
@@ -19,6 +20,8 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
             services.AddSingleton<IHostedService, HomeAirPollutionAcquisitionService>();
             services.AddSingleton<IHostedService, HomeWeatherAcquisitionService>();
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+            services.AddTransient<IStartupTask, ConfigureLoggerStartupTask>();
             services.AddApplicationWeaterZaptoServices();
             services.AddSingleton<CacheSignal>();
             services.AddSupervisor();

@@ -5,6 +5,7 @@ using Connect.Data.Database;
 using Connect.Data.Repository;
 using Connect.WebServer.Services;
 using Framework.Data.Abstractions;
+using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace Connect.WebServer.Services
+namespace WeatherZapto.WebServer.Services
 {
     public class ConfigureLoggerStartupTask : IStartupTask
     {

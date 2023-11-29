@@ -20,7 +20,7 @@ namespace AirZapto.Data.Database
         #endregion
 
         #region Methods
-        public override async Task<bool> UpgradeDatabaseAsync()
+        protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -43,7 +43,7 @@ namespace AirZapto.Data.Database
             return res;
         }
 
-        public override async Task FeedDataAsync()
+        protected override async Task FeedDataAsync()
         {
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {
