@@ -1,7 +1,5 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationViewModel ViewModel
-@inject IPositionService PositionService
-@inject IJSRuntime JsRuntime
 @implements IDisposable
 
 <div class="d-flex align-center gap-4 mb-2">
@@ -9,6 +7,15 @@
     {
         <MudContainer Class="d-flex justify-content-between" Style="width:400px">
             <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+            <MudAutocomplete T="string" 
+                                Label="@Localizer["CityZipCode"]" 
+                                @bind-Value="value" 
+                                SearchFunc="@Search" 
+                                ResetValueOnEmptyText="true"
+                                CoerceText="true"
+                                CoerceValue="true"
+                                AdornmentIcon="@Icons.Material.Filled.Search" 
+                                AdornmentColor="Color.Primary" />
         </MudContainer>
     }
     else
@@ -25,6 +32,8 @@
     public string Latitude { get; set; }
 
     public LocationModel Model { get; set; }
+
+    private string value;
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,5 +58,10 @@
     public void Dispose()
     {
         this.ViewModel?.Dispose();
+    }
+
+    private async Task<IEnumerable<string>> Search(string value)
+    {
+        return Enumerable.Empty<string>();
     }
 }

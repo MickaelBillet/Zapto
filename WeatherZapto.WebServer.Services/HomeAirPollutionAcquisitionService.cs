@@ -46,7 +46,7 @@ namespace WeatherZapto.WebServer.Services
                     {
                         using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                         {
-                            if (this.DatabaseService.IsInitialized == true)
+                            if (this.DatabaseService.DatabaseIsInitialized())
                             {
                                 ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorAirPollution>().AddAirPollutionAsync(zaptoAirPollution);
                                 if (code != ResultCode.CouldNotCreateItem)

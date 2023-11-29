@@ -14,7 +14,7 @@ namespace Framework.Data.Services
 		#region Properties
 		protected IDataContextFactory? DataContextFactory { get; }
 		protected IConfiguration Configuration { get; }
-        protected bool IsInitialized { get; private set; }
+        private bool IsInitialized { get; set; }
 		#endregion
 
 		#region Constructor
@@ -116,7 +116,7 @@ namespace Framework.Data.Services
 			return res;
 		}
 
-        protected bool DatabaseIsInitialized()
+        public bool DatabaseIsInitialized()
 		{
 			return this.IsInitialized;
 		}
