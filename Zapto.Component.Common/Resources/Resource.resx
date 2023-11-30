@@ -150,8 +150,8 @@
   <data name="Check the performances of the servers" xml:space="preserve">
     <value>Check the performances of the servers</value>
   </data>
-  <data name="CityZipCode" xml:space="preserve">
-    <value>Search for a city by name or zipcode</value>
+  <data name="CitySearch" xml:space="preserve">
+    <value>Search for a city</value>
   </data>
   <data name="CO" xml:space="preserve">
     <value>Carbon monoxide</value>

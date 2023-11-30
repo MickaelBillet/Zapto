@@ -2,21 +2,23 @@
 @inject ILocationViewModel ViewModel
 @implements IDisposable
 
-<div class="d-flex align-center gap-4 mb-2">
+<div class="d-flex flex-column">
     @if (this.Model != null)
     {
-        <MudContainer Class="d-flex justify-content-between" Style="width:400px">
-            <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
-            <MudAutocomplete T="string" 
-                                Label="@Localizer["CityZipCode"]" 
-                                @bind-Value="value" 
-                                SearchFunc="@Search" 
-                                ResetValueOnEmptyText="true"
-                                CoerceText="true"
-                                CoerceValue="true"
-                                AdornmentIcon="@Icons.Material.Filled.Search" 
-                                AdornmentColor="Color.Primary" />
-        </MudContainer>
+        <div class="d-flex justify-content-between mb-6">
+            <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Model.Name</MudText>
+            <div style="width:400px">
+                <MudAutocomplete T="string"
+                                 Label="@Localizer["CitySearch"]"
+                                 @bind-Value="value"
+                                 SearchFunc="@Search"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search"
+                                 AdornmentColor="Color.Primary" />
+            </div>
+        </div>
     }
     else
     {
