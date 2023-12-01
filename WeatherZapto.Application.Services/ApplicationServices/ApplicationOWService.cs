@@ -27,12 +27,13 @@ namespace WeatherZapto.Application.Services
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<ZaptoLocation>> GetLocation(string APIKey, string city, string stateCode, string countryCode)
+        public async Task<IEnumerable<ZaptoLocation>> GetLocationFromCity(string APIKey, string city, string stateCode, string countryCode)
         {
             IEnumerable<ZaptoLocation> zaptoLocations = null;
-            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, city, stateCode, countryCode)) : null;
+            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocationsFromCity(APIKey, city, stateCode, countryCode)) : null;
             if (locations != null)
             {
+                await this.SupervisorCall.AddCallOpenWeather();
                 zaptoLocations = locations.Select((location) =>
                 {
                     return new ZaptoLocation()
@@ -44,15 +45,14 @@ namespace WeatherZapto.Application.Services
                         State = location.state, 
                     };
                 });
-                await this.SupervisorCall.AddCallOpenWeather();
             }
             return zaptoLocations;
         }
 
-        public async Task<IEnumerable<ZaptoLocation>> GetLocation(string APIKey, string zipCode, string countryCode)
+        public async Task<IEnumerable<ZaptoLocation>> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode)
         {
             IEnumerable<ZaptoLocation> zaptoLocations = null;
-            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, zipCode, countryCode)) : null;
+            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocationsFromZipCode(APIKey, zipCode, countryCode)) : null;
             if (locations != null)
             {
                 await this.SupervisorCall.AddCallOpenWeather();

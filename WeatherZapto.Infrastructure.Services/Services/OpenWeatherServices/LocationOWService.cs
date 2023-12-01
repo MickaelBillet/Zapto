@@ -35,13 +35,13 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
                                                                                             this.SerializerOptions,
                                                                                             new CancellationToken());
         }
-        public async Task<IEnumerable<Location>> GetLocations(string APIKey, string city, string stateCode, string countryCode)
+        public async Task<IEnumerable<Location>> GetLocationsFromCity(string APIKey, string city, string stateCode, string countryCode)
         {
             return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationCity, city, stateCode, countryCode, LIMIT, APIKey),
                                                                                             this.SerializerOptions,
                                                                                             new CancellationToken());
         }
-        public async Task<IEnumerable<Location>> GetLocations(string APIKey, string zipCode, string countryCode)
+        public async Task<IEnumerable<Location>> GetLocationsFromZipCode(string APIKey, string zipCode, string countryCode)
         {
             return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationZipCode, zipCode, countryCode, LIMIT, APIKey),
                                                                                             this.SerializerOptions,

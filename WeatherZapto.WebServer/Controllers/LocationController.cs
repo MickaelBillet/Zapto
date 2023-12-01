@@ -66,7 +66,7 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null))
                 {
-                    zaptoLocations = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], city, state, country);
+                    zaptoLocations = await this.ApplicationOWService.GetLocationFromCity(this.Configuration["OpenWeatherAPIKey"], city, state, country);
                     if (zaptoLocations != null)
                     {
                         return StatusCode(200, zaptoLocations);
@@ -99,7 +99,7 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null))
                 {
-                    zaptoLocations = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], zipcode, country);
+                    zaptoLocations = await this.ApplicationOWService.GetLocationFromZipCode(this.Configuration["OpenWeatherAPIKey"], zipcode, country);
                     if (zaptoLocations != null)
                     {
                         return StatusCode(200, zaptoLocations);
