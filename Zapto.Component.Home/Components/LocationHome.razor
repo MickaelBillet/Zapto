@@ -62,8 +62,8 @@
         this.ViewModel?.Dispose();
     }
 
-    private async Task<IEnumerable<string>> Search(string value)
+    private async Task<IEnumerable<string>> Search(string input)
     {
-        return Enumerable.Empty<string>();
+        return await Task.Run<IEnumerable<string>>(() => this.ViewModel.GetLocations(input));
     }
 }

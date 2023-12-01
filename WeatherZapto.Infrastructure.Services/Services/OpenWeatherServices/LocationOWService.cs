@@ -29,9 +29,21 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<Location>> GetLocations(string APIKey, string longitude, string latitude)
+        public async Task<IEnumerable<Location>> GetReverseLocations(string APIKey, string longitude, string latitude)
         {
-            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocation, latitude, longitude, LIMIT, APIKey),
+            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWReverseLocation, latitude, longitude, LIMIT, APIKey),
+                                                                                            this.SerializerOptions,
+                                                                                            new CancellationToken());
+        }
+        public async Task<IEnumerable<Location>> GetLocations(string APIKey, string city, string stateCode, string countryCode)
+        {
+            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationCity, city, stateCode, countryCode, LIMIT, APIKey),
+                                                                                            this.SerializerOptions,
+                                                                                            new CancellationToken());
+        }
+        public async Task<IEnumerable<Location>> GetLocations(string APIKey, string zipCode, string countryCode)
+        {
+            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationZipCode, zipCode, countryCode, LIMIT, APIKey),
                                                                                             this.SerializerOptions,
                                                                                             new CancellationToken());
         }

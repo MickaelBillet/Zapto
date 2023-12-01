@@ -1,6 +1,7 @@
 ﻿using Connect.Application;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -12,6 +13,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<LocationModel?> GetLocationModel(string latitude, string longitude);
         Task TestNotification(string? locationId);
         Task<LocationModel?> GetLocationModel();
+        IEnumerable<string>? GetLocations(string input);
     }
 
     public class LocationViewModel : BaseViewModel, ILocationViewModel
@@ -30,6 +32,30 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
+
+        public IEnumerable<string>? GetLocations(string input)
+        {
+            IEnumerable<string>? output = null;
+
+            Regex regex = new Regex(@"^(([A-Z][a-z]+\s?)+,?\s?([A-Z,a-z]{0,2})?\s?(\d{5})?)$");
+            Match? match = regex.Match(input);
+            if (match.Success)
+            {
+                output = match.Groups.Values.Select(item => item.Value);
+            }
+            else
+            {
+                regex = new Regex(@"^((\d{5})\s?,?([A-Z,a-z]{0,2})?)$");
+                match = regex.Match(input);
+                if (match.Success)
+                {
+                    output = match.Groups.Values.Select(item => item.Value);
+                }
+            }
+
+            return output;
+        }
+
         public async Task<LocationModel?> GetLocationModel(string latitude, string longitude)
         {
             LocationModel? model = null;

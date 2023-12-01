@@ -19,7 +19,7 @@ namespace WeatherZapto.Infrastructure.WebServices
         #region Method  
         public async Task<HealthCheckWeatherZapto> GetHealthCheckWeatherZapto(CancellationToken token = default)
         {
-            return await WebService.GetAsync<HealthCheckWeatherZapto>(WeatherZaptoConstants.RestUrlHealthCheck, null, null, token); ;
+            return await WebService.GetAsync<HealthCheckWeatherZapto>(WeatherZaptoConstants.UrlHealthCheck, null, null, token); ;
         }
         #endregion
     }

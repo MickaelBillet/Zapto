@@ -26,17 +26,83 @@ namespace WeatherZapto.WebServer.Controllers
 
         #region Methods 
         [HttpGet("lon={longitude}&lat={latitude}")]
-        public async Task<IActionResult> GetLocation(string longitude, string latitude)
+        public async Task<IActionResult> GetReverseLocation(string longitude, string latitude)
         {
             ZaptoLocation? zaptoLocation = null;
             try
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null))
                 {
-                    zaptoLocation = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
+                    zaptoLocation = await this.ApplicationOWService.GetReverseLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
                     if (zaptoLocation != null)
                     {
                         return StatusCode(200, zaptoLocation);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    return Problem("Services not configured", null, 500, "Server Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomErrorResponse
+                {
+                    Message = ex.Message,
+                    Description = string.Empty,
+                    Code = 500,
+                });
+            }
+        }
+        [HttpGet("city={city}&state={state}&country={country}")]
+        public async Task<IActionResult> GetLocationFromCity(string city, string state, string country)
+        {
+            IEnumerable<ZaptoLocation>? zaptoLocations = null;
+            try
+            {
+                if ((this.Configuration != null) && (this.ApplicationOWService != null))
+                {
+                    zaptoLocations = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], city, state, country);
+                    if (zaptoLocations != null)
+                    {
+                        return StatusCode(200, zaptoLocations);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    return Problem("Services not configured", null, 500, "Server Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomErrorResponse
+                {
+                    Message = ex.Message,
+                    Description = string.Empty,
+                    Code = 500,
+                });
+            }
+        }
+        [HttpGet("zip={zipcode}&country={country}")]
+        public async Task<IActionResult> GetLocationFromZipCode(string zipcode, string country)
+        {
+            IEnumerable<ZaptoLocation>? zaptoLocations = null;
+            try
+            {
+                if ((this.Configuration != null) && (this.ApplicationOWService != null))
+                {
+                    zaptoLocations = await this.ApplicationOWService.GetLocation(this.Configuration["OpenWeatherAPIKey"], zipcode, country);
+                    if (zaptoLocations != null)
+                    {
+                        return StatusCode(200, zaptoLocations);
                     }
                     else
                     {

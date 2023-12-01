@@ -19,7 +19,7 @@ namespace WeatherZapto.Infrastructure.WebServices
         #region Methods
         public async Task<ZaptoAirPollution> GetAirPollution(string longitude, string latitude)
         {
-            return await this.WebService.GetAsync<ZaptoAirPollution>(string.Format(WeatherZaptoConstants.RestUrlAirPollution, longitude, latitude),
+            return await this.WebService.GetAsync<ZaptoAirPollution>(string.Format(WeatherZaptoConstants.UrlAirPollution, longitude, latitude),
                                                                                                     null,
                                                                                                     this.SerializerOptions,
                                                                                                     new CancellationToken()); ;
@@ -27,7 +27,7 @@ namespace WeatherZapto.Infrastructure.WebServices
 
         public async Task<ZaptoAirPollution> GetAirPollution(string location, string longitude, string latitude)
         {
-            return await this.WebService.GetAsync<ZaptoAirPollution>(string.Format(WeatherZaptoConstants.RestUrlAirPollutionLocation, location, longitude, latitude),
+            return await this.WebService.GetAsync<ZaptoAirPollution>(string.Format(WeatherZaptoConstants.UrlAirPollutionLocation, location, longitude, latitude),
                                                                                                     null,
                                                                                                     this.SerializerOptions,
                                                                                                     new CancellationToken()); ;

@@ -27,10 +27,54 @@ namespace WeatherZapto.Application.Services
         #endregion
 
         #region Methods
-        public async Task<ZaptoLocation> GetLocation(string APIKey, string longitude, string latitude)
+        public async Task<IEnumerable<ZaptoLocation>> GetLocation(string APIKey, string city, string stateCode, string countryCode)
+        {
+            IEnumerable<ZaptoLocation> zaptoLocations = null;
+            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, city, stateCode, countryCode)) : null;
+            if (locations != null)
+            {
+                zaptoLocations = locations.Select((location) =>
+                {
+                    return new ZaptoLocation()
+                    {
+                        Latitude = location.lat,
+                        Longitude = location.lon,
+                        Location = location.name,
+                        Country = location.country,
+                        State = location.state, 
+                    };
+                });
+                await this.SupervisorCall.AddCallOpenWeather();
+            }
+            return zaptoLocations;
+        }
+
+        public async Task<IEnumerable<ZaptoLocation>> GetLocation(string APIKey, string zipCode, string countryCode)
+        {
+            IEnumerable<ZaptoLocation> zaptoLocations = null;
+            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, zipCode, countryCode)) : null;
+            if (locations != null)
+            {
+                await this.SupervisorCall.AddCallOpenWeather();
+                zaptoLocations = locations.Select((location) =>
+                {
+                    return new ZaptoLocation()
+                    {
+                        Latitude = location.lat,
+                        Longitude = location.lon,
+                        Location = location.name,
+                        Country = location.country,
+                        State = location.state,
+                    };
+                });
+            }
+            return zaptoLocations;
+        }
+
+        public async Task<ZaptoLocation> GetReverseLocation(string APIKey, string longitude, string latitude)
         {
             ZaptoLocation zaptoLocation = null;
-            Location location = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocations(APIKey, longitude, latitude)).FirstOrDefault() : null;
+            Location location = (this.LocationOWService != null) ? (await this.LocationOWService.GetReverseLocations(APIKey, longitude, latitude)).FirstOrDefault() : null;
             if (location != null)
             {
                 await this.SupervisorCall.AddCallOpenWeather();
