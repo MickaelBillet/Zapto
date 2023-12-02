@@ -23,16 +23,34 @@ namespace WeatherZapto.Infrastructure.WebServices
 
         public async Task<IEnumerable<ZaptoLocation>> GetLocations(string city, string stateCode, string countryCode)
         {
-            return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationCity, city, stateCode, countryCode),
+            if (string.IsNullOrEmpty(countryCode) == false)
+            {
+                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationCity2, city, countryCode),
                                                                                                 this.SerializerOptions,
                                                                                                 new CancellationToken());
+            }
+            else
+            {
+                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationCity1, city),
+                                                                                                this.SerializerOptions,
+                                                                                                new CancellationToken());
+            }
         }
 
         public async Task<IEnumerable<ZaptoLocation>> GetLocations(string zipCode, string countryCode)
         {
-            return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode, zipCode, countryCode),
+            if (string.IsNullOrEmpty(countryCode) == false) 
+            {
+                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode2, zipCode, countryCode),
                                                                                                 this.SerializerOptions,
                                                                                                 new CancellationToken());
+            }
+            else
+            {
+                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode1, zipCode),
+                                                                                                this.SerializerOptions,
+                                                                                                new CancellationToken());
+            }
         }
         #endregion
     }

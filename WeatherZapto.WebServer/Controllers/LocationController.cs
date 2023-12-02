@@ -58,8 +58,10 @@ namespace WeatherZapto.WebServer.Controllers
                 });
             }
         }
-        [HttpGet("city={city}&state={state}&country={country}")]
-        public async Task<IActionResult> GetLocationFromCity(string city, string state, string country)
+
+        [HttpGet("city={city}")]
+        [HttpGet("city={city}&country={country}")]
+        public async Task<IActionResult> GetLocationFromCity(string city, string? state, string? country)
         {
             IEnumerable<ZaptoLocation>? zaptoLocations = null;
             try
@@ -91,8 +93,10 @@ namespace WeatherZapto.WebServer.Controllers
                 });
             }
         }
+
+        [HttpGet("zip={zipcode}")]
         [HttpGet("zip={zipcode}&country={country}")]
-        public async Task<IActionResult> GetLocationFromZipCode(string zipcode, string country)
+        public async Task<IActionResult> GetLocationFromZipCode(string zipcode, string? country)
         {
             IEnumerable<ZaptoLocation>? zaptoLocations = null;
             try

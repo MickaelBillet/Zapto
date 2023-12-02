@@ -12,7 +12,7 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
         protected IWebService WebService { get; private set; }
         protected IConfiguration Configuration { get; private set; }
         protected JsonSerializerOptions SerializerOptions { get; private set; }
-        private const string LIMIT = "1";
+        private const string LIMIT = "10";
         #endregion
 
         #region Constructor

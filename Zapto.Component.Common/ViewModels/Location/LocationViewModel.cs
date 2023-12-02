@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<LocationModel?> GetLocationModel(string latitude, string longitude);
         Task TestNotification(string? locationId);
         Task<LocationModel?> GetLocationModel();
-        IEnumerable<string>? GetLocations(string input);
+        Task<IEnumerable<string?>>? GetLocations(string input);
     }
 
     public class LocationViewModel : BaseViewModel, ILocationViewModel
@@ -33,26 +33,65 @@ namespace Zapto.Component.Common.ViewModels
 
         #region Methods
 
-        public IEnumerable<string>? GetLocations(string input)
+        public async Task<IEnumerable<string?>>? GetLocations(string input)
         {
-            IEnumerable<string>? output = null;
+            IEnumerable<string?>? output = null;
 
-            Regex regex = new Regex(@"^(([A-Z][a-z]+\s?)+,?\s?([A-Z,a-z]{0,2})?\s?(\d{5})?)$");
+            Regex regex = new Regex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$");
             Match? match = regex.Match(input);
             if (match.Success)
             {
-                output = match.Groups.Values.Select(item => item.Value);
+                (string? city, string? countrycode)? city = this.ReadGroupCity(match.Groups);
+                if ((city != null) && (city.Value.city!.Length > 1))
+                {
+                    IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(city.Value.city, string.Empty, city.Value.countrycode);
+                    output = locations.GroupBy(x => new
+                    { x.Location, x.State, x.Country, x.Latitude, x.Longitude }).Select(y => y.First()).Select(x => x.Location + " " + x.State + " " + x.Country + " " + x.Latitude.ToString("F3") + " " + x.Longitude.ToString("F3"));
+                }
             }
             else
             {
-                regex = new Regex(@"^((\d{5})\s?,?([A-Z,a-z]{0,2})?)$");
+                regex = new Regex(@"^(\d{5})\s?,?([A-Z,a-z]{2})?$");
                 match = regex.Match(input);
                 if (match.Success)
                 {
-                    output = match.Groups.Values.Select(item => item.Value);
+                    (string? zipcode, string? countrycode)? zipcode = this.ReadGroupZipCode(match.Groups);
+                    if (zipcode != null)
+                    {
+                        IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(zipcode.Value.zipcode, zipcode.Value.countrycode);
+                        output = locations.Select(x => x.Location + " " + x.Country);
+                    }
                 }
             }
 
+            return output;
+        }
+
+        private (string? city, string? countrycode)? ReadGroupCity(GroupCollection groupCollection)
+        {
+            (string? city, string? countrycode)? output = null;            
+            if (groupCollection != null)
+            {
+                output = new()
+                {
+                    city = groupCollection[1].Value,
+                    countrycode = groupCollection[2].Value,
+                };
+            }
+            return output;
+        }
+
+        private (string? zipcode, string ? countrycode)? ReadGroupZipCode(GroupCollection groupCollection)
+        {
+            (string? zipcode, string? countrycode)? output = null;
+            if (groupCollection != null)
+            {
+                output = new()
+                {
+                    zipcode = groupCollection[1].Value,
+                    countrycode = groupCollection[2].Value,
+                };
+            }
             return output;
         }
 
@@ -61,7 +100,7 @@ namespace Zapto.Component.Common.ViewModels
             LocationModel? model = null;
             try
             {
-                ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(longitude, latitude);
+                ZaptoLocation location = await this.ApplicationLocationServices.GeReversetLocation(longitude, latitude);
                 model = (location != null) ? new LocationModel() { Name = location.Location } : null;
             }
             catch (Exception ex)

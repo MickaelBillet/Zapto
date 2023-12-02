@@ -20,9 +20,9 @@ namespace Connect.Server.Configuration
             services.AddUdpService();
             services.AddSupervisor();
             services.AddRepositories();
+            services.AddApplicationConnectServices();
             services.AddSingleton<IDatabaseService, ConnectDatabaseService>(); 
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();
-            services.AddApplicationConnectServices();
             services.AddSingleton<IHostedService, RecordingDataService>();
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();

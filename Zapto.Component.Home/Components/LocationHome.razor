@@ -64,6 +64,6 @@
 
     private async Task<IEnumerable<string>> Search(string input)
     {
-        return await Task.Run<IEnumerable<string>>(() => this.ViewModel.GetLocations(input));
+        return await this.ViewModel.GetLocations(input);
     }
 }

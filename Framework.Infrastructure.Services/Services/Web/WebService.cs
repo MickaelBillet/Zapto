@@ -51,7 +51,7 @@ namespace Framework.Infrastructure.Services
         {
             IEnumerable<T> items = null;
 
-            if (this.InternetService?.IsConnectedToInternet() != false)
+           if (this.InternetService?.IsConnectedToInternet() != false)
             {
                 HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
 
