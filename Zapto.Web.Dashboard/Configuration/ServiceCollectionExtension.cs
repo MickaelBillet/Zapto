@@ -38,6 +38,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IWeatherViewModel, WeatherViewModel>();
 			services.AddTransient<ILocationViewModel, LocationViewModel>();
 			services.AddTransient<IHomeViewModel, HomeViewModel>();
+			services.AddTransient<ILocationSearchViewModel, LocationSearchViewModel>();
 		}
 
 		public static void AddServices(this IServiceCollection services, IConfiguration configuration)

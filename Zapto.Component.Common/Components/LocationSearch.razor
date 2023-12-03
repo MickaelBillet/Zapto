@@ -1,0 +1,54 @@
+﻿@inject IStringLocalizer<Resource> Localizer
+@inject ILocationSearchViewModel ViewModel
+@implements IDisposable
+
+@if (this.Model != null)
+{
+    <div style="width:400px">
+        <MudAutocomplete T="LocationModel"
+                            Label="@Localizer["CitySearch"]"
+                            Value="Model"
+                            SearchFunc="@Search"
+                            ResetValueOnEmptyText="true"
+                            CoerceText="false"
+                            CoerceValue="false"
+                            ValueChanged="SelectLocation"
+                            AdornmentIcon="@Icons.Material.Filled.Search"
+                            AdornmentColor="Color.Primary" />
+    </div>
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+}
+
+@code {
+    [Parameter]
+    public LocationModel? Model { get; set; }
+
+    [Parameter]
+    public EventCallback<LocationModel?> ModelChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.ViewModel != null)
+        {
+            await this.ViewModel.InitializeAsync(null);
+        }
+    }
+
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+    }
+
+    private async Task<IEnumerable<LocationModel?>?> Search(string input)
+    {
+        return await this.ViewModel.GetLocations(input);
+    }
+
+    private async Task SelectLocation(LocationModel model)
+    {
+        await this.ModelChanged.InvokeAsync(model);
+    }
+}

@@ -4,21 +4,36 @@
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-<ErrorBoundary @ref="ErrorBoundaryLocation">
-    <ChildContent>
-        <LocationHome Latitude="@this.Latitude" Longitude="@this.Longitude"></LocationHome>
-    </ChildContent>
-    <ErrorContent>
-        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocation" Color="Color.Warning">Reload</MudButton>
-        </MudContainer>
-    </ErrorContent>
-</ErrorBoundary>
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-between mb-6">
+        <ErrorBoundary @ref="ErrorBoundaryLocation">
+            <ChildContent>
+                <LocationHome Model="@this.Model"></LocationHome>
+            </ChildContent>
+            <ErrorContent>
+                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+                    <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocation" Color="Color.Warning">Reload</MudButton>
+                </MudContainer>
+            </ErrorContent>
+        </ErrorBoundary>
+        <ErrorBoundary @ref="ErrorBoundaryLocationSearch">
+            <ChildContent>
+                <LocationSearch ModelChanged="SelectLocation"></LocationSearch>
+            </ChildContent>
+            <ErrorContent>
+                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
+                    <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocationSearch" Color="Color.Warning">Reload</MudButton>
+                </MudContainer>
+            </ErrorContent>
+        </ErrorBoundary>
+    </div>
+</div>
 
 <ErrorBoundary @ref="ErrorBoundaryWeather">
     <ChildContent>
-        <WeatherHome Longitude="@this.Longitude" Latitude="@this.Latitude"></WeatherHome>
+        <WeatherHome Longitude="@this.Model.Longitude.ToString()" Latitude="@this.Model.Latitude.ToString()"></WeatherHome>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -30,7 +45,7 @@
 
 <ErrorBoundary @ref="ErrorBoundaryAirPollution">
     <ChildContent>
-        <AirPollutionHome Longitude="@this.Longitude" Latitude="@this.Latitude"></AirPollutionHome>
+        <AirPollutionHome Longitude="@this.Model.Longitude.ToString()" Latitude="@this.Model.Latitude.ToString()"></AirPollutionHome>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -42,11 +57,11 @@
 
 @code
     {
-    public string Longitude { get; set; }
-    public string Latitude { get; set; }
     private ErrorBoundary ErrorBoundaryAirPollution;
     private ErrorBoundary ErrorBoundaryWeather;
     private ErrorBoundary ErrorBoundaryLocation;
+    private ErrorBoundary ErrorBoundaryLocationSearch;
+    private LocationModel Model { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,6 +83,7 @@
             ErrorBoundaryWeather?.Recover();
             ErrorBoundaryAirPollution?.Recover();
             ErrorBoundaryLocation?.Recover();
+            ErrorBoundaryLocationSearch?.Recover();
         }
     }
 
@@ -78,8 +94,11 @@
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
-        this.Longitude = longitude.ToString();
-        this.Latitude = latitude.ToString();
+        this.Model = new LocationModel
+        {
+            Longitude = longitude,
+            Latitude = latitude,
+        };
 
         //Warning don't delete this line
         this.StateHasChanged();
@@ -105,5 +124,15 @@
     private void ResetErrorLocation()
     {
         ErrorBoundaryLocation?.Recover();
+    }
+
+    private void ResetErrorLocationSearch()
+    {
+        ErrorBoundaryLocationSearch?.Recover();
+    }
+
+    private void SelectLocation(LocationModel model)
+    {
+        this.Model = model;
     }
 }

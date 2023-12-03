@@ -5,7 +5,7 @@
 <div class="d-flex align-center gap-4 mb-2">
     @if (this.Model != null)
     {
-        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Name</MudText>
+        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Location</MudText>
         <MudIconButton Size="Size.Small"
                         OnClick="@(async (e) => await TestNotificationButton())"
                         Icon="@Icons.Material.Filled.NotificationsActive"

@@ -2,40 +2,20 @@
 @inject ILocationViewModel ViewModel
 @implements IDisposable
 
-<div class="d-flex flex-column">
-    @if (this.Model != null)
-    {
-        <div class="d-flex justify-content-between mb-6">
-            <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Model.Name</MudText>
-            <div style="width:400px">
-                <MudAutocomplete T="string"
-                                 Label="@Localizer["CitySearch"]"
-                                 @bind-Value="value"
-                                 SearchFunc="@Search"
-                                 ResetValueOnEmptyText="true"
-                                 CoerceText="true"
-                                 CoerceValue="true"
-                                 AdornmentIcon="@Icons.Material.Filled.Search"
-                                 AdornmentColor="Color.Primary" />
-            </div>
-        </div>
-    }
-    else
-    {
-        <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
-    }
-</div>
+@if (this.Location != null)
+{
+    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Location</MudText>
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+}
 
 @code {
     [Parameter]
-    public string Longitude { get; set; }
+    public LocationModel Model { get; set; } = null;
 
-    [Parameter]
-    public string Latitude { get; set; }
-
-    public LocationModel Model { get; set; }
-
-    private string value;
+    private string Location { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,12 +27,22 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.Latitude) == false) && (string.IsNullOrEmpty(this.Longitude) == false))
+        if ((this.ViewModel != null) 
+                && (this.Model != null)
+                && (this.Model.Latitude != null)
+                && (this.Model.Longitude != null))
         {
-            this.Model = await this.ViewModel.GetLocationModel(this.Latitude, this.Longitude);
-            if (this.Model == null)
+            if (string.IsNullOrEmpty(this.Model.Location))
             {
-                throw new Exception("Location Service KO");
+                this.Location = await this.ViewModel.GetLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
+                if (this.Location == null)
+                {
+                    throw new Exception("Location Service KO");
+                }
+            }
+            else
+            {
+                this.Location = this.Model.Location;
             }
         }
     }
@@ -60,10 +50,5 @@
     public void Dispose()
     {
         this.ViewModel?.Dispose();
-    }
-
-    private async Task<IEnumerable<string>> Search(string input)
-    {
-        return await this.ViewModel.GetLocations(input);
     }
 }
