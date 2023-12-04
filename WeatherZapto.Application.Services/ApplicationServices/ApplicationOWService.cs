@@ -49,26 +49,23 @@ namespace WeatherZapto.Application.Services
             return zaptoLocations;
         }
 
-        public async Task<IEnumerable<ZaptoLocation>> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode)
+        public async Task<ZaptoLocation> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode)
         {
-            IEnumerable<ZaptoLocation> zaptoLocations = null;
-            IEnumerable<Location> locations = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocationsFromZipCode(APIKey, zipCode, countryCode)) : null;
-            if (locations != null)
+            ZaptoLocation zaptoLocation = null;
+            Location location = (this.LocationOWService != null) ? (await this.LocationOWService.GetLocationFromZipCode(APIKey, zipCode, countryCode)) : null;
+            if (location != null)
             {
                 await this.SupervisorCall.AddCallOpenWeather();
-                zaptoLocations = locations.Select((location) =>
+                return new ZaptoLocation()
                 {
-                    return new ZaptoLocation()
-                    {
-                        Latitude = location.lat,
-                        Longitude = location.lon,
-                        Location = location.name,
-                        Country = location.country,
-                        State = location.state,
-                    };
-                });
+                    Latitude = location.lat,
+                    Longitude = location.lon,
+                    Location = location.name,
+                    Country = location.country,
+                    Zip = location.zip,
+                };
             }
-            return zaptoLocations;
+            return zaptoLocation;
         }
 
         public async Task<ZaptoLocation> GetReverseLocation(string APIKey, string longitude, string latitude)

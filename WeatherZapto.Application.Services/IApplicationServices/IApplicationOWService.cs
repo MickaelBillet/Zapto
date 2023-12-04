@@ -9,6 +9,6 @@ namespace WeatherZapto.Application
         Task<ZaptoWeather> GetCurrentWeather(string APIKey, string locationName, string longitude, string latitude, string language);
         Task<Stream> GetCurrentWeatherImage(string code);
         Task<IEnumerable<ZaptoLocation>> GetLocationFromCity(string APIKey, string city, string stateCode, string countryCode);
-        Task<IEnumerable<ZaptoLocation>> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode);
+        Task<ZaptoLocation> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode);
     }
 }

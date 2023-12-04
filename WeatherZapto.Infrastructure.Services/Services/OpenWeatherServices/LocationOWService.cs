@@ -41,9 +41,10 @@ namespace WeatherZapto.Infrastructure.OpenWeatherServices
                                                                                             this.SerializerOptions,
                                                                                             new CancellationToken());
         }
-        public async Task<IEnumerable<Location>> GetLocationsFromZipCode(string APIKey, string zipCode, string countryCode)
+        public async Task<Location> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode)
         {
-            return await this.WebService.GetCollectionAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationZipCode, zipCode, countryCode, LIMIT, APIKey),
+            return await this.WebService.GetAsync<Location>(string.Format(WeatherZaptoConstants.UrlOWLocationZipCode, zipCode, countryCode, APIKey),    
+                                                                                            null,
                                                                                             this.SerializerOptions,
                                                                                             new CancellationToken());
         }

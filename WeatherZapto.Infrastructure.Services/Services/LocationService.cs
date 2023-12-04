@@ -37,20 +37,12 @@ namespace WeatherZapto.Infrastructure.WebServices
             }
         }
 
-        public async Task<IEnumerable<ZaptoLocation>> GetLocations(string zipCode, string countryCode)
+        public async Task<ZaptoLocation> GetLocation(string zipCode, string countryCode)
         {
-            if (string.IsNullOrEmpty(countryCode) == false) 
-            {
-                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode2, zipCode, countryCode),
+            return await this.WebService.GetAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode, zipCode, countryCode),
+                                                                                                null,
                                                                                                 this.SerializerOptions,
                                                                                                 new CancellationToken());
-            }
-            else
-            {
-                return await this.WebService.GetCollectionAsync<ZaptoLocation>(string.Format(WeatherZaptoConstants.UrlLocationZipCode1, zipCode),
-                                                                                                this.SerializerOptions,
-                                                                                                new CancellationToken());
-            }
         }
         #endregion
     }

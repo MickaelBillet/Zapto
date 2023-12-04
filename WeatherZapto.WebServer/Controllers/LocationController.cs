@@ -94,19 +94,18 @@ namespace WeatherZapto.WebServer.Controllers
             }
         }
 
-        [HttpGet("zip={zipcode}")]
         [HttpGet("zip={zipcode}&country={country}")]
-        public async Task<IActionResult> GetLocationFromZipCode(string zipcode, string? country)
+        public async Task<IActionResult> GetLocationFromZipCode(string zipcode, string country)
         {
-            IEnumerable<ZaptoLocation>? zaptoLocations = null;
+            ZaptoLocation? zaptoLocation = null;
             try
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null))
                 {
-                    zaptoLocations = await this.ApplicationOWService.GetLocationFromZipCode(this.Configuration["OpenWeatherAPIKey"], zipcode, country);
-                    if (zaptoLocations != null)
+                    zaptoLocation = await this.ApplicationOWService.GetLocationFromZipCode(this.Configuration["OpenWeatherAPIKey"], zipcode, country);
+                    if (zaptoLocation != null)
                     {
-                        return StatusCode(200, zaptoLocations);
+                        return StatusCode(200, zaptoLocation);
                     }
                     else
                     {

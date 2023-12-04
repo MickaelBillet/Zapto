@@ -28,9 +28,9 @@ namespace WeatherZapto.Application.Services
             return (this.LocationService != null) ? await this.LocationService.GetLocations(city, countryCode, stateCode) : null;
         }
 
-        public async Task<IEnumerable<ZaptoLocation>> GetLocations(string zipCode, string countryCode)
+        public async Task<ZaptoLocation> GetLocation(string zipCode, string countryCode)
         {
-            return (this.LocationService != null) ? await this.LocationService.GetLocations(zipCode, countryCode) : null;
+            return (this.LocationService != null) ? await this.LocationService.GetLocation(zipCode, countryCode) : null;
         }
         #endregion
     }

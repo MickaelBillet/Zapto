@@ -19,7 +19,7 @@
         </ErrorBoundary>
         <ErrorBoundary @ref="ErrorBoundaryLocationSearch">
             <ChildContent>
-                <LocationSearch ModelChanged="SelectLocation"></LocationSearch>
+                <LocationSearch ModelChanged="@SelectLocation"></LocationSearch>
             </ChildContent>
             <ErrorContent>
                 <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -33,7 +33,7 @@
 
 <ErrorBoundary @ref="ErrorBoundaryWeather">
     <ChildContent>
-        <WeatherHome Longitude="@this.Model.Longitude.ToString()" Latitude="@this.Model.Latitude.ToString()"></WeatherHome>
+        <WeatherHome Location="@this.Model"></WeatherHome>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -45,7 +45,7 @@
 
 <ErrorBoundary @ref="ErrorBoundaryAirPollution">
     <ChildContent>
-        <AirPollutionHome Longitude="@this.Model.Longitude.ToString()" Latitude="@this.Model.Latitude.ToString()"></AirPollutionHome>
+        <AirPollutionHome Location="@this.Model"></AirPollutionHome>
     </ChildContent>
     <ErrorContent>
         <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -61,12 +61,13 @@
     private ErrorBoundary ErrorBoundaryWeather;
     private ErrorBoundary ErrorBoundaryLocation;
     private ErrorBoundary ErrorBoundaryLocationSearch;
+
     private LocationModel Model { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         #if DEBUG
-    //await Task.Delay(5000);
+        //await Task.Delay(5000);
         #endif
         if (this.ViewModel != null)
         {

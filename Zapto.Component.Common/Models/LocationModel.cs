@@ -7,10 +7,18 @@
         public double? Longitude { get; set; }
         public string? Country { get; set; }
         public string? State { get; set; }
+        public string? Zip { get; set; }
 
         public override string ToString()
         {
-            return $"{Location} - {State} - {Country} -  {Latitude!.Value.ToString("F3")} - {Longitude!.Value.ToString("F3")}";
+            if (string.IsNullOrEmpty(this.Zip))
+            {
+                return $"{Location} - {State} - {Country} -  {Latitude!.Value.ToString("F3")} - {Longitude!.Value.ToString("F3")}";
+            }
+            else
+            {
+                return $"{Location} - {Zip} - {Country} -  {Latitude!.Value.ToString("F3")} - {Longitude!.Value.ToString("F3")}";
+            }
         }
     }
 }

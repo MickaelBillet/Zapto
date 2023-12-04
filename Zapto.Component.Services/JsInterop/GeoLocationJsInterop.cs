@@ -38,11 +38,11 @@ namespace Zapto.Component.Common.JsInterop
         }
 
         [JSInvokable]
-        public async Task OnErrorAsync(string error)
+        public async Task OnErrorAsync(object error)
         {
             if (this.CallBackErrorResult != null)
             {
-                await this.CallBackErrorResult.Invoke(error);
+                //await this.CallBackErrorResult.Invoke(error);
             }
         }
 

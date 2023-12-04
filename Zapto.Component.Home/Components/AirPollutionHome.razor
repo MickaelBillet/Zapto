@@ -86,10 +86,7 @@
 @code
 {
     [Parameter]
-    public string Latitude { get; set; }
-
-    [Parameter]
-    public string Longitude { get; set; }
+    public LocationModel Location { get; set; }
 
     public AirPollutionModel Model { get; set; }
 
@@ -103,9 +100,9 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (this.Latitude != null) && (this.Longitude != null))
+        if ((this.ViewModel != null) && (this.Location != null))
         {
-            this.Model = await this.ViewModel.GetAirPollutionModel(this.Longitude, this.Latitude);
+            this.Model = await this.ViewModel.GetAirPollutionModel(this.Location.Longitude.ToString(), this.Location.Latitude.ToString());
             if (this.Model != null)
             {
                 this.ViewModel.Refresh += RefreshView;                

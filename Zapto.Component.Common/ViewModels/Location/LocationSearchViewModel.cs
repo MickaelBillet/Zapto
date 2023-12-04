@@ -62,17 +62,17 @@ namespace Zapto.Component.Common.ViewModels
                         (string? zipcode, string? countrycode)? result = this.ReadGroup(match.Groups);
                         if ((result != null) && (result.Value.zipcode!.Length == ZipCodeSize))
                         {
-                            IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(result.Value.zipcode, result.Value.countrycode);
-                            output = locations.GroupBy(x => new { x.Location, x.State, x.Country, x.Latitude, x.Longitude })
-                                                .Select(y => y.First())
-                                                .Select(x => new LocationModel()
-                                                {
-                                                    Country = x.Country,
-                                                    Longitude = x.Longitude,
-                                                    Location = x.Location,
-                                                    Latitude = x.Latitude,
-                                                    State = x.State,
-                                                });
+                            ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(result.Value.zipcode, result.Value.countrycode);
+                            output = new List<LocationModel> { 
+                                new LocationModel()
+                                {
+                                    Country = location.Country,
+                                    Longitude = location.Longitude,
+                                    Location = location.Location,
+                                    Latitude = location.Latitude,
+                                    Zip = location.Zip,
+                                },
+                            };
                         }
                     }
                 }
