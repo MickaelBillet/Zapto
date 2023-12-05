@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,9 +16,9 @@ namespace Framework.Infrastructure.Services
 
 		#region Constructor
 
-		public ErrorHandlerWebService(IAuthenticationWebService service)
+		public ErrorHandlerWebService(IServiceProvider provider)
 		{
-			this.AuthenticationService = service;
+			this.AuthenticationService = provider.GetService<IAuthenticationWebService>();
 		}
 
 		#endregion

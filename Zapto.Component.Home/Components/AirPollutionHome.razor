@@ -100,7 +100,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (this.Location != null))
+        if ((this.ViewModel != null)
+                && (this.Location != null)
+                && (this.Location.Latitude != null)
+                && (this.Location.Longitude != null))
         {
             this.Model = await this.ViewModel.GetAirPollutionModel(this.Location.Longitude.ToString(), this.Location.Latitude.ToString());
             if (this.Model != null)

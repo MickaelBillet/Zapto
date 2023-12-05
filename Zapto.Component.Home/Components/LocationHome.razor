@@ -34,11 +34,7 @@ else
         {
             if (string.IsNullOrEmpty(this.Model.Location))
             {
-                this.Location = await this.ViewModel.GetLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
-                if (this.Location == null)
-                {
-                    throw new Exception("Location Service KO");
-                }
+                this.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
             }
             else
             {

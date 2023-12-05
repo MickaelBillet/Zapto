@@ -42,7 +42,7 @@ namespace Zapto.Component.Common.JsInterop
         {
             if (this.CallBackErrorResult != null)
             {
-                //await this.CallBackErrorResult.Invoke(error);
+                await this.CallBackErrorResult.Invoke("GeoLocalisationError");
             }
         }
 

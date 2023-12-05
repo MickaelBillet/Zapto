@@ -9,7 +9,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface ILocationViewModel : IBaseViewModel
     {
-        Task<string?> GetLocation(string latitude, string longitude);
+        Task<string?> GetReverseLocation(string latitude, string longitude);
         Task TestNotification(string? locationId);
         Task<LocationModel?> GetLocationModel();
     }
@@ -31,20 +31,19 @@ namespace Zapto.Component.Common.ViewModels
 
         #region Methods
 
-        public async Task<string?> GetLocation(string latitude, string longitude)
+        public async Task<string?> GetReverseLocation(string latitude, string longitude)
         {
-            string? location = null;
+            ZaptoLocation? zaptoLocation = null;
             try
             {
-                ZaptoLocation zaptoLocation = await this.ApplicationLocationServices.GeReversetLocation(longitude, latitude);
-                location = zaptoLocation.Location;
+                zaptoLocation = await this.ApplicationLocationServices.GeReversetLocation(longitude, latitude);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 throw new Exception("Location Service Exception : " + ex.Message);
             }
-            return location;
+            return zaptoLocation?.Location;
         }
 
         public async Task TestNotification(string? locationId)

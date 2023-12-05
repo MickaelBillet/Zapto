@@ -19,7 +19,7 @@
         </ErrorBoundary>
         <ErrorBoundary @ref="ErrorBoundaryLocationSearch">
             <ChildContent>
-                <LocationSearch ModelChanged="@SelectLocation"></LocationSearch>
+                <LocationSearch ModelChanged="@this.SelectLocation"></LocationSearch>
             </ChildContent>
             <ErrorContent>
                 <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
@@ -56,18 +56,18 @@
 </ErrorBoundary>
 
 @code
-    {
+{
     private ErrorBoundary ErrorBoundaryAirPollution;
     private ErrorBoundary ErrorBoundaryWeather;
     private ErrorBoundary ErrorBoundaryLocation;
     private ErrorBoundary ErrorBoundaryLocationSearch;
 
-    private LocationModel Model { get; set; } = null;
+    private LocationModel Model { get; set; } = new LocationModel();
 
     protected override async Task OnInitializedAsync()
     {
         #if DEBUG
-        //await Task.Delay(5000);
+    //await Task.Delay(5000);
         #endif
         if (this.ViewModel != null)
         {
@@ -90,21 +90,18 @@
 
     private async Task GetErrorAsync(string error)
     {
-        await Task.FromResult<string>(error);
+        this.Model.LocalizationIsAvailable = await Task.FromResult<bool>(false);        
     }
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
-        this.Model = new LocationModel
-        {
-            Longitude = longitude,
-            Latitude = latitude,
-        };
+        this.Model.Longitude = longitude;
+        this.Model.Latitude = latitude;
+
+        this.Model.LocalizationIsAvailable = await Task.FromResult<bool>(true);
 
         //Warning don't delete this line
         this.StateHasChanged();
-
-        await Task.FromResult<bool>(true);
     }
 
     public void Dispose()

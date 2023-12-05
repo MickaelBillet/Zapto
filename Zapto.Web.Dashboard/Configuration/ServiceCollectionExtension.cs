@@ -56,6 +56,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddScoped<INavigationService, NavigationService>();
 			services.AddTransient<IPositionService, PositionService>();
 			services.AddTransient<IAuthenticationService, AuthenticationService>();
+			services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebService>();			
 			services.AddTransient<IImageService, ImageService>((service) => new ImageService(service, configuration, "OpenWeather"));
 			services.AddScoped<DataService>();
         }
