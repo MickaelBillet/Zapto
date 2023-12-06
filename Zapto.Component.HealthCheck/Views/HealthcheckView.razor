@@ -1,5 +1,6 @@
 ﻿@inject IHealthCheckViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
+@inject ISnackbar Snackbar
 
 <div class="d-flex align-center gap-4">
     <MudText Typo="Typo.h5" Color="Color.Primary">@Localizer["Healthcheck"]</MudText>
@@ -7,45 +8,45 @@
 </div>
 
 <div class="mx-auto mt-2">
-    <MudExpansionPanels>
         @if (this.Model != null)
         {
-            @foreach (HealthCheckModel model in this.Model)
-            {
-                <MudExpansionPanel>
-                    <TitleContent>
-                        <div class="d-flex">
-                            <Circle Color="@model.GetStatusColor()" Radius="15"></Circle>
-                            <MudText Style="font-weight:500" Align="Align.Left" Class="ml-8 mt-1">@model?.Name</MudText>                            
-                        </div>
-                    </TitleContent>
-                    <ChildContent>
-                        @if (model.Items != null)
-                        {
-                            <MudTable Items="@model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
-                                <HeaderContent>
-                                    <MudTh>@Localizer["Service"]</MudTh>
-                                    <MudTh>@Localizer["Description"]</MudTh>
-                                    <MudTh>@Localizer["Status"]</MudTh>
-                                    <MudTh>@Localizer["Category"]</MudTh>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
-                                    <MudTd DataLabel="@Localizer["Description"]">@context.Description</MudTd>
-                                    <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetStatusColor()" Radius="15"></Circle></MudTd>
-                                    <MudTd DataLabel="@Localizer["Category"]">@context.Tags</MudTd>
-                                </RowTemplate>
-                            </MudTable>
-                        }
-                    </ChildContent>
-                </MudExpansionPanel>
-            }
+            <MudExpansionPanels>
+                @foreach (HealthCheckModel model in this.Model)
+                {
+                    <MudExpansionPanel>
+                        <TitleContent>
+                            <div class="d-flex">
+                                <Circle Color="@model.GetStatusColor()" Radius="15"></Circle>
+                                <MudText Style="font-weight:500" Align="Align.Left" Class="ml-8 mt-1">@model?.Name</MudText>                            
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            @if (model.Items != null)
+                            {
+                                <MudTable Items="@model.Items" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>@Localizer["Service"]</MudTh>
+                                        <MudTh>@Localizer["Description"]</MudTh>
+                                        <MudTh>@Localizer["Status"]</MudTh>
+                                        <MudTh>@Localizer["Category"]</MudTh>
+                                    </HeaderContent>
+                                    <RowTemplate>
+                                        <MudTd DataLabel="@Localizer["Service"]">@context.Name</MudTd>
+                                        <MudTd DataLabel="@Localizer["Description"]">@context.Description</MudTd>
+                                        <MudTd DataLabel="@Localizer["Status"]"><Circle Color="@context.GetStatusColor()" Radius="15"></Circle></MudTd>
+                                        <MudTd DataLabel="@Localizer["Category"]">@context.Tags</MudTd>
+                                    </RowTemplate>
+                                </MudTable>
+                            }
+                        </ChildContent>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
         }
         else
         {
             <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
         }
-    </MudExpansionPanels>
 </div>
 
 @code
@@ -57,7 +58,21 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            this.Model = await this.ViewModel.GetModelList();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Model == null))
+        {
+            try
+            {
+                this.Model = await this.ViewModel.GetModelList();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
 

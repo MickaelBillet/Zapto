@@ -1,5 +1,6 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject IAirPollutionViewModel? ViewModel 
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudPaper Style="height:120px;">
@@ -38,10 +39,6 @@
                 <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
             }
         }
-        else
-        {
-            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-        }
     </MudContainer>
 </MudPaper>
 
@@ -54,8 +51,25 @@
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            this.Model = await this.ViewModel.GetAirPollutionModel();
-            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Model == null))
+        {
+            try
+            {
+                this.Model = await this.ViewModel.GetAirPollutionModel();
+                if (this.Model != null)
+                {
+                    this.ViewModel.Refresh += RefreshView;
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
 

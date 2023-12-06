@@ -1,5 +1,6 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ISensorCO2ViewModel? ViewModel
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 
@@ -54,20 +55,16 @@
             {
                 <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
             }
-        }
-        else
-        {
-            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-        }   
+        }  
     </MudContainer>
 </MudPaper>
 
 @code 
 {
     [Parameter]
-    public string? SensorName { get; set; }
+    public string? SensorName { get; set; } = null;
 
-    public SensorCO2Model? Model { get; set; }
+    public SensorCO2Model? Model { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,10 +78,17 @@
     {
         if ((string.IsNullOrEmpty(this.SensorName) == false) && (this.ViewModel != null))
         {
-            this.Model = await this.ViewModel.GetSensorCO2Model(this.SensorName);
-            if (this.Model != null)
+            try
             {
-                this.ViewModel.Refresh += RefreshView;
+                this.Model = await this.ViewModel.GetSensorCO2Model(this.SensorName);
+                if (this.Model != null)
+                {
+                    this.ViewModel.Refresh += RefreshView;
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
             }
         }
     }

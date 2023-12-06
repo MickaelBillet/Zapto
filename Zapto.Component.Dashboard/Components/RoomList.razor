@@ -1,4 +1,5 @@
 ﻿@inject IRoomListViewModel? ViewModel
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudGrid Class="mb-2">
@@ -13,7 +14,7 @@
 
 @code {
     [Parameter]
-    public LocationModel? Location { get; set; }
+    public LocationModel? Location { get; set; } = null;
 
     public IEnumerable<RoomModel>? Rooms { get; set; } = null;
 
@@ -29,7 +30,14 @@
     {
         if ((this.ViewModel != null) && (this.Location != null))
         {
-            this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id);
+            try
+            {
+                this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
 

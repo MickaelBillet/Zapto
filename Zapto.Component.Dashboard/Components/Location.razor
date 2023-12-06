@@ -1,37 +1,59 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationViewModel ViewModel
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <div class="d-flex align-center gap-4 mb-2">
-    @if (this.Model != null)
+    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
+    @if ((this.Text != null) && (this.Text != this.Localizer["Unable to locate"]))
     {
-        <MudText Typo="Typo.h5" Color="Color.Primary">@this.Model.Location</MudText>
         <MudIconButton Size="Size.Small"
-                        OnClick="@(async (e) => await TestNotificationButton())"
-                        Icon="@Icons.Material.Filled.NotificationsActive"
-                        Color="@Color.Info" />
-    }
-    else
-    {
-        <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+                    OnClick="@(async (e) => await TestNotificationButton())"
+                    Icon="@Icons.Material.Filled.NotificationsActive"
+                    Color="@Color.Info" />
     }
 </div>
 
 @code 
 {
     [Parameter]
-    public LocationModel? Model { get; set; }
+    public LocationModel? Model { get; set; } = null;
 
     [Parameter]
     public EventCallback<LocationModel?> ModelChanged { get; set; }
+
+    private string? Text { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            this.Model = await this.ViewModel.GetLocationModel();
-            await this.ModelChanged.InvokeAsync(this.Model);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Model == null))
+        {
+            try
+            {
+                this.Model = await this.ViewModel.GetLocationModel();
+                if (this.Model?.Location != null)
+                {
+                    this.Text = this.Model.Location;
+                    await this.ModelChanged.InvokeAsync(this.Model);
+                }
+                else
+                {
+                    this.Text = this.Localizer["Unable to locate"];
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Text = this.Localizer["Unable to locate"];
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
 

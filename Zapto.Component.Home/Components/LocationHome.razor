@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationViewModel ViewModel
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
-
 
 @code {
     [Parameter]
@@ -23,7 +23,7 @@
     {
         get
         {
-            return (this.Model.Latitude != null) && (this.Model.Longitude != null);
+            return (this.Model != null) && (this.Model.Latitude != null) && (this.Model.Longitude != null);
         }
     }
 
@@ -47,17 +47,33 @@
     {
         if ((this.ViewModel != null) && (this.Model != null))                
         {
-            if (this.LocalizationIsAvailable == null)
+            try
             {
-                this.Text = this.Localizer["Location in progress"];
+                if (this.LocalizationIsAvailable == null)
+                {
+                    this.Text = this.Localizer["Location in progress"];
+                }
+                else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
+                {
+                    this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
+                    if (this.Model?.Location != null)
+                    {
+                        this.Text = this.Model.Location;
+                    }
+                    else
+                    {
+                        this.Text = this.Localizer["Unable to locate"];
+                    }
+                }
+                else if (this.LocalizationIsAvailable == false)
+                {
+                    this.Text = this.Localizer["Unable to locate"];
+                }
             }
-            else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
-            {
-                this.Text = this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
-            }
-            else if (this.LocalizationIsAvailable == false)
+            catch (Exception ex)
             {
                 this.Text = this.Localizer["Unable to locate"];
+                Snackbar.Add(ex.Message, Severity.Error);
             }
         }
     }

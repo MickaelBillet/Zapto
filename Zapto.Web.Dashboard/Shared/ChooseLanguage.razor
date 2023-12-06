@@ -9,7 +9,7 @@
             <option value="@culture">@culture.DisplayName</option>
         }
     </select>*@
-    <div style="width:100px">
+    <div style="width:120px">
         <MudSelect Class="my-5" @bind-Value="@this.ViewModel.SelectedCulture" Margin="Margin.Dense" Direction="Direction.Bottom" OffsetY="true" Dense="true"Variant="Variant.Outlined">
             @foreach (var culture in this.ViewModel.Cultures)
             {

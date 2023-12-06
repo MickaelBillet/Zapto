@@ -4,6 +4,7 @@ using Connect.Model;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor;
 using MudBlazor.Services;
 using WeatherZapto;
 using Zapto.Component.Services.Helpers;
@@ -92,6 +93,18 @@ builder.Services.AddMudServices();
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddViewModels();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
+
+    config.SnackbarConfiguration.PreventDuplicates = false;
+    config.SnackbarConfiguration.NewestOnTop = false;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.VisibleStateDuration = 60000;
+    config.SnackbarConfiguration.HideTransitionDuration = 500;
+    config.SnackbarConfiguration.ShowTransitionDuration = 500;
+    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+});
 
 WebAssemblyHost host = builder.Build();
 await host.SetDefaultCulture();

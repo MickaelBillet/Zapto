@@ -1,11 +1,12 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationSearchViewModel ViewModel
+@inject ISnackbar Snackbar
 @implements IDisposable
 
     <div style="width:300px">
         <MudAutocomplete T="LocationModel"
                             Label="@Localizer["CitySearch"]"
-                            Value="Model"
+                            Value="this.Model"
                             SearchFunc="@Search"
                             ResetValueOnEmptyText="true"
                             CoerceText="false"
@@ -37,7 +38,16 @@
 
     private async Task<IEnumerable<LocationModel?>?> Search(string input)
     {
-        return await this.ViewModel.GetLocations(input);
+        IEnumerable<LocationModel?>? output = null;
+        try
+        {
+            output = await this.ViewModel.GetLocations(input);
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        return output;
     }
 
     private async Task SelectLocation(LocationModel model)

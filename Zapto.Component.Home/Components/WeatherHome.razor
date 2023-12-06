@@ -1,4 +1,5 @@
 ﻿@inject IWeatherViewModel ViewModel 
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 @if (this.Model != null)
@@ -6,8 +7,8 @@
     <MudGrid Class="mb-2">
         <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
             <MudContainer Class="d-flex align-center gap-4" Style="height:110px;">
-                    <MudImage Src="@this.Model?.Image"></MudImage>            
-                    <MudText Typo="Typo.h5" Align="Align.Left">@this.Model?.WeatherText</MudText>  
+                <MudImage Src="@this.Model?.Image"></MudImage>            
+                <MudText Typo="Typo.h5" Align="Align.Left">@this.Model?.WeatherText</MudText>  
             </MudContainer>
         </MudItem>
         <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
@@ -84,17 +85,21 @@
         </MudItem>
     </MudGrid>
 }
-else
-{
-    <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
-}
 
 @code 
 {
     [Parameter]
-    public LocationModel Location { get; set; }
+    public LocationModel Location { get; set; } = null;
 
-    public WeatherModel Model { get; set; }
+    public WeatherModel Model { get; set; } = null;
+
+    private bool LocalizationFound
+    {
+        get
+        {
+            return (this.Location != null) && (this.Location.Latitude != null) && (this.Location.Longitude != null);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,15 +111,19 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null)
-                && (this.Location != null)
-                && (this.Location.Latitude != null)
-                && (this.Location.Longitude != null))
+        if ((this.ViewModel != null) && (this.LocalizationFound))
         {
-            this.Model = await this.ViewModel.GetWeatherModel(this.Location.Latitude.ToString(), this.Location.Longitude.ToString());
-            if (this.Model != null)
+            try
             {
-                this.ViewModel.Refresh += RefreshView;
+                this.Model = await this.ViewModel.GetWeatherModel(this.Location.Latitude.ToString(), this.Location.Longitude.ToString());
+                if (this.Model != null)
+                {
+                    this.ViewModel.Refresh += RefreshView;
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
             }
         }
     }

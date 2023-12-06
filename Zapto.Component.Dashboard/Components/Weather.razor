@@ -1,4 +1,5 @@
 ﻿@inject IWeatherViewModel? ViewModel 
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudGrid Class="mb-2">
@@ -8,11 +9,7 @@
            {
                 <MudImage Src="@this.Model?.Image"></MudImage>            
                 <MudText Typo="Typo.h5" Align="Align.Left">@this.Model?.WeatherText</MudText>  
-           }
-           else
-           {
-                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-           }            
+           }           
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
@@ -34,11 +31,7 @@
                         <MudText Typo="Typo.body1" Class="ml-4">Min</MudText>
                     </div>
                 </div>
-            }
-            else
-            {
-                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-            }   
+            } 
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
@@ -81,10 +74,6 @@
                 <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.WindSpeed</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">km/h</MudText>
             }
-            else
-            {
-                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-            }
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3" Style="min-width:400px">
@@ -95,25 +84,38 @@
                 <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Pressure</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
             }
-            else
-            {
-                <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-            }
         </MudPaper>
     </MudItem>
 </MudGrid>
 
 @code 
 {
-    public WeatherModel? Model { get; set; }
+    public WeatherModel? Model { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         if (this.ViewModel != null)
         {
             await this.ViewModel.InitializeAsync(null);
-            this.Model = await this.ViewModel.GetWeatherModel();
-            this.ViewModel.Refresh += RefreshView;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Model == null))
+        {
+            try
+            {
+                this.Model = await this.ViewModel.GetWeatherModel();
+                if (this.Model != null)
+                {
+                    this.ViewModel.Refresh += RefreshView;
+                }
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
 

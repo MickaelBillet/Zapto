@@ -1,5 +1,6 @@
 ﻿@inject IRoomChartListViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 <h3>@RoomName</h3>
@@ -72,10 +73,17 @@ else
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
         {
-            this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
-            this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
+            try
+            {
+                this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
+                this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
 
-            await this.DisplayCharts();
+                await this.DisplayCharts();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
         }
     }
     public void Dispose()

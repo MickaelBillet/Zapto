@@ -62,7 +62,6 @@ namespace Zapto.Component.Common.ViewModels
             }
             return model;
         }
-
         public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
         {
             AirPollutionModel? model = null;
