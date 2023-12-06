@@ -39,7 +39,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.14" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.14" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-		<PackageReference Include="MudBlazor" Version="6.11.0" />
+		<PackageReference Include="MudBlazor" Version="6.11.1" />
 	</ItemGroup>
 
   <ItemGroup>
