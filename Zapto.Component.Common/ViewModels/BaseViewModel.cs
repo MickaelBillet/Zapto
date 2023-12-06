@@ -8,6 +8,7 @@ namespace Zapto.Component.Common.ViewModels
 	{
 		public Task InitializeAsync(string? parameter);
         public event EventHandler Refresh;
+		public bool IsLoading { get; }
 	}
 
 	public class BaseViewModel : IBaseViewModel
@@ -19,6 +20,7 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		public INavigationService NavigationService { get; }
         protected IAuthenticationService AuthenticationService { get; }
+		public bool IsLoading { get; protected set; } = false;
         #endregion
 
         #region Constructor

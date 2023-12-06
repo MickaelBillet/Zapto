@@ -8,7 +8,7 @@
         public string? Country { get; set; }
         public string? State { get; set; }
         public string? Zip { get; set; }
-        public bool LocalizationIsAvailable { get; set; }
+        public bool? LocalizationIsAvailable { get; set; } = null;
 
         public override string ToString()
         {

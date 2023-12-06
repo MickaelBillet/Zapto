@@ -35,6 +35,8 @@ namespace Zapto.Component.Common.ViewModels
 			IEnumerable<RoomModel>? models = null;
 			try
 			{
+				this.IsLoading = true;
+
 				models = (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
 				{
 					Name = this.Localizer[room.Name],
@@ -55,7 +57,11 @@ namespace Zapto.Component.Common.ViewModels
 				Debug.WriteLine(ex);
 				new Exception("Room Service Exception : " + ex.Message);
 			}
-			return models;
+            finally
+            {
+                this.IsLoading = false;
+            }
+            return models;
 		}
 		#endregion
 	}

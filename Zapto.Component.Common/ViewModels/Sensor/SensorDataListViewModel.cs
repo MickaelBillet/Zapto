@@ -30,8 +30,8 @@ namespace Zapto.Component.Common.ViewModels
                 models = roomModel?.ConnectedObjectsList?.Where((obj) => (obj.Sensor != null)
                                                                         && (((obj.Sensor.Type & DeviceType.Sensor_Humidity) == DeviceType.Sensor_Humidity)
                                                                             || ((obj.Sensor.Type & DeviceType.Sensor_Pressure) == DeviceType.Sensor_Pressure)
-                                                                            || ((obj.Sensor.Type & DeviceType.Sensor_Temperature) == DeviceType.Sensor_Temperature))).Select(
-                                                                                (obj) => new SensorDataModel()
+                                                                            || ((obj.Sensor.Type & DeviceType.Sensor_Temperature) == DeviceType.Sensor_Temperature)))
+                                                            .Select((obj) => new SensorDataModel()
                                                                                 {
                                                                                     Id = obj.Id,
                                                                                     LocationId = roomModel.LocationId,

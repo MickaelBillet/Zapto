@@ -51,6 +51,8 @@ namespace Zapto.Component.Common.ViewModels
 					string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
 					if (string.IsNullOrEmpty(culture) == false)
 					{
+                        this.IsLoading = true;
+
 						ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(user.LocationName, user.LocationLongitude, user.LocationLatitude, culture);
 						if (weather != null)
 						{
@@ -86,6 +88,10 @@ namespace Zapto.Component.Common.ViewModels
                 throw new Exception("Weather Service Exception");
 
             }
+            finally
+            {
+                this.IsLoading = false;
+            }
             return model;
 		}
 
@@ -98,6 +104,8 @@ namespace Zapto.Component.Common.ViewModels
                 string culture = await this.LocalStorageService.GetItemAsync<string>("culture");
                 if (string.IsNullOrEmpty(culture) == false)
                 {
+                    this.IsLoading = true;
+
                     ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(longitude, latitude, culture);
                     if (weather != null)
                     {
@@ -131,6 +139,10 @@ namespace Zapto.Component.Common.ViewModels
                 Debug.Write(ex);
                 throw new Exception("Weather Service Exception");
 
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
             return model;
         }

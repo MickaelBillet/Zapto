@@ -26,13 +26,14 @@ namespace Zapto.Component.Common.ViewModels
             IEnumerable<SensorEventModel>? sensorEvents = null;
             try
             {
-                sensorEvents = roomModel?.Sensors?.Where((obj) => ((obj.Type & DeviceType.Sensor_Water_Leak) == DeviceType.Sensor_Water_Leak)).Select((obj) => new SensorEventModel()
-                {
-                    Name = obj.Name,
-                    LocationId = roomModel.LocationId,
-                    Id = obj.Id,
-                    HasLeak = obj.LeakDetected,
-                });
+                sensorEvents = roomModel?.Sensors?.Where((obj) => ((obj.Type & DeviceType.Sensor_Water_Leak) == DeviceType.Sensor_Water_Leak))
+                                                    .Select((obj) => new SensorEventModel()
+                                                                        {
+                                                                            Name = obj.Name,
+                                                                            LocationId = roomModel.LocationId,
+                                                                            Id = obj.Id,
+                                                                            HasLeak = obj.LeakDetected,
+                                                                        });
             }
             catch (Exception ex)
             {

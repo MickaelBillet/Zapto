@@ -201,6 +201,9 @@
   <data name="Loading..." xml:space="preserve">
     <value>Chargement...</value>
   </data>
+  <data name="Location in progress" xml:space="preserve">
+    <value>Localisation en cours</value>
+  </data>
   <data name="Log In" xml:space="preserve">
     <value>Se connecter</value>
   </data>
@@ -272,6 +275,9 @@
   </data>
   <data name="Temperature" xml:space="preserve">
     <value>Temperature</value>
+  </data>
+  <data name="Unable to locate" xml:space="preserve">
+    <value>Impossible de se localiser</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value> Valeur  (ug/m3)</value>

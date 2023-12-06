@@ -2,20 +2,51 @@
 @inject ILocationViewModel ViewModel
 @implements IDisposable
 
-@if (this.Location != null)
+@if (this.LocationFound)
 {
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Location</MudText>
+    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Model.Location</MudText>
 }
-else
+else if ((this.LocalizationIsAvailable == null) || ((this.LocalizationIsAvailable == true) && (this.LocationFound == false)))
 {
-    <MudProgressCircular Color="Color.Default" Class="ml-6 my-2" Indeterminate="true" />
+    <div class="d-flex align-items-start flex-column mt-6">
+        <div class="d-flex flex-row align-items-center">
+            <MudText Typo="Typo.h5" Color="Color.Primary">@this.Localizer["Location in progress"]</MudText>
+            <MudProgressCircular Color="Color.Default" Class="ml-6 mt-3" Size="Size.Medium" Indeterminate="true" />
+        </div>
+        </div>
+}
+else if (this.LocalizationIsAvailable == false)
+{
+    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Localizer["Unable to locate"]</MudText>
 }
 
 @code {
     [Parameter]
     public LocationModel Model { get; set; } = null;
 
-    private string Location { get; set; } = null;
+    private bool LocationFound
+    {
+        get
+        {
+            return string.IsNullOrEmpty(this.Model.Location) == false;
+        }
+    }
+
+    private bool LocalizationFound
+    {
+        get
+        {
+            return (this.Model.Latitude != null) && (this.Model.Longitude != null);
+        }
+    }
+
+    private bool? LocalizationIsAvailable
+    {
+        get
+        {
+            return this.Model.LocalizationIsAvailable;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,18 +58,11 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) 
-                && (this.Model != null)
-                && (this.Model.Latitude != null)
-                && (this.Model.Longitude != null))
+        if ((this.ViewModel != null) && (this.Model != null))                
         {
-            if (string.IsNullOrEmpty(this.Model.Location))
+            if ((this.LocationFound == false) && (this.LocalizationFound == true))
             {
-                this.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
-            }
-            else
-            {
-                this.Location = this.Model.Location;
+                this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
             }
         }
     }

@@ -36,12 +36,18 @@ namespace Zapto.Component.Common.ViewModels
             ZaptoLocation? zaptoLocation = null;
             try
             {
+                this.IsLoading = true;
+
                 zaptoLocation = await this.ApplicationLocationServices.GeReversetLocation(longitude, latitude);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 throw new Exception("Location Service Exception : " + ex.Message);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
             return zaptoLocation?.Location;
         }
@@ -66,6 +72,8 @@ namespace Zapto.Component.Common.ViewModels
             LocationModel? model = null;
             try
             {
+                this.IsLoading = true;
+
                 model = (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
                 {
                     Location = location.City,
@@ -76,6 +84,10 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.WriteLine(ex);
                 throw new Exception("Location Service Exception : " + ex.Message);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
             return model;
         }

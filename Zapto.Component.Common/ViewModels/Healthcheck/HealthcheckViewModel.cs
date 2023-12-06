@@ -43,41 +43,50 @@ namespace Zapto.Component.Common.ViewModels
             List<HealthCheckModel> items = new List<HealthCheckModel>();
             try
             {
-                HealthCheckConnect? healthcheckConnect = await this.ApplicationHealthCheckConnectServices.GetHealthCheckConnect();
-                if (healthcheckConnect != null)
-                {
-                    items.Add(this.Map(healthcheckConnect));
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+                this.IsLoading = true;
 
-            try
-            { 
-                HealthCheckAirZapto? healthcheckAirZapto = await this.ApplicationHealthCheckAirZaptoServices.GetHealthCheckAirZapto();
-                if (healthcheckAirZapto != null)
+                try
                 {
-                    items.Add(this.Map(healthcheckAirZapto));
+                    HealthCheckConnect? healthcheckConnect = await this.ApplicationHealthCheckConnectServices.GetHealthCheckConnect();
+                    if (healthcheckConnect != null)
+                    {
+                        items.Add(this.Map(healthcheckConnect));
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
 
-            try
-            { 
-                HealthCheckWeatherZapto? healthCheckWeatherZapto = await this.ApplicationHealthCheckWeatherZaptoServices.GetHealthCheckWeatherZapto();
-                if (healthCheckWeatherZapto != null)
+                try
                 {
-                    items.Add(this.Map(healthCheckWeatherZapto));
+                    HealthCheckAirZapto? healthcheckAirZapto = await this.ApplicationHealthCheckAirZaptoServices.GetHealthCheckAirZapto();
+                    if (healthcheckAirZapto != null)
+                    {
+                        items.Add(this.Map(healthcheckAirZapto));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+
+                try
+                {
+                    HealthCheckWeatherZapto? healthCheckWeatherZapto = await this.ApplicationHealthCheckWeatherZaptoServices.GetHealthCheckWeatherZapto();
+                    if (healthCheckWeatherZapto != null)
+                    {
+                        items.Add(this.Map(healthCheckWeatherZapto));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
                 }
             }
-            catch(Exception ex) 
+            finally
             {
-                Debug.WriteLine(ex);
+                this.IsLoading = false;
             }
             return items;
         }

@@ -28,6 +28,8 @@ namespace Zapto.Component.Common.ViewModels
             IEnumerable<PlugModel>? models = null;
 			try
 			{
+				this.IsLoading = true;
+
 				models = roomModel.ConnectedObjectsList?.Where((obj) => obj.Plug != null).Select((obj) => new PlugModel()
 				{
 					Name = obj.Name,
@@ -43,7 +45,11 @@ namespace Zapto.Component.Common.ViewModels
 			{
 				Debug.WriteLine(ex);
 			}
-			return models;
+            finally
+            {
+                this.IsLoading = false;
+            }
+            return models;
 		}
 
         #endregion

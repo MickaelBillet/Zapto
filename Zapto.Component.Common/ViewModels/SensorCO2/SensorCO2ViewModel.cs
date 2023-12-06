@@ -34,6 +34,8 @@ namespace Zapto.Component.Common.ViewModels
             SensorCO2Model? model = null;
             try
             {
+                this.IsLoading = true;
+
                 if (this.ApplicationSensorServices != null)
                 {
                     model = (await this.ApplicationSensorServices.GetSensorsAsync())?.Select((sensor) => new SensorCO2Model()
@@ -50,6 +52,10 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.Write(ex);
                 throw new Exception("Sensor CO2 Service Exception");
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
 
             return model;

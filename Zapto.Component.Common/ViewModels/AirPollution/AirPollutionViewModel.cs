@@ -46,6 +46,8 @@ namespace Zapto.Component.Common.ViewModels
                 ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
                 if (user != null)
                 {
+                    this.IsLoading = true;
+
                     ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(user.LocationName, user.LocationLongitude, user.LocationLatitude);
                     if (zaptoAirPollution != null)
                     {
@@ -58,6 +60,10 @@ namespace Zapto.Component.Common.ViewModels
                 Debug.WriteLine(ex);
                 throw new Exception("AirPollution Service Exception : " + ex.Message);
             }
+            finally
+            {
+                this.IsLoading = false;
+            }
             return model;
         }
 
@@ -65,7 +71,9 @@ namespace Zapto.Component.Common.ViewModels
         {
             AirPollutionModel? model = null;
             try
-            { 
+            {
+                this.IsLoading = true;
+
                 ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
                 if (zaptoAirPollution != null)
                 {
@@ -77,6 +85,10 @@ namespace Zapto.Component.Common.ViewModels
                 Debug.WriteLine(ex);
                 throw new Exception("AirPollution Service Exception : " + ex.Message);
             }
+            finally
+            {
+                this.IsLoading = false;
+            }
             return model;
         }
         public async Task<AirPollutionModel?> GetAirPollutionModel(string longitude, string latitude)
@@ -84,6 +96,8 @@ namespace Zapto.Component.Common.ViewModels
             AirPollutionModel? model = null;
             try
             {
+                this.IsLoading = true;
+
                 ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(longitude, latitude);
                 if (zaptoAirPollution != null)
                 {
@@ -94,6 +108,10 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.WriteLine(ex);
                 throw new Exception("AirPollution Service Exception : " + ex.Message);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
             return model;
         }

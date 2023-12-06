@@ -35,6 +35,8 @@ namespace Zapto.Component.Common.ViewModels
 
             try
             { 
+                this.IsLoading = true;
+
                 Match? match = new Regex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$").Match(input);
                 if (match.Success)
                 {
@@ -81,6 +83,10 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.WriteLine(ex);
                 throw new Exception("Location Service Exception : " + ex.Message);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
 
             return output;

@@ -52,6 +52,8 @@ namespace Zapto.Component.Common.ViewModels
             List<RoomChartModel>? data = null;
             try
             {
+                this.IsLoading = true;
+
                 if (this.ApplicationOperationDataService != null)
                 {
                     data = new List<RoomChartModel>();
@@ -76,6 +78,10 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.WriteLine(ex);
                 throw new Exception("Charts Data Exception : " + ex.Message);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
             return data;
         }
