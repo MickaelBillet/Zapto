@@ -202,7 +202,7 @@
     <value>Chargement...</value>
   </data>
   <data name="Location in progress" xml:space="preserve">
-    <value>Localisation en cours</value>
+    <value>Localisation en cours...</value>
   </data>
   <data name="Log In" xml:space="preserve">
     <value>Se connecter</value>

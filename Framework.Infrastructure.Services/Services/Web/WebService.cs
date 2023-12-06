@@ -33,8 +33,8 @@ namespace Framework.Infrastructure.Services
             this.HttpClientService = serviceProvider.GetRequiredService<IHttpClientService>();
             this.InternetService = serviceProvider.GetRequiredService<IInternetService>();
             this.AuthenticationWebService = serviceProvider.GetService<IAuthenticationWebService>();
+            this.ErrorHandlerService = serviceProvider.GetRequiredService<IErrorHandlerWebService>();
             this.HttpClientName = httpClientName;
-            this.ErrorHandlerService = serviceProvider.GetService<IErrorHandlerWebService>();
             this.SystemTextJsonContentSerializer = new SystemTextJsonContentSerializer();
 		}
 		#endregion

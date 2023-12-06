@@ -1,11 +1,9 @@
 ﻿using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
-using Zapto.Component.Common.Resources;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -21,16 +19,14 @@ namespace Zapto.Component.Common.ViewModels
     {
         #region Properties
         private IApplicationAirPollutionService ApplicationAirPollutionService { get; }
-        public IStringLocalizer<Resource> Localizer { get; }
         #endregion
 
         #region Constructor
         public AirPollutionViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             ApplicationAirPollutionService = serviceProvider.GetRequiredService<IApplicationAirPollutionService>();
-            this.Localizer = serviceProvider.GetRequiredService<IStringLocalizer<Resource>>();
         }
-    #endregion
+        #endregion
 
         #region Methods
         public void OpenDetails(AirPollutionModel model)

@@ -30,7 +30,6 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-
         public async Task<string?> GetReverseLocation(string latitude, string longitude)
         {
             ZaptoLocation? zaptoLocation = null;

@@ -86,7 +86,6 @@ namespace Zapto.Component.Common.ViewModels
             {
                 Debug.Write(ex);
                 throw new Exception("Weather Service Exception");
-
             }
             finally
             {

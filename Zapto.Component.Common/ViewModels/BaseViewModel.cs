@@ -1,5 +1,7 @@
 ﻿using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Zapto.Component.Common.Resources;
 using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
@@ -15,12 +17,13 @@ namespace Zapto.Component.Common.ViewModels
 	{
 		private bool _disposed = false;
 
-		public event EventHandler? Refresh;
+        public event EventHandler? Refresh;
 
-		#region Properties
-		public INavigationService NavigationService { get; }
+        #region Properties
+        protected INavigationService NavigationService { get; }
         protected IAuthenticationService AuthenticationService { get; }
-		public bool IsLoading { get; protected set; } = false;
+        protected IStringLocalizer<Resource> Localizer { get; }
+        public bool IsLoading { get; protected set; } = false;
         #endregion
 
         #region Constructor
@@ -28,12 +31,13 @@ namespace Zapto.Component.Common.ViewModels
 		{
 			this.NavigationService = serviceProvider.GetRequiredService<INavigationService>();
 			this.AuthenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
-		}
-		#endregion
+            this.Localizer = serviceProvider.GetRequiredService<IStringLocalizer<Resource>>();
+        }
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		protected virtual void OnRefresh(EventArgs e)
+        protected virtual void OnRefresh(EventArgs e)
 		{
 			EventHandler? handler = this.Refresh;
 			handler?.Invoke(this, e);

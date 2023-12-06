@@ -2,27 +2,14 @@
 @inject ILocationViewModel ViewModel
 @implements IDisposable
 
-@if (this.LocationFound)
-{
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Model.Location</MudText>
-}
-else if ((this.LocalizationIsAvailable == null) || ((this.LocalizationIsAvailable == true) && (this.LocationFound == false)))
-{
-    <div class="d-flex align-items-start flex-column mt-6">
-        <div class="d-flex flex-row align-items-center">
-            <MudText Typo="Typo.h5" Color="Color.Primary">@this.Localizer["Location in progress"]</MudText>
-            <MudProgressCircular Color="Color.Default" Class="ml-6 mt-3" Size="Size.Medium" Indeterminate="true" />
-        </div>
-        </div>
-}
-else if (this.LocalizationIsAvailable == false)
-{
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Localizer["Unable to locate"]</MudText>
-}
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
+
 
 @code {
     [Parameter]
     public LocationModel Model { get; set; } = null;
+
+    private string Text { get; set; } = string.Empty;
 
     private bool LocationFound
     {
@@ -60,9 +47,17 @@ else if (this.LocalizationIsAvailable == false)
     {
         if ((this.ViewModel != null) && (this.Model != null))                
         {
-            if ((this.LocationFound == false) && (this.LocalizationFound == true))
+            if (this.LocalizationIsAvailable == null)
             {
-                this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
+                this.Text = this.Localizer["Location in progress"];
+            }
+            else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
+            {
+                this.Text = this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
+            }
+            else if (this.LocalizationIsAvailable == false)
+            {
+                this.Text = this.Localizer["Unable to locate"];
             }
         }
     }
