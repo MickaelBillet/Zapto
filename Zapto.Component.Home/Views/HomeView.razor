@@ -69,7 +69,7 @@
     protected override async Task OnInitializedAsync()
     {
         #if DEBUG
-        await Task.Delay(5000);
+        //await Task.Delay(5000);
         #endif
 
         if (this.ViewModel != null)
@@ -101,8 +101,8 @@
 
     private async Task GetPositionAsync(double longitude, double latitude)
     {
-        this.Model.Longitude = longitude;
-        this.Model.Latitude = latitude;
+        this.Model.Longitude = Math.Round(longitude,6);
+        this.Model.Latitude = Math.Round(latitude,6);
         this.Model.LocalizationIsAvailable = await Task.FromResult<bool>(true);
 
         //Warning don't delete this line

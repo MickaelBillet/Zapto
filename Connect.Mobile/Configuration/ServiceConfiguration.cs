@@ -5,6 +5,7 @@ using Connect.Mobile.Interfaces;
 using Connect.Mobile.ViewModel;
 using Framework.Infrastructure.Services;
 using Framework.Mobile.Services;
+using Framework.Mobile.Services.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

@@ -18,7 +18,7 @@ namespace WeatherZapto.Application.Services
 		#endregion
 
 		#region Methods
-        public async Task<ZaptoLocation> GetReversetLocation(string longitude, string latitude)
+        public async Task<ZaptoLocation> GetReverseLocation(string longitude, string latitude)
         {
             return (this.LocationService != null) ? await this.LocationService.GetReverseLocation(longitude, latitude) : null;
         }

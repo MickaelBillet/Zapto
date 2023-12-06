@@ -5,7 +5,7 @@
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
 
-@code {
+    @code {
     [Parameter]
     public LocationModel Model { get; set; } = null;
 
@@ -49,7 +49,11 @@
         {
             try
             {
-                if (this.LocalizationIsAvailable == null)
+                if ((this.LocationFound == true) && (this.LocalizationFound == true))
+                {
+                    this.Text = this.Model.Location;
+                }
+                if ((this.LocalizationIsAvailable == null) && (this.LocationFound == false))
                 {
                     this.Text = this.Localizer["Location in progress"];
                 }

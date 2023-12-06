@@ -46,6 +46,10 @@ namespace WeatherZapto.WebApi.Controllers
                     return BadRequest();
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(int.Parse(ex.Message));
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new CustomErrorResponse
@@ -72,6 +76,10 @@ namespace WeatherZapto.WebApi.Controllers
                 {
                     return NotFound();
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(int.Parse(ex.Message));
             }
             catch (Exception ex)
             {

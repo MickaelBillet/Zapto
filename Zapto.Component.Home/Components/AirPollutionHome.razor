@@ -106,7 +106,7 @@
         {
             try
             {
-                this.Model = await this.ViewModel.GetAirPollutionModel(this.Location.Latitude.ToString(), this.Location.Longitude.ToString());
+                this.Model = await this.ViewModel.GetAirPollutionModel(this.Location.Longitude.ToString(), this.Location.Latitude.ToString());
                 if (this.Model != null)
                 {
                     this.ViewModel.Refresh += RefreshView;

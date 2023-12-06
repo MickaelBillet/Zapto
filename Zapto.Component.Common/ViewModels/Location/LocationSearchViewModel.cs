@@ -37,44 +37,54 @@ namespace Zapto.Component.Common.ViewModels
             { 
                 this.IsLoading = true;
 
-                Match? match = new Regex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$").Match(input);
-                if (match.Success)
+                if (string.IsNullOrEmpty(input) == false)
                 {
-                    (string? city, string? countrycode)? result = this.ReadGroup(match.Groups);
-                    if ((result != null) && (result.Value.city!.Length > MinLength))
-                    {
-                        IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(result.Value.city, string.Empty, result.Value.countrycode);
-                        output = locations.GroupBy(x => new{ x.Location, x.State, x.Country, x.Latitude, x.Longitude })
-                                            .Select(y => y.First())
-                                            .Select(x => new LocationModel()
-                                            {
-                                                Country = x.Country,
-                                                Longitude = x.Longitude,
-                                                Location = x.Location,
-                                                Latitude = x.Latitude,
-                                                State = x.State,
-                                            });
-                    }
-                }
-                else
-                {
-                    match = new Regex(@"^(\d{5})\s?,?([A-Z,a-z]{2})?$").Match(input);
+                    Match? match = new Regex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$").Match(input);
                     if (match.Success)
                     {
-                        (string? zipcode, string? countrycode)? result = this.ReadGroup(match.Groups);
-                        if ((result != null) && (result.Value.zipcode!.Length == ZipCodeSize))
+                        (string? city, string? countrycode)? result = this.ReadGroup(match.Groups);
+                        if ((result != null) && (result.Value.city!.Length > MinLength))
                         {
-                            ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(result.Value.zipcode, result.Value.countrycode);
-                            output = new List<LocationModel> { 
-                                new LocationModel()
+                            IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(result.Value.city, string.Empty, result.Value.countrycode);
+                            if (locations != null)
+                            {
+                                output = locations.GroupBy(x => new { x.Location, x.State, x.Country, x.Latitude, x.Longitude })
+                                                    .Select(y => y.First())
+                                                    .Select(x => new LocationModel()
+                                                    {
+                                                        Country = x.Country,
+                                                        Longitude = x.Longitude,
+                                                        Location = x.Location,
+                                                        Latitude = x.Latitude,
+                                                        State = x.State,
+                                                    });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        match = new Regex(@"^(\d{5})\s?,?([A-Z,a-z]{2})$").Match(input);
+                        if (match.Success)
+                        {
+                            (string? zipcode, string? countrycode)? result = this.ReadGroup(match.Groups);
+                            if ((result != null) && (result.Value.zipcode!.Length == ZipCodeSize))
+                            {
+                                ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(result.Value.zipcode, result.Value.countrycode);
+                                if (location != null) 
                                 {
-                                    Country = location.Country,
-                                    Longitude = location.Longitude,
-                                    Location = location.Location,
-                                    Latitude = location.Latitude,
-                                    Zip = location.Zip,
-                                },
-                            };
+                                    output = new List<LocationModel>
+                                    {
+                                        new LocationModel()
+                                        {
+                                            Country = location.Country,
+                                            Longitude = location.Longitude,
+                                            Location = location.Location,
+                                            Latitude = location.Latitude,
+                                            Zip = location.Zip,
+                                        },
+                                    };
+                                }
+                            }
                         }
                     }
                 }

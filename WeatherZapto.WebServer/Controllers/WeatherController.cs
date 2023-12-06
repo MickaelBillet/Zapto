@@ -59,6 +59,10 @@ namespace WeatherZapto.WebServer.Controllers
                     return Problem("Services not configured", null, 500, "Server Error");
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(int.Parse(ex.Message));
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new CustomErrorResponse
@@ -93,6 +97,10 @@ namespace WeatherZapto.WebServer.Controllers
                 {
                     return Problem("Services not configured", null, 500, "Server Error");
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(int.Parse(ex.Message));
             }
             catch (Exception ex)
             {

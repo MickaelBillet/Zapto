@@ -481,13 +481,13 @@ namespace Framework.Infrastructure.Services
                     return await action();
                 }, token);
 			}
-			catch (TaskCanceledException)
-			{
-				this.ErrorHandlerService.HandleError("HttpResponseFailure");
-			}
             catch (OperationCanceledException)
 			{
                 //We cancel the task
+            }
+            catch (Exception)
+            {
+                this.ErrorHandlerService.HandleError("HttpResponseFailure");
             }
 
 			//Return the response message gotten from the http client call.

@@ -1,4 +1,5 @@
 ﻿using Framework.Core.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -25,16 +26,32 @@ namespace WeatherZapto.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            HealthReport? report = await this.HealthCheckService.CheckHealthAsync();
-            var reportToJson = report.ToJson();
+            try
+            { 
+                HealthReport? report = await this.HealthCheckService.CheckHealthAsync();
+                var reportToJson = report.ToJson();
 
-            if (reportToJson != null)
-            {
-                return StatusCode(200, reportToJson);
+                if (reportToJson != null)
+                {
+                    return StatusCode(200, reportToJson);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                return NotFound();
+                return StatusCode(int.Parse(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomErrorResponse
+                {
+                    Message = ex.Message,
+                    Description = string.Empty,
+                    Code = 500,
+                });
             }
         }
         #endregion

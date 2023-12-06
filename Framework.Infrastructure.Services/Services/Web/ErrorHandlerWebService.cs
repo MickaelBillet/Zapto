@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -10,15 +8,12 @@ namespace Framework.Infrastructure.Services
 	{
 		#region Property
 
-		private IAuthenticationWebService AuthenticationService { get; }
-
 		#endregion
 
 		#region Constructor
 
 		public ErrorHandlerWebService(IServiceProvider provider)
 		{
-			this.AuthenticationService = provider.GetService<IAuthenticationWebService>();
 		}
 
 		#endregion
@@ -42,47 +37,18 @@ namespace Framework.Infrastructure.Services
 		/// <summary>
 		/// Handles the error async.
 		/// </summary>
-		/// <returns>The error async.</returns>
-		/// <param name="stream">Stream.</param>
-		/// <param name="obj">Object.</param>
 		public async Task<bool> HandleErrorAsync(HttpResponseMessage response, string obj, int attempt)
 		{
-			bool hasError = true;
+			await Task.FromResult(true);
 
-			if ((response?.StatusCode == HttpStatusCode.Unauthorized || response?.StatusCode == HttpStatusCode.Forbidden) 
-					&& (this.AuthenticationService != null) && (attempt == 1))
+            if (response != null)
 			{
-				//We ask a new token
-				bool isAuthenticated = await this.AuthenticationService.RefreshAccessToken();
-
-				if (isAuthenticated != true)
-				{
-					throw new HttpRequestException(response.StatusCode + " - " + response.ReasonPhrase + " (" + obj + ") ");
-				}
-				else
-				{
-					hasError = false;
-				}
-			}
-			else if (response?.StatusCode == HttpStatusCode.NotFound)
-			{
-				throw new HttpRequestException(response.StatusCode.ToString());
-			}
+                throw new HttpRequestException(((int)response.StatusCode).ToString());
+            }
 			else
 			{
-				if (response != null)
-				{
-					throw new HttpRequestException(response.StatusCode 
-													+ " - " + response.ReasonPhrase 
-													+ " (" + obj + ") ");
-				}
-				else
-				{
-					throw new HttpRequestException("Unexpected error");
-				}
+				throw new HttpRequestException("500");
 			}
-
-			return hasError;
 		}
 
 		#endregion

@@ -36,7 +36,7 @@ namespace Zapto.Component.Common.ViewModels
             try
             {
                 this.IsLoading = true;
-                zaptoLocation = await this.ApplicationLocationServices.GetReversetLocation(longitude, latitude);
+                zaptoLocation = await this.ApplicationLocationServices.GetReverseLocation(longitude, latitude);
             }
             catch (Exception ex)
             {

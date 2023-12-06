@@ -27,7 +27,6 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddSupervisor();
             services.AddRepositories();
             services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebService>();
-            services.AddSingleton<IAuthenticationWebService, AuthenticationWebService>((service) => new AuthenticationWebService(service, "OpenWeather"));
         }
     }
 }
