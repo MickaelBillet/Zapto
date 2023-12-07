@@ -4,13 +4,14 @@ using Connect.Infrastructure.Services;
 using Connect.Mobile.Interfaces;
 using Connect.Mobile.ViewModel;
 using Framework.Infrastructure.Services;
+using Framework.Mobile.Core.Services;
 using Framework.Mobile.Services;
-using Framework.Mobile.Services.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Sinks.Email;
 using System.Net;
+using ErrorHandlerWebService = Framework.Mobile.Core.Services.ErrorHandlerWebService;
 using IErrorHandlerService = Connect.Mobile.Interfaces.IErrorHandlerService;
 
 namespace Connect.Mobile.Services

@@ -41,7 +41,7 @@ namespace Connect.Mobile.ViewModel
 
 		#region Services
 
-        private IApplicationLocationServices ApplicationLocationServices { get; }
+        private IApplicationConnectLocationServices ApplicationLocationServices { get; }
         private ISignalRService SignalRService { get; }
         private ICacheService CacheService { get; }
 
@@ -54,7 +54,7 @@ namespace Connect.Mobile.ViewModel
             this.RoomsList = new ObservableCollection<Room>();
             this.SelectRoomCommand = new Command<Room>(async (Room room) => await ExecuteSelectRoomCommand(room));
 
-            this.ApplicationLocationServices = serviceProvider.GetService<IApplicationLocationServices>();
+            this.ApplicationLocationServices = serviceProvider.GetService<IApplicationConnectLocationServices>();
             this.SignalRService = serviceProvider.GetService<ISignalRService>();
             this.CacheService = serviceProvider.GetService<ICacheService>();
         }

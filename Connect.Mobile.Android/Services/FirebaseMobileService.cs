@@ -60,7 +60,7 @@ namespace Connect.Mobile.Droid.Services
                 }
                 catch (Exception ex)
                 {
-
+                    Debug.WriteLine(ex);
                 }
             };
         }
@@ -90,7 +90,7 @@ namespace Connect.Mobile.Droid.Services
                 }
                 catch (Exception ex)
                 {
-
+                    Debug.WriteLine(ex);
                 }
             };
         }
@@ -104,7 +104,7 @@ namespace Connect.Mobile.Droid.Services
             }
             catch (Exception ex)
             {
-
+                Debug.WriteLine(ex);
             }
 
         }

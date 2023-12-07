@@ -35,7 +35,7 @@ namespace Connect.Mobile.ViewModel
 
 		#region Services
 
-        private IApplicationLocationServices ApplicationLocationServices { get; }
+        private IApplicationConnectLocationServices ApplicationLocationServices { get; }
 
 		#endregion
 
@@ -46,7 +46,7 @@ namespace Connect.Mobile.ViewModel
             this.SelectRoomCommand = new Command<Room>(async (Room room) => await ExecuteSelectRoomCommand(room));
             this.ClickLocationCommand = new Command(async () => await ExecuteClickLocationCommand());
 
-            this.ApplicationLocationServices = serviceProvider.GetService<IApplicationLocationServices>();
+            this.ApplicationLocationServices = serviceProvider.GetService<IApplicationConnectLocationServices>();
         } 
 
         #endregion

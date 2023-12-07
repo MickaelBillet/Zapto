@@ -14,19 +14,19 @@ namespace Framework.Mobile.Core.Services
     {
         #region Property
 
-        private string TokenEndpoint { get; set; }
+        private string? TokenEndpoint { get; set; }
 
-        private string ClientId { get; set; }
+        private string? ClientId { get; set; }
 
-        private string ClientSecret { get; set; }
+        private string? ClientSecret { get; set; }
 
-        public Token Token { get; set; }
+        public Token? Token { get; set; }
 
         #endregion
 
         #region Services
 
-        private HttpClient HttpClient { get; }
+        private HttpClient? HttpClient { get; }
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace Framework.Mobile.Core.Services
 
         public AuthenticationWebService(IServiceProvider serviceProvider, string name)
         {
-            IHttpClientService httpClientService = serviceProvider.GetService<IHttpClientService>();
+            IHttpClientService httpClientService = serviceProvider.GetRequiredService<IHttpClientService>();
             if (httpClientService != null)
             {
                 HttpClient = httpClientService.GetClient(name);

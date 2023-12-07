@@ -17,6 +17,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using Xamarin.Essentials;
+using ErrorHandlerWebService = Framework.Mobile.Core.Services.ErrorHandlerWebService;
 
 namespace AirZapto.Mobile
 {

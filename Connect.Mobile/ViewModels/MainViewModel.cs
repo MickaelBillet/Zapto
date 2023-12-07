@@ -31,7 +31,7 @@ namespace Connect.Mobile.ViewModel
         #endregion
 
         #region Services
-        private IApplicationLocationServices ApplicationLocationServices { get; }
+        private IApplicationConnectLocationServices ApplicationLocationServices { get; }
         private IAuthenticationWebService AuthenticationWebService { get; }
         private IConfiguration Configuration { get; }  
         private IForegroundService ForegroundService { get; }
@@ -43,7 +43,7 @@ namespace Connect.Mobile.ViewModel
 
         public MainViewModel(IServiceProvider serviceProvider, IConfiguration configuration) : base(serviceProvider)
 		{
-            this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationServices>();
+            this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationConnectLocationServices>();
             this.AuthenticationWebService = serviceProvider.GetRequiredService<IAuthenticationWebService>();
             this.ForegroundService = serviceProvider.GetRequiredService<IForegroundService>();
             this.FirebaseMobileService = serviceProvider.GetRequiredService<IFirebaseMobileService>();
