@@ -139,18 +139,22 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddHealthChecks()
         //Memory
-        .AddCheck<MemoryHealthCheck>("Memory", 
-                                        HealthStatus.Degraded, 
+        .AddCheck<MemoryHealthCheck>("Memory",
+                                        HealthStatus.Degraded,
                                         new string[] { "system" })
         //PostGreSql
-        .AddNpgSql(builder.Configuration["ConnectionStrings:DefaultConnection"]!, 
-                            name:"PostGreSql", 
-                            failureStatus:HealthStatus.Unhealthy, 
-                            tags: new string[] {"system"})
+        .AddNpgSql(builder.Configuration["ConnectionStrings:DefaultConnection"]!,
+                            name: "PostGreSql",
+                            failureStatus: HealthStatus.Unhealthy,
+                            tags: new string[] { "system" })
         //Log error in DB
         .AddCheck<ErrorHealthCheck>("Error System",
                                         failureStatus: HealthStatus.Degraded,
-                                        tags: new[] { "system" });
+                                        tags: new[] { "system" })
+        //Open Weather Call
+        .AddCheck<CallOpenWeather>("Call OpenWeather",
+                                        failureStatus: HealthStatus.Unhealthy,
+                                        new string[] { "system" });
 
 builder.Services.Configure<HealthCheckPublisherOptions>(options =>
 {

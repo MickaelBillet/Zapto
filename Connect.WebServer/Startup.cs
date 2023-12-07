@@ -3,7 +3,6 @@ using Connect.Server.Configuration;
 using Connect.Server.Helpers;
 using Connect.WebApi.Middleware;
 using Connect.WebServer.Services;
-using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
