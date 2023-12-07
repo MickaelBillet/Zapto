@@ -6,62 +6,16 @@
 
 <div class="d-flex flex-column">
     <div class="d-flex justify-content-between mb-6">
-        <ErrorBoundary @ref="ErrorBoundaryLocation">
-            <ChildContent>
-                <LocationHome Model="@this.Model"></LocationHome>
-            </ChildContent>
-            <ErrorContent>
-                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-                    <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocation" Color="Color.Warning">Reload</MudButton>
-                </MudContainer>
-            </ErrorContent>
-        </ErrorBoundary>
-        <ErrorBoundary @ref="ErrorBoundaryLocationSearch">
-            <ChildContent>
-                <LocationSearch ModelChanged="@this.SelectLocation"></LocationSearch>
-            </ChildContent>
-            <ErrorContent>
-                <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-                    <MudText Typo="Typo.h6" Class="mr-4">Location Service @this.Localizer["HS"]</MudText>
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorLocationSearch" Color="Color.Warning">Reload</MudButton>
-                </MudContainer>
-            </ErrorContent>
-        </ErrorBoundary>
+        <LocationHome Model="@this.Model"></LocationHome>
+        <LocationSearch ModelChanged="@this.SelectLocation"></LocationSearch>
     </div>
 </div>
 
-<ErrorBoundary @ref="ErrorBoundaryWeather">
-    <ChildContent>
-        <WeatherHome Location="@this.Model"></WeatherHome>
-    </ChildContent>
-    <ErrorContent>
-        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">Weather Service @this.Localizer["HS"]</MudText>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorWeather" Color="Color.Warning">Reload</MudButton>
-        </MudContainer>
-    </ErrorContent>
-</ErrorBoundary>
-
-<ErrorBoundary @ref="ErrorBoundaryAirPollution">
-    <ChildContent>
-        <AirPollutionHome Location="@this.Model"></AirPollutionHome>
-    </ChildContent>
-    <ErrorContent>
-        <MudContainer Style="height:80px;" Class="d-flex align-center gap-2">
-            <MudText Typo="Typo.h6" Class="mr-4">AirPollution Service @this.Localizer["HS"]</MudText>
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ErrorOutline" @onclick="ResetErrorAirPollution" Color="Color.Warning">Reload</MudButton>
-        </MudContainer>
-    </ErrorContent>
-</ErrorBoundary>
+<WeatherHome Location="@this.Model"></WeatherHome>
+<AirPollutionHome Location="@this.Model"></AirPollutionHome>
 
 @code
     {
-    private ErrorBoundary ErrorBoundaryAirPollution;
-    private ErrorBoundary ErrorBoundaryWeather;
-    private ErrorBoundary ErrorBoundaryLocation;
-    private ErrorBoundary ErrorBoundaryLocationSearch;
-
     private bool? LocalizationIsAvailable { get; set; } = null;
 
     private LocationModel Model { get; set; } = new LocationModel();
@@ -83,11 +37,6 @@
         if ((this.ViewModel != null) && (this.PositionService != null))
         {
             await this.PositionService.GetCurrentPosition(JsRuntime, GetPositionAsync, GetErrorAsync);
-
-            ErrorBoundaryWeather?.Recover();
-            ErrorBoundaryAirPollution?.Recover();
-            ErrorBoundaryLocation?.Recover();
-            ErrorBoundaryLocationSearch?.Recover();
         }
     }
 
@@ -112,26 +61,6 @@
     public void Dispose()
     {
         this.ViewModel?.Dispose();
-    }
-
-    private void ResetErrorWeather()
-    {
-        ErrorBoundaryWeather?.Recover();
-    }
-
-    private void ResetErrorAirPollution()
-    {
-        ErrorBoundaryAirPollution?.Recover();
-    }
-
-    private void ResetErrorLocation()
-    {
-        ErrorBoundaryLocation?.Recover();
-    }
-
-    private void ResetErrorLocationSearch()
-    {
-        ErrorBoundaryLocationSearch?.Recover();
     }
 
     private void SelectLocation(LocationModel model)
