@@ -4,14 +4,14 @@ using Serilog;
 
 namespace WeatherZapto.WebServer.Services
 {
-    public class ConfigureLoggerStartupTask : IStartupTask
+    public class LoggerStartupTask : IStartupTask
     {
         #region Services
         private IConfiguration Configuration { get; }
         #endregion
 
         #region Constructor
-        public ConfigureLoggerStartupTask(IConfiguration configuration)
+        public LoggerStartupTask(IConfiguration configuration)
         {
             this.Configuration = configuration;  
         }

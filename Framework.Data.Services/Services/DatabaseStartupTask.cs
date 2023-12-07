@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Framework.Data.Services
 {
-    public class CreateDatabaseStartupTask : IStartupTask
+    public class DatabaseStartupTask : IStartupTask
     {
         #region Services
         private IDatabaseService DatabaseService { get; }
         #endregion
 
         #region Constructor
-        public CreateDatabaseStartupTask(IServiceProvider serviceProvider)
+        public DatabaseStartupTask(IServiceProvider serviceProvider)
         {
             this.DatabaseService = serviceProvider.GetRequiredService<IDatabaseService>();  
         }
