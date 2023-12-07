@@ -152,7 +152,7 @@ builder.Services.AddHealthChecks()
                                         failureStatus: HealthStatus.Degraded,
                                         tags: new[] { "system" })
         //Open Weather Call
-        .AddCheck<CallOpenWeather>("Call OpenWeather",
+        .AddCheck<CallOpenWeather>("OpenWeather Calls",
                                         failureStatus: HealthStatus.Unhealthy,
                                         new string[] { "system" });
 

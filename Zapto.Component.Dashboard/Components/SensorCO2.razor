@@ -55,7 +55,15 @@
             {
                 <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
             }
-        }  
+        }
+        else if ((this.Model == null) && (this.HasError == true))
+        {
+            <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        }
     </MudContainer>
 </MudPaper>
 
@@ -65,6 +73,7 @@
     public string? SensorName { get; set; } = null;
 
     public SensorCO2Model? Model { get; set; } = null;
+    private bool HasError { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,6 +98,7 @@
             catch (Exception ex)
             {
                 Snackbar.Add(ex.Message, Severity.Error);
+                this.HasError = true;
             }
         }
     }

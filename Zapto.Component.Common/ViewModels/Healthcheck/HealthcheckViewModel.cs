@@ -121,6 +121,14 @@ namespace Zapto.Component.Common.ViewModels
                 Exception = healthCheckWeatherZapto?.Entries?.PostGreSql?.Exception?.ToString(),
                 Tags = healthCheckWeatherZapto?.Entries?.PostGreSql?.Tags?.Aggregate((workingSentence, next) => workingSentence + " " + next),
             });
+            weatherZapto.Items?.Add(new HealthcheckItemModel
+            {
+                Name = "OpenWeather Calls",
+                Description = healthCheckWeatherZapto?.Entries?.CallOpenWeather?.Description?.ToString(),
+                Status = healthCheckWeatherZapto?.Entries?.CallOpenWeather?.Status,
+                Exception = healthCheckWeatherZapto?.Entries?.CallOpenWeather?.Exception?.ToString(),
+                Tags = healthCheckWeatherZapto?.Entries?.CallOpenWeather?.Tags?.Aggregate((workingSentence, next) => workingSentence + " " + next),
+            });
             return weatherZapto;
         }
         private HealthCheckModel Map(HealthCheckConnect healthCheckConnect)

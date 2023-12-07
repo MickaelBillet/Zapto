@@ -25,7 +25,8 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOpenWeather()
         {
             int res = 0;
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.Date.ToUniversalTime() == Clock.Now.Date.ToUniversalTime());
+            
+            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().Date == Clock.Now.ToUniversalTime().Date);
             if (entity != null) 
             {
                 entity.Count++;
@@ -45,15 +46,15 @@ namespace WeatherZapto.Data.Supervisors
             return result;
         }
 
-        public async Task<long?> GetDayCallsCount(DateOnly date)
+        public async Task<long?> GetDayCallsCount(DateTime date)
         {
-            long? count = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.Date.Equals(date))).Count;
-            return count;
+            CallEntity entity = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date == date.ToUniversalTime().Date));
+            return (entity != null) ? entity.Count : 0;
         }
 
         public async Task<long?> GetLast30DaysCallsCount()
         {
-            long? count = await this.CallRepository.GetLast30DaysCallsCount();
+           long? count = await this.CallRepository.GetLast30DaysCallsCount();
             return count;
         }
         #endregion

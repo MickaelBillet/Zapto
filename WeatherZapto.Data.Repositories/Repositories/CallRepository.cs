@@ -15,11 +15,11 @@ namespace WeatherZapto.Data.Repositories
         #region Methods
         public async Task<long?> GetLast30DaysCallsCount()
         {
-            long? count = null;
+            long? count = 0;
             if (this.DataContext != null)
             {
                 DateTime date = Clock.Now - new TimeSpan(30,0,0,0);
-                FormattableString sql = $"SELECT * FROM Call Where CreationDateTime < {date.ToUniversalTime().ToString("o")}";
+                FormattableString sql = $"SELECT * FROM \"Call\" Where (\"CreationDateTime\" >= {date.ToUniversalTime()})"; 
 
                 if (this.DataContext != null)
                 {

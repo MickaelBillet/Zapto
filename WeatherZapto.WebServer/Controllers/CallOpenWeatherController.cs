@@ -31,7 +31,7 @@ namespace WeatherZapto.WebApi.Controllers
                 string[] tab = date.Split("-");
                 if ((tab != null) && (tab.Length > 0))
                 {
-                    count = await this.Supervisor.GetDayCallsCount(new DateOnly(int.Parse(tab[2]), int.Parse(tab[1]), int.Parse(tab[0])));
+                    count = await this.Supervisor.GetDayCallsCount(new DateTime(int.Parse(tab[2]), int.Parse(tab[1]), int.Parse(tab[0])));
                     if (count != null)
                     {
                         return StatusCode(200, count);

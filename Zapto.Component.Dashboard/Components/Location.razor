@@ -4,7 +4,7 @@
 @implements IDisposable
 
 <div class="d-flex align-center gap-4 mb-2">
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
+    <MudText Typo="Typo.h5" Color="Color.Primary">@this.Text</MudText>
     @if ((this.Text != null) && (this.Text != this.Localizer["Unable to locate"]))
     {
         <MudIconButton Size="Size.Small"

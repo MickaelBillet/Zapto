@@ -24,7 +24,7 @@ namespace WeatherZapto.WebServer.Services
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
                                                                 CancellationToken cancellationToken = default(CancellationToken))
         {
-            long? dayCount = await this.SupervisorCall.GetDayCallsCount(new DateOnly(Clock.Now.Year, Clock.Now.Month, Clock.Now.Day));
+            long? dayCount = await this.SupervisorCall.GetDayCallsCount(Clock.Now);
             long? monthCount = await this.SupervisorCall.GetLast30DaysCallsCount();
 
             if ((monthCount > WarningLimit) && (monthCount < ErrorLimit))

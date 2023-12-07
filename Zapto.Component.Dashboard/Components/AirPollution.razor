@@ -39,12 +39,21 @@
                 <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
             }
         }
+        else if ((this.Model == null) && (this.HasError == true))
+        {
+            <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
+        }
+        else
+        {
+            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+        }
     </MudContainer>
 </MudPaper>
 
 @code 
 {
     public AirPollutionModel? Model { get; set; }
+    private bool HasError { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,6 +78,7 @@
             catch (Exception ex)
             {
                 Snackbar.Add(ex.Message, Severity.Error);
+                this.HasError = true;
             }
         }
     }
