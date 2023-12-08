@@ -109,6 +109,10 @@
                 <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Pressure</MudText>
                 <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
             }
+            else if ((this.Model == null) && (this.HasError == true))
+            {
+                <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
+            }
             else
             {
                 <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
