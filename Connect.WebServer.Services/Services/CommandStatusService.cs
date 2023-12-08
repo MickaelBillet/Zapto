@@ -33,35 +33,15 @@ namespace Connect.WebServer.Services
             try
             {
                 ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
 
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)
                 {
-                    Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
-                    if (plug != null)
-                    {
-                        ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                        plug.UpdateStatus(status.Status);
-                        Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
-                        if (room != null)
-                        {
-                            //Send Status to the clients (Mobile, Web...)
-                            await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
-                            await supervisorPlug.UpdatePlug(plug);
-
-                            if (plug.ConnectedObjectId != null)
-                            {
-                                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
-                                ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(plug.ConnectedObjectId, false);
-                                if (connectedObject != null)
-                                {
-                                    //Send Notification to the Firebase app
-                                    await applicationPlugServices.NotifyPlugStatus(room.LocationId, plug, connectedObject.Name);
-                                }
-                            }
-                        }
-                    }
+                    await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices, supervisorConnectedObject, status);
                 }
             }
             catch(Exception ex)
@@ -70,6 +50,35 @@ namespace Connect.WebServer.Services
             }
         }
 
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, 
+                                                ISupervisorRoom supervisorRoom, 
+                                                IApplicationPlugServices applicationPlugServices, 
+                                                ISupervisorConnectedObject supervisorConnectedObject, 
+                                                CommandStatus status)
+        {
+            Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
+            if (plug != null)
+            {                
+                plug.UpdateStatus(status.Status);
+                Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
+                if (room != null)
+                {
+                    //Send Status to the clients (Mobile, Web...)
+                    await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
+                    await supervisorPlug.UpdatePlug(plug);
+
+                    if (plug.ConnectedObjectId != null)
+                    {                        
+                        ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(plug.ConnectedObjectId, false);
+                        if (connectedObject != null)
+                        {
+                            //Send Notification to the Firebase app
+                            await applicationPlugServices.NotifyPlugStatus(room.LocationId, plug, connectedObject.Name);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

@@ -38,8 +38,14 @@ namespace Connect.WebServer.Services
 
             try
             {
-                await this.ProcessPlugStatus(scope);
-                await this.ProcessSensorStatus(scope);
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+
+                IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
+
+                await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices);
+                await this.ProcessSensorStatus(supervisorSensor);
             }
             catch (Exception ex)
             {
@@ -47,60 +53,49 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessPlugStatus(IServiceScope scope)
-        {
-            try
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, ISupervisorRoom supervisorRoom, IApplicationPlugServices applicationPlugServices)
+        {                
+            List<Plug> plugs = (await supervisorPlug.GetPlugs()).ToList();
+            foreach (Plug plug in plugs)
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
-                List<Plug> plugs = (await supervisorPlug.GetPlugs()).ToList();
-                foreach (Plug plug in plugs)
+                ResultCode resultCode = ResultCode.CouldNotUpdateItem;
+                Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
+                if (room != null)
                 {
-                    ResultCode resultCode = ResultCode.CouldNotUpdateItem;
-                    Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
-                    if (room != null)
+                    //Get order before the update
+                    int previousOrder = plug.Order;
+                    //Update the order with all the data
+                    plug.UpdateOrder(room.Humidity, room.Temperature);
+
+                    //We send the command to the Arduino when the order changes
+                    if (plug.Order != previousOrder)
                     {
-                        //Get order before the update
-                        int previousOrder = plug.Order;
-                        //Update the order with all the data
-                        plug.UpdateOrder(room.Humidity, room.Temperature);
-
-                        //We send the command to the Arduino when the order changes
-                        if (plug.Order != previousOrder)
+                        //Send Command to Arduino
+                        if (await applicationPlugServices.SendCommandAsync(plug) <= 0)
                         {
-                            //Send Command to Arduino
-                            if (await applicationPlugServices.SendCommandAsync(plug) <= 0)
-                            {
-                                //If we cannot send the command to the Arduino, we keep the previous value
-                                plug.Order = previousOrder;
-                            }
+                            //If we cannot send the command to the Arduino, we keep the previous value
+                            plug.Order = previousOrder;
                         }
-
-                        Log.Information("ProcessingDataService.ProcessInScope " + "Id : " + plug.Id);
-                        Log.Information("ProcessingDataService.ProcessInScope " + "OnOff : " + plug.OnOff);
-                        Log.Information("ProcessingDataService.ProcessInScope " + "Status : " + plug.Status);
-                        Log.Information("ProcessingDataService.ProcessInScope " + "Order : " + plug.Order);
-
-                        //Update the working duration
-                        plug.ComputeWorkingDuration();
-
-                        //Send Status to the clients app (Mobile, Web...)
-                        await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
-                        resultCode = await supervisorPlug.UpdatePlug(plug);
                     }
+
+                    Log.Information("ProcessingDataService.ProcessInScope " + "Id : " + plug.Id);
+                    Log.Information("ProcessingDataService.ProcessInScope " + "OnOff : " + plug.OnOff);
+                    Log.Information("ProcessingDataService.ProcessInScope " + "Status : " + plug.Status);
+                    Log.Information("ProcessingDataService.ProcessInScope " + "Order : " + plug.Order);
+
+                    //Update the working duration
+                    plug.ComputeWorkingDuration();
+
+                    //Send Status to the clients app (Mobile, Web...)
+                    await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
+                    resultCode = await supervisorPlug.UpdatePlug(plug);
                 }
-            }
-            catch (Exception ex) 
-            {
-                Log.Error(ex.ToString());
             }
         }
 
-        private async Task ProcessSensorStatus(IServiceScope scope)
+        private async Task ProcessSensorStatus(ISupervisorSensor supervisorSensor)
         {
-            ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-            List<Sensor> sensors = (await supervisor.GetSensors()).ToList();
+            List<Sensor> sensors = (await supervisorSensor.GetSensors()).ToList();
 
             //30 minutes
             int period = 30;
@@ -121,7 +116,7 @@ namespace Connect.WebServer.Services
                     sensor.IsRunning = RunningStatus.Healthy;
                 }
 
-                await supervisor.UpdateSensor(sensor);
+                await supervisorSensor.UpdateSensor(sensor);
             }
         }
 

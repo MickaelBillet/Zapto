@@ -13,6 +13,7 @@ namespace Connect.WebServer.Services
     public class SensorDataService : ScheduledService
     {
         private const double MARGIN = 0.5;
+        private const int MEASURES_COUNT = 10;
 
         #region Properties
         private IConfiguration Configuration { get; }
@@ -40,16 +41,23 @@ namespace Connect.WebServer.Services
 
             try
             {
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-				IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
+                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
+
+                IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
+                IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
+                IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
 				SensorData? data = await applicationSensorServices.ReceiveDataAsync();
 				if (data != null)
 				{
 					Sensor sensor = await supervisorSensor.GetSensor(data.Type, data.Channel);
 					if (sensor != null)
 					{
-						if ((await this.CheckHumidityValue(scope, data.Humidity, sensor.RoomId)) 
-							&& (await this.CheckTemperatureValue(scope, data.Temperature, sensor.RoomId)))
+						if ((await this.CheckHumidityValue(supervisorOperatingData, data.Humidity, sensor.RoomId)) 
+							&& (await this.CheckTemperatureValue(supervisorOperatingData, data.Temperature, sensor.RoomId)))
 						{
 							sensor.ProcessData(data.Temperature, data.Humidity, data.Pressure);
 							(resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
@@ -58,11 +66,11 @@ namespace Connect.WebServer.Services
 								//Test if the sensor is linked with a room or a connectedobject
 								if (string.IsNullOrEmpty(sensor.RoomId) == false)
 								{
-									await this.ProcessRoomData(scope, sensor);
+									await this.ProcessRoomData(supervisorRoom, supervisorNotification, applicationRoomServices, sensor);
 								}
 								else if (string.IsNullOrEmpty(sensor.ConnectedObjectId) == false)
 								{
-									await this.ProcessConnectedObjectData(scope, sensor);    
+									await this.ProcessConnectedObjectData(supervisorRoom, supervisorConnectedObject, applicationConnectedObjectServices, supervisorNotification, sensor);    
 								}
 							}
 							else
@@ -79,11 +87,11 @@ namespace Connect.WebServer.Services
             }
         }
 
-		private async Task ProcessRoomData(IServiceScope scope, Sensor sensor)
+		private async Task ProcessRoomData(ISupervisorRoom supervisorRoom, 
+                                            ISupervisorNotification supervisorNotification, 
+                                            IApplicationRoomServices applicationRoomServices, 
+                                            Sensor sensor)
 		{
-            ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-            ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
-            IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
             Room room = await supervisorRoom.GetRoom(sensor.RoomId);
             if (room != null)
             {
@@ -107,12 +115,12 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessConnectedObjectData(IServiceScope scope, Sensor sensor)
+        private async Task ProcessConnectedObjectData(ISupervisorRoom supervisorRoom, 
+                                                        ISupervisorConnectedObject supervisorConnectedObject, 
+                                                        IApplicationConnectedObjectServices applicationConnectedObjectServices, 
+                                                        ISupervisorNotification supervisorNotification, 
+                                                        Sensor sensor)
         {
-            ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-            ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
-            IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
-            ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
             ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId, true);
             if (connectedObject != null)
             {
@@ -129,24 +137,24 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task<bool> CheckTemperatureValue(IServiceScope scope, float temperature, string roomId)
+        private async Task<bool> CheckTemperatureValue(ISupervisorOperatingData supervisorOperatingData, float temperature, string roomId)
 		{
 			bool isValid = false;
-			IEnumerable<(double?, DateTime)> temperatures = (await scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>().GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Temperature, x.Date));
+			IEnumerable<(double?, DateTime)> temperatures = (await supervisorOperatingData.GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Temperature, x.Date));
 
-            //We begin to delete the false measures after the first 10 measures
-            if (temperatures.Count() >= 10)
+            //We begin to delete the false measures after the first MEASURES_COUNT measures
+            if (temperatures.Count() >= MEASURES_COUNT)
 			{
-				(double? temp, DateTime time) median = ZaptoMath.Median(temperatures.TakeLast(10));
+				(double? temp, DateTime time) median = ZaptoMath.Median(temperatures.TakeLast(MEASURES_COUNT));
 				if ((median.temp != null) && (Math.Abs((temperature - median.temp.Value)) < (median.temp * MARGIN)))
 				{
 					isValid = true;
 				}
 
-                //We delete the false measures from the first 10 measures
-                if (temperatures.Count() == 10)
+                //We delete the false measures from the first MEASURES_COUNT measures
+                if (temperatures.Count() == MEASURES_COUNT)
 				{
-					this.DeleteFalseMeasure(scope, median.temp, temperatures, roomId);
+					this.DeleteFalseMeasure(supervisorOperatingData, median.temp, temperatures, roomId);
                 }
 			}
 			else
@@ -156,24 +164,24 @@ namespace Connect.WebServer.Services
 			return isValid;
 		}
 
-        private async Task<bool> CheckHumidityValue(IServiceScope scope, float humidity, string roomId)
+        private async Task<bool> CheckHumidityValue(ISupervisorOperatingData supervisorOperatingData, float humidity, string roomId)
         {
             bool isValid = false;
-            IEnumerable<(double?, DateTime)> humidities = (await scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>().GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Humidity, x.Date));
+            IEnumerable<(double?, DateTime)> humidities = (await supervisorOperatingData.GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Humidity, x.Date));
 
-			//We begin to delete the false measures after the first 10 measures
-            if (humidities.Count() >= 10)
+            //We begin to delete the false measures after the first MEASURES_COUNT measures
+            if (humidities.Count() >= MEASURES_COUNT)
             {
-                (double? hum, DateTime time) median = ZaptoMath.Median(humidities.TakeLast(10));
+                (double? hum, DateTime time) median = ZaptoMath.Median(humidities.TakeLast(MEASURES_COUNT));
                 if ((median.hum != null) && (Math.Abs((humidity - median.hum.Value)) < (median.hum * MARGIN)))
                 {
                     isValid = true;
                 }
 
-                //We delete the false measures from the first 10 measures
-                if (humidities.Count() == 10)
+                //We delete the false measures from the first MEASURES_COUNT measures
+                if (humidities.Count() == MEASURES_COUNT)
                 {
-                    this.DeleteFalseMeasure(scope, median.hum, humidities, roomId);
+                    this.DeleteFalseMeasure(supervisorOperatingData, median.hum, humidities, roomId);
                 }
             }
             else
@@ -183,7 +191,7 @@ namespace Connect.WebServer.Services
             return isValid;
         }
 
-		private void DeleteFalseMeasure(IServiceScope scope, double? median, IEnumerable<(double?, DateTime)> values, string roomId)
+		private void DeleteFalseMeasure(ISupervisorOperatingData supervisorOperatingData, double? median, IEnumerable<(double?, DateTime)> values, string roomId)
 		{
 			List<DateTime> remove = new List<DateTime>();
 
@@ -195,7 +203,7 @@ namespace Connect.WebServer.Services
                 }
             }
 
-            remove.ForEach(async item => await scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>().DeleteOperationData(item, roomId));
+            remove.ForEach(async item => await supervisorOperatingData.DeleteOperationData(item, roomId));
         }
         #endregion
     }

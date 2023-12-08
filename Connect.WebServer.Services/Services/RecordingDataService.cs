@@ -35,8 +35,12 @@ namespace Connect.WebServer.Services
 
             try
             {
-                await this.AddOperatingDataForRoom(scope);
-                await this.AddOperatingDataForConnectedObject(scope);                
+                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+
+                await this.AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
+                await this.AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);                
             }
             catch (Exception ex)
             {
@@ -44,12 +48,10 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task AddOperatingDataForRoom(IServiceScope scope)
+        private async Task AddOperatingDataForRoom(ISupervisorRoom supervisorRoom, ISupervisorOperatingData supervisorOperatingData)
         {
             int roomCount = 0;
-
-            ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
-            ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+            
             IEnumerable<Room> rooms = await supervisorRoom.GetRooms();
             foreach (Room room in rooms)
             {
@@ -73,12 +75,10 @@ namespace Connect.WebServer.Services
             Log.Information("RecordingDataService - rooms : " + roomCount);
         }
 
-        private async Task AddOperatingDataForConnectedObject(IServiceScope scope)
+        private async Task AddOperatingDataForConnectedObject(ISupervisorConnectedObject supervisorConnectedObject, ISupervisorOperatingData supervisorOperatingData)
         {
             int objectCount = 0;
-
-            ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
-            ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+            
             IEnumerable<ConnectedObject> objects = await supervisorConnectedObject.GetConnectedObjects();
             foreach (ConnectedObject obj in objects)
             {

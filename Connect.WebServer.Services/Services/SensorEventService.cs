@@ -33,8 +33,11 @@ namespace Connect.WebServer.Services
 
             try
             {
-				ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
+
 				SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
 				if (@event != null)
 				{
@@ -46,20 +49,10 @@ namespace Connect.WebServer.Services
 						(resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
                         if (resultCode == ResultCode.Ok)
                         {
-                            Room? room = null;
                             //Test if the sensor is linked with a room or a connectedobject
                             if (string.IsNullOrEmpty(sensor.RoomId) == false)
                             {
-                                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                                room = await supervisorRoom.GetRoom(sensor.RoomId);
-                                if (room != null)
-                                {
-                                    //Send event to the client apps
-                                    await applicationSensorServices.SendEventToClientAsync(room.LocationId, sensor);
-
-                                    //Send Notification to the Firebase app
-                                    await applicationSensorServices.NotifySensorLeak(room.LocationId, room);
-                                }
+                                await this.ProcessRoomData(applicationSensorServices, supervisorRoom, sensor);
                             }
                         }
                         else
@@ -72,6 +65,19 @@ namespace Connect.WebServer.Services
             catch(Exception ex)
             {
                 Log.Fatal(ex.Message);
+            }
+        }
+
+        private async Task ProcessRoomData(IApplicationSensorServices applicationSensorServices, ISupervisorRoom supervisorRoom, Sensor sensor)
+        {
+            Room? room = await supervisorRoom.GetRoom(sensor.RoomId);
+            if (room != null)
+            {
+                //Send event to the client apps
+                await applicationSensorServices.SendEventToClientAsync(room.LocationId, sensor);
+
+                //Send Notification to the Firebase app
+                await applicationSensorServices.NotifySensorLeak(room.LocationId, room);
             }
         }
 

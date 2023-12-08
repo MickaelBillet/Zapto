@@ -2,7 +2,6 @@
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
-using MailKit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -84,11 +83,6 @@ namespace Connect.WebServer.Services
                 Log.Fatal(ex.Message);
             }
         }
-
-        private void MailSent(object? sender, MessageSentEventArgs arg)
-        {
-        }
-
         #endregion
     }
 }
