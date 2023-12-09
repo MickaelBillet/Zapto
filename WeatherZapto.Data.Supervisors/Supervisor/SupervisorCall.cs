@@ -26,7 +26,7 @@ namespace WeatherZapto.Data.Supervisors
         {
             int res = 0;
             
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().Date == Clock.Now.ToUniversalTime().Date);
+            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().CompareDay(Clock.Now.ToUniversalTime()) == 0);
             if (entity != null) 
             {
                 entity.Count++;
@@ -48,7 +48,7 @@ namespace WeatherZapto.Data.Supervisors
 
         public async Task<long?> GetDayCallsCount(DateTime date)
         {
-            CallEntity entity = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date == date.ToUniversalTime().Date));
+            CallEntity entity = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().CompareDay(Clock.Now.ToUniversalTime()) == 0));
             return (entity != null) ? entity.Count : 0;
         }
 
