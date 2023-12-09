@@ -13,7 +13,7 @@ namespace Framework.Data.Abstractions
                                                     Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
         Task<T?> GetAsync(string id);
         Task<int> DeleteAsync(T entity);
-        Task<bool> EntityExists(string id);
+        Task<bool> EntityExistsAsync(string id);
         Task<int> UpdateAsync(T entity);
         Task<T?> GetAsync(Expression<Func<T, bool>>? condition = null,
                             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);

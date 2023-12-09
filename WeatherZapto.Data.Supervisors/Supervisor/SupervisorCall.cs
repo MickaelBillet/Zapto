@@ -11,6 +11,7 @@ namespace WeatherZapto.Data.Supervisors
 
         #region Properties
         private ICallRepository CallRepository => _lazyCallRepository?.Value;
+        private static AutoResetEvent AutoReset = new AutoResetEvent(true);
         #endregion
 
         #region Constructor
@@ -25,8 +26,10 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOpenWeather()
         {
             int res = 0;
-            
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().CompareDay(Clock.Now.ToUniversalTime()) == 0);
+
+            AutoReset.WaitOne();
+
+            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().Date.Equals(Clock.Now.ToUniversalTime().Date));
             if (entity != null) 
             {
                 entity.Count++;
@@ -42,19 +45,21 @@ namespace WeatherZapto.Data.Supervisors
                 });                
             }
 
+            AutoReset.Set();
+
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
 
         public async Task<long?> GetDayCallsCount(DateTime date)
         {
-            CallEntity entity = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().CompareDay(Clock.Now.ToUniversalTime()) == 0));
-            return (entity != null) ? entity.Count : 0;
+            long? count = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Equals(date.ToUniversalTime().Date))).Count;
+            return count;
         }
 
         public async Task<long?> GetLast30DaysCallsCount()
         {
-           long? count = await this.CallRepository.GetLast30DaysCallsCount();
+            long? count = await this.CallRepository.GetLast30DaysCallsCount();
             return count;
         }
         #endregion
