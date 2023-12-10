@@ -116,7 +116,7 @@ namespace Connect.Data.Repositories
 
             return res;
         }
-        public async Task<bool> EntityExists(string id)
+        public async Task<bool> EntityExistsAsync(string id)
         {
             return (this.Table != null) ? (await this.Table.AsNoTracking().FirstOrDefaultAsync((arg) => arg.Id == id) != null) : false;
         }

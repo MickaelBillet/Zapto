@@ -47,36 +47,6 @@ namespace Connect.WebServer.Services
                 {
                     ResultCode resultCode = await supervisor.ResetWorkingDuration(plug);
                 }
-
-                //Send a mail with a log file
-                //DirectoryInfo directoryInfo = new DirectoryInfo(this.Configuration["LogDirectoryPath"]);
-
-                //IEnumerable<FileInfo> fileInfos = directoryInfo.GetFiles().OrderByDescending(file => file.LastWriteTime);
-
-                //if (fileInfos?.Count() > 0)
-                //{
-                //    using (FileStream fs = new FileStream(fileInfos.ToList()[0].FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                //    {
-                //        byte[] result = new byte[fs.Length];
-                //        await fs.ReadAsync(result, 0, (int)fs.Length);
-
-                //        FormFile file = new FormFile(fs, 0, fs.Length, fs.Name, Path.GetFileName(fs.Name))
-                //        {
-                //            Headers = new HeaderDictionary(),
-                //            ContentType = "application/octet-stream"
-                //        };
-
-                //        MailRequest mailRequest = new MailRequest()
-                //        {
-                //            Attachments = new List<IFormFile>() { file },
-                //            Body = string.Empty,
-                //            Subject = "Logs Connect " + Clock.Now,
-                //            ToEmail = "mickael.billet@gmail.com",
-                //        };
-
-                //        await mailService.SendEmailAsync(mailRequest, MailSent);
-                //    }
-                //}
             }
             catch (Exception ex)
             {
