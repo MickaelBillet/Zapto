@@ -8,7 +8,7 @@ namespace Connect.Server.Helpers
 {
     public class AddRequiredHeaderParameter : IOperationFilter
     {
-        private string _tenantIdExample;
+        private readonly string _tenantIdExample;
 
         public AddRequiredHeaderParameter(string tenantIdExample)
         {

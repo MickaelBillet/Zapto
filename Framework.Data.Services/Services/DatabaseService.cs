@@ -13,7 +13,8 @@ namespace Framework.Data.Services
 
 		#region Properties
 		protected IDataContextFactory? DataContextFactory { get; }
-		protected IConfiguration Configuration { get; }
+        public IServiceScopeFactory ServiceScopeFactory { get; }
+        protected IConfiguration Configuration { get; }
         private bool IsInitialized { get; set; }
 		#endregion
 
@@ -21,7 +22,8 @@ namespace Framework.Data.Services
 		public DatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
 		{
 			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
-			this.Configuration = configuration;
+            this.ServiceScopeFactory = serviceScopeFactory;
+            this.Configuration = configuration;
 		}
         #endregion
 

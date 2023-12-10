@@ -6,12 +6,9 @@ namespace Framework.Core.Base
     {
         public static object Convert(object value)
         {
-            uint duration = 0;
-
             if (value is uint)
             {
-                duration = (uint)value;
-
+                uint duration = (uint)value;
                 TimeSpan timeSpan;
 
                 timeSpan = new TimeSpan(duration * 60 * 10000000L);

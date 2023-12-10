@@ -50,7 +50,7 @@ namespace Framework.Core.Base
 
             SynchronizationContext.SetSynchronizationContext(synch);
 
-            T ret = default(T);
+            T ret = default;
             synch.Post(async _ =>
             {
                 try

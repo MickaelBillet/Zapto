@@ -17,10 +17,7 @@
                 //Section critique en assurant le verrouillage par exclusion mutuelle 
                 lock (padlock)
                 {
-                    if (instance == null)
-                    {
-                        instance = new CRC_CCITT();
-                    }
+                    instance ??= new CRC_CCITT();
 
                     return instance;
                 }

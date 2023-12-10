@@ -99,9 +99,6 @@ namespace Connect.Model
 
         public (string? data, int port) GetSensorConfiguration()
         {
-            string? json = null;
-            int port = 0;
-
             SensorConfiguration configuration = new SensorConfiguration()
             {
                 Type = this.Name,
@@ -109,9 +106,8 @@ namespace Connect.Model
                 Parameter = this.Parameter,
             };
 
-            json = JsonSerializer.Serialize<SensorConfiguration>(configuration);
-            port = ConnectConstants.PortConnectionData;
-
+            string? json = JsonSerializer.Serialize(configuration);
+            int port = ConnectConstants.PortConnectionData;
             return (json, port);
         }
 

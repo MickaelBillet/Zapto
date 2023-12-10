@@ -17,14 +17,9 @@ namespace Framework.Core.Base
         public TimeSpanText(string text)
         {
             string[] tmp = text.Split(default(string[]), StringSplitOptions.None);
-
-            TimeSpan timeSpanTmp;
-
             if (tmp.Length == 2)
             {
                 string days = string.Empty;
-                string time = string.Empty;
-
                 foreach (char car in tmp[0])
                 {
 
@@ -35,10 +30,9 @@ namespace Framework.Core.Base
                 }
 
                 //Test si on récupère bien une durée au format correct
-                if (TimeSpan.TryParse(tmp[1] + ".00", out timeSpanTmp))
+                if (TimeSpan.TryParse(tmp[1] + ".00", out _))
                 {
-                    time = tmp[1] + ".00";
-
+                    string time = tmp[1] + ".00";
                     if (!string.IsNullOrEmpty(days))
                     {
                         days = days + ".";
@@ -56,7 +50,7 @@ namespace Framework.Core.Base
             else if (tmp.Length == 1)
             {
                 //Test si on récupère bien une durée au format correct
-                if (TimeSpan.TryParse(tmp[0] + ".00", out timeSpanTmp))
+                if (TimeSpan.TryParse(tmp[0] + ".00", out _))
                 {
                     this.m_data = tmp[0] + ".00";
 
@@ -77,7 +71,7 @@ namespace Framework.Core.Base
         {
             if (this.m_isTimeSpan)
             {
-                return this.m_data.Substring(0, this.m_data.Length - 3);
+                return this.m_data.Substring(0, this.m_data.Length^3);
             }
             else
             {

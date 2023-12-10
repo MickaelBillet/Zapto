@@ -38,7 +38,7 @@ namespace Framework.Core.Base
 
         #endregion
 
-        public struct Releaser : IDisposable
+        public readonly struct Releaser : IDisposable
         {
             private readonly AsyncLock ToRelease;
 
@@ -46,8 +46,7 @@ namespace Framework.Core.Base
 
             public void Dispose()
             {
-                if (ToRelease != null)
-                    ToRelease.Semaphore.Release();
+                ToRelease?.Semaphore.Release();
             }
         }
     }

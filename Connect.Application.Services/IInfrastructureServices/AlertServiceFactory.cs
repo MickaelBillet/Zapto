@@ -1,4 +1,5 @@
 ﻿using Connect.Model;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -12,11 +13,15 @@ namespace Connect.Application.Infrastructure
 
             if (type == ServiceAlertType.Firebase)
             {
-                alertService = serviceProvider.GetService<IFirebaseService>();
+                alertService = serviceProvider.GetRequiredService<IFirebaseService>();
             }
             else if (type == ServiceAlertType.SignalR)
             {
-                alertService = serviceProvider.GetService<ISignalRConnectService>();
+                alertService = serviceProvider.GetRequiredService<ISignalRConnectService>();
+            }
+            else if (type == ServiceAlertType.Mail) 
+            {
+                alertService = serviceProvider.GetRequiredService<ISendMailAlertService>();
             }
 
             return alertService;

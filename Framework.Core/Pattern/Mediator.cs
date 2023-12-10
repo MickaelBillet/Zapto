@@ -5,14 +5,16 @@ namespace Framework.Core.Base
 {
     public static class Mediator
     {
-        private static IDictionary<string, List<Action<object>>> _dict =new Dictionary<string, List<Action<object>>>();
+        private static readonly IDictionary<string, List<Action<object>>> _dict = new Dictionary<string, List<Action<object>>>();
 
         public static void Subscribe(string token, Action<object> callback)
         {
             if (!_dict.ContainsKey(token))
             {
-                List<Action<object>> list = new List<Action<object>>();
-                list.Add(callback);
+                List<Action<object>> list = new List<Action<object>>
+                {
+                    callback
+                };
                 _dict.Add(token, list);
             }
             else

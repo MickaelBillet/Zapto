@@ -278,7 +278,7 @@ namespace Connect.Model
 
         public static int GetCommand(int status, int mode)
         {
-            int command = CommandType.Off;
+            int command;
             if ((status == Connect.Model.Status.ON) && (mode == Connect.Model.Mode.Manual))
             {
                 command = CommandType.Manual;

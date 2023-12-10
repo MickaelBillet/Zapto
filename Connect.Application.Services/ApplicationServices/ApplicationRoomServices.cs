@@ -1,5 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
@@ -23,7 +24,7 @@ namespace Connect.Application.Services
 		{
 			this.RoomService = serviceProvider.GetService<IRoomService>();
 			this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
-            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Firebase);
+            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
 
         #endregion

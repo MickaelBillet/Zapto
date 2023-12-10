@@ -29,7 +29,7 @@ namespace Framework.Infrastructure.Services
 		}
 
 		public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
-														CancellationToken cancellationToken = default(CancellationToken))
+														CancellationToken cancellationToken = default)
         {
             if (this.Status != null)
             {

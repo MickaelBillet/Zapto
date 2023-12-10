@@ -54,7 +54,7 @@ namespace Connect.Data.Supervisors
 
         public async Task<ResultCode> DeleteNotifications(IEnumerable<Notification> notifications)
         {
-            if (notifications.Count() == 0)
+            if (notifications.Any() == false)
             {
                 return ResultCode.Ok;
             }

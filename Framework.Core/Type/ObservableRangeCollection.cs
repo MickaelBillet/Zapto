@@ -56,7 +56,7 @@ namespace Framework.Core.Base
             }
 
             int startIndex = Count;
-            var changedItems = collection is List<T> ? (List<T>)collection : new List<T>(collection);
+            List<T> changedItems = collection is List<T> ? (List<T>)collection : new List<T>(collection);
             foreach (var i in changedItems)
             {
                 Items.Add(i);

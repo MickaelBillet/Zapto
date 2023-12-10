@@ -59,8 +59,7 @@ namespace Framework.Core.Base
                 else
                     ++CurrentCount;
             }
-            if (toRelease != null)
-                toRelease.SetResult(true);
+            toRelease?.SetResult(true);
         }
 
         #endregion

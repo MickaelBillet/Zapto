@@ -1,4 +1,5 @@
 ﻿using Connect.Model;
+using Framework.Infrastructure.Services;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Infrastructure

@@ -90,8 +90,7 @@ namespace Connect.Data.DataContext
 
 		public override void Dispose()
 		{
-			if (this.Transaction != null)
-				this.Transaction.Dispose();
+			this.Transaction?.Dispose();
 
 			this.Transaction = null;
 

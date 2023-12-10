@@ -26,7 +26,7 @@ namespace Connect.Application.Services
             this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
             this.UdpCommunicationService = serviceProvider.GetService<IUdpCommunicationService>();
             this.SensorService = serviceProvider.GetService<ISensorService>();
-            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Firebase);
+            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
 
         #endregion

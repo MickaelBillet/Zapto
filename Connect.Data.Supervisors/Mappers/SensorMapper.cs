@@ -19,7 +19,7 @@ namespace Connect.Data.Mappers
                 ConnectedObjectId = model.ConnectedObjectId,
                 Humidity = model.Humidity,
                 IpAddress = model.IpAddress,
-                IsRunning = (model.IsRunning == RunningStatus.Healthy) ? true : false,
+                IsRunning = (model.IsRunning == RunningStatus.Healthy),
                 LastDateTimeOn = model.LastDateTimeOn,
                 LeakDetected = model.LeakDetected,
                 Parameter = model.Parameter,

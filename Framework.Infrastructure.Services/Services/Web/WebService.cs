@@ -170,7 +170,7 @@ namespace Framework.Infrastructure.Services
         /// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> GetAsync<T>(string url, string id, JsonSerializerOptions options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
         {
-            T item = default(T);
+            T item = default;
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {

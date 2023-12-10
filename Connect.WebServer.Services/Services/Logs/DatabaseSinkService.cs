@@ -48,40 +48,28 @@ namespace Connect.WebServer.Services
 
         static string LevelToSeverity(LogEvent logEvent)
         {
-            switch (logEvent.Level)
+            return logEvent.Level switch
             {
-                case LogEventLevel.Debug:
-                    return "Debug";
-                case LogEventLevel.Error:
-                    return "Error";
-                case LogEventLevel.Fatal:
-                    return "Fatal";
-                case LogEventLevel.Verbose:
-                    return "Verbose";
-                case LogEventLevel.Warning:
-                    return "Warning";
-                default:
-                    return "Information";
-            }
+                LogEventLevel.Debug => "Debug",
+                LogEventLevel.Error => "Error",
+                LogEventLevel.Fatal => "Fatal",
+                LogEventLevel.Verbose => "Verbose",
+                LogEventLevel.Warning => "Warning",
+                _ => "Information",
+            };
         }
 
         static LogEventLevel SeverityToLevel(string? severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case "Debug":
-                    return LogEventLevel.Debug;
-                case "Error":
-                    return LogEventLevel.Error;
-                case "Fatal":
-                    return LogEventLevel.Fatal;
-                case "Verbose":
-                    return LogEventLevel.Verbose;
-                case "Warning":
-                    return LogEventLevel.Warning;
-                default:
-                    return LogEventLevel.Information;
-            }
+                "Debug" => LogEventLevel.Debug,
+                "Error" => LogEventLevel.Error,
+                "Fatal" => LogEventLevel.Fatal,
+                "Verbose" => LogEventLevel.Verbose,
+                "Warning" => LogEventLevel.Warning,
+                _ => LogEventLevel.Information,
+            };
         }
         #endregion
     }

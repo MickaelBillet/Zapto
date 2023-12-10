@@ -2,6 +2,7 @@
 using Connect.Data;
 using Connect.Model;
 using Framework.Core.Base;
+using Framework.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ namespace Connect.WebApi.Controllers
         {
             this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorLocation>();
             this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
-            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Firebase);
+            this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
         #endregion
 

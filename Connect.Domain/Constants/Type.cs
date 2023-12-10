@@ -75,5 +75,6 @@
         public const short None = 0;
         public const short SignalR = 1;
         public const short Firebase = 2;
+        public const short Mail = 3;
     }
 }

@@ -141,7 +141,7 @@ namespace Connect.Data.Supervisors
                 }
             }
 
-            if (operationRanges.Count() == 0)
+            if (operationRanges.Any() == false)
             {
                 return ResultCode.Ok;
             }

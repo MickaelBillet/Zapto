@@ -32,8 +32,10 @@ namespace Framework.Infrastructure.Services
 
         public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent)
         {
-            MimeMessage email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(MailSettings.Mail);
+            MimeMessage email = new MimeMessage
+            {
+                Sender = MailboxAddress.Parse(MailSettings.Mail)
+            };
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.From.Add(MailboxAddress.Parse(MailSettings.Mail));
             email.Subject = mailRequest.Subject;

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Connect.Application.Infrastructure
+namespace Framework.Infrastructure.Services
 {
     public interface IAlertService
     {
