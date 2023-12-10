@@ -12,16 +12,16 @@ namespace Framework.Data.Services
 		private bool _disposed = false;
 
 		#region Properties
-		protected IDataContextFactory? DataContextFactory { get; }
-        public IServiceScopeFactory ServiceScopeFactory { get; }
+		protected IDataContextFactory DataContextFactory { get; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; set; }
         protected IConfiguration Configuration { get; }
         private bool IsInitialized { get; set; }
 		#endregion
 
 		#region Constructor
-		public DatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
+		public DatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
 		{
-			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+			this.DataContextFactory = dataContextFactory;
             this.ServiceScopeFactory = serviceScopeFactory;
             this.Configuration = configuration;
 		}

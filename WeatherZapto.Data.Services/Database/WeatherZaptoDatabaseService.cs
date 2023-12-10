@@ -1,4 +1,5 @@
 ﻿using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,13 +10,11 @@ namespace WeatherZapto.Data.Services
     public sealed class WeatherZaptoDatabaseService : DatabaseService
     {
         #region Properties
-        private IServiceScopeFactory ServiceScopeFactory { get; }
         #endregion
 
         #region Constructor
-        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceProvider, serviceScopeFactory, configuration)
+        public WeatherZaptoDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
         {
-            this.ServiceScopeFactory = serviceScopeFactory;
         }
         #endregion
 

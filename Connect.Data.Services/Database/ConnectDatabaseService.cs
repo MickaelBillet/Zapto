@@ -1,5 +1,6 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +11,11 @@ namespace Connect.Data.Database
     public sealed class ConnectDatabaseService : DatabaseService
     {
         #region Properties
-        private IServiceScopeFactory ServiceScopeFactory { get; }
         #endregion
 
         #region Constructor
-        public ConnectDatabaseService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceProvider, serviceScopeFactory, configuration)
+        public ConnectDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
         {
-            this.ServiceScopeFactory = serviceScopeFactory;
         }
         #endregion
 

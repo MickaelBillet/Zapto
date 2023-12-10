@@ -20,10 +20,12 @@ namespace Framework.Infrastructure.Services
         #region Methods
         public async Task SendAlertAsync(string locationId, string title, string body)
         {
-            MailRequest mailRequest = new MailRequest();
-
-            mailRequest.Subject = $"{locationId} - {title}";
-            mailRequest.Body = $"{body}";
+            MailRequest mailRequest = new MailRequest()
+            {
+                Subject = $"{locationId} - {title}",
+                Body = $"{body}",
+                ToEmail = "mickael.billet@gmail.com",
+            };
 
             bool sent = await this.MailService.SendEmailAsync(mailRequest, MailSent);
         }

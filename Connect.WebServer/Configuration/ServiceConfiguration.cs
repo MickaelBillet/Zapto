@@ -23,6 +23,7 @@ namespace Connect.Server.Configuration
             services.AddApplicationConnectServices();
             services.AddSingleton<IDatabaseService, ConnectDatabaseService>(); 
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();
+            services.AddTransient<ISendMailAlertService, SendMailAlertService>();
             services.AddSingleton<IHostedService, RecordingDataService>();
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();

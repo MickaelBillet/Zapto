@@ -13,15 +13,15 @@ namespace Connect.Application.Infrastructure
 
             if (type == ServiceAlertType.Firebase)
             {
-                alertService = serviceProvider.GetRequiredService<IFirebaseService>();
+                alertService = serviceProvider.GetService<IFirebaseService>();
             }
             else if (type == ServiceAlertType.SignalR)
             {
-                alertService = serviceProvider.GetRequiredService<ISignalRConnectService>();
+                alertService = serviceProvider.GetService<ISignalRConnectService>();
             }
             else if (type == ServiceAlertType.Mail) 
             {
-                alertService = serviceProvider.GetRequiredService<ISendMailAlertService>();
+                alertService = serviceProvider.GetService<ISendMailAlertService>();
             }
 
             return alertService;
