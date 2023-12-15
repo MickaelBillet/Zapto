@@ -64,6 +64,7 @@ namespace Connect.WebServer.Services
                 {
                     //Get order before the update
                     int previousOrder = plug.Order;
+
                     //Update the order with all the data
                     plug.UpdateOrder(room.Humidity, room.Temperature);
 

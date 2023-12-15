@@ -42,7 +42,7 @@ namespace Connect.Application.Services
 		}
 
 		/// <summary>
-		/// Send the command plaug to the iot server
+		/// Send the plug command to the iot server
 		/// </summary>
 		public async Task<int> SendCommandAsync(Plug plug)
 		{
