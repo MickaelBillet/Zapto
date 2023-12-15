@@ -16,9 +16,9 @@ namespace Connect.WebServer.Services
 
         #region Constructor
 
-        public SensorConnectionService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, Convert.ToInt32(configuration["ConnectionPeriod"])) 
+        public SensorConnectionService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, Convert.ToInt32(configuration["ConnectionPeriod"]))
         {
-            
+
         }
 
         #endregion
@@ -38,7 +38,7 @@ namespace Connect.WebServer.Services
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
                 IEnumerable<Sensor> sensors = await supervisor.GetSensors();
-                foreach(Sensor sensor in sensors)
+                foreach (Sensor sensor in sensors)
                 {
                     await applicationSensorServices.Notify(sensor);
                 }

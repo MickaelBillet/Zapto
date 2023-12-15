@@ -1,11 +1,11 @@
 ﻿using Connect.Application;
 using Connect.Data;
 using Connect.Model;
+using Connect.WebServer.Services;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -15,13 +15,11 @@ namespace Connect.WebApi.Controllers
     [Authorize(Policy = "user")]
     public class PlugsController : Controller
     {
-        #region Property
-
+        #region Services
         private ISupervisorPlug SupervisorPlug { get; }
         private ISupervisorRoom SupervisorRoom { get; }
         private IApplicationPlugServices ApplicationPlugServices { get; }
-
-
+        private ISendCommandService SendCommandService { get; }
         #endregion
 
         #region Constructor
@@ -31,6 +29,7 @@ namespace Connect.WebApi.Controllers
             this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
             this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
             this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SendCommandService = serviceProvider.GetRequiredService<ISendCommandService>();
         }
 
         #endregion
@@ -46,7 +45,6 @@ namespace Connect.WebApi.Controllers
             try
             {
                 plug = await this.SupervisorPlug.GetPlug(id);
-
                 if (plug != null)
                 {
                     return StatusCode(200, plug);
@@ -94,48 +92,13 @@ namespace Connect.WebApi.Controllers
                 }
                 else
                 {
-                    Plug plug = await this.SupervisorPlug.GetPlug(id);
-
+                    Plug? plug = await this.SupervisorPlug.GetPlug(id);
                     if (plug != null)
                     {                        
                         plug.OnOff = command[0];
                         plug.Mode = command[1];
 
-                        ResultCode resultCode = ResultCode.CouldNotUpdateItem;
-
-                        Room room = await this.SupervisorRoom.GetRoomFromPlugId(plug.Id);
-                        if (room != null)
-                        {
-                            //Get order before the update
-                            int previousOrder = plug.Order;
-
-                            //Update the order with all the data
-                            plug.UpdateOrder(room.Humidity, room.Temperature);
-
-                            //We send the command to the Arduino when the order changes
-                            if (plug.Order != previousOrder)
-                            {
-                                //Send Command to Arduino
-                                if (await this.ApplicationPlugServices.SendCommandAsync(plug) <= 0)
-                                {
-                                    //If we cannot send the command to the Arduino, we keep the previous value
-                                    plug.Order = previousOrder;
-                                }
-                            }
-
-                            Log.Information("UpdateOrderPlug " + "Id : " + plug.Id);
-                            Log.Information("UpdateOrderPlug " + "OnOff : " + plug.OnOff);
-                            Log.Information("UpdateOrderPlug " + "Status : " + plug.Status);
-                            Log.Information("UpdateOrderPlug " + "Order : " + plug.Order);
-
-                            //Update the working duration
-                            plug.ComputeWorkingDuration();
-
-                            //Send Status to the clients app (Mobile, Web...)
-                            await this.ApplicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
-                            resultCode = await this.SupervisorPlug.UpdatePlug(plug);
-                        }
-                        
+                        ResultCode resultCode = await this.SendCommandService.Execute(plug);                        
                         if (resultCode == ResultCode.Ok)
                         {
                             return Ok();

@@ -5,7 +5,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services
+namespace Connect.WebServer.Services.Services.ScheduleService
 {
     public class CommandStatusService : ScheduledService
     {
@@ -41,24 +41,24 @@ namespace Connect.WebServer.Services
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)
                 {
-                    await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices, supervisorConnectedObject, status);
+                    await ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices, supervisorConnectedObject, status);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
             }
         }
 
-        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, 
-                                                ISupervisorRoom supervisorRoom, 
-                                                IApplicationPlugServices applicationPlugServices, 
-                                                ISupervisorConnectedObject supervisorConnectedObject, 
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug,
+                                                ISupervisorRoom supervisorRoom,
+                                                IApplicationPlugServices applicationPlugServices,
+                                                ISupervisorConnectedObject supervisorConnectedObject,
                                                 CommandStatus status)
         {
             Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
             if (plug != null)
-            {                
+            {
                 plug.UpdateStatus(status.Status);
                 Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
                 if (room != null)
@@ -67,15 +67,15 @@ namespace Connect.WebServer.Services
                     await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
                     await supervisorPlug.UpdatePlug(plug);
 
-                    if (plug.ConnectedObjectId != null)
-                    {                        
-                        ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(plug.ConnectedObjectId, false);
-                        if (connectedObject != null)
-                        {
-                            //Send Notification to the Firebase app
-                            await applicationPlugServices.NotifyPlugStatus(room.LocationId, plug, connectedObject.Name);
-                        }
-                    }
+                    //if (plug.ConnectedObjectId != null)
+                    //{
+                    //    ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(plug.ConnectedObjectId, false);
+                    //    if (connectedObject != null)
+                    //    {
+                    //        //Send Notification
+                    //        await applicationPlugServices.NotifyPlugStatus(room.LocationId, plug, connectedObject.Name);
+                    //    }
+                    //}
                 }
             }
         }

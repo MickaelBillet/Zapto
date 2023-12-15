@@ -37,22 +37,21 @@ namespace Connect.WebServer.Services
                 ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
 
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
-
-				SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
-				if (@event != null)
-				{
-					Sensor sensor = await supervisorSensor.GetSensor(@event.Type, @event.Channel);
-					if (sensor != null)
-					{
+                SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
+                if (@event != null)
+                {
+                    Sensor sensor = await supervisorSensor.GetSensor(@event.Type, @event.Channel);
+                    if (sensor != null)
+                    {
                         sensor.LeakDetected = @event.Leak;
-						//Update in database the data of the sensor
-						(resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
+                        //Update in database the data of the sensor
+                        (resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
                         if (resultCode == ResultCode.Ok)
                         {
                             //Test if the sensor is linked with a room or a connectedobject
                             if (string.IsNullOrEmpty(sensor.RoomId) == false)
                             {
-                                await this.ProcessRoomData(applicationSensorServices, supervisorRoom, sensor);
+                                await ProcessRoomData(applicationSensorServices, supervisorRoom, sensor);
                             }
                         }
                         else
@@ -60,9 +59,9 @@ namespace Connect.WebServer.Services
                             Log.Error("SensorEventService.ProcessInScope Error");
                         }
                     }
-				}
-			}
-            catch(Exception ex)
+                }
+            }
+            catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
             }

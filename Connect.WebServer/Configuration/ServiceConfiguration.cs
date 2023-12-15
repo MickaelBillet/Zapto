@@ -4,6 +4,9 @@ using Connect.Data;
 using Connect.Data.Database;
 using Connect.Data.Repository;
 using Connect.WebServer.Services;
+using Connect.WebServer.Services.Services.Plug;
+using Connect.WebServer.Services.Services.ScheduleService;
+using Connect.WebServer.Services.Services.Sensor;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
@@ -21,6 +24,7 @@ namespace Connect.Server.Configuration
             services.AddSupervisor();
             services.AddRepositories();
             services.AddApplicationConnectServices();
+            services.AddConnectWebServices();
             services.AddSingleton<IDatabaseService, ConnectDatabaseService>(); 
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();
             services.AddTransient<ISendMailAlertService, SendMailAlertService>();

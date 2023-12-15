@@ -4,7 +4,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services
+namespace Connect.WebServer.Services.Services.ScheduleService
 {
     public class RecordingDataService : CronScheduledService
     {
@@ -39,8 +39,8 @@ namespace Connect.WebServer.Services
                 ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
 
-                await this.AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
-                await this.AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);                
+                await AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
+                await AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Connect.WebServer.Services
         private async Task AddOperatingDataForRoom(ISupervisorRoom supervisorRoom, ISupervisorOperatingData supervisorOperatingData)
         {
             int roomCount = 0;
-            
+
             IEnumerable<Room> rooms = await supervisorRoom.GetRooms();
             foreach (Room room in rooms)
             {
@@ -64,7 +64,7 @@ namespace Connect.WebServer.Services
                     ConnectedObjectId = null,
                 };
 
-                if ((room.Temperature != null) || (room.Humidity != null) || (room.Pressure != null))
+                if (room.Temperature != null || room.Humidity != null || room.Pressure != null)
                 {
                     if (await supervisorOperatingData.AddOperatingData(dataRoom) > 0)
                     {
@@ -78,7 +78,7 @@ namespace Connect.WebServer.Services
         private async Task AddOperatingDataForConnectedObject(ISupervisorConnectedObject supervisorConnectedObject, ISupervisorOperatingData supervisorOperatingData)
         {
             int objectCount = 0;
-            
+
             IEnumerable<ConnectedObject> objects = await supervisorConnectedObject.GetConnectedObjects();
             foreach (ConnectedObject obj in objects)
             {

@@ -7,7 +7,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services
+namespace Connect.WebServer.Services.Services.ScheduleService
 {
     public class ServerIotConnectionService : ScheduledService
     {
@@ -17,9 +17,9 @@ namespace Connect.WebServer.Services
 
         #region Constructor
 
-        public ServerIotConnectionService(IServiceScopeFactory serviceScopeFactory, HostedServiceHealthCheck hostedServiceHealthCheck) : base(serviceScopeFactory,  10) 
+        public ServerIotConnectionService(IServiceScopeFactory serviceScopeFactory, HostedServiceHealthCheck hostedServiceHealthCheck) : base(serviceScopeFactory, 10)
         {
-            this.HostedServiceHealthCheck = hostedServiceHealthCheck;
+            HostedServiceHealthCheck = hostedServiceHealthCheck;
         }
 
         #endregion
@@ -36,16 +36,16 @@ namespace Connect.WebServer.Services
             Log.Information("ServerIotConnectionService.ProcessInScope");
 
             try
-            {                
+            {
                 IApplicationServerIotServices applicationServerIotServices = scope.ServiceProvider.GetRequiredService<IApplicationServerIotServices>();
                 ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorServerIotStatus>();
                 SystemStatus? status = await applicationServerIotServices.ReceiveStatusAsync();
                 if (status != null)
-				{
-                    if (this.HostedServiceHealthCheck != null)
+                {
+                    if (HostedServiceHealthCheck != null)
                     {
                         status.Date = Clock.Now;
-                        this.HostedServiceHealthCheck.SetStatus(status);
+                        HostedServiceHealthCheck.SetStatus(status);
 
                         if (status.Status == Domain.SystemStatus.STARTED)
                         {

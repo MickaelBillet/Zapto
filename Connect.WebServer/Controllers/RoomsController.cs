@@ -1,5 +1,4 @@
 ﻿using Connect.Data;
-using Connect.Data.Supervisors;
 using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;

@@ -6,8 +6,7 @@ namespace Connect.WebServer.Services
     {
         public static void AddConnectWebServices(this IServiceCollection services)
         {
-
-            
+            services.AddScoped<ISendCommandService, SendCommandService>();            
         }
     }
 }

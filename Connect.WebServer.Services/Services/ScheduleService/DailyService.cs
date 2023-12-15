@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using IMailService = Framework.Infrastructure.Services.IMailService;
 
-namespace Connect.WebServer.Services
+namespace Connect.WebServer.Services.Services.ScheduleService
 {
     public class DailyService : CronScheduledService
     {
@@ -25,7 +25,7 @@ namespace Connect.WebServer.Services
 
         public DailyService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         #endregion
@@ -43,7 +43,7 @@ namespace Connect.WebServer.Services
                 IEnumerable<Plug> plugs = await supervisor.GetPlugs();
 
                 //Reset the WorkingDuration daily
-                foreach(Plug plug in plugs)
+                foreach (Plug plug in plugs)
                 {
                     ResultCode resultCode = await supervisor.ResetWorkingDuration(plug);
                 }

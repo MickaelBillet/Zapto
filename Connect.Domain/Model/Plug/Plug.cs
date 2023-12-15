@@ -8,8 +8,8 @@ namespace Connect.Model
 {
     public class Plug : ConnectDevice
     {
-        private int _status = Connect.Model.Status.OFF;
-        private int _mode = Connect.Model.Mode.Manual;
+        private int _status = Model.Status.OFF;
+        private int _mode = Model.Mode.Manual;
         private int _onoff = 0;
         private int _order = 0;
         private Condition? _condition = null;

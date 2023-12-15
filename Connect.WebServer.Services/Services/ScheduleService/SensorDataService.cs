@@ -23,7 +23,7 @@ namespace Connect.WebServer.Services
 
         public SensorDataService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 10)
         {
-			this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         #endregion
@@ -50,56 +50,56 @@ namespace Connect.WebServer.Services
                 IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                 IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
-				SensorData? data = await applicationSensorServices.ReceiveDataAsync();
-				if (data != null)
-				{
-					Sensor sensor = await supervisorSensor.GetSensor(data.Type, data.Channel);
-					if (sensor != null)
-					{
-						if ((await this.CheckHumidityValue(supervisorOperatingData, data.Humidity, sensor.RoomId)) 
-							&& (await this.CheckTemperatureValue(supervisorOperatingData, data.Temperature, sensor.RoomId)))
-						{
-							sensor.ProcessData(data.Temperature, data.Humidity, data.Pressure);
-							(resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
-							if (resultCode == ResultCode.Ok)
-							{
-								//Test if the sensor is linked with a room or a connectedobject
-								if (string.IsNullOrEmpty(sensor.RoomId) == false)
-								{
-									await this.ProcessRoomData(supervisorRoom, supervisorNotification, applicationRoomServices, sensor);
-								}
-								else if (string.IsNullOrEmpty(sensor.ConnectedObjectId) == false)
-								{
-									await this.ProcessConnectedObjectData(supervisorRoom, supervisorConnectedObject, applicationConnectedObjectServices, supervisorNotification, sensor);    
-								}
-							}
-							else
-							{
-								Log.Error("SensorDataService.ProcessInScope Error");
-							}
-						}
-					}
-				}
-			}
-            catch(Exception ex)
+                SensorData? data = await applicationSensorServices.ReceiveDataAsync();
+                if (data != null)
+                {
+                    Sensor sensor = await supervisorSensor.GetSensor(data.Type, data.Channel);
+                    if (sensor != null)
+                    {
+                        if (await this.CheckHumidityValue(supervisorOperatingData, data.Humidity, sensor.RoomId)
+                            && await this.CheckTemperatureValue(supervisorOperatingData, data.Temperature, sensor.RoomId))
+                        {
+                            sensor.ProcessData(data.Temperature, data.Humidity, data.Pressure);
+                            (resultCode, sensor) = await supervisorSensor.UpdateSensor(sensor);
+                            if (resultCode == ResultCode.Ok)
+                            {
+                                //Test if the sensor is linked with a room or a connectedobject
+                                if (string.IsNullOrEmpty(sensor.RoomId) == false)
+                                {
+                                    await ProcessRoomData(supervisorRoom, supervisorNotification, applicationRoomServices, sensor);
+                                }
+                                else if (string.IsNullOrEmpty(sensor.ConnectedObjectId) == false)
+                                {
+                                    await ProcessConnectedObjectData(supervisorRoom, supervisorConnectedObject, applicationConnectedObjectServices, supervisorNotification, sensor);
+                                }
+                            }
+                            else
+                            {
+                                Log.Error("SensorDataService.ProcessInScope Error");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
             }
         }
 
-		private async Task ProcessRoomData(ISupervisorRoom supervisorRoom, 
-                                            ISupervisorNotification supervisorNotification, 
-                                            IApplicationRoomServices applicationRoomServices, 
+        private async Task ProcessRoomData(ISupervisorRoom supervisorRoom,
+                                            ISupervisorNotification supervisorNotification,
+                                            IApplicationRoomServices applicationRoomServices,
                                             Sensor sensor)
-		{
+        {
             Room room = await supervisorRoom.GetRoom(sensor.RoomId);
             if (room != null)
             {
                 int validityPeriod = 0;
 
-                if ((this.Configuration != null) && (this.Configuration["ValidityPeriod"] != null))
+                if (Configuration != null && Configuration["ValidityPeriod"] != null)
                 {
-                    int.TryParse(this.Configuration["ValidityPeriod"], out validityPeriod);
+                    int.TryParse(Configuration["ValidityPeriod"], out validityPeriod);
                 }
 
                 //Compute the data (Temperature, Humidity, Pressure) of the room
@@ -115,10 +115,10 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessConnectedObjectData(ISupervisorRoom supervisorRoom, 
-                                                        ISupervisorConnectedObject supervisorConnectedObject, 
-                                                        IApplicationConnectedObjectServices applicationConnectedObjectServices, 
-                                                        ISupervisorNotification supervisorNotification, 
+        private async Task ProcessConnectedObjectData(ISupervisorRoom supervisorRoom,
+                                                        ISupervisorConnectedObject supervisorConnectedObject,
+                                                        IApplicationConnectedObjectServices applicationConnectedObjectServices,
+                                                        ISupervisorNotification supervisorNotification,
                                                         Sensor sensor)
         {
             ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId, true);
@@ -138,31 +138,31 @@ namespace Connect.WebServer.Services
         }
 
         private async Task<bool> CheckTemperatureValue(ISupervisorOperatingData supervisorOperatingData, float temperature, string roomId)
-		{
-			bool isValid = false;
-			IEnumerable<(double?, DateTime)> temperatures = (await supervisorOperatingData.GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Temperature, x.Date));
+        {
+            bool isValid = false;
+            IEnumerable<(double?, DateTime)> temperatures = (await supervisorOperatingData.GetRoomOperatingDataOfDay(roomId, DateTime.Today)).Select(x => (x.Temperature, x.Date));
 
             //We begin to delete the false measures after the first MEASURES_COUNT measures
             if (temperatures.Count() >= MEASURES_COUNT)
-			{
-				(double? temp, DateTime time) median = ZaptoMath.Median(temperatures.TakeLast(MEASURES_COUNT));
-				if ((median.temp != null) && (Math.Abs((temperature - median.temp.Value)) < (median.temp * MARGIN)))
-				{
-					isValid = true;
-				}
+            {
+                (double? temp, DateTime time) median = ZaptoMath.Median(temperatures.TakeLast(MEASURES_COUNT));
+                if (median.temp != null && Math.Abs(temperature - median.temp.Value) < median.temp * MARGIN)
+                {
+                    isValid = true;
+                }
 
                 //We delete the false measures from the first MEASURES_COUNT measures
                 if (temperatures.Count() == MEASURES_COUNT)
-				{
-					this.DeleteFalseMeasure(supervisorOperatingData, median.temp, temperatures, roomId);
+                {
+                    DeleteFalseMeasure(supervisorOperatingData, median.temp, temperatures, roomId);
                 }
-			}
-			else
-			{
-				isValid = true;
-			}
-			return isValid;
-		}
+            }
+            else
+            {
+                isValid = true;
+            }
+            return isValid;
+        }
 
         private async Task<bool> CheckHumidityValue(ISupervisorOperatingData supervisorOperatingData, float humidity, string roomId)
         {
@@ -173,7 +173,7 @@ namespace Connect.WebServer.Services
             if (humidities.Count() >= MEASURES_COUNT)
             {
                 (double? hum, DateTime time) median = ZaptoMath.Median(humidities.TakeLast(MEASURES_COUNT));
-                if ((median.hum != null) && (Math.Abs((humidity - median.hum.Value)) < (median.hum * MARGIN)))
+                if (median.hum != null && Math.Abs(humidity - median.hum.Value) < median.hum * MARGIN)
                 {
                     isValid = true;
                 }
@@ -181,7 +181,7 @@ namespace Connect.WebServer.Services
                 //We delete the false measures from the first MEASURES_COUNT measures
                 if (humidities.Count() == MEASURES_COUNT)
                 {
-                    this.DeleteFalseMeasure(supervisorOperatingData, median.hum, humidities, roomId);
+                    DeleteFalseMeasure(supervisorOperatingData, median.hum, humidities, roomId);
                 }
             }
             else
@@ -191,13 +191,13 @@ namespace Connect.WebServer.Services
             return isValid;
         }
 
-		private void DeleteFalseMeasure(ISupervisorOperatingData supervisorOperatingData, double? median, IEnumerable<(double?, DateTime)> values, string roomId)
-		{
-			List<DateTime> remove = new List<DateTime>();
+        private void DeleteFalseMeasure(ISupervisorOperatingData supervisorOperatingData, double? median, IEnumerable<(double?, DateTime)> values, string roomId)
+        {
+            List<DateTime> remove = new List<DateTime>();
 
             foreach ((double? temp, DateTime time) obj in values)
             {
-                if ((median != null) && (obj.temp != null) && (Math.Abs((obj.temp.Value - median.Value)) > (median * MARGIN)))
+                if (median != null && obj.temp != null && Math.Abs(obj.temp.Value - median.Value) > median * MARGIN)
                 {
                     remove.Add(obj.time);
                 }
