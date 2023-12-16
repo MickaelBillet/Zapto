@@ -46,7 +46,6 @@ namespace Connect.WebServer.Services
                 ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
                 ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
                 ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
-
                 IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                 IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
@@ -154,7 +153,7 @@ namespace Connect.WebServer.Services
                 //We delete the false measures from the first MEASURES_COUNT measures
                 if (temperatures.Count() == MEASURES_COUNT)
                 {
-                    DeleteFalseMeasure(supervisorOperatingData, median.temp, temperatures, roomId);
+                    this.DeleteFalseMeasure(supervisorOperatingData, median.temp, temperatures, roomId);
                 }
             }
             else
@@ -181,7 +180,7 @@ namespace Connect.WebServer.Services
                 //We delete the false measures from the first MEASURES_COUNT measures
                 if (humidities.Count() == MEASURES_COUNT)
                 {
-                    DeleteFalseMeasure(supervisorOperatingData, median.hum, humidities, roomId);
+                    this.DeleteFalseMeasure(supervisorOperatingData, median.hum, humidities, roomId);
                 }
             }
             else

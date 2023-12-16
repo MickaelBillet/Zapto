@@ -35,7 +35,6 @@ namespace Connect.WebServer.Services
             {
                 ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
                 if (@event != null)

@@ -5,7 +5,6 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using IMailService = Framework.Infrastructure.Services.IMailService;
 
 namespace Connect.WebServer.Services.Services.ScheduleService
 {
@@ -39,7 +38,6 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             try
             {
                 ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                IMailService mailService = scope.ServiceProvider.GetRequiredService<IMailService>();
                 IEnumerable<Plug> plugs = await supervisor.GetPlugs();
 
                 //Reset the WorkingDuration daily

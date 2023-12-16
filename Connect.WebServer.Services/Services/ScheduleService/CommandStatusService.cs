@@ -35,9 +35,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
                 ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
                 ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
-
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
-
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)
                 {
