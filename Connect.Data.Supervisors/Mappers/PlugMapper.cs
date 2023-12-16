@@ -26,7 +26,7 @@ namespace Connect.Data.Mappers
                 Type = model.Type,
                 WorkingDuration = model.WorkingDuration,
                 LastCommandDateTime = model.LastCommandDateTime,
-                LastCommandSent = model.LastCommandSent,
+                CommandReceived = model.CommandReceived,
             };
             return entity;
         }
@@ -52,7 +52,7 @@ namespace Connect.Data.Mappers
                 Type = entity.Type,
                 WorkingDuration = entity.WorkingDuration,
                 LastCommandDateTime = entity.LastCommandDateTime,
-                LastCommandSent = entity.LastCommandSent,
+                CommandReceived = entity.CommandReceived,
             };
             return model;
         }

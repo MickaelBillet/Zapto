@@ -42,9 +42,9 @@ namespace Connect.WebServer.Services
                 //Update the order with all the data
                 plug.UpdateOrder(room.Humidity, room.Temperature);
 
-                //We send the command to the Arduino when the order changes or when the last command has not been received after  one minute
+                //We send the command to the Arduino when the order changes or when the last command has not been received after one minute
                 if ((plug.Order != previousOrder) 
-                    || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0,1,0)) && (plug.LastCommandSent == 1)))
+                    || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0,1,0)) && (plug.CommandReceived == 0)))
                 {
                     //Send Command to Arduino
                     if (await this.ApplicationPlugServices.SendCommandAsync(plug) <= 0)
@@ -55,7 +55,7 @@ namespace Connect.WebServer.Services
                     else
                     {
                         plug.LastCommandDateTime = Clock.Now;
-                        plug.LastCommandSent = 1;
+                        plug.CommandReceived = 0;
                     }
                 }
 

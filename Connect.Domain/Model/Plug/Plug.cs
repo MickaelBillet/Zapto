@@ -31,7 +31,7 @@ namespace Connect.Model
 
         [Newtonsoft.Json.JsonIgnore]
         [JsonIgnore]
-        public int LastCommandSent { get; set; } = 0;
+        public int CommandReceived { get; set; } = 0;
 
         public Configuration? Configuration
         {
@@ -276,7 +276,7 @@ namespace Connect.Model
                 this.Status = (status.Equals(Command.PLUG_OFF) ? Model.Status.ON : Model.Status.OFF);
             }
 
-            this.LastCommandSent = 0;
+            this.CommandReceived = 1;
 
             //Update the working duration
             this.ComputeWorkingDuration();
