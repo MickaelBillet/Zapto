@@ -3,8 +3,8 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Services.Repositories
 {
-    public interface IServerIotStatusRepository : IRepository<ServerIotStatusEntity>
+    public interface IPlugRepository : IRepository<PlugEntity>
     {
-        Task<int> CreateTable();
+        Task<int> Upgrade1_1();
     }
 }

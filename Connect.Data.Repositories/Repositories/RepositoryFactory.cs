@@ -27,6 +27,18 @@ namespace Connect.Data.Repositories
             }
             return serverIotStatusRepository;
         }
+        public Lazy<IPlugRepository>? CreatePlugRepository(IDalSession session)
+        {
+            Lazy<IPlugRepository>? plugRepository = null;
+            if (session != null)
+            {
+                if (session.ConnectionType?.ServerType == ServerType.SqlLite)
+                {
+                    plugRepository = new Lazy<IPlugRepository>(() => new PlugRepositorySqlite(session));
+                }
+            }
+            return plugRepository;
+        }
     }
 }
  

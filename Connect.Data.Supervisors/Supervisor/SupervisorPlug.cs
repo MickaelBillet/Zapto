@@ -10,14 +10,14 @@ namespace Connect.Data.Supervisors
 {
     public sealed class SupervisorPlug : ISupervisorPlug
     {
-        private readonly Lazy<IRepository<PlugEntity>> _lazyPlugRepository;
+        private readonly Lazy<IPlugRepository> _lazyPlugRepository;
         private readonly Lazy<IRepository<ConfigurationEntity>> _lazyConfigurationRepository;
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
         private readonly Lazy<IRepository<OperationRangeEntity>> _lazyOperationRangeRepository;
         private readonly Lazy<IRepository<ProgramEntity>> _lazyProgramRepository;
 
         #region Properties
-        private IRepository<PlugEntity> PlugRepository => _lazyPlugRepository.Value;
+        private IPlugRepository PlugRepository => _lazyPlugRepository.Value;
         private IRepository<ConfigurationEntity> ConfigurationRepository => _lazyConfigurationRepository.Value;
         private IRepository<ConditionEntity> ConditionRepository => _lazyConditionRepository.Value;
         private IRepository<OperationRangeEntity> OperationRangeRepository => _lazyOperationRangeRepository.Value;
@@ -27,7 +27,7 @@ namespace Connect.Data.Supervisors
         #region Constructor
         public SupervisorPlug(IDalSession session, IRepositoryFactory repositoryFactory)
         {
-            _lazyPlugRepository = repositoryFactory.CreateRepository<PlugEntity>(session);
+            _lazyPlugRepository = repositoryFactory.CreatePlugRepository(session);
             _lazyConfigurationRepository = repositoryFactory?.CreateRepository<ConfigurationEntity>(session);
             _lazyConditionRepository = repositoryFactory?.CreateRepository<ConditionEntity>(session);
             _lazyOperationRangeRepository = repositoryFactory.CreateRepository<OperationRangeEntity>(session);
@@ -36,6 +36,11 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public async Task<ResultCode> Upgrade1_1()
+        {
+            return (await this.PlugRepository.Upgrade1_1() == 0) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
+        }
+
         public async Task<ResultCode> PlugExists(string id)
         {
             return (await this.PlugRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;

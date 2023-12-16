@@ -1,7 +1,5 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Connect.Data
 {
@@ -14,5 +12,6 @@ namespace Connect.Data
         Task<ResultCode> AddPlug(Plug plug);
         Task<ResultCode> UpdatePlug(Plug plug);
         Task<ResultCode> ResetWorkingDuration(Plug plug);
+        Task<ResultCode> Upgrade1_1();
     }
 }

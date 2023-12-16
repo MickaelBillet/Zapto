@@ -25,9 +25,13 @@ namespace Connect.Model
 
         public string ConditionId { get; set; } = string.Empty;
 
+        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
         public DateTime? LastCommandDateTime { get; set; } = null;
 
-        bool LastCommandSent { get; set; } = false;
+        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
+        public int LastCommandSent { get; set; } = 0;
 
         public Configuration? Configuration
         {
@@ -271,6 +275,8 @@ namespace Connect.Model
                 //reverse operation for a module
                 this.Status = (status.Equals(Command.PLUG_OFF) ? Model.Status.ON : Model.Status.OFF);
             }
+
+            this.LastCommandSent = 0;
 
             //Update the working duration
             this.ComputeWorkingDuration();

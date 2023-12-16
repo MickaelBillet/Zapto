@@ -8,5 +8,6 @@ namespace Connect.Data.Services.Repositories
         Lazy<IRepository<T>> CreateRepository<T>(IDalSession session) where T : ItemEntity;
         Lazy<IRoomRepository> CreateRoomRepository(IDalSession session);
         Lazy<IServerIotStatusRepository> CreateServerIotStatusRepository(IDalSession session);
+        Lazy<IPlugRepository> CreatePlugRepository(IDalSession session);
     }
 }

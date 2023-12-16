@@ -60,10 +60,16 @@ namespace Connect.Data.Database
                     Log.Information($"softwareVersion : {softwareVersion}");
                     if (softwareVersion > dbVersion)
                     {
-                        if (softwareVersion.CompareTo(new Version(0, 0, 0)) > 0)
+                        if ((softwareVersion.CompareTo(new Version(0, 0, 0)) > 0) && softwareVersion.CompareTo(new Version(1, 0, 0)) < 0)
                         {
                             ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorServerIotStatus>();
-                            int tmp = await supervisorServerIotStatus.CreateTable();
+                            ResultCode code = await supervisorServerIotStatus.CreateTable();
+                        }
+
+                        if (softwareVersion.CompareTo(new Version(1, 0, 0)) > 0)
+                        {
+                            ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+                            ResultCode code = await supervisorPlug.Upgrade1_1();
                         }
                     }
                     ResultCode result = await supervisor.UpdateVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);

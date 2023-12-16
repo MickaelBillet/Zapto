@@ -66,16 +66,6 @@ namespace Connect.WebServer.Services.Services.ScheduleService
                     //Send Status to the clients (Mobile, Web...)
                     await applicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
                     await supervisorPlug.UpdatePlug(plug);
-
-                    //if (plug.ConnectedObjectId != null)
-                    //{
-                    //    ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(plug.ConnectedObjectId, false);
-                    //    if (connectedObject != null)
-                    //    {
-                    //        //Send Notification
-                    //        await applicationPlugServices.NotifyPlugStatus(room.LocationId, plug, connectedObject.Name);
-                    //    }
-                    //}
                 }
             }
         }
