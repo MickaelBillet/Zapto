@@ -31,7 +31,7 @@ namespace Connect.Data.Database
                 {
                     plug.WorkingDuration = 0;
 
-                    if (plug.Status != 0)
+                    if (plug.Status is Status.ON or Status.OffON)  
                     {
                         plug.LastDateTimeOn = DateTime.Now;
                     }
@@ -346,6 +346,7 @@ namespace Connect.Data.Database
                 Mode = Mode.Manual,
                 Name = "Module connecté",
                 RoomId = string.Empty,
+                Order = Order.Off,
                 ConfigurationId = configA1.Id,
                 Type = DeviceType.Module,
                 LastDateTimeOn = null,
@@ -358,7 +359,7 @@ namespace Connect.Data.Database
                 Id = Guid.NewGuid().ToString(),
                 Mode = Mode.Manual,
                 Name = "Prise connectée",
-                Order = 0,
+                Order = Order.Off,
                 RoomId = string.Empty,
                 ConfigurationId = configA3.Id,
                 Type = DeviceType.Outlet,
@@ -372,7 +373,7 @@ namespace Connect.Data.Database
                 Id = Guid.NewGuid().ToString(),
                 Mode = Mode.Manual,
                 Name = "Prise connectée",
-                Order = 0,
+                Order = Order.Off,
                 RoomId = string.Empty,
                 ConfigurationId = configA4.Id,
                 Type = DeviceType.Outlet,
@@ -386,7 +387,7 @@ namespace Connect.Data.Database
                 Id = Guid.NewGuid().ToString(),
                 Mode = Mode.Manual,
                 Name = "Module connecté",
-                Order = 0,
+                Order = Order.Off,
                 RoomId = string.Empty,
                 ConfigurationId = configA2.Id,
                 Type = DeviceType.Module,

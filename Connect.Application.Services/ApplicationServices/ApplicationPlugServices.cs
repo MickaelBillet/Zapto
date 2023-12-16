@@ -53,11 +53,11 @@ namespace Connect.Application.Services
 			{
 				if ((plug.Type & DeviceType.Outlet) == DeviceType.Outlet) //Prise
 				{
-					command = (plug.Order == 1) ? Command.PLUG_ON : Command.PLUG_OFF;
+					command = (plug.Order == Order.On) ? Command.PLUG_ON : Command.PLUG_OFF;
 				}
 				else if ((plug.Type & DeviceType.Module) == DeviceType.Module) //Module
 				{
-					command = (plug.Order == 1) ? Command.PLUG_OFF : Command.PLUG_ON;
+					command = (plug.Order == Order.On) ? Command.PLUG_OFF : Command.PLUG_ON;
 				}
 
 				PlugCommand plugCommand = new PlugCommand()
@@ -128,11 +128,11 @@ namespace Connect.Application.Services
         {
 			if (this.AlertService != null)
 			{
-				if ((plug.Order == 0) && (plug.Status == 1))
+				if ((plug.Order == Order.Off) && (plug.Status == Status.ON))
 				{
 					await this.AlertService.SendAlertAsync(locationId, nameConnectedObject, "Allumage manuel");
                 }
-                else if ((plug.Order == 1) && (plug.Status == 0))
+                else if ((plug.Order == Order.On) && (plug.Status == Status.OFF))
 				{
                     await this.AlertService.SendAlertAsync(locationId, nameConnectedObject, "Coupure manuelle");
                 }

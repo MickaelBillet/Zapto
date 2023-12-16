@@ -25,6 +25,10 @@ namespace Connect.Model
 
         public string ConditionId { get; set; } = string.Empty;
 
+        public DateTime? LastCommandDateTime { get; set; } = null;
+
+        bool LastCommandSent { get; set; } = false;
+
         public Configuration? Configuration
         {
             get { return _configuration; }
@@ -142,12 +146,12 @@ namespace Connect.Model
                         }
                         else
                         {
-                            this.Order = 1;
+                            this.Order = Model.Order.On;
                         }
                     }
                     else
                     {
-                        this.Order = 1;
+                        this.Order = Model.Order.On;
                     }
                 }
                 //Programming mode
@@ -172,30 +176,30 @@ namespace Connect.Model
                                     }
                                     else
                                     {
-                                        this.Order = 1;
+                                        this.Order = Model.Order.On;
                                     }
                                 }
                                 else
                                 {
-                                    this.Order = 1;
+                                    this.Order = Model.Order.On;
                                 }
                                 break;
                             }
                             else
                             {
-                                this.Order = 0;
+                                this.Order = Model.Order.Off;
                             }
                         }
                     }
                     else
                     {
-                        this.Order = 0;
+                        this.Order = Model.Order.Off;
                     }
                 }
             }
             else
             {
-                this.Order = 0;
+                this.Order = Model.Order.Off;
             }
         }
 
@@ -207,11 +211,11 @@ namespace Connect.Model
             {
                 if (humidity > condition.HumidityOrder)
                 {
-                    order = 1;
+                    order = Model.Order.On;
                 }
                 else
                 {
-                    order = 0;
+                    order = Model.Order.Off;
                 }
             }
 
@@ -220,17 +224,17 @@ namespace Connect.Model
 
         private int UpdateOrderFromTemperature(Condition condition, double? temperature) 
         {
-            int order = 1;
+            int order = Model.Order.On;
 
             if ((temperature != null) && (condition.TemperatureOrder != null))
             {
                 if (temperature > condition.TemperatureOrder)
                 {
-                    order = 1;
+                    order = Model.Order.On;
                 }
                 else
                 {
-                    order = 0;
+                    order = Model.Order.Off;
                 }
             }
 
@@ -246,7 +250,7 @@ namespace Connect.Model
                 this.WorkingDuration = this.WorkingDuration + DateTime.Now.Subtract(this.LastDateTimeOn.Value).TotalSeconds;
             }
 
-            if (this.Status == Connect.Model.Status.ON)
+            if (this.Status == Model.Status.ON)
             {
                 this.LastDateTimeOn = DateTime.Now;
             }
@@ -279,11 +283,11 @@ namespace Connect.Model
         public static int GetCommand(int status, int mode)
         {
             int command;
-            if ((status == Connect.Model.Status.ON) && (mode == Connect.Model.Mode.Manual))
+            if ((status == Model.Status.ON) && (mode == Model.Mode.Manual))
             {
                 command = CommandType.Manual;
             }
-            else if ((status == Connect.Model.Status.ON) && (status == Connect.Model.Mode.Programing))
+            else if ((status == Model.Status.ON) && (status == Model.Mode.Programing))
             {
                 command = CommandType.Programing;
             }
@@ -296,22 +300,22 @@ namespace Connect.Model
 
         public static int GetStatus(int status, int order)
         {
-            int result = Connect.Model.Status.OFF;
-            if ((status == Connect.Model.Status.ON) && (order == Connect.Model.Order.On))
+            int result = Model.Status.OFF;
+            if ((status == Model.Status.ON) && (order == Model.Order.On))
             {
-                result = Connect.Model.Status.ON;
+                result = Model.Status.ON;
             }
-            else if ((status == Connect.Model.Status.ON) && (order == Connect.Model.Order.Off))
+            else if ((status == Model.Status.ON) && (order == Model.Order.Off))
             {
-                result = Connect.Model.Status.OffON;
+                result = Model.Status.OffON;
             }
-            else if ((status == Connect.Model.Status.OFF) && (order == Connect.Model.Order.On))
+            else if ((status == Model.Status.OFF) && (order == Model.Order.On))
             {
-                result = Connect.Model.Status.OnOFF;
+                result = Model.Status.OnOFF;
             }
-            else if ((status == Connect.Model.Status.OFF) && (order == Connect.Model.Order.Off))
+            else if ((status == Model.Status.OFF) && (order == Model.Order.Off))
             {
-                result = Connect.Model.Status.OFF;
+                result = Model.Status.OFF;
             }
             return result;
         }
