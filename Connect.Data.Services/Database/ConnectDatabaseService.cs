@@ -73,6 +73,10 @@ namespace Connect.Data.Database
                         }
                     }
                     ResultCode result = await supervisor.UpdateVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
+                    if (result == ResultCode.ItemNotFound)
+                    {
+                        result = await supervisor.AddVersion();
+                    }
                     res = (result == ResultCode.Ok) ? true : false;
                 }
             }

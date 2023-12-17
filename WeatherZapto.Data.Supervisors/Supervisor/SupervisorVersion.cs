@@ -36,7 +36,7 @@ namespace WeatherZapto.Data.Supervisors
                 int res = await this.VersionRepository.InsertAsync(new VersionEntity()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    CreationDateTime = Clock.Now,
+                    CreationDateTime = Clock.Now.ToUniversalTime(),
                     Major = 0,
                     Minor = 0,
                     Build = 0,
@@ -60,7 +60,7 @@ namespace WeatherZapto.Data.Supervisors
                 int res = await this.VersionRepository.UpdateAsync(new VersionEntity()
                 {
                     Id = entity.Id,
-                    CreationDateTime = Clock.Now,
+                    CreationDateTime = Clock.Now.ToUniversalTime(),
                     Major = major,
                     Minor = minor,
                     Build = build,

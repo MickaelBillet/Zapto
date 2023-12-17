@@ -49,7 +49,6 @@ namespace WeatherZapto.Data.Supervisors
             {
                 result = ResultCode.ItemAlreadyExist;
             }
-
             return result;
         }
 

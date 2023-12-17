@@ -36,6 +36,10 @@ namespace AirZapto.Data.Database
                     {
                     }
                     ResultCode result = await supervisor.UpdateVersionAsync(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
+                    if (result == ResultCode.ItemNotFound)
+                    {
+                        result = await supervisor.AddVersionAsync();
+                    }
                     res = (result == ResultCode.Ok) ? true : false;
                 }
             }

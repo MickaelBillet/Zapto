@@ -1,6 +1,4 @@
 ﻿using Framework.Core.Base;
-using System;
-using System.Threading.Tasks;
 
 namespace Connect.Data
 {
