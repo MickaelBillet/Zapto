@@ -18,7 +18,7 @@ namespace Zapto.Component.Common.Models
             this.Name = name;
             this.Value = value;
             this.Levels = levels;
-            this.HasStatus = (levels?.Any() == true) ? true : false;
+            this.HasStatus = (levels?.Any() == true);
             this.Description = description;
         }
         #endregion

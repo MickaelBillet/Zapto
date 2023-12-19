@@ -41,7 +41,7 @@ namespace WeatherZapto.Data.Services
                     {
                         result = await supervisor.AddVersion();
                     }
-                    res = (result == ResultCode.Ok) ? true : false;
+                    res = (result == ResultCode.Ok);
                 }
             }
             return res;

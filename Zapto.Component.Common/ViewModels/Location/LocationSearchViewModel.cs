@@ -12,7 +12,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<IEnumerable<LocationModel?>?> GetLocations(string input);
     }
 
-    public class LocationSearchViewModel : BaseViewModel, ILocationSearchViewModel
+    public partial class LocationSearchViewModel : BaseViewModel, ILocationSearchViewModel
     {
         private const int MinLength = 2;
         private const int ZipCodeSize = 5;
@@ -24,28 +24,35 @@ namespace Zapto.Component.Common.ViewModels
         #region Constructor
         public LocationSearchViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-			this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationService>();
+            ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationService>();
         }
         #endregion
 
         #region Methods
+
+        [GeneratedRegex("^(\\d{5})\\s?,?([A-Z,a-z]{2})$")]
+        private static partial Regex ZipCodeRegex();
+
+        [GeneratedRegex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$")]
+        private static partial Regex CityNameRegx();
+
         public async Task<IEnumerable<LocationModel?>?> GetLocations(string input)
         {
             IEnumerable<LocationModel?>? output = null;
 
             try
-            { 
-                this.IsLoading = true;
+            {
+                IsLoading = true;
 
                 if (string.IsNullOrEmpty(input) == false)
                 {
-                    Match? match = new Regex(@"^([a-zA-Z\u0080-\u024F](?:[\-\'])?[a-zA-Z\u0080-\u024F]+)\s?([A-Z,a-z]{2})?$").Match(input);
+                    Match? match = CityNameRegx().Match(input);
                     if (match.Success)
                     {
-                        (string? city, string? countrycode)? result = this.ReadGroup(match.Groups);
-                        if ((result != null) && (result.Value.city!.Length > MinLength))
+                        (string? city, string? countrycode)? result = ReadGroup(match.Groups);
+                        if (result != null && result.Value.city!.Length > MinLength)
                         {
-                            IEnumerable<ZaptoLocation> locations = await this.ApplicationLocationServices.GetLocations(result.Value.city, string.Empty, result.Value.countrycode);
+                            IEnumerable<ZaptoLocation> locations = await ApplicationLocationServices.GetLocations(result.Value.city, string.Empty, result.Value.countrycode);
                             if (locations != null)
                             {
                                 output = locations.GroupBy(x => new { x.Location, x.State, x.Country, x.Latitude, x.Longitude })
@@ -63,13 +70,13 @@ namespace Zapto.Component.Common.ViewModels
                     }
                     else
                     {
-                        match = new Regex(@"^(\d{5})\s?,?([A-Z,a-z]{2})$").Match(input);
+                        match = ZipCodeRegex().Match(input);
                         if (match.Success)
                         {
-                            (string? zipcode, string? countrycode)? result = this.ReadGroup(match.Groups);
-                            if ((result != null) && (result.Value.zipcode!.Length == ZipCodeSize))
+                            (string? zipcode, string? countrycode)? result = ReadGroup(match.Groups);
+                            if (result != null && result.Value.zipcode!.Length == ZipCodeSize)
                             {
-                                ZaptoLocation location = await this.ApplicationLocationServices.GetLocation(result.Value.zipcode, result.Value.countrycode);
+                                ZaptoLocation location = await ApplicationLocationServices.GetLocation(result.Value.zipcode, result.Value.countrycode);
                                 if (location != null) 
                                 {
                                     output = new List<LocationModel>
@@ -96,7 +103,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             finally
             {
-                this.IsLoading = false;
+                IsLoading = false;
             }
 
             return output;
@@ -115,6 +122,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             return output;
         }
+
         #endregion
     }
 }

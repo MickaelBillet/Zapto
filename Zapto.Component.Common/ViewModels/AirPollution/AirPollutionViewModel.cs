@@ -115,7 +115,7 @@ namespace Zapto.Component.Common.ViewModels
             AirPollutionModel model = new AirPollutionModel()
             {
                 Id = zaptoAirPollution.Id,
-                aqi = zaptoAirPollution.aqi,
+                Aqi = zaptoAirPollution.aqi,
                 Location = zaptoAirPollution.Location,
                 Longitude = zaptoAirPollution.Longitude,
                 Latitude = zaptoAirPollution.Latitude,
@@ -132,10 +132,6 @@ namespace Zapto.Component.Common.ViewModels
             model.Items?.Add(new AirPollutionItemModel(this.Localizer["NO"], "no", zaptoAirPollution.no, null));
 
             return model;
-        }
-        public override void Dispose()
-        {
-            base.Dispose();
         }
         #endregion
     }

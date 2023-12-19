@@ -1,5 +1,4 @@
 ﻿using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Text.Json;
 
@@ -13,7 +12,7 @@ namespace Connect.Infrastructure.WebServices
         #endregion
 
         #region Constructor
-        public ConnectWebService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName)
+        public ConnectWebService(IServiceProvider serviceProvider, string httpClientName)
         {
             this.SerializerOptions = new JsonSerializerOptions()
             {

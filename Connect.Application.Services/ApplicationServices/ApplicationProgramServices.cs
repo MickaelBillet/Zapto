@@ -95,7 +95,7 @@ namespace Connect.Application.Services
             if (hasOverLapping == false)
             {
                 //Http Post OperationRange
-                hasError = ((this.OperationRangeService != null) && (await this.OperationRangeService.AddOperationRangeAsync(operationRange) == true)) ? false : true;
+                hasError = (this.OperationRangeService == null) || (await this.OperationRangeService.AddOperationRangeAsync(operationRange) != true);
             }            
 
             return (hasError, hasOverLapping);

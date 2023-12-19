@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace Zapto.Component.Common.ViewModels
+﻿namespace Zapto.Component.Common.ViewModels
 {
     public interface IMainViewModel : IBaseViewModel
 	{
@@ -13,7 +11,7 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Constructor
-		public MainViewModel(IServiceProvider serviceProvider, IConfiguration configuration) : base(serviceProvider)
+		public MainViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
 		}
 		#endregion

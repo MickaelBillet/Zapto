@@ -22,11 +22,13 @@ namespace Zapto.Web.Dashboard.Services
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            Logs log = new();
-            log.Level = logLevel.ToString();
-            log.Date = Clock.Now;
-            log.Exception = exception?.Message;
-            log.RenderedMessage = string.Format("{0}: {1} - {2}", logLevel.ToString(), eventId.Id, formatter(state, exception));
+            Logs log = new()
+            {
+                Level = logLevel.ToString(),
+                Date = Clock.Now,
+                Exception = exception?.Message,
+                RenderedMessage = string.Format("{0}: {1} - {2}", logLevel.ToString(), eventId.Id, formatter(state, exception))
+            };
             this.HttpClient.PostAsJsonAsync<Logs>(ConnectConstants.RestUrlLogs, log);
         }
     }

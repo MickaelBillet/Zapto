@@ -45,11 +45,7 @@ namespace Zapto.Component.Services
 
 			if (response != null)
 			{
-				if (response.StatusCode == HttpStatusCode.NotFound)
-				{
-					hasError = true;
-				}
-				else
+				if (response.StatusCode != HttpStatusCode.NotFound)
 				{
 					throw new HttpRequestException(((int)response.StatusCode).ToString());
 				}

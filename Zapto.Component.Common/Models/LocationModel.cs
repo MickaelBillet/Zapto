@@ -14,11 +14,11 @@
         {
             if (string.IsNullOrEmpty(this.Zip))
             {
-                return $"{Location} - {State} - {Country} -  {Latitude!.Value.ToString("F3")} - {Longitude!.Value.ToString("F3")}";
+                return $"{Location} - {State} - {Country} -  {Latitude!.Value:F3} - {Longitude!.Value:F3}";
             }
             else
             {
-                return $"{Location} - {Zip} - {Country} -  {Latitude!.Value.ToString("F3")} - {Longitude!.Value.ToString("F3")}";
+                return $"{Location} - {Zip} - {Country} -  {Latitude!.Value:F3} - {Longitude!.Value:F3}";
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Zapto.Component.Common.ViewModels
                                                                                     Id = obj.Id,
                                                                                     LocationId = roomModel.LocationId,
                                                                                     Name = obj.Name,
-                                                                                    Temperature = (obj.Sensor != null) ? obj.Sensor.Temperature?.ToString("0.0") : null,
+                                                                                    Temperature = obj.Sensor?.Temperature?.ToString("0.0"),
                                                                                     IsRunning = (obj.Sensor != null) ? obj.Sensor.IsRunning : 0,
                                                                                 });
             }

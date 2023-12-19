@@ -1,6 +1,4 @@
 ﻿using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Text.Json;
 
 namespace WeatherZapto.Infrastructure.WebServices
@@ -13,7 +11,7 @@ namespace WeatherZapto.Infrastructure.WebServices
         #endregion
 
         #region Constructor
-        public WeatherZaptoWebService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName)
+        public WeatherZaptoWebService(IServiceProvider serviceProvider, string httpClientName)
         {
             this.SerializerOptions = new JsonSerializerOptions()
             {

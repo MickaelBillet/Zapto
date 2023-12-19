@@ -66,7 +66,7 @@ namespace AirZapto.Application.Services
 					Period = sensor.Period,
 				});
 
-				isConnected = (this.NotificationsMessageHandler != null) ? await this.NotificationsMessageHandler.SendMessageAsync(sensor.IdSocket, json) : false;
+                isConnected = (this.NotificationsMessageHandler != null) ? await this.NotificationsMessageHandler.SendMessageAsync(sensor.IdSocket, json) : false;
 			}
 
 			return isConnected;

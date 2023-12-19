@@ -130,7 +130,7 @@ namespace WeatherZapto.Application.Services
                     TemperatureMin = (weather.main != null) ? (weather.main.temp_min - 273.15).ToString("0.0") : null,
                     TemperatureMax = (weather.main != null) ? (weather.main.temp_max - 273.15).ToString("0.0") : null,
                     FeelsLike = (weather.main != null) ? (weather.main.feels_like - 273.15).ToString("0.0") : null,
-                    Pressure = (weather.main != null) ? weather.main.pressure : null,
+                    Pressure = weather.main?.pressure,
                     Location = locationName,
                     WeatherText = weather.weather?.FirstOrDefault()?.description,
                     Icon = weather.weather?.FirstOrDefault()?.icon,

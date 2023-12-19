@@ -31,16 +31,15 @@ namespace Framework.Data.Services
 
         public async Task ConfigureDatabase()
         {
-            ConnectionType connectionType = new ConnectionType()
+            ConnectionType connectionType = new()
             {
                 ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
                 ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
             };
 
-            bool isCreated = false;
             if (this.DatabaseExist(connectionType) == false)
             {
-                isCreated = this.CreateDatabase(connectionType);
+                bool isCreated = this.CreateDatabase(connectionType);
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync();

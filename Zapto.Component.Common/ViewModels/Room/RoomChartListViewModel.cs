@@ -32,11 +32,6 @@ namespace Zapto.Component.Common.ViewModels
             await base.InitializeAsync(parameter);
         }
 
-        public override void Dispose()
-        {           
-            base.Dispose();
-        }
-
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
             return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
