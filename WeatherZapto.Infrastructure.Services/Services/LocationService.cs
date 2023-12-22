@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using WeatherZapto.Application.Infrastructure;
+﻿using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Model;
 
 namespace WeatherZapto.Infrastructure.WebServices
@@ -7,7 +6,7 @@ namespace WeatherZapto.Infrastructure.WebServices
     internal class LocationService : WeatherZaptoWebService, ILocationService
     {
         #region Constructor
-        public LocationService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public LocationService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
         #endregion

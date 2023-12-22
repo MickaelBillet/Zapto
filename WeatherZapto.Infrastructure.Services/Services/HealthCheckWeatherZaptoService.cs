@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using WeatherZapto.Application.Infrastructure;
+﻿using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Model.Healthcheck;
 
 namespace WeatherZapto.Infrastructure.WebServices
@@ -10,8 +6,8 @@ namespace WeatherZapto.Infrastructure.WebServices
     internal class HealthCheckWeatherZaptoService : WeatherZaptoWebService, IHealthCheckWeatherZaptoService
     {
         #region Constructor
-        public HealthCheckWeatherZaptoService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
-        {
+        public HealthCheckWeatherZaptoService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
+        { 
 
         }
         #endregion

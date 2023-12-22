@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using WeatherZapto.Application.Infrastructure;
+﻿using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Model;
 
 namespace WeatherZapto.Infrastructure.WebServices
@@ -10,7 +6,7 @@ namespace WeatherZapto.Infrastructure.WebServices
     public class WeatherService : WeatherZaptoWebService, IWeatherService
     {
         #region Constructor
-        public WeatherService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public WeatherService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
 		{
 
         }

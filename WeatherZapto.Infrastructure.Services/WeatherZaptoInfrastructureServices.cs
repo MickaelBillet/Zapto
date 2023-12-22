@@ -32,19 +32,19 @@ namespace WeatherZapto.Infrastructure.Services
         {
             services.AddTransient<IWeatherService, WeatherService>((service) =>
             {
-                return new WeatherService(service, configuration, httpClientName);
+                return new WeatherService(service, httpClientName);
             });
             services.AddTransient<IAirPollutionService, AirPollutionService>((service) =>
             {
-                return new AirPollutionService(service, configuration, httpClientName);
+                return new AirPollutionService(service, httpClientName);
             });
             services.AddTransient<ILocationService, LocationService>((service) =>
             {
-                return new LocationService(service, configuration, httpClientName);
+                return new LocationService(service, httpClientName);
             });
             services.AddTransient<IHealthCheckWeatherZaptoService, HealthCheckWeatherZaptoService>((service) =>
             {
-                return new HealthCheckWeatherZaptoService(service, configuration, httpClientName);
+                return new HealthCheckWeatherZaptoService(service, httpClientName);
             });
         }
     }
