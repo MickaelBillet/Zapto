@@ -10,7 +10,7 @@ if($LASTEXITCODE -eq 0)
     # Success
     Write-Output "Docker Login Success"
     Write-Output "Docker Build Progress..."
-    $result = docker build -t mickabdocker/airzaptowebserver:v1 -f ./AirZapto.WebServer/Dockerfile .
+    $result = docker build -t mickabdocker/airzaptowebserver:v2 -f ./AirZapto.WebServer/Dockerfile .
 
     # Evaluate success/failure
     if($LASTEXITCODE -eq 0)
@@ -18,7 +18,7 @@ if($LASTEXITCODE -eq 0)
         # Success
         Write-Output "Docker Build Success"
         Write-Output "Docker Push Progress..."
-        $result = docker push mickabdocker/airzaptowebserver:v1
+        $result = docker push mickabdocker/airzaptowebserver:v2
      
         # Evaluate success/failure
         if($LASTEXITCODE -eq 0)
