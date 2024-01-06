@@ -118,7 +118,7 @@ namespace Connect.Application.Services
 		}
 
 		/// <summary>
-		/// Notify the plug status to the firebase app
+		/// Notify the plug status
 		/// </summary>
 		/// <param name="locationId"></param>
 		/// <param name="plug"></param>

@@ -74,7 +74,7 @@ namespace Connect.WebServer.Services
                 //Send event to the client apps
                 await applicationSensorServices.SendEventToClientAsync(room.LocationId, sensor);
 
-                //Send Notification to the Firebase app
+                //Send Notification
                 await applicationSensorServices.NotifySensorLeak(room.LocationId, room);
             }
         }
