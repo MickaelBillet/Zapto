@@ -19,7 +19,7 @@ namespace Framework.Data.Services
         }
         #endregion
 
-        #region
+        #region Methods
         public async Task Execute()
         {
             await this.DatabaseService.ConfigureDatabase();

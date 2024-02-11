@@ -42,13 +42,4 @@
     <ProjectReference Include="..\Connect.WebServer.Services\Connect.WebServer.Services.csproj" />
     <ProjectReference Include="..\Serilog.Sqlite.Sinks\src\Serilog.Sinks.SQLite\Serilog.Sinks.SQLite.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Scripts\WindowsIot\startup.bat">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Scripts\WindowsIot\startup.ps1">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
