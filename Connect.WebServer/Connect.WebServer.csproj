@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <StartupObject>Connect.WebServer.Program</StartupObject>
     <RootNamespace>Connect.WebServer</RootNamespace>
     <Nullable>enable</Nullable>
@@ -21,12 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.SignalR" Version="7.0.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="7.0.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.SignalR" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Sqlite" Version="8.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Expressions" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
