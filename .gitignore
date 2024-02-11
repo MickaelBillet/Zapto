@@ -109,3 +109,8 @@
 /AirZapto.Data.Services/bin/Debug/net8.0
 /AirZapto.Data.Supervisors/bin/Debug/net8.0
 /AirZapto.WebServer.Services/bin/Debug/net8.0
+/WeatherZapto.Data.Repositories/bin/Debug/net8.0
+/WeatherZapto.Data.Services/bin/Debug/net8.0
+/WeatherZapto.Data.Supervisors/bin/Debug/net8.0
+/WeatherZapto.WebServer/bin/Debug/net8.0
+/WeatherZapto.WebServer.Services/bin/Debug/net8.0

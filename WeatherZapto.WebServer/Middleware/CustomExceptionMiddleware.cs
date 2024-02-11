@@ -45,7 +45,7 @@ namespace WeatherZapto.WebServer.Middleware
 
 					response.ContentType = "application/json";
 					response.StatusCode = statusCode;
-					response.Headers.Add("exception", "messageException");
+					response.Headers.Append("exception", "messageException");
 
 					await response.WriteAsync(JsonSerializer.Serialize<CustomErrorResponse>(new CustomErrorResponse
 					{
@@ -84,7 +84,7 @@ namespace WeatherZapto.WebServer.Middleware
 
             response.ContentType = "application/json";
             response.StatusCode = statusCode;
-            response.Headers.Add("exception", "messageException");
+            response.Headers.Append("exception", "messageException");
 
             await response.WriteAsync(JsonSerializer.Serialize<CustomErrorResponse>(new CustomErrorResponse
             {
