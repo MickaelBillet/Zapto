@@ -11,7 +11,7 @@ namespace Connect.Infrastructure.WebServices
     {
         #region Constructor
 
-        public SensorService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public SensorService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
 

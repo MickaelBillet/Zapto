@@ -13,7 +13,7 @@ namespace Connect.Infrastructure.WebServices
     {
         #region Constructor
 
-        public NotificationService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public NotificationService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
 
         }

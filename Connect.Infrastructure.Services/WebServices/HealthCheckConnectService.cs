@@ -11,7 +11,7 @@ namespace Connect.Infrastructure.WebServices
     internal class HealthCheckConnectService : ConnectWebService, IHealthCheckConnectService
     {
         #region Constructor
-        public HealthCheckConnectService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public HealthCheckConnectService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
 
         }

@@ -14,7 +14,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public ClientAppService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public ClientAppService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
 
         }

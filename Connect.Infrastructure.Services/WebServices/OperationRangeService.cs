@@ -17,7 +17,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public OperationRangeService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public OperationRangeService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
 

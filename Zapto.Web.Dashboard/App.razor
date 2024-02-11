@@ -38,22 +38,22 @@
     {
         if (args.Path.Contains("dashboard"))
         {
-            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] {"Zapto.Component.Dashboard.dll"});
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] {"Zapto.Component.Dashboard.wasm"});
             this.LazyLoadedAssemblies.AddRange(assemblies);
         }
         else if (args.Path.Contains("healthcheck"))
         {
-            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.Healthcheck.dll" });
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.Healthcheck.wasm" });
             this.LazyLoadedAssemblies.AddRange(assemblies);
         }
         else if (args.Path.Contains("roomchartlist"))
         {
-            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.Charts.dll" });
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.Charts.wasm" });
             this.LazyLoadedAssemblies.AddRange(assemblies);
         }
         else if (args.Path.Contains("airpollutiondetails"))
         {
-            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.AirPollution.dll" });
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new[] { "Zapto.Component.AirPollution.wasm" });
             this.LazyLoadedAssemblies.AddRange(assemblies);
         }
     }

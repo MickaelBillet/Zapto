@@ -15,7 +15,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public ConnectedObjectService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public ConnectedObjectService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
 

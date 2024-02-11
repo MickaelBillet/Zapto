@@ -12,7 +12,7 @@ namespace Connect.Infrastructure.WebServices
     {
         #region Constructor
 
-        public OperatingDataService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public OperatingDataService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
 

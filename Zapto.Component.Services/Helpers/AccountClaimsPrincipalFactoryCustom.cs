@@ -31,7 +31,7 @@ namespace Zapto.Component.Services.Helpers
 
             if (rolesElem is JsonElement roles)
             {
-                if (roles.ValueKind == JsonValueKind.Array)
+                if ((roles.ValueKind == JsonValueKind.Array) && (options.RoleClaim != null))
                 {
                     identity.RemoveClaim(identity.FindFirst(options.RoleClaim));
                     foreach (var role in roles.EnumerateArray())

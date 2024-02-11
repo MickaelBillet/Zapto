@@ -19,7 +19,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public LocationService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public LocationService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
             this.CacheService = serviceProvider.GetService<ICacheService>();
         }

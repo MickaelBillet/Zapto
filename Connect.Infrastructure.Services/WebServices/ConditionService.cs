@@ -15,7 +15,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public ConditionService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public ConditionService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
         }
 

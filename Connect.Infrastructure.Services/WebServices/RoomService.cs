@@ -21,7 +21,7 @@ namespace Connect.Infrastructure.WebServices
 
         #region Constructor
 
-        public RoomService(IServiceProvider serviceProvider, IConfiguration configuration, string httpClientName) : base(serviceProvider, configuration, httpClientName)
+        public RoomService(IServiceProvider serviceProvider, string httpClientName) : base(serviceProvider, httpClientName)
         {
             CacheService = serviceProvider.GetService<ICacheService>();
         }
