@@ -105,3 +105,7 @@
 /AirZapto.Data.Supervisors/bin/Debug/net7.0
 /AirZapto.Data.Supervisors/obj
 /Connect.Data/bin
+/AirZapto.Data.Repositories/bin/Debug/net8.0
+/AirZapto.Data.Services/bin/Debug/net8.0
+/AirZapto.Data.Supervisors/bin/Debug/net8.0
+/AirZapto.WebServer.Services/bin/Debug/net8.0
