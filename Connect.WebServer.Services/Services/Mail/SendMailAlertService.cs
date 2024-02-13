@@ -1,6 +1,5 @@
 ﻿using MailKit;
 using Serilog;
-using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services
 {
@@ -30,7 +29,7 @@ namespace Framework.Infrastructure.Services
             bool sent = await this.MailService.SendEmailAsync(mailRequest, MailSent);
         }
 
-        private void MailSent(object sender, MessageSentEventArgs e)
+        private void MailSent(object? sender, MessageSentEventArgs e)
         {
             Log.Information("Mail Sent");
         }

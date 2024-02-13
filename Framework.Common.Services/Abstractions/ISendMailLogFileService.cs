@@ -2,7 +2,7 @@
 
 namespace Framework.Infrastructure.Services
 {
-    public interface ISendMailLogFileService
+    public interface ISendMailWithFileService
     {
         Task Send(string directoryPath);
     }

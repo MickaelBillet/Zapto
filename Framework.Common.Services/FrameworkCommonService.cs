@@ -2,7 +2,7 @@
 
 namespace Framework.Infrastructure.Services
 {
-    public static class FrameworkInfraService
+    public static class FrameworkCommonService
 	{
         public static void AddMailService(this IServiceCollection services)
         {

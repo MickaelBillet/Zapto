@@ -1,15 +1,10 @@
 ﻿using Framework.Core.Base;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Framework.Infrastructure.Services;
+using Serilog;
 
-namespace Framework.Infrastructure.Services
+namespace Connect.WebServer.Services
 {
-    public class SendMailLogFileService : ISendMailLogFileService
+    public class SendMailLogFileService : ISendMailWithFileService
     {
         #region Services
         private IMailService MailService { get; }
@@ -27,25 +22,14 @@ namespace Framework.Infrastructure.Services
         {
             //Send a mail with a log file
             DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
-
             IEnumerable<FileInfo> fileInfos = directoryInfo.GetFiles().OrderByDescending(file => file.LastWriteTime);
-
             if (fileInfos?.Count() > 0)
             {
-                using (FileStream fs = new FileStream(fileInfos.ToList()[0].FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    byte[] result = new byte[fs.Length];
-                    await fs.ReadAsync(result, 0, (int)fs.Length);
-
-                    FormFile file = new FormFile(fs, 0, fs.Length, fs.Name, Path.GetFileName(fs.Name))
-                    {
-                        Headers = new HeaderDictionary(),
-                        ContentType = "application/octet-stream"
-                    };
-
+                foreach(FileInfo file in fileInfos) 
+                { 
                     MailRequest mailRequest = new MailRequest()
                     {
-                        Attachments = new List<IFormFile>() { file },
+                        Attachments = new List<MailAttachment> { new MailAttachment(file.FullName) },
                         Body = string.Empty,
                         Subject = "Logs Connect " + Clock.Now,
                         ToEmail = "mickael.billet@gmail.com",
@@ -56,8 +40,9 @@ namespace Framework.Infrastructure.Services
             }
         }
 
-        private void MailSent(object sender, MailKit.MessageSentEventArgs e)
+        private void MailSent(object? sender, MailKit.MessageSentEventArgs e)
         {
+            Log.Information("Mail Sent");
         }
         #endregion
     }

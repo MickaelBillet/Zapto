@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Expressions" Version="4.0.0" />
@@ -17,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Connect.Application.Services\Connect.Application.Services.csproj" />
     <ProjectReference Include="..\Connect.Data.Repositories\Connect.Data.Repositories.csproj" />
+    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ using MimeKit;
 using Polly;
 using Serilog;
 using System;
-using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +29,6 @@ namespace Framework.Infrastructure.Services
         #endregion
 
         #region Methods
-
         public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent)
         {
             MimeMessage email = new MimeMessage
@@ -44,20 +43,9 @@ namespace Framework.Infrastructure.Services
 
             if (mailRequest.Attachments != null)
             {
-                byte[] fileBytes;
-
-                foreach (var file in mailRequest.Attachments)
+                foreach (var attachment in mailRequest.Attachments.Where(attachment => attachment.Content != null))
                 {
-                    if (file.Length > 0)
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            fileBytes = ms.ToArray();
-                        }
-
-                        builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-                    }
+                    builder.Attachments.Add(attachment.Filename, attachment.Content, ContentType.Parse(attachment.ContentType));
                 }
             }
 
@@ -142,7 +130,6 @@ namespace Framework.Infrastructure.Services
 
             return option;
         }
-
         #endregion
     }
 }
