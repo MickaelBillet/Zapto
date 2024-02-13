@@ -1,7 +1,9 @@
-﻿using MailKit;
+﻿using Framework.Infrastructure.Services;
+using MailKit;
 using Serilog;
+using IMailService = Framework.Infrastructure.Services.IMailService;
 
-namespace Framework.Infrastructure.Services
+namespace Connect.WebServer.Services
 {
     public class SendMailAlertService : ISendMailAlertService
     {
