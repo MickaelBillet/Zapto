@@ -1,17 +1,17 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim-arm64v8 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim-arm64v8 AS base
 WORKDIR /app
 EXPOSE 5010
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["WeatherZapto.WebServer/WeatherZapto.WebServer.csproj", "WeatherZapto.WebServer/"]
 COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 COPY ["WeatherZapto.Infrastructure.Services/WeatherZapto.Infrastructure.Services.csproj", "WeatherZapto.Infrastructure.Services/"]
 COPY ["Framework.Core/Framework.Core.csproj", "Framework.Core/"]
 COPY ["WeatherZapto.Application.Services/WeatherZapto.Application.Services.csproj", "WeatherZapto.Application.Services/"]
-COPY ["Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
+COPY ["Framework.Common.Services/Framework.Common.Services.csproj", "Framework.Common.Services/"]
 COPY ["WeatherZapto.Domain/WeatherZapto.Domain.csproj", "WeatherZapto.Domain/"]
 COPY ["WeatherZapto.WebServer.Services/WeatherZapto.WebServer.Services.csproj", "WeatherZapto.WebServer.Services/"]
 COPY ["WeatherZapto.Data.Repositories/WeatherZapto.Data.Repositories.csproj", "WeatherZapto.Data.Repositories/"]
@@ -24,7 +24,7 @@ COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/*", "Serilog.Sqlite.Sinks/s
 COPY ["WeatherZapto.Infrastructure.Services/*", "WeatherZapto.Infrastructure.Services/"]
 COPY ["Framework.Core/*", "Framework.Core/"]
 COPY ["WeatherZapto.Application.Services/*", "WeatherZapto.Application.Services/"]
-COPY ["Framework.Infrastructure.Services/*", "Framework.Infrastructure.Services/"]
+COPY ["Framework.Common.Services/*", "Framework.Common.Services/"]
 COPY ["WeatherZapto.Domain/*", "WeatherZapto.Domain/"]
 COPY ["WeatherZapto.WebServer.Services/*", "WeatherZapto.WebServer.Services/"]
 COPY ["WeatherZapto.Data.Repositories/*", "WeatherZapto.Data.Repositories/"]

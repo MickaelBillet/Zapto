@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

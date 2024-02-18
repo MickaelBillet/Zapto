@@ -1,6 +1,6 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim-arm64v8 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim-arm64v8 AS base
 WORKDIR /app
 EXPOSE 5000
 EXPOSE 5001/udp
@@ -10,14 +10,14 @@ EXPOSE 5004/udp
 EXPOSE 5005/udp
 EXPOSE 5007/udp
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["Connect.WebServer/Connect.WebServer.csproj", "Connect.WebServer/"]
 COPY ["Connect.WebServer.Services/Connect.WebServer.Services.csproj", "Connect.WebServer.Services/"]
 COPY ["Connect.Application.Services/Connect.Application.Services.csproj", "Connect.Application.Services/"]
 COPY ["Connect.Domain/Connect.Domain.csproj", "Connect.Domain/"]
 COPY ["Framework.Core/Framework.Core.csproj", "Framework.Core/"]
-COPY ["Framework.Infrastructure.Services/Framework.Infrastructure.Services.csproj", "Framework.Infrastructure.Services/"]
+COPY ["Framework.Common.Services/Framework.Common.Services.csproj", "Framework.Common.Services/"]
 COPY ["Connect.Data.Repositories/Connect.Data.Repositories.csproj", "Connect.Data.Repositories/"]
 COPY ["Connect.Data.Supervisors/Connect.Data.Supervisors.csproj", "Connect.Data.Supervisors/"]
 COPY ["Connect.Data.Services/Connect.Data.Services.csproj", "Connect.Data.Services/"]
@@ -29,7 +29,7 @@ COPY ["Connect.WebServer.Services/*", "Connect.WebServer.Services/"]
 COPY ["Connect.Application.Services/*", "Connect.Application.Services/"]
 COPY ["Connect.Domain/*", "Connect.Domain/"]
 COPY ["Framework.Core/*", "Framework.Core/"]
-COPY ["Framework.Infrastructure.Services/*", "Framework.Infrastructure.Services/"]
+COPY ["Framework.Common.Services/*", "Framework.Common.Services/"]
 COPY ["Connect.Data.Services/*", "Connect.Data.Services/"]
 COPY ["Connect.Data.Repositories/*", "Connect.Data.Repositories/"]
 COPY ["Connect.Data.Supervisors/*", "Connect.Data.Supervisors/"]
