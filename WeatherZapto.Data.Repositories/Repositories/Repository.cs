@@ -44,7 +44,7 @@ namespace WeatherZapto.Data.Repositories
         public async Task<T?> GetAsync(string id)
         {
             T? entity = null;
-            if (this.Table != null)
+            if ((this.Table != null) && (this.Table.Any()))
             {
                 entity = await (from item in this.Table
                                 where item.Id == id
@@ -56,7 +56,7 @@ namespace WeatherZapto.Data.Repositories
         public async Task<T?> GetAsync(Expression<Func<T, bool>>? condition = null,
                                             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
         {
-            if ((this.DataContext != null) && (this.Table != null))
+            if ((this.DataContext != null) && (this.Table != null) && (this.Table.Any()))
             {
                 IQueryable<T> query = this.Table;
                 if (condition != null)
@@ -79,7 +79,7 @@ namespace WeatherZapto.Data.Repositories
         public async Task<IEnumerable<T>?> GetCollectionAsync(Expression<Func<T, bool>>? condition = null, 
                                                                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
         {
-            if ((this.DataContext != null) && (this.Table != null))
+            if ((this.DataContext != null) && (this.Table != null) && (this.Table.Any()))
             {
                 IQueryable<T> query = this.Table;
                 if (condition != null)
@@ -102,7 +102,7 @@ namespace WeatherZapto.Data.Repositories
         public async Task<int> DeleteAsync(T entity)
         {
             int res = 0;
-            if ((this.DataContext != null) && (this.Table != null))
+            if ((this.DataContext != null) && (this.Table != null) && (this.Table.Any()))
             {
                 if (this.DataContext.Entry(entity).State == EntityState.Detached)
                 {

@@ -23,6 +23,8 @@ namespace WeatherZapto.WebApi.Controllers
         #endregion
 
         #region Method
+
+        //WeatherZaptoConstants.UrlHealthCheck
         [HttpGet]
         public async Task<IActionResult> Get()
         {

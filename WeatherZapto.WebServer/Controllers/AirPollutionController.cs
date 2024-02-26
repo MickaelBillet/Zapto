@@ -27,6 +27,7 @@ namespace WeatherZapto.WebServer.Controllers
         #endregion
 
         #region Methods 
+        //WeatherZaptoConstants.UrlAirPollution
         [HttpGet(@"lon={longitude}&lat={latitude}")]
         public async Task<IActionResult> GetAirPollution(string longitude, string latitude)
         {
@@ -74,6 +75,7 @@ namespace WeatherZapto.WebServer.Controllers
             }
         }
 
+        //WeatherZaptoConstants.UrlAirPollutionLocation
         [HttpGet(@"location={location}&lon={longitude}&lat={latitude}")]
         public async Task<IActionResult> GetAirPollution(string location, string longitude, string latitude)
         {

@@ -30,8 +30,8 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddVersion()
         {
             ResultCode result = ResultCode.CouldNotCreateItem;
-            VersionEntity entity = (await this.VersionRepository.GetCollectionAsync()).FirstOrDefault();
-            if (entity == null)
+            IEnumerable<VersionEntity> entities = await this.VersionRepository.GetCollectionAsync();
+            if (entities?.FirstOrDefault() == null)
             {
                 int res = await this.VersionRepository.InsertAsync(new VersionEntity()
                 {
@@ -40,7 +40,7 @@ namespace WeatherZapto.Data.Supervisors
                     Major = 0,
                     Minor = 0,
                     Build = 0,
-                }); ;
+                });
                 
                 result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             }

@@ -111,8 +111,8 @@ namespace Zapto.Component.Common.ViewModels
                         model = new WeatherModel()
                         {
                             Temperature = weather.Temperature,
-                            TemperatureMax = weather.TemperatureMax,
-                            TemperatureMin = weather.TemperatureMin,
+                            TemperatureMax = this.GetTemperatureMax(weather),
+                            TemperatureMin = this.GetTemperatureMin(weather),
                             FeelsLike = weather.FeelsLike,
                             Pressure = weather.Pressure,
                             WeatherText = weather.WeatherText,
@@ -143,6 +143,42 @@ namespace Zapto.Component.Common.ViewModels
                 this.IsLoading = false;
             }
             return model;
+        }
+
+        private string GetTemperatureMax(ZaptoWeather weather)
+        {
+            string max = string.Empty;
+            if ((string.IsNullOrEmpty(weather.TemperatureMax) == false)
+                && (string.IsNullOrEmpty(weather.Temperature) == false))
+            {
+                if ((double.Parse(weather.Temperature) > double.Parse(weather.TemperatureMax)))
+                {
+                    max = weather.Temperature;
+                }
+                else
+                {
+                    max = weather.TemperatureMax;
+                }
+            }
+            return max;
+        }
+
+        private string GetTemperatureMin(ZaptoWeather weather)
+        {
+            string min = string.Empty;
+            if ((string.IsNullOrEmpty(weather.TemperatureMin) == false)
+                && (string.IsNullOrEmpty(weather.Temperature) == false))
+            {
+                if (double.Parse(weather.Temperature) < double.Parse(weather.TemperatureMin))
+                {
+                    min = weather.Temperature;
+                }
+                else
+                {
+                    min = weather.TemperatureMin;
+                }
+            }
+            return min;
         }
         #endregion
     }

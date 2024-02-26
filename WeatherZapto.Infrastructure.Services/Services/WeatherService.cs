@@ -18,7 +18,7 @@ namespace WeatherZapto.Infrastructure.WebServices
 			return await this.WebService.GetAsync<ZaptoWeather>(string.Format(WeatherZaptoConstants.UrlWeather, longitude, latitude, culture),
                                                                         null,
                                                                         this.SerializerOptions,
-                                                                        new CancellationToken()); ;
+                                                                        new CancellationToken());
 		}
 
         public async Task<ZaptoWeather> GetWeather(string location, string longitude, string latitude, string culture)

@@ -3,7 +3,7 @@ using WeatherZapto.Application.Services;
 
 namespace WeatherZapto.Application
 {
-	public static class WeatherZaptoAppServices
+    public static class WeatherZaptoAppServices
 	{
 		public static void AddApplicationWeaterZaptoServices(this IServiceCollection services)
 		{

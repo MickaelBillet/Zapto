@@ -2,6 +2,7 @@ using Framework.Core.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using WeatherZapto.Application;
+using WeatherZapto.Data;
 using WeatherZapto.Model;
 
 namespace WeatherZapto.WebServer.Controllers
@@ -15,18 +16,21 @@ namespace WeatherZapto.WebServer.Controllers
         private IApplicationOWServiceCache? ApplicationOWServiceCache { get; }
         private IApplicationOWService? ApplicationOWService { get; }
         private IConfiguration? Configuration { get; }
+        protected IServiceScopeFactory? ServiceScopeFactory { get; set; }
         #endregion
 
         #region Constructor
         public WeatherController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             this.ApplicationOWServiceCache = serviceProvider.GetRequiredService<IApplicationOWServiceCache>();
-            this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>(); 
+            this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
+            this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = configuration;
         }
         #endregion
 
         #region Methods 
+        //WeatherZaptoConstants.UrlWeather
         [HttpGet("lon={longitude}&lat={latitude}&cul={culture}")]
         public async Task<IActionResult> GetWeather(string longitude, string latitude, string culture)
         {
@@ -42,7 +46,8 @@ namespace WeatherZapto.WebServer.Controllers
                         zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude, culture.Substring(0,2));
                         if (zaptoWeather != null)
                         {
-                            return StatusCode(200, zaptoWeather);
+                            (zaptoWeather.TemperatureMin, zaptoWeather.TemperatureMax) = await this.GetTemperatureMinMax(zaptoLocation?.Location);
+                            return StatusCode(200, zaptoWeather);                            
                         }
                         else
                         {
@@ -74,6 +79,7 @@ namespace WeatherZapto.WebServer.Controllers
             }
         }
 
+        //WeatherZaptoConstants.UrlWeatherLocation
         [HttpGet("location={location}&lon={longitude}&lat={latitude}&cul={culture}")]
         public async Task<IActionResult> GetWeatherLocation(string location, string longitude, string latitude, string culture)
         {
@@ -86,6 +92,7 @@ namespace WeatherZapto.WebServer.Controllers
                     zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude, culture.Substring(0,2));
                     if (zaptoWeather != null)
                     {
+                        (zaptoWeather.TemperatureMin, zaptoWeather.TemperatureMax) = await this.GetTemperatureMinMax(location);
                         return StatusCode(200, zaptoWeather);
                     }
                     else
@@ -111,6 +118,23 @@ namespace WeatherZapto.WebServer.Controllers
                     Code = 500,
                 });
             }
+        }
+
+        private async Task<(string min, string max)> GetTemperatureMinMax(string? location)
+        {
+            string min = string.Empty, max = string.Empty;
+            using (IServiceScope scope = this.ServiceScopeFactory!.CreateScope())
+            {
+                ISupervisorTemperature? supervisorTemperature = scope.ServiceProvider.GetService<ISupervisorTemperature>();
+                if ((supervisorTemperature != null) && (string.IsNullOrEmpty(location) == false))
+                {
+                    double? valmin = await supervisorTemperature.GetTemperatureMin(location, Clock.Now.Date);
+                    double? valmax = await supervisorTemperature.GetTemperatureMax(location, Clock.Now.Date);
+                    min = valmin != null ? valmin.Value.ToString("0.0") : string.Empty;
+                    max=  valmax != null ? valmax.Value.ToString("0.0") : string.Empty;
+                }
+            }
+            return (min, max);
         }
         #endregion
     }

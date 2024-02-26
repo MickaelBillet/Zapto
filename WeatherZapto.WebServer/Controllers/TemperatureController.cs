@@ -20,10 +20,11 @@ namespace WeatherZapto.WebServer.Controllers
         #endregion
 
         #region Methods 
+        //WeatherZaptoConstants.UrlTemperaturesDay
         [HttpGet("data/date={date}&location={location}")]
         public async Task<IActionResult> GetTemperatures(string date, string location)
         {
-            IEnumerable<float>? temperatures = null;
+            IEnumerable<double>? temperatures = null;
 
             try
             {
@@ -60,10 +61,11 @@ namespace WeatherZapto.WebServer.Controllers
             }
         }
 
+        //WeatherZaptoConstants.UrlTemperaturesMinMax
         [HttpGet("minmax/date={date}&location={location}")]
         public async Task<IActionResult> GetTemperatureMinMax(string date, string location)
         {
-            float?[] minmax = new float?[2];
+            double?[] minmax = new double?[2];
             try
             {
                 string[] tab = date.Split("-");

@@ -47,6 +47,14 @@ namespace WeatherZapto.Data.Services
             return res;
         }
 
+        protected override async Task FeedDataAsync()
+        {
+            using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+            {
+                await scope.ServiceProvider.GetRequiredService<ISupervisorVersion>().AddVersion();
+            }
+        }
+
         #endregion
     }
 }
