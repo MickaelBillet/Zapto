@@ -120,3 +120,6 @@
 /AirZapto.Android/.vs/AirZapto.Android.csproj.dtbcache.json
 /Framework.Common.Services/obj
 /Framework.Common.Services/bin/Debug/netstandard2.1
+/Framework.Common.Services/bin/Release/netstandard2.1
+/WeatherZapto.Data.Services/bin/Release/net8.0
+/Zapto.Web.Dashboard/bin/Release/net8.0
