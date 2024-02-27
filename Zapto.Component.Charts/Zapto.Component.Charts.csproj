@@ -48,4 +48,8 @@
     <ProjectReference Include="..\Zapto.Component.Common\Zapto.Component.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
