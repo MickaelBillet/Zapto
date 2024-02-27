@@ -1,7 +1,6 @@
 using AirZapto;
 using Blazored.LocalStorage;
 using Connect.Model;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
@@ -14,7 +13,6 @@ using Zapto.Web.Dashboard.Extensions;
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient("ConnectClient", client =>
 {
