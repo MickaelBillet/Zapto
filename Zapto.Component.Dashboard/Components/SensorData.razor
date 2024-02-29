@@ -2,7 +2,7 @@
 @inject ISensorDataViewModel? ViewModel
 @implements IDisposable
 
-<MudPaper Class="d-flex align-center justify-center my-2 mx-1" Elevation="0" Style="@($"background:{Colors.Grey.Lighten4};width:200px;height:60px;")">
+<MudPaper Class="d-flex align-center justify-center mb-2 mx-1" Elevation="0" Style="@($"background:{Colors.Grey.Lighten4};width:200px;height:60px;")">
     @if (this.Model?.IsRunning == RunningStatus.UnHealthy) 
     {
         <Circle Color="#CE2222" Radius="10"></Circle>

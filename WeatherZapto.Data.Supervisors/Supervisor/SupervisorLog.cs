@@ -26,13 +26,13 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<IEnumerable<Logs>> GetLogsInf24H()
 		{
             IEnumerable<LogsEntity> entities = (await this.LogsRepository.GetCollectionAsync(arg => (Clock.Now.ToUniversalTime() <= arg.CreationDateTime.AddHours(24f).ToUniversalTime())));
-            return entities.Select(item => LogsMapper.Map(item));
+            return (entities != null) ? entities.Select(item => LogsMapper.Map(item)) : Enumerable.Empty<Logs>();
 		}
 
 		public async Task<IEnumerable<Logs>> GetLogsCollection()
 		{
             IEnumerable<LogsEntity> entities = await this.LogsRepository.GetCollectionAsync();
-            return entities.Select(item => LogsMapper.Map(item));
+            return (entities != null) ? entities.Select(item => LogsMapper.Map(item)) : Enumerable.Empty<Logs>();
         }
 
         public async Task<ResultCode> AddLog(Logs log)

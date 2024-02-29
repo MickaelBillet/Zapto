@@ -4,14 +4,14 @@
 @implements IDisposable
 
 <MudPaper Style="height:120px;">
-    <MudContainer Class="d-flex justify-content-between" Style="width:400px">
-        <MudText Typo="Typo.subtitle1" Class="mr-6">@Localizer["Outside Pollution"]</MudText>
+    <MudStack Justify="Justify.SpaceBetween" Row="true">
+        <MudText Typo="Typo.subtitle1" Class="mx-2">@Localizer["Outside Pollution"]</MudText>
         <MudIconButton Size="Size.Small"
                        Class="mt-0 mr-1"
                        OnClick="@((e) => ShowAirPollutionDetails())"
                        Icon="@Icons.Material.Outlined.Info"
                        Color="@Color.Primary" />
-    </MudContainer>
+    </MudStack>
     
     <MudContainer Style="height:80px;" Class="d-flex align-items-center justify-content-center gap-2">
         @if (this.Model != null)
