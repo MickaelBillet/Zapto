@@ -2,6 +2,7 @@
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -151,8 +152,8 @@ namespace Zapto.Component.Common.ViewModels
             if ((string.IsNullOrEmpty(weather.TemperatureMax) == false)
                 && (string.IsNullOrEmpty(weather.Temperature) == false))
             {
-                if ((double.Parse(weather.Temperature) > double.Parse(weather.TemperatureMax)))
-                {
+                if (double.Parse(weather.Temperature, NumberStyles.Number) > double.Parse(weather.TemperatureMax, NumberStyles.Number))
+                { 
                     max = weather.Temperature;
                 }
                 else
@@ -169,7 +170,7 @@ namespace Zapto.Component.Common.ViewModels
             if ((string.IsNullOrEmpty(weather.TemperatureMin) == false)
                 && (string.IsNullOrEmpty(weather.Temperature) == false))
             {
-                if (double.Parse(weather.Temperature) < double.Parse(weather.TemperatureMin))
+                if (double.Parse(weather.Temperature, NumberStyles.Number) < double.Parse(weather.TemperatureMin, NumberStyles.Number))
                 {
                     min = weather.Temperature;
                 }

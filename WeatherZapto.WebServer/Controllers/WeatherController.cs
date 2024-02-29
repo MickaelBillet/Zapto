@@ -131,7 +131,7 @@ namespace WeatherZapto.WebServer.Controllers
                     double? valmin = await supervisorTemperature.GetTemperatureMin(location, Clock.Now.Date);
                     double? valmax = await supervisorTemperature.GetTemperatureMax(location, Clock.Now.Date);
                     min = valmin != null ? valmin.Value.ToString("0.0") : string.Empty;
-                    max=  valmax != null ? valmax.Value.ToString("0.0") : string.Empty;
+                    max = valmax != null ? valmax.Value.ToString("0.0") : string.Empty;
                 }
             }
             return (min, max);
