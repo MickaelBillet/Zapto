@@ -1,17 +1,14 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Mappers;
-using AirZapto.Data.Services.Repositories;
 using AirZapto.Model;
 using Framework.Core.Base;
-using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 
 namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorSensorData : Supervisor, ISupervisorSensorData
 	{
         #region Constructor
-        public SupervisorSensorData(IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, IConfiguration? configuration) : base(contextFactory, repositoryFactory, configuration)
+        public SupervisorSensorData(IServiceProvider serviceProvider) : base(serviceProvider)
         { }
         #endregion
 

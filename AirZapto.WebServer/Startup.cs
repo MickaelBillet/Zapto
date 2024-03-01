@@ -2,7 +2,6 @@ using AirZapto.WebServer.Services;
 using AirZapto.WebServices.Configuration;
 using AirZapto.WebServices.Helpers;
 using AirZapto.WebServices.Middleware;
-using Framework.Data.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -118,6 +117,7 @@ namespace AirZapto.WebServer
                     policy.RequireClaim("user_realm_roles", "user", "administrator");
                 });
             });
+            services.AddMemoryCache();
             services.AddServices();
             services.AddOptions();
             services.AddControllers();
@@ -205,7 +205,7 @@ namespace AirZapto.WebServer
             app.UseRouting();
             app.UseCors();
             app.UseAuthentication();
-            app.UseAuthorization();            
+            app.UseAuthorization();  
 
             WebSocketOptions webSocketOptions = new WebSocketOptions()
             {
