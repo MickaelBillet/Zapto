@@ -60,8 +60,8 @@ namespace Zapto.Component.Common.ViewModels
 							model = new WeatherModel()
 							{
 								Temperature = weather.Temperature,
-                                TemperatureMax = weather.TemperatureMax, 
-                                TemperatureMin = weather.TemperatureMin,
+                                TemperatureMax = this.GetTemperatureMax(weather),
+                                TemperatureMin = this.GetTemperatureMin(weather),
                                 FeelsLike = weather.FeelsLike,
                                 Pressure = weather.Pressure,
 								WeatherText = weather.WeatherText,

@@ -72,7 +72,7 @@ namespace WeatherZapto.Data.Supervisors
 
                             if ((entities != null) && (entities.Any()))
                             {
-                                temperatureMin = entities.Min((item) => float.Parse(item.Temperature));
+                                temperatureMin = entities.Min((item) => double.Parse(item.Temperature));
                                 this.Cache.Set($"TemperatureMin-{location}", temperatureMin, this.MemoryCacheEntryOptions);
                             }
                         }
@@ -109,7 +109,7 @@ namespace WeatherZapto.Data.Supervisors
 
                             if ((entities != null) && (entities.Any()))
                             { 
-                                temperatureMax = entities.Max((item) => float.Parse(item.Temperature));
+                                temperatureMax = entities.Max((item) => double.Parse(item.Temperature));
                                 this.Cache.Set($"TemperatureMax-{location}", temperatureMax, this.MemoryCacheEntryOptions);
                             }
                         }
