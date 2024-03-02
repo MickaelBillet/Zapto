@@ -11,9 +11,6 @@ namespace AirZapto.Data.Supervisors
     public sealed class SupervisorLogs : Supervisor, ISupervisorLogs
 	{
         #region Constructor
-        public SupervisorLogs(IServiceProvider serviceProvider) : base(serviceProvider)
-        { }
-
         public SupervisorLogs(IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, IConfiguration? configuration) : base(contextFactory, repositoryFactory, configuration)
         { }
         #endregion
