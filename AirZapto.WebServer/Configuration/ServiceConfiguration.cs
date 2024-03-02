@@ -17,7 +17,8 @@ namespace AirZapto.WebServices.Configuration
 			services.AddJsonFileService();
 			services.AddSupervisors();
 			services.AddRepositories();
-			services.AddApplicationAirZaptoServices();
+            services.AddSingleton<CacheSignal>();
+            services.AddApplicationAirZaptoServices();
 			services.AddSingleton<WebSockerService>();
             services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
             services.AddTransient<IWSMessageManager, SensorMessageManager>(); 

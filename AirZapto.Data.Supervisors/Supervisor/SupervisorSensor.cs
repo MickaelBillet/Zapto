@@ -23,8 +23,8 @@ namespace AirZapto.Data.Supervisors
             this.Cache = serviceProvider.GetService<IMemoryCache>();
             this.CacheSignal = serviceProvider.GetService<CacheSignal>();
             this.MemoryCacheEntryOptions = new MemoryCacheEntryOptions()
-                                                       .SetSlidingExpiration(TimeSpan.FromSeconds(600)) //This determines how long a cache entry can be inactive before it is removed from the cache
-                                                       .SetAbsoluteExpiration(TimeSpan.FromSeconds(900)) //The problem with sliding expiration is that if we keep on accessing the cache entry, it will never expire
+                                                       .SetSlidingExpiration(TimeSpan.FromSeconds(300)) //This determines how long a cache entry can be inactive before it is removed from the cache
+                                                       .SetAbsoluteExpiration(TimeSpan.FromSeconds(600)) //The problem with sliding expiration is that if we keep on accessing the cache entry, it will never expire
                                                        .SetPriority(CacheItemPriority.Normal);
         }
         #endregion
@@ -72,40 +72,21 @@ namespace AirZapto.Data.Supervisors
 		{
 			ResultCode result = ResultCode.ItemNotFound;
 			Sensor? sensor = null;
-			if (this.CacheSignal != null && this.Cache != null)
-			{
-				try
-				{
-                    await this.CacheSignal.WaitAsync();
-					if (this.Cache.TryGetValue($"Sensor-{id}", out sensor))
-					{
-						Log.Information($"Sensor found {sensor}");
-					}
-					else
-					{
-						if (this.Repository != null)
-						{
-							SensorEntity? entity = await this.Repository.GetSensorAsync(id);
-							sensor = (entity != null) ? SensorMapper.Map(entity) : null;
-							if (sensor != null) 
-							{
-								this.Cache.Set($"Sensor-{id}", sensor, this.MemoryCacheEntryOptions);
-								result = ResultCode.Ok;
-                            }
-							else
-							{
-								result = ResultCode.ItemNotFound;
-							}
-						}
-					}
-				}
-                finally
+            if (this.Repository != null)
+            {
+                SensorEntity? entity = await this.Repository.GetSensorAsync(id);
+                sensor = (entity != null) ? SensorMapper.Map(entity) : null;
+                if (sensor != null)
                 {
-                    this.CacheSignal.Release();
+                    result = ResultCode.Ok;
+                }
+                else
+                {
+                    result = ResultCode.ItemNotFound;
                 }
             }
 
-			return (result, sensor);
+            return (result, sensor);
 		}
 
 		public async Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket)
@@ -143,7 +124,7 @@ namespace AirZapto.Data.Supervisors
 			return result;
 		}
 
-		public async Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync()
+		public async Task<(ResultCode, IEnumerable<Sensor>?)> GetCacheSensorsAsync()
 		{
 			ResultCode result = ResultCode.ItemNotFound;
 			IEnumerable<Sensor>? sensors = null;
@@ -155,8 +136,9 @@ namespace AirZapto.Data.Supervisors
 					if (this.Cache.TryGetValue($"Sensor", out sensors))
 					{
 						Log.Information($"Sensors found");
-					}
-					else
+                        result = ResultCode.Ok;
+                    }
+                    else
 					{
 						if (this.Repository != null)
 						{
@@ -182,6 +164,27 @@ namespace AirZapto.Data.Supervisors
         
 			return (result, sensors);
 		}
+
+        public async Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync()
+        {
+            ResultCode result = ResultCode.ItemNotFound;
+            IEnumerable<Sensor>? sensors = null;
+            if (this.Repository != null)
+            {
+                IEnumerable<SensorEntity>? entities = await this.Repository.GetAllSensorsAsync();
+                sensors = (entities != null) ? entities.Select((item) => SensorMapper.Map(item)) : null;
+                if ((sensors != null) && (sensors.Any()))
+                {
+                    result = ResultCode.Ok;
+                }
+                else
+                {
+                    result = ResultCode.ItemNotFound;
+                }
+            }
+
+            return (result, sensors);
+        }
         #endregion
     }
 }

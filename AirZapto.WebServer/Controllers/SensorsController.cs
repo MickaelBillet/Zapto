@@ -65,7 +65,7 @@ namespace AirZapto.WebServices.Controllers
         {
             try
             {
-                (ResultCode code, IEnumerable<Sensor>? sensors) = await this.Supervisor.GetSensorsAsync();
+                (ResultCode code, IEnumerable<Sensor>? sensors) = await this.Supervisor.GetCacheSensorsAsync();
 
                 if (code == ResultCode.Ok)
                 {
