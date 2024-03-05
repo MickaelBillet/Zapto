@@ -1,8 +1,9 @@
 ﻿using Connect.Application;
 using Connect.Application.Infrastructure;
 using Connect.Model;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using Serilog;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -52,8 +53,8 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
-				throw new Exception("SignalR Exception");
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("SignalR Exception", ZaptoSeverity.Error);
             }
             return res;
         }
@@ -93,9 +94,9 @@ namespace Zapto.Component.Common.ViewModels
 			}
 			catch (Exception ex)
 			{
-				Debug.Write(ex);
-				throw new Exception("Send Plug Command Exception");
-			}
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("Send Plug Command Exception", ZaptoSeverity.Error);
+            }
 			return res;
 		}		
 

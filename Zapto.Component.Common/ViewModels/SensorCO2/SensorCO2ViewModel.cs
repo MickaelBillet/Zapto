@@ -1,13 +1,14 @@
 ﻿using AirZapto.Application;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using Serilog;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
 {
     public interface ISensorCO2ViewModel : IBaseViewModel
     {
-        Task<SensorCO2Model?> GetSensorCO2Model(string sensorName);
+        Task<(SensorCO2Model? model, bool hasError)> GetSensorCO2Model(string sensorName);
     }
 
     public class SensorCO2ViewModel : BaseViewModel, ISensorCO2ViewModel
@@ -29,9 +30,11 @@ namespace Zapto.Component.Common.ViewModels
         {
             await base.InitializeAsync(parameter);
         }
-        public async Task<SensorCO2Model?> GetSensorCO2Model(string sensorName)
+        public async Task<(SensorCO2Model? model, bool hasError)> GetSensorCO2Model(string sensorName)
         {
             SensorCO2Model? model = null;
+            bool hasError = false;
+
             try
             {
                 this.IsLoading = true;
@@ -50,15 +53,16 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
-                throw new Exception("Sensor CO2 Service Exception");
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                hasError = true;
+                this.NavigationService.ShowMessage("Sensor CO2 Service Exception", ZaptoSeverity.Error);
             }
             finally
             {
                 this.IsLoading = false;
             }
 
-            return model;
+            return (model, hasError);
         }
 
         #endregion

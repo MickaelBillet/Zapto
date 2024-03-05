@@ -12,7 +12,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IWeatherViewModel : IBaseViewModel
     {
-		Task<WeatherModel?> GetWeatherModel();
+		Task<(WeatherModel? model, bool hasError)> GetWeatherModel();
 		Task<WeatherModel?> GetWeatherModel(LocationModel location);
     }
 
@@ -34,9 +34,11 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-        public async Task<WeatherModel?> GetWeatherModel()
+        public async Task<(WeatherModel? model, bool hasError)> GetWeatherModel()
 		{
 			WeatherModel? model = null;
+            bool hasError = false;
+
 			try
 			{
 				ZaptoUser user = await this.AuthenticationService.GetAuthenticatedUser();
@@ -81,13 +83,14 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                hasError = true;
                 this.NavigationService.ShowMessage("Weather Service Exception", ZaptoSeverity.Error);
             }
             finally
             {
                 this.IsLoading = false;
             }
-            return model;
+            return (model, hasError);
 		}
 
         public async Task<WeatherModel?> GetWeatherModel(LocationModel location)

@@ -65,6 +65,8 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if (this.Model != null)
                 {
+                    this.IsLoading = true;
+
                     if ((this.LocationFound == true) && (this.LocalizationFound == true))
                     {
                         location = this.Model.Location!;
@@ -96,6 +98,10 @@ namespace Zapto.Component.Common.ViewModels
                 location = this.Localizer["Unable to locate"];
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 this.NavigationService.ShowMessage("Location Unable", ZaptoSeverity.Error);
+            }
+            finally
+            {
+                this.IsLoading = false;
             }
 
             return location;

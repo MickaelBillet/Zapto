@@ -1,6 +1,8 @@
 ﻿using Connect.Application;
 using Connect.Model;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
@@ -49,9 +51,9 @@ namespace Zapto.Component.Common.ViewModels
 			}
 			catch (Exception ex) 
 			{ 
-				Debug.WriteLine(ex);
-				new Exception("Room Service Exception : " + ex.Message);
-			}
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("Room Service Exception", ZaptoSeverity.Error);
+            }
             finally
             {
                 this.IsLoading = false;

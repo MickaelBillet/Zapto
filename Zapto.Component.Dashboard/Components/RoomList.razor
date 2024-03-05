@@ -1,5 +1,4 @@
 ﻿@inject IRoomListViewModel? ViewModel
-@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudGrid Class="mb-2">
@@ -30,14 +29,7 @@
     {
         if ((this.ViewModel != null) && (this.Location != null))
         {
-            try
-            {
-                this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id);
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+            this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id);
         }
     }
 

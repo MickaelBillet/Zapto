@@ -1,6 +1,9 @@
 ﻿using Connect.Application;
 using Connect.Model;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
+using MudBlazor;
+using Serilog;
 using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
@@ -34,12 +37,32 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
-            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
+            DateTime? dateTime = null;
+            try
+            {
+                dateTime = (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("GetRoomMaxDate Exception", ZaptoSeverity.Error);
+            }
+            return dateTime;
         }
 
         public async Task<DateTime?> GetRoomMinDate(string roomId)
         {
-            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
+            DateTime? dateTime = null;
+            try
+            {
+                dateTime = (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("GetRoomMinDate Exception", ZaptoSeverity.Error);
+            }
+            return dateTime;
         }
 
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
@@ -71,8 +94,8 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex) 
             {
-                Debug.WriteLine(ex);
-                throw new Exception("Charts Data Exception : " + ex.Message);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("Charts Data Exception", ZaptoSeverity.Error);
             }
             finally
             {

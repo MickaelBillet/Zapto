@@ -2,8 +2,9 @@
 using AirZapto.Model.Healthcheck;
 using Connect.Application;
 using Connect.Model.Healthcheck;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using Serilog;
 using WeatherZapto.Application;
 using WeatherZapto.Model.Healthcheck;
 using Zapto.Component.Common.Models;
@@ -55,7 +56,8 @@ namespace Zapto.Component.Common.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
+                    Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                    this.NavigationService.ShowMessage("HealthCheckConnect Services Exception", ZaptoSeverity.Error);
                 }
 
                 try
@@ -68,7 +70,8 @@ namespace Zapto.Component.Common.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
+                    Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                    this.NavigationService.ShowMessage("HealthCheck AirZapto Services Exception", ZaptoSeverity.Error);
                 }
 
                 try
@@ -81,7 +84,8 @@ namespace Zapto.Component.Common.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
+                    Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                    this.NavigationService.ShowMessage("HealthCheckWeatherZapto Services Exception", ZaptoSeverity.Error);
                 }
             }
             finally

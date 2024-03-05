@@ -73,17 +73,9 @@ else
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
         {
-            try
-            {
-                this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
-                this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
-
-                await this.DisplayCharts();
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+            this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
+            this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
+            await this.DisplayCharts();
         }
     }
     public void Dispose()

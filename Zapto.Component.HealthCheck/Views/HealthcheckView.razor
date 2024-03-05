@@ -1,6 +1,5 @@
 ﻿@inject IHealthCheckViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
-@inject ISnackbar Snackbar
 
 <div class="d-flex align-center gap-4">
     <MudText Typo="Typo.h5" Color="Color.Primary">@Localizer["Healthcheck"]</MudText>
@@ -65,14 +64,7 @@
     {
         if ((this.ViewModel != null) && (this.Model == null))
         {
-            try
-            {
-                this.Model = await this.ViewModel.GetModelList();
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+            this.Model = await this.ViewModel.GetModelList();
         }
     }
 
