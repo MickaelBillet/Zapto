@@ -91,7 +91,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.Write(ex);
-                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - ex.ToString()");
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 throw new Exception("Weather Service Exception");
             }
             finally
@@ -143,7 +143,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.Write(ex);
-                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - ex.ToString()");
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 throw new Exception("Weather Service Exception : " + ex.Message);
             }
             finally
