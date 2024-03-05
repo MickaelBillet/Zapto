@@ -67,18 +67,10 @@
     {
         if ((this.ViewModel != null) && (this.Model == null))
         {
-            try
+            this.Model = await this.ViewModel.GetAirPollutionModel();
+            if (this.Model != null)
             {
-                this.Model = await this.ViewModel.GetAirPollutionModel();
-                if (this.Model != null)
-                {
-                    this.ViewModel.Refresh += RefreshView;
-                }
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
-                this.HasError = true;
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }
