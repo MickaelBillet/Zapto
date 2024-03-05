@@ -83,14 +83,6 @@
 
     public WeatherModel Model { get; set; } = null;
 
-    private bool LocalizationFound
-    {
-        get
-        {
-            return (this.Location != null) && (this.Location.Latitude != null) && (this.Location.Longitude != null);
-        }
-    }
-
     protected override async Task OnInitializedAsync()
     {
         if (this.ViewModel != null)
@@ -101,19 +93,12 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (this.LocalizationFound))
+        if (this.ViewModel != null)
         {
-            try
+            this.Model = await this.ViewModel.GetWeatherModel(this.Location);
+            if (this.Model != null)
             {
-                this.Model = await this.ViewModel.GetWeatherModel(this.Location.Latitude.ToString(), this.Location.Longitude.ToString());
-                if (this.Model != null)
-                {
-                    this.ViewModel.Refresh += RefreshView;
-                }
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }

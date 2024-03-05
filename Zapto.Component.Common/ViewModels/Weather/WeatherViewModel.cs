@@ -3,7 +3,6 @@ using Framework.Core.Base;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System.Diagnostics;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
@@ -14,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
     public interface IWeatherViewModel : IBaseViewModel
     {
 		Task<WeatherModel?> GetWeatherModel();
-		Task<WeatherModel?> GetWeatherModel(string latitude, string longitude);
+		Task<WeatherModel?> GetWeatherModel(LocationModel location);
     }
 
 	public class WeatherViewModel : BaseViewModel, IWeatherViewModel
@@ -35,15 +34,7 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-        public override async Task InitializeAsync(string? parameter)
-		{
-			await base.InitializeAsync(parameter);
-		}
-		public override void Dispose()
-		{
-			base.Dispose();
-		}
-		public async Task<WeatherModel?> GetWeatherModel()
+        public async Task<WeatherModel?> GetWeatherModel()
 		{
 			WeatherModel? model = null;
 			try
@@ -89,9 +80,8 @@ namespace Zapto.Component.Common.ViewModels
 			}
             catch (Exception ex)
             {
-                Debug.Write(ex);
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                throw new Exception("Weather Service Exception");
+                this.NavigationService.ShowMessage("Weather Service Exception", ZaptoSeverity.Error);
             }
             finally
             {
@@ -100,40 +90,42 @@ namespace Zapto.Component.Common.ViewModels
             return model;
 		}
 
-        public async Task<WeatherModel?> GetWeatherModel(string latitude, string longitude)
+        public async Task<WeatherModel?> GetWeatherModel(LocationModel location)
         {
 			WeatherModel? model = null;
-
             try
             {
-                string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
-                Log.Debug($"Culture : {culture}");
-
-                if (string.IsNullOrEmpty(culture) == false)
+                if ((location != null) && (location.Latitude != null) && (location.Longitude != null))
                 {
-                    this.IsLoading = true;
+                    string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                    Log.Debug($"Culture : {culture}");
 
-                    ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(longitude, latitude, culture);
-                    if (weather != null)
+                    if (string.IsNullOrEmpty(culture) == false)
                     {
-                        model = new WeatherModel()
-                        {
-                            Temperature = weather.Temperature,
-                            FeelsLike = weather.FeelsLike,
-                            Pressure = weather.Pressure,
-                            WeatherText = weather.WeatherText,
-                            WindSpeed = weather.WindSpeed,
-                            WindDirection = weather.WindDirection,
-                            Location = weather.Location,
-                        };
+                        this.IsLoading = true;
 
-                        using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+                        ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(location.Longitude.ToString(), location.Latitude.ToString(), culture);
+                        if (weather != null)
                         {
-                            byte[]? byteArray = (stream as MemoryStream)?.ToArray();
-                            if (byteArray != null)
+                            model = new WeatherModel()
                             {
-                                string? b64String = Convert.ToBase64String(byteArray);
-                                model.Image = "data:image/png;base64," + b64String;
+                                Temperature = weather.Temperature,
+                                FeelsLike = weather.FeelsLike,
+                                Pressure = weather.Pressure,
+                                WeatherText = weather.WeatherText,
+                                WindSpeed = weather.WindSpeed,
+                                WindDirection = weather.WindDirection,
+                                Location = weather.Location,
+                            };
+
+                            using (Stream stream = await this.ApplicationOWService.GetCurrentWeatherImage(weather.Icon))
+                            {
+                                byte[]? byteArray = (stream as MemoryStream)?.ToArray();
+                                if (byteArray != null)
+                                {
+                                    string? b64String = Convert.ToBase64String(byteArray);
+                                    model.Image = "data:image/png;base64," + b64String;
+                                }
                             }
                         }
                     }
@@ -141,9 +133,8 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.Write(ex);
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                throw new Exception("Weather Service Exception : " + ex.Message);
+                this.NavigationService.ShowMessage("Weather Service Exception", ZaptoSeverity.Error);
             }
             finally
             {

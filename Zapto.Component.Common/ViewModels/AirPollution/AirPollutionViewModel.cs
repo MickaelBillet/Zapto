@@ -20,14 +20,6 @@ namespace Zapto.Component.Common.ViewModels
     {
         #region Properties
         private IApplicationAirPollutionService ApplicationAirPollutionService { get; }
-        private LocationModel Location { get; set; }
-        private bool LocalizationFound
-        {
-            get
-            {
-                return (this.Location != null) && (this.Location.Latitude != null) && (this.Location.Longitude != null);
-            }
-        }
         #endregion
 
         #region Constructor
@@ -100,9 +92,7 @@ namespace Zapto.Component.Common.ViewModels
             AirPollutionModel? model = null;
             try
             {
-                this.Location = location;
-
-                if (this.LocalizationFound)
+                if ((location != null) && (location.Latitude != null) && (location.Longitude != null))
                 {
                     this.IsLoading = true;
 
