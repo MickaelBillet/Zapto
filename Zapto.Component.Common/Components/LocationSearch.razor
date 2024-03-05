@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationSearchViewModel ViewModel
-@inject ISnackbar Snackbar
 @implements IDisposable
 
     <div style="width:300px">
@@ -38,16 +37,7 @@
 
     private async Task<IEnumerable<LocationModel?>?> Search(string input)
     {
-        IEnumerable<LocationModel?>? output = null;
-        try
-        {
-            output = await this.ViewModel.GetLocations(input);
-        }
-        catch(Exception ex)
-        {
-            Snackbar.Add(ex.Message, Severity.Error);
-        }
-        return output;
+        return await this.ViewModel.GetLocations(input);
     }
 
     private async Task SelectLocation(LocationModel model)

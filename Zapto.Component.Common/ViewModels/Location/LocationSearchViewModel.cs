@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+﻿using Framework.Core.Base;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Text.RegularExpressions;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
@@ -98,8 +99,8 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                throw new Exception("Location Service Exception : " + ex.Message);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("Location Service Exception", ZaptoSeverity.Error);
             }
             finally
             {

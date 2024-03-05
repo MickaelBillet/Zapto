@@ -56,9 +56,6 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-
-
-
         public async Task<string> GetLocation(LocationModel model)
         {
             string location = string.Empty;
@@ -98,7 +95,8 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 location = this.Localizer["Unable to locate"];
-                this.NavigationService.ShowMessage(ex.Message, ZaptoSeverity.Error);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
+                this.NavigationService.ShowMessage("Location Unable", ZaptoSeverity.Error);
             }
 
             return location;
