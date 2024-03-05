@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Diagnostics;
 using System.Globalization;
 using WeatherZapto.Application;
@@ -50,6 +51,8 @@ namespace Zapto.Component.Common.ViewModels
 				if (user != null)
 				{
 					string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                    Log.Debug($"Culture : {culture}");
+
 					if (string.IsNullOrEmpty(culture) == false)
 					{
                         this.IsLoading = true;

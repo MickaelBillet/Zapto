@@ -5,14 +5,28 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
+using Serilog;
+using Serilog.Debugging;
 using WeatherZapto;
 using Zapto.Component.Services.Helpers;
 using Zapto.Web.Dashboard;
 using Zapto.Web.Dashboard.Configuration;
 using Zapto.Web.Dashboard.Extensions;
 
+SelfLog.Enable(m => Console.Error.WriteLine(m));
+
+Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .Enrich.WithProperty("InstanceId", Guid.NewGuid().ToString("n"))
+                    .WriteTo.BrowserConsole()
+                    .CreateLogger();
+
+Log.Debug("Hello, Zapto !");
+
+
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
+
 
 builder.Services.AddHttpClient("ConnectClient", client =>
 {
