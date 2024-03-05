@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
+using MudBlazor;
 using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Services
@@ -10,6 +11,7 @@ namespace Zapto.Component.Services
 		#region Service
 		private NavigationManager NavigationManager { get; }
 		private DataService DataService { get; }
+		private ISnackbar Snackbar { get; }
 		#endregion
 
 		#region Constructor
@@ -17,6 +19,7 @@ namespace Zapto.Component.Services
 		{
 			this.NavigationManager = serviceProvider.GetRequiredService<NavigationManager>();
 			this.DataService = serviceProvider.GetRequiredService<DataService>();
+			this.Snackbar = serviceProvider.GetRequiredService<ISnackbar>();
 		}
 		#endregion
 
@@ -47,7 +50,12 @@ namespace Zapto.Component.Services
 			return this.NavigationManager.BaseUri;
 		}
 
-		public void Dispose()
+        public void ShowMessage(string message, byte severity)
+		{
+			this.Snackbar.Add(message, (Severity)severity);
+		}
+
+        public void Dispose()
 		{
 		}
 		#endregion

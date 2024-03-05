@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject ILocationViewModel ViewModel
-@inject ISnackbar Snackbar
 @implements IDisposable
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-6">@this.Text</MudText>
@@ -9,31 +8,7 @@
     [Parameter]
     public LocationModel Model { get; set; } = null;
 
-    private string Text { get; set; } = string.Empty;
-
-    private bool LocationFound
-    {
-        get
-        {
-            return string.IsNullOrEmpty(this.Model.Location) == false;
-        }
-    }
-
-    private bool LocalizationFound
-    {
-        get
-        {
-            return (this.Model != null) && (this.Model.Latitude != null) && (this.Model.Longitude != null);
-        }
-    }
-
-    private bool? LocalizationIsAvailable
-    {
-        get
-        {
-            return this.Model.LocalizationIsAvailable;
-        }
-    }
+    private string Text { get; set; } = string.Empty;    
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,38 +22,7 @@
     {
         if ((this.ViewModel != null) && (this.Model != null))                
         {
-            try
-            {
-                if ((this.LocationFound == true) && (this.LocalizationFound == true))
-                {
-                    this.Text = this.Model.Location;
-                }
-                if ((this.LocalizationIsAvailable == null) && (this.LocationFound == false))
-                {
-                    this.Text = this.Localizer["Location in progress"];
-                }
-                else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
-                {
-                    this.Model.Location = await this.ViewModel.GetReverseLocation(this.Model.Latitude.ToString(), this.Model.Longitude.ToString());
-                    if (this.Model?.Location != null)
-                    {
-                        this.Text = this.Model.Location;
-                    }
-                    else
-                    {
-                        this.Text = this.Localizer["Unable to locate"];
-                    }
-                }
-                else if (this.LocalizationIsAvailable == false)
-                {
-                    this.Text = this.Localizer["Unable to locate"];
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Text = this.Localizer["Unable to locate"];
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+            this.Text = await this.ViewModel.GetLocation(this.Model);
         }
     }
 

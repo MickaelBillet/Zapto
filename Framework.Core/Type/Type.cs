@@ -22,4 +22,13 @@
         public const byte Healthy = 2;
         public const byte Degraded = 3;
     }
+
+    public static class ZaptoSeverity
+    {
+        public const byte Normal = 0;
+        public const byte Info = 1;
+        public const byte Success = 2;
+        public const byte Warning = 3;
+        public const byte Error = 4;
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using Connect.Application;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using Serilog;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -12,6 +13,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<string?> GetReverseLocation(string latitude, string longitude);
         Task TestNotification(string? locationId);
         Task<LocationModel?> GetLocationModel();
+        Task<string> GetLocation(LocationModel model);
     }
 
     public class LocationViewModel : BaseViewModel, ILocationViewModel
@@ -19,6 +21,30 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		private IApplicationLocationService ApplicationLocationServices { get; }
         private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
+        private LocationModel? Model { get; set; }
+        private bool LocationFound
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.Model?.Location) == false;
+            }
+        }
+
+        private bool LocalizationFound
+        {
+            get
+            {
+                return (this.Model != null) && (this.Model.Latitude != null) && (this.Model.Longitude != null);
+            }
+        }
+
+        private bool? LocalizationIsAvailable
+        {
+            get
+            {
+                return this.Model?.LocalizationIsAvailable;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -30,6 +56,54 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
+
+
+
+        public async Task<string> GetLocation(LocationModel model)
+        {
+            string location = string.Empty;
+
+            this.Model = model;
+
+            try
+            {
+                if (this.Model != null)
+                {
+                    if ((this.LocationFound == true) && (this.LocalizationFound == true))
+                    {
+                        location = this.Model.Location!;
+                    }
+                    if ((this.LocalizationIsAvailable == null) && (this.LocationFound == false))
+                    {
+                        location = this.Localizer["Location in progress"];
+                    }
+                    else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
+                    {
+                        this.Model.Location = await this.GetReverseLocation(this.Model.Latitude.ToString()!, this.Model.Longitude.ToString()!);
+                        if (this.Model?.Location != null)
+                        {
+                            location = this.Model.Location;
+                        }
+                        else
+                        {
+                            location = this.Localizer["Unable to locate"];
+                        }
+                    }
+                    else if (this.LocalizationIsAvailable == false)
+                    {
+                        location = this.Localizer["Unable to locate"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                location = this.Localizer["Unable to locate"];
+                this.NavigationService.ShowMessage(ex.Message, ZaptoSeverity.Error);
+            }
+
+            return location;
+        }
+
         public async Task<string?> GetReverseLocation(string latitude, string longitude)
         {
             ZaptoLocation? zaptoLocation = null;
@@ -40,7 +114,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 throw new Exception("Location Service Exception : " + ex.Message);
             }
             finally
@@ -61,7 +135,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
             }
         }
 
@@ -80,7 +154,7 @@ namespace Zapto.Component.Common.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 throw new Exception("Location Service Exception : " + ex.Message);
             }
             finally

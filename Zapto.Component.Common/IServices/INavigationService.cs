@@ -7,5 +7,6 @@
 		public void NavigateToLogout(string path, string? returnurl = null);
         string GetUri();
 		string GetBaseUri();
+		void ShowMessage(string message, byte severity);
 	}
 }
