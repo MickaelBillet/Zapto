@@ -12,7 +12,7 @@ namespace Zapto.Component.Common.ViewModels
     {
         Task<string?> GetReverseLocation(string latitude, string longitude);
         Task TestNotification(string? locationId);
-        Task<LocationModel?> GetLocationModel();
+        Task<(LocationModel? model, string location)> GetLocationModel();
         Task<string> GetLocation(LocationModel model);
     }
 
@@ -59,7 +59,6 @@ namespace Zapto.Component.Common.ViewModels
         public async Task<string> GetLocation(LocationModel model)
         {
             string location = string.Empty;
-
             this.Model = model;
 
             try
@@ -137,9 +136,11 @@ namespace Zapto.Component.Common.ViewModels
             }
         }
 
-        public async Task<LocationModel?> GetLocationModel()
+        public async Task<(LocationModel? model, string location)> GetLocationModel()
         {
+            string location = string.Empty;
             LocationModel? model = null;
+
             try
             {
                 this.IsLoading = true;
@@ -149,17 +150,27 @@ namespace Zapto.Component.Common.ViewModels
                     Location = location.City,
                     Id = location.Id
                 }).FirstOrDefault();
+
+                if (model?.Location != null)
+                {
+                    location = model.Location;
+                }
+                else
+                {
+                    location = this.Localizer["Unable to locate"];
+                }
             }
             catch (Exception ex)
             {
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                throw new Exception("Location Service Exception : " + ex.Message);
+                location = this.Localizer["Unable to locate"];
+                this.NavigationService.ShowMessage("Location Service Exception", ZaptoSeverity.Error);
             }
             finally
             {
                 this.IsLoading = false;
             }
-            return model;
+            return (model, location);
         }
         #endregion
     }

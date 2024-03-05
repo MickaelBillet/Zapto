@@ -36,23 +36,10 @@
     {
         if ((this.ViewModel != null) && (this.Model == null))
         {
-            try
+            (this.Model, this.Text) = await this.ViewModel.GetLocationModel();
+            if (this.Model?.Location != null)
             {
-                this.Model = await this.ViewModel.GetLocationModel();
-                if (this.Model?.Location != null)
-                {
-                    this.Text = this.Model.Location;
-                    await this.ModelChanged.InvokeAsync(this.Model);
-                }
-                else
-                {
-                    this.Text = this.Localizer["Unable to locate"];
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Text = this.Localizer["Unable to locate"];
-                Snackbar.Add(ex.Message, Severity.Error);
+                await this.ModelChanged.InvokeAsync(this.Model);
             }
         }
     }
