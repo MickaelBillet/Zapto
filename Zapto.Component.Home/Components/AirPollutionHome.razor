@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<Resource> Localizer
 @inject IAirPollutionViewModel ViewModel
-@inject ISnackbar Snackbar
 @implements IDisposable
 
 @if (this.Model != null)
@@ -82,15 +81,7 @@
     [Parameter]
     public LocationModel Location { get; set; } = null;
 
-    private AirPollutionModel Model { get; set; } = null;
-
-    private bool LocalizationFound
-    {
-        get
-        {
-            return (this.Location != null) && (this.Location.Latitude != null) && (this.Location.Longitude != null);
-        }
-    }
+    private AirPollutionModel Model { get; set; } = null;    
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,19 +93,12 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if ((this.ViewModel != null) && (this.LocalizationFound))
+        if (this.ViewModel != null)
         {
-            try
+            this.Model = await this.ViewModel.GetAirPollutionModel(this.Location);
+            if (this.Model != null)
             {
-                this.Model = await this.ViewModel.GetAirPollutionModel(this.Location.Longitude.ToString(), this.Location.Latitude.ToString());
-                if (this.Model != null)
-                {
-                    this.ViewModel.Refresh += RefreshView;
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Snackbar.Add(ex.Message, Severity.Error);
+                this.ViewModel.Refresh += RefreshView;
             }
         }
     }
