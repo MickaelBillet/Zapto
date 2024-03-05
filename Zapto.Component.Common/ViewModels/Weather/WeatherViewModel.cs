@@ -1,9 +1,11 @@
 ﻿using Blazored.LocalStorage;
+using Framework.Core.Base;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
 using Zapto.Component.Common.Models;
@@ -89,6 +91,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.Write(ex);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - ex.ToString()");
                 throw new Exception("Weather Service Exception");
             }
             finally
@@ -105,6 +108,8 @@ namespace Zapto.Component.Common.ViewModels
             try
             {
                 string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                Log.Debug($"Culture : {culture}");
+
                 if (string.IsNullOrEmpty(culture) == false)
                 {
                     this.IsLoading = true;
@@ -138,6 +143,7 @@ namespace Zapto.Component.Common.ViewModels
             catch (Exception ex)
             {
                 Debug.Write(ex);
+                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - ex.ToString()");
                 throw new Exception("Weather Service Exception : " + ex.Message);
             }
             finally
