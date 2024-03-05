@@ -159,7 +159,7 @@ namespace Zapto.Component.Common.ViewModels
             if ((string.IsNullOrEmpty(weather.TemperatureMax) == false)
                 && (string.IsNullOrEmpty(weather.Temperature) == false))
             {
-                if (double.Parse(weather.Temperature, NumberStyles.Number) > double.Parse(weather.TemperatureMax, NumberStyles.Number))
+                if (double.Parse(weather.Temperature.Replace('.', ','), NumberStyles.Number) > double.Parse(weather.TemperatureMax.Replace('.', ','), NumberStyles.Number))
                 { 
                     max = weather.Temperature;
                 }
@@ -177,7 +177,7 @@ namespace Zapto.Component.Common.ViewModels
             if ((string.IsNullOrEmpty(weather.TemperatureMin) == false)
                 && (string.IsNullOrEmpty(weather.Temperature) == false))
             {
-                if (double.Parse(weather.Temperature, NumberStyles.Number) < double.Parse(weather.TemperatureMin, NumberStyles.Number))
+                if (double.Parse(weather.Temperature.Replace('.', ','), NumberStyles.Number) < double.Parse(weather.TemperatureMin.Replace('.', ','), NumberStyles.Number))
                 {
                     min = weather.Temperature;
                 }
