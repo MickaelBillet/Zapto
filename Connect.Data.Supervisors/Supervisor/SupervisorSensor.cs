@@ -67,7 +67,6 @@ namespace Connect.Data.Supervisors
         public async Task<(ResultCode, Sensor)> UpdateSensor(Sensor sensor)
         {
             ResultCode result = await this.SensorExists(sensor?.Id);
-
             if (result == ResultCode.Ok)
             {               
                 int res = await this.SensorRepository.UpdateAsync(SensorMapper.Map(sensor));
