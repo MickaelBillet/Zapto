@@ -104,10 +104,10 @@ namespace Connect.Data.Supervisors
                 List<ConnectedObject> objects = objectEntities.Select(item => ConnectedObjectMapper.Map(item)).ToList();
                 foreach (ConnectedObject obj in objects)
                 {
-                    IEnumerable<NotificationEntity> notificationEntities = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.ConnectedObjectId == obj.Id));
-                    if (notificationEntities != null)
+                    IEnumerable<NotificationEntity> notificationEntities_1 = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.ConnectedObjectId == obj.Id));
+                    if (notificationEntities_1 != null)
                     {
-                        obj.NotificationsList = notificationEntities.Select(item => NotificationMapper.Map(item)).ToList();
+                        obj.NotificationsList = notificationEntities_1.Select(item => NotificationMapper.Map(item)).ToList();
                     }
 
                     PlugEntity plugEntity = await this.PlugRepository.GetAsync((plug) => plug.ConnectedObjectId == obj.Id);
@@ -128,11 +128,10 @@ namespace Connect.Data.Supervisors
 
                     room.ConnectedObjectsList.Add(obj);
 
-                    notificationEntities = null;
-                    notificationEntities = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.RoomId == room.Id));
-                    if (notificationEntities != null)
+                    IEnumerable<NotificationEntity> notificationEntities_2 = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.RoomId == room.Id));
+                    if (notificationEntities_2 != null)
                     {
-                        room.NotificationsList = notificationEntities.Select(item => NotificationMapper.Map(item)).ToList();
+                        room.NotificationsList = notificationEntities_2.Select(item => NotificationMapper.Map(item)).ToList();
                     }
                 }
             }

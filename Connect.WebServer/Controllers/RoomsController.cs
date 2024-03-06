@@ -31,7 +31,7 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        // GET connect/rooms
+        //GET connect/rooms
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -61,7 +61,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/rooms/5
+        //ConnectConstants.RestUrlRoomsId
+        //GET connect/rooms/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {

@@ -33,7 +33,8 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        // POST connect/location/test
+        //ConnectConstants.RestUrlLocationTest
+        //POST connect/location/test
         [HttpPost("~/connect/Locations/test")]
         public async Task<IActionResult> Post([FromBody] string locationId)
         {
@@ -75,7 +76,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/locations
+        //ConnectConstants.RestUrlLocations
+        //GET connect/locations
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -106,7 +108,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/locations/5/rooms
+        //ConnectConstants.RestUrlLocationRooms
+        //GET connect/locations/5/rooms
         [HttpGet("~/connect/Locations/{id}/Rooms")]
         public async Task<IActionResult> GetRooms(string id)
 		{
@@ -134,7 +137,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/locations/5
+        //ConnectConstants.RestUrlLocationsId
+        //GET connect/locations/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {

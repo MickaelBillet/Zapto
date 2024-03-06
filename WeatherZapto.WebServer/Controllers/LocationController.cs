@@ -25,7 +25,7 @@ namespace WeatherZapto.WebServer.Controllers
         #endregion
 
         #region Methods 
-        //UrlReverseLocation
+        //WeatherZaptoConstants.UrlReverseLocation
         [HttpGet("lon={longitude}&lat={latitude}")]
         public async Task<IActionResult> GetReverseLocation(string longitude, string latitude)
         {
@@ -64,8 +64,8 @@ namespace WeatherZapto.WebServer.Controllers
             }
         }
 
-        //UrlLocationCity1
-        //UrlLocationCity2
+        //WeatherZaptoConstants.UrlLocationCity1
+        //WeatherZaptoConstants.UrlLocationCity2
         [HttpGet("city={city}")]
         [HttpGet("city={city}&country={country}")]
         public async Task<IActionResult> GetLocationFromCity(string city, string? state, string? country)

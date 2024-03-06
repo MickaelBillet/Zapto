@@ -65,6 +65,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
+        //ConnectConstants.RestUrlPlugCommand
+        //ConnectConstants.RestUrlPlugOrder
         //PUT connect/plugs/5/mode/
         [HttpPut("~/connect/Plugs/{id}/mode/")]
         [HttpPut("~/connect/Plugs/{id}/onoff/")]
