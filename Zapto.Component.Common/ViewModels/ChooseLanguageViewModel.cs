@@ -1,6 +1,6 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
+using Zapto.Component.Common.IServices;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
     {
 		#region Properties
-		private ILocalStorageService LocalStorageService { get; set; }
+        private IStorageService StorageService { get; set; }
 
         public CultureInfo[]? Cultures { get; private set; }
 
@@ -24,7 +24,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if (CultureInfo.CurrentCulture != value)
                 {
-                    this.LocalStorageService.SetItemAsync<string>("culture", value.Name);
+                    this.StorageService.SetItemAsync<string>("culture", value.Name);
                     this.NavigationService.NavigateTo(this.NavigationService.GetUri(), true);
                 }
             }
@@ -35,7 +35,7 @@ namespace Zapto.Component.Common.ViewModels
         #region Constructor
         public ChooseLanguageViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.LocalStorageService = serviceProvider.GetRequiredService<ILocalStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IStorageService>();
         }
 		#endregion
 

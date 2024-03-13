@@ -1,17 +1,18 @@
 using AirZapto;
-using Blazored.LocalStorage;
 using Connect.Model;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.JSInterop;
 using MudBlazor;
 using MudBlazor.Services;
 using Serilog;
 using Serilog.Debugging;
+using System.Globalization;
 using WeatherZapto;
 using Zapto.Component.Services.Helpers;
 using Zapto.Web.Dashboard;
 using Zapto.Web.Dashboard.Configuration;
-using Zapto.Web.Dashboard.Extensions;
 
 SelfLog.Enable(m => Console.Error.WriteLine(m));
 
@@ -26,6 +27,7 @@ Log.Debug("Hello, Zapto !");
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
 
 builder.Services.AddHttpClient("ConnectClient", client =>
@@ -104,7 +106,6 @@ builder.Services.AddLocalization();
 builder.Services.AddMudServices();
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddViewModels();
-builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddMudServices(config =>
 {
     config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
@@ -119,5 +120,6 @@ builder.Services.AddMudServices(config =>
 });
 
 WebAssemblyHost host = builder.Build();
-await host.SetDefaultCulture();
+
+
 await host.RunAsync();

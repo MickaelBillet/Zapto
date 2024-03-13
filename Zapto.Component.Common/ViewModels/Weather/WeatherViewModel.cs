@@ -1,11 +1,11 @@
-﻿using Blazored.LocalStorage;
-using Framework.Core.Base;
+﻿using Framework.Core.Base;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
+using Zapto.Component.Common.IServices;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -21,7 +21,7 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		private IApplicationWeatherService ApplicationWeatherService { get; }
 		private IApplicationOWService ApplicationOWService { get; }
-        private ILocalStorageService LocalStorageService { get; }
+        private IStorageService LocalStorageService { get; }
         #endregion
 
         #region Constructor
@@ -29,7 +29,7 @@ namespace Zapto.Component.Common.ViewModels
 		{
 			this.ApplicationWeatherService = serviceProvider.GetRequiredService<IApplicationWeatherService>();
 			this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
-            this.LocalStorageService = serviceProvider.GetRequiredService<ILocalStorageService>();
+            this.LocalStorageService = serviceProvider.GetRequiredService<IStorageService>();
         }
         #endregion
 

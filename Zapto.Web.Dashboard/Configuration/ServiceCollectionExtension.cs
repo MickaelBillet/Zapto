@@ -6,6 +6,7 @@ using Connect.Infrastructure.Services;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Infrastructure.Services;
+using Zapto.Component.Common.IServices;
 using Zapto.Component.Common.Services;
 using Zapto.Component.Common.ViewModels;
 using Zapto.Component.Services;
@@ -59,6 +60,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebServiceZapto>();			
 			services.AddTransient<IImageService, ImageService>((service) => new ImageService(service, configuration, "OpenWeather"));
 			services.AddScoped<DataService>();
+            services.AddTransient<IStorageService, StorageService>();
         }
     }
 }
