@@ -11,7 +11,7 @@
 {
     foreach (RoomChartModel model in this.Models)
     {
-        <RoomChart Labels="@model.Labels" Humidities="@model.Humidities" Temperatures="@model.Temperatures" CurrentDay="@model.Day"></RoomChart>
+        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" CurrentDay="@model.Day"></RoomChart>
     }
 }
 else
@@ -31,6 +31,9 @@ else
 
     [Parameter]
     public string RoomName { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Location { get; set; } = string.Empty;
 
     private DateTime? MaxDate { get; set; }
 
@@ -64,23 +67,23 @@ else
     #endregion
 
     #region Methods
-    protected override async Task OnInitializedAsync()
-    {
-        if (this.ViewModel != null)
-        {
-            await this.ViewModel.InitializeAsync(null);
-            this.PropertyChanged += this.PropertyChangedHandler;
-        }
-    }
     protected override async Task OnParametersSetAsync()
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
         {
+            await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
             await this.DisplayCharts();
         }
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        this.PropertyChanged += this.PropertyChangedHandler;
+    }
+
     public void Dispose()
     {
         this.ViewModel?.Dispose();

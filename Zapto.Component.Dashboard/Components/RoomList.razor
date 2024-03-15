@@ -29,7 +29,7 @@
     {
         if ((this.ViewModel != null) && (this.Location != null))
         {
-            this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id);
+            this.Rooms = await this.ViewModel.GetRoomModels(this.Location.Id, this.Location.Location);
         }
     }
 

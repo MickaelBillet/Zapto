@@ -3,14 +3,13 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using System.Diagnostics;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
 {
     public interface IRoomListViewModel : IBaseViewModel
 	{
-		Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId);
+		Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId, string? locationName);
 	}
 
 	public class RoomListViewModel : BaseViewModel, IRoomListViewModel
@@ -27,7 +26,7 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-		public async Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId)
+		public async Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId, string? locationName)
 		{
 			IEnumerable<RoomModel>? models = null;
 			try
@@ -37,6 +36,7 @@ namespace Zapto.Component.Common.ViewModels
 				models = (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
 				{
 					Name = this.Localizer[room.Name],
+					LocationName = locationName,
 					LocationId = room.LocationId,
 					Type = room.Type,
 					Description = room.Description,

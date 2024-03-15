@@ -8,7 +8,7 @@ namespace Zapto.Component.Common.ViewModels
     public interface IRoomViewModel : IBaseViewModel
 	{
 		public Task<bool> ReceiveStatusAsync(RoomModel model);
-		public void OpenChart(string roomId, string roomName);
+		public void OpenChart(string roomId, string roomName, string location);
     }
 
     public class RoomViewModel : BaseViewModel, IRoomViewModel
@@ -31,9 +31,9 @@ namespace Zapto.Component.Common.ViewModels
 			await base.InitializeAsync(parameter);
 		}
 
-		public void OpenChart(string roomId, string roomName)
+		public void OpenChart(string roomId, string roomName, string location)
 		{
-			this.NavigationService.NavigateTo($"/roomchartlist/{roomId}/{roomName}");
+			this.NavigationService.NavigateTo($"/roomchartlist/{location}/{roomId}/{roomName}");
 		}
 
 		public async Task<bool> ReceiveStatusAsync(RoomModel model)
