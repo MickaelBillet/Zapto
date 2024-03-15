@@ -67,14 +67,14 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
         {
-            List<RoomChartModel>? data = null;
+            List<RoomChartModel>? models = null;
             try
             {
                 this.IsLoading = true;
 
                 if (this.ApplicationOperationDataService != null)
                 {
-                    data = new List<RoomChartModel>();
+                    models = new List<RoomChartModel>();
                     for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
                     {
                         IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
@@ -87,7 +87,7 @@ namespace Zapto.Component.Common.ViewModels
                                 Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList(),
                                 Day = (date != null) ? date.Value.ToString("D") : string.Empty,
                             };                        
-                            data.Add(model);
+                            models.Add(model);
                         }
                     }
                 }
@@ -101,7 +101,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 this.IsLoading = false;
             }
-            return data;
+            return models;
         }
         #endregion
     }

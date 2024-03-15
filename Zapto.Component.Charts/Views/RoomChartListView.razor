@@ -23,6 +23,7 @@ else
 {
     private bool isdisplayed = false;
 
+    #region Properties
     public event EventHandler? PropertyChanged;
 
     [Parameter]
@@ -31,9 +32,9 @@ else
     [Parameter]
     public string RoomName { get; set; } = string.Empty;
 
-    public DateTime? MaxDate { get; set; }
+    private DateTime? MaxDate { get; set; }
 
-    public DateTime? MinDate { get; set; }
+    private DateTime? MinDate { get; set; }
 
     public bool IsDisplayed
     {
@@ -55,12 +56,14 @@ else
         }
     }
 
-    public DateTime? StartDate { get; set; } = DateTime.Today;
+    private DateTime? StartDate { get; set; } = DateTime.Today;
 
     private DateTime? EndDate { get; set; } = DateTime.Today;
 
     private IEnumerable<RoomChartModel>? Models { get; set; }
+    #endregion
 
+    #region Methods
     protected override async Task OnInitializedAsync()
     {
         if (this.ViewModel != null)
@@ -101,6 +104,7 @@ else
         await this.DisplayCharts();
         this.StateHasChanged();
     }
+    #endregion
 }
 
 
