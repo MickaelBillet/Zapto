@@ -1,5 +1,6 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Mappers;
+using AirZapto.Data.Services;
 using AirZapto.Data.Services.Repositories;
 using Framework.Core.Base;
 using Framework.Core.Domain;

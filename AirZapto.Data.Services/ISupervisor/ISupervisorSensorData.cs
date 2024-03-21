@@ -1,7 +1,7 @@
 ﻿using AirZapto.Model;
 using Framework.Core.Base;
 
-namespace AirZapto.Data
+namespace AirZapto.Data.Services
 {
     public interface ISupervisorSensorData
 	{

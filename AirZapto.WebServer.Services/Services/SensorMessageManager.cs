@@ -1,4 +1,5 @@
 ﻿using AirZapto.Data;
+using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
@@ -14,14 +15,14 @@ namespace AirZapto.WebServer.Services
     public class SensorMessageManager : WebSocketHandler, IWSMessageManager
     {
 		#region Properties
-		private ISupervisorSensor SupervisorSensor { get;}
+		private ISupervisorCacheSensor SupervisorSensor { get;}
 		private ISupervisorSensorData SupervisorSensorData { get;}
         #endregion
 
         #region Constructor
         public SensorMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
         {
-            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
 			this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorSensorData>();		
 		}
 
@@ -113,7 +114,7 @@ namespace AirZapto.WebServer.Services
 								sensor.IsRunning = RunningStatus.Healthy;
 
                                 code = await this.SupervisorSensor.UpdateSensorAsync(sensor);
-								code = await this.SupervisorSensorData.AddSensorDataAsync(new AirZapto.Model.AirZaptoData()
+								code = await this.SupervisorSensorData.AddSensorDataAsync(new Model.AirZaptoData()
 								{
 									CO2 = data.CO2,
 									Temperature = data.Temperature,

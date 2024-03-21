@@ -2,30 +2,19 @@
 using AirZapto.Data.Mappers;
 using AirZapto.Model;
 using Framework.Core.Base;
-using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorSensor : Supervisor, ISupervisorSensor
 	{
         #region Services
-        private IMemoryCache? Cache { get; }
-        private CacheSignal? CacheSignal { get; }
-        private MemoryCacheEntryOptions MemoryCacheEntryOptions { get; }
+
         #endregion
 
         #region Constructor
         public SupervisorSensor(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.Cache = serviceProvider.GetService<IMemoryCache>();
-            this.CacheSignal = serviceProvider.GetService<CacheSignal>();
-            this.MemoryCacheEntryOptions = new MemoryCacheEntryOptions()
-                                                       .SetSlidingExpiration(TimeSpan.FromSeconds(300)) //This determines how long a cache entry can be inactive before it is removed from the cache
-                                                       .SetAbsoluteExpiration(TimeSpan.FromSeconds(600)) //The problem with sliding expiration is that if we keep on accessing the cache entry, it will never expire
-                                                       .SetPriority(CacheItemPriority.Normal);
+
         }
         #endregion
 
@@ -96,7 +85,6 @@ namespace AirZapto.Data.Supervisors
 			if (this.Repository != null)
 			{
 				SensorEntity? entity = await this.Repository.GetSensorFromIdSocketAsync(idSocket);
-
 				sensor = (entity != null) ? SensorMapper.Map(entity) : null;
 				result = (sensor != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
 			}
@@ -122,47 +110,6 @@ namespace AirZapto.Data.Supervisors
 			}
 
 			return result;
-		}
-
-		public async Task<(ResultCode, IEnumerable<Sensor>?)> GetCacheSensorsAsync()
-		{
-			ResultCode result = ResultCode.ItemNotFound;
-			IEnumerable<Sensor>? sensors = null;
-            if (this.CacheSignal != null && this.Cache != null)
-            {
-				try
-				{
-					await this.CacheSignal.WaitAsync();
-					if (this.Cache.TryGetValue($"Sensor", out sensors))
-					{
-						Log.Information($"Sensors found");
-                        result = ResultCode.Ok;
-                    }
-                    else
-					{
-						if (this.Repository != null)
-						{
-							IEnumerable<SensorEntity>? entities = await this.Repository.GetAllSensorsAsync();
-							sensors = (entities != null) ? entities.Select((item) => SensorMapper.Map(item)) : null;
-							if ((sensors != null) && (sensors.Any()))
-							{
-                                this.Cache.Set($"Sensor", sensors, this.MemoryCacheEntryOptions);
-								result = ResultCode.Ok;
-                            }
-							else
-							{
-								result = ResultCode.ItemNotFound;
-							}
-						}
-					}
-				}
-				finally
-				{
-					this.CacheSignal.Release();
-				}
-            }
-        
-			return (result, sensors);
 		}
 
         public async Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync()

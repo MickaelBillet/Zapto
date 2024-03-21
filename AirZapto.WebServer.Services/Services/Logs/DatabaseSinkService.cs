@@ -1,6 +1,7 @@
 ﻿using AirZapto.Data;
 using AirZapto.Data.DataContext;
 using AirZapto.Data.Repositories;
+using AirZapto.Data.Services;
 using AirZapto.Data.Supervisors;
 using Framework.Core.Domain;
 using Microsoft.Extensions.Configuration;

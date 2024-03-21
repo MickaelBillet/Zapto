@@ -1,4 +1,5 @@
 ﻿using AirZapto.Data;
+using AirZapto.Data.Services;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
