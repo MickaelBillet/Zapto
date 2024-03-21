@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Common.Services
 {
-    public sealed class CacheService<T> : ICacheService<T> where T : class
+    public sealed class CacheZaptoService<T> : ICacheZaptoService<T> where T : class
     {
         #region Properties
         private IDictionary<string, T> Cache { get; }
@@ -16,7 +16,7 @@ namespace Framework.Common.Services
         #endregion
 
         #region Constructor
-        public CacheService(IServiceProvider serviceProvider) 
+        public CacheZaptoService(IServiceProvider serviceProvider) 
         {
             this.Cache = new Dictionary<string, T>();
             this.CacheSignal = serviceProvider.GetRequiredService<CacheSignal>();

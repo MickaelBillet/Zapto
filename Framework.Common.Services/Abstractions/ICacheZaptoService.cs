@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services
 {
-    public interface ICacheService<T> where T : class
+    public interface ICacheZaptoService<T> where T : class
 	{
         Task<(ResultCode, T)> GetOrCreate(string key, Func<string, Task<(ResultCode, T)>> createItem);
         Task Set(string key, T value);
