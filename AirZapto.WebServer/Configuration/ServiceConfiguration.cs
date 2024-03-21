@@ -34,7 +34,7 @@ namespace AirZapto.WebServices.Configuration
 
         public static void AddCacheServices(this IServiceCollection services)
         {
-            services.AddSingleton<ICacheService<Sensor>, CacheService<Sensor>>();
+            services.AddSingleton<ICacheZaptoService<Sensor>, CacheZaptoService<Sensor>>();
         }
     }
 }

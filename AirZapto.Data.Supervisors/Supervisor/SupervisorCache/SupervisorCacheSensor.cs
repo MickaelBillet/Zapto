@@ -10,14 +10,14 @@ namespace AirZapto.Data.Supervisors
     {
         #region Services
         private ISupervisorSensor Supervisor { get; }
-        private ICacheService<Sensor> CacheService { get; }
+        private ICacheZaptoService<Sensor> CacheService { get; }
         #endregion
 
         #region Constructor
         public SupervisorCacheSensor(IServiceProvider serviceProvider)
         {
             this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
-            this.CacheService = serviceProvider.GetRequiredService<ICacheService<Sensor>>();
+            this.CacheService = serviceProvider.GetRequiredService<ICacheZaptoService<Sensor>>();
         }
         #endregion
 
