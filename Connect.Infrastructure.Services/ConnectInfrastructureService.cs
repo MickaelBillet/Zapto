@@ -12,48 +12,48 @@ namespace Connect.Infrastructure.Services
 			services.AddTransient<IClientAppService, ClientAppService>((service) =>
 			{
 				return new ClientAppService(service, httpClientName);
-			});
-			services.AddTransient<IConditionService, ConditionService>((service) =>
+			})
+			.AddTransient<IConditionService, ConditionService>((service) =>
 			{
 				return new ConditionService(service, httpClientName);
-            });
-			services.AddTransient<IConnectedObjectService, ConnectedObjectService>((service) =>
+            })
+			.AddTransient<IConnectedObjectService, ConnectedObjectService>((service) =>
 			{
 				return new ConnectedObjectService(service, httpClientName);
-            });
-			services.AddTransient<ILocationService, LocationService>((service) =>
+            })
+			.AddTransient<ILocationService, LocationService>((service) =>
 			{
 				return new LocationService(service, httpClientName);
-			});
-			services.AddTransient<INotificationService, NotificationService>((service) =>
+			})
+			.AddTransient<INotificationService, NotificationService>((service) =>
 			{
 				return new NotificationService(service	, httpClientName);
-			});
-			services.AddTransient<IOperationRangeService, OperationRangeService>((service) =>
+			})
+			.AddTransient<IOperationRangeService, OperationRangeService>((service) =>
 			{
 				return new OperationRangeService(service	, httpClientName);
-			});
-			services.AddTransient<IPlugService, PlugService>((service) =>
+			})
+			.AddTransient<IPlugService, PlugService>((service) =>
 			{
 				return new PlugService(service, httpClientName);
-			});
-			services.AddTransient<IProgramService, ProgramService>((service) =>
+			})
+			.AddTransient<IProgramService, ProgramService>((service) =>
 			{
 				return new ProgramService(service, httpClientName);
-			});
-			services.AddTransient<IRoomService, RoomService>((service) =>
+			})
+			.AddTransient<IRoomService, RoomService>((service) =>
 			{
 				return new RoomService(service, httpClientName);
-			});
-			services.AddTransient<IHealthCheckConnectService, HealthCheckConnectService>((service) =>
+			})
+			.AddTransient<IHealthCheckConnectService, HealthCheckConnectService>((service) =>
 			{
 				return new HealthCheckConnectService(service, httpClientName);
-			});
-			services.AddTransient<ISensorService, SensorService>((service) =>
+			})
+			.AddTransient<ISensorService, SensorService>((service) =>
 			{
 				return new SensorService(service, httpClientName);
-			});
-			services.AddTransient<IOperatingDataService, OperatingDataService>((service) =>
+			})
+			.AddTransient<IOperatingDataService, OperatingDataService>((service) =>
 			{
 				return new OperatingDataService(service, httpClientName);
 			});

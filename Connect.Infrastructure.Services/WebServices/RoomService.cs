@@ -1,7 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
 using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

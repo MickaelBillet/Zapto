@@ -107,7 +107,6 @@ builder.Services.AddViewModels();
 builder.Services.AddMudServices(config =>
 {
     config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
-
     config.SnackbarConfiguration.PreventDuplicates = false;
     config.SnackbarConfiguration.NewestOnTop = false;
     config.SnackbarConfiguration.ShowCloseIcon = true;
@@ -117,7 +116,4 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
 
-WebAssemblyHost host = builder.Build();
-
-
-await host.RunAsync();
+await builder.Build().RunAsync();

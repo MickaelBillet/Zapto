@@ -1,7 +1,5 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
-using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 

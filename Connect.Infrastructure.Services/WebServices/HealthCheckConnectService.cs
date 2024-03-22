@@ -1,7 +1,6 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
 using Connect.Model.Healthcheck;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
