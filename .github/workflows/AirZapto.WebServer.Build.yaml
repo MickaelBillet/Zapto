@@ -1,1 +1,10 @@
 
+name: AirZapto.WebServer.build.yaml
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - '**.cs'
+    - '**.csproj'
