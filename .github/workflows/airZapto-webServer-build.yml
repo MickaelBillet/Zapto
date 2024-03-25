@@ -1,5 +1,5 @@
 
-name: AirZapto.WebServer.build.yaml
+name: AirZapto.WebServer.build.yml
 
 on:
   workflow_dispatch:
