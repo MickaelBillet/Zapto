@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AirZapto.WebServer
 {
-    public class Program
+    public partial class Program
 	{
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
                                                                  .SetBasePath(Directory.GetCurrentDirectory())
