@@ -125,3 +125,5 @@
 /Zapto.Web.Dashboard/bin/Release/net8.0
 /AirZaptoWebServer.Tests/bin/Debug/net8.0
 /AirZaptoWebServer.Tests/obj
+/AirZapto.Data.Supervisors.Tests/bin/Debug/net8.0
+/AirZapto.Data.Supervisors.Tests/obj
