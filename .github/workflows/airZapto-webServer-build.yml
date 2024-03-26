@@ -28,5 +28,5 @@ jobs:
         run : dotnet build ./AirZapto.WebServer.sln --configuration release --no-restore
 
       - name : Test
-        run : donet test ./AirZapto.WebServer.sln --configuration release --no-restore --no-build
+        run : dotnet test ./AirZapto.WebServer.sln --configuration release --no-restore --no-build
     
