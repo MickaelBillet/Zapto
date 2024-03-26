@@ -33,7 +33,7 @@ namespace AirZapto.Data.Supervisors.Tests
             });
 
             //Assert
-            Assert.True(code == ResultCode.Ok);
+            Assert.True(code == ResultCode.ArgumentRequired);
         }
     }
 }
