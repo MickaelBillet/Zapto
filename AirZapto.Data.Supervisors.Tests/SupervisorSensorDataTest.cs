@@ -94,18 +94,18 @@ namespace AirZapto.Data.Supervisors.Tests
             if (code == ResultCode.Ok)
             {
                 (code, sensor) = await supervisorSensor.GetSensorFromIdSocketAsync("1");
-            }
-
-            if (code == ResultCode.Ok)
-            {
-                supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
-                code = await supervisorSensorData.AddSensorDataAsync(new Model.AirZaptoData()
+                if (code == ResultCode.Ok)
                 {
-                    CO2 = 500,
-                    Temperature = 10.2f,
-                    SensorId = sensor!.Id,
-                });
+                    supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
+                    code = await supervisorSensorData.AddSensorDataAsync(new Model.AirZaptoData()
+                    {
+                        CO2 = 500,
+                        Temperature = 10.2f,
+                        SensorId = sensor!.Id,
+                    });
+                }
             }
+           
             return (code, sensor);
         }
     }
