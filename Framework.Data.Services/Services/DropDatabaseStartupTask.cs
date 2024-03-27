@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Data.Services
 {
-    public class DropDatabaseStartupTask : IStartupTask
+    public class DropDatabaseStartupTask : ICleanTask
     {
         #region Services
         private IDatabaseService DatabaseService { get; }

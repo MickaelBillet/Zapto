@@ -33,6 +33,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
                 services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+                services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
             })
@@ -42,8 +43,14 @@ namespace AirZapto.Data.Supervisors.Tests
 
         #region Methods
         protected virtual async Task Initialyse()
-        {            
-             var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
+        {
+            var cleanTasks = this.HostApplication.Services.GetServices<IStartupTask>();
+            foreach (var task in cleanTasks)
+            {
+                await task.Execute();
+            }
+
+            var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
             foreach (var task in startupTasks)
             {
                 await task.Execute();
