@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Framework.Data.Services
 {
-    public class DatabaseStartupTask : IStartupTask
+    public class DropDatabaseStartupTask : IStartupTask
     {
         #region Services
         private IDatabaseService DatabaseService { get; }
         #endregion
 
         #region Constructor
-        public DatabaseStartupTask(IServiceProvider serviceProvider)
+        public DropDatabaseStartupTask(IServiceProvider serviceProvider)
         {
             this.DatabaseService = serviceProvider.GetRequiredService<IDatabaseService>();  
         }
@@ -22,7 +22,7 @@ namespace Framework.Data.Services
         #region Methods
         public async Task Execute()
         {
-            await this.DatabaseService.ConfigureDatabase();
+            await Task.Run(() => this.DatabaseService.DropDatabase());
         }
         #endregion
     }

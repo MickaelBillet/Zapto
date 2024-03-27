@@ -1,16 +1,12 @@
 ﻿using AirZapto.Data.Database;
 using AirZapto.Data.Services;
-using AirZapto.Data.Services.Repositories;
 using AirZapto.WebServer.Services;
-using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Data;
-using System.Threading.Tasks;
 
 namespace AirZapto.Data.Supervisors.Tests
 {
@@ -36,7 +32,7 @@ namespace AirZapto.Data.Supervisors.Tests
                 services.AddRepositories();
 
                 services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
-                services.AddTransient<IStartupTask, DatabaseStartupTask>();
+                services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
             })
@@ -45,9 +41,9 @@ namespace AirZapto.Data.Supervisors.Tests
         #endregion
 
         #region Methods
-        public async Task Initialyse()
-        {
-            var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
+        protected virtual async Task Initialyse()
+        {            
+             var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
             foreach (var task in startupTasks)
             {
                 await task.Execute();

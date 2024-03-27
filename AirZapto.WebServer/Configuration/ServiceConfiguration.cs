@@ -27,7 +27,7 @@ namespace AirZapto.WebServices.Configuration
 			services.AddSingleton<IHostedService, SensorConnectionService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, DailyService>();
-            services.AddTransient<IStartupTask, DatabaseStartupTask>();
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddCacheServices();
         }
