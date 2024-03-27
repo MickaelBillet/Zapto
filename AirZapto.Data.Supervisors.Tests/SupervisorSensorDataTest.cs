@@ -50,7 +50,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Act
             ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
-            ResultCode code = await supervisorSensorData.DeleteSensorDataAsync(new TimeSpan(0, 0, 5));
+            ResultCode code = await supervisorSensorData.DeleteSensorDataAsync(new TimeSpan(0, 1, 0));
 
             //Assert
             Assert.True(code == ResultCode.Ok);
