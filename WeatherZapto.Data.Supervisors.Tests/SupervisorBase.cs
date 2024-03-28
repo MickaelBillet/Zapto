@@ -4,27 +4,37 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Testcontainers.PostgreSql;
 using WeatherZapto.Data.Repository;
 using WeatherZapto.Data.Services;
 using WeatherZapto.WebServer.Services;
 
 namespace WeatherZapto.Data.Supervisors.Tests
 {
-    public abstract class SupervisorBase
+    public abstract class SupervisorBase : IAsyncLifetime
     {
         #region Properties
         protected IHost HostApplication { get; }
+        private readonly PostgreSqlContainer _container;
         #endregion
 
         #region Constructor
         public SupervisorBase()
         {
+            _container = new PostgreSqlBuilder()
+                                .WithImage("postgres:14.7")
+                                .WithDatabase("weatherZaptoDb")
+                                .WithUsername("postgres")
+                                .WithPassword("postgres")
+                                .WithCleanUp(true)
+                                .Build();
+
             this.HostApplication = new HostBuilder().ConfigureAppConfiguration((context, configurationBuilder) =>
             {
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    {"ConnectionStrings:DefaultConnection", "Data Source=.\\weatherZaptoDb.db3;"},
-                    {"ConnectionStrings:ServerType", "Sqlite"}
+                    {"ConnectionStrings:DefaultConnection", $"{_container.GetConnectionString()}"},
+                    {"ConnectionStrings:ServerType", "PostGreSQL"}
                 });
             }).ConfigureServices((context, services) =>
             {
@@ -43,7 +53,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
         #region Methods
         protected virtual async Task Initialyse()
         {
-            var cleanTasks = this.HostApplication.Services.GetServices<IStartupTask>();
+            var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
             foreach (var task in cleanTasks)
             {
                 await task.Execute();
@@ -55,6 +65,11 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 await task.Execute();
             }
         }
+
+
+        public async Task InitializeAsync() => await _container.StartAsync();
+
+        public async Task DisposeAsync() => await _container.DisposeAsync();
         #endregion
     }
 }

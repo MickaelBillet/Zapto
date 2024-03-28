@@ -31,6 +31,24 @@ namespace WeatherZapto.Data.Repositories
             }
             return count;
         }
+
+        public async Task<long?> GetDayCallsCount(DateTime date)
+        {
+            long? count = 0;
+            if (this.DataContext != null)
+            {
+                FormattableString sql = $"SELECT * FROM \"Call\" Where (\"CreationDateTime\" = {date.ToUniversalTime().Date})";
+
+                if (this.DataContext != null)
+                {
+                    await this.DataContext.CallEntities.FromSql<CallEntity>(sql).ForEachAsync(item =>
+                    {
+                        count = count + item.Count;
+                    });
+                }
+            }
+            return count;
+        }
         #endregion
     }
 }
