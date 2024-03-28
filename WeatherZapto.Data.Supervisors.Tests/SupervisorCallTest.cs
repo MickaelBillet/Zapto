@@ -11,15 +11,15 @@ namespace WeatherZapto.Data.Supervisors.Tests
         public async Task AddCall()
         {
             //Arrange
+            this.CreateHost();
             await this.Initialyse();
 
             //Act
-            IDalSession session = this.HostApplication.Services.GetRequiredService<IDalSession>();
+            IDalSession session = this.HostApplication!.Services.GetRequiredService<IDalSession>();
             IRepositoryFactory repositoryFactory = this.HostApplication.Services.GetRequiredService<IRepositoryFactory>();
             ISupervisorCall supervisor = new SupervisorCall(session, repositoryFactory);
             ResultCode code = await supervisor.AddCallOpenWeather();
             code = await supervisor.AddCallOpenWeather();
-
 
             //Assert
             Assert.True(code == ResultCode.Ok);
@@ -29,11 +29,12 @@ namespace WeatherZapto.Data.Supervisors.Tests
         public async Task GetDayCallsCount()
         {
             //Arrange
+            this.CreateHost();
             await this.Initialyse();
 
             //Act
             long? call = null;
-            IDalSession session = this.HostApplication.Services.GetRequiredService<IDalSession>();
+            IDalSession session = this.HostApplication!.Services.GetRequiredService<IDalSession>();
             IRepositoryFactory repositoryFactory = this.HostApplication.Services.GetRequiredService<IRepositoryFactory>();
             ISupervisorCall supervisor = new SupervisorCall(session, repositoryFactory);
             ResultCode code = await supervisor.AddCallOpenWeather();
@@ -47,26 +48,31 @@ namespace WeatherZapto.Data.Supervisors.Tests
             Assert.True(call == 1);
         }
 
-        //[Fact]
-        //public async Task GetLast30DaysCallsCount()
-        //{
-        //    //Arrange
-        //    await this.Initialyse();
+        [Fact]
+        public async Task GetLast30DaysCallsCount()
+        {
+            //Arrange
+            this.CreateHost();
+            await this.Initialyse();
 
-        //    //Act
-        //    long? call = null;
-        //    IDalSession session = this.HostApplication.Services.GetRequiredService<IDalSession>();
-        //    IRepositoryFactory repositoryFactory = this.HostApplication.Services.GetRequiredService<IRepositoryFactory>();
-        //    ISupervisorCall supervisor = new SupervisorCall(session, repositoryFactory);
-        //    ResultCode code = await supervisor.AddCallOpenWeather();
-        //    if (code == ResultCode.Ok)
-        //    {
-        //        call = await supervisor.GetLast30DaysCallsCount();
-        //    }
+            //Act
+            long? call = null;
+            IDalSession session = this.HostApplication!.Services.GetRequiredService<IDalSession>();
+            IRepositoryFactory repositoryFactory = this.HostApplication.Services.GetRequiredService<IRepositoryFactory>();
+            ISupervisorCall supervisor = new SupervisorCall(session, repositoryFactory);
+            ResultCode code = await supervisor.AddCallOpenWeather();
+            if (code == ResultCode.Ok)
+            {
+                code = await supervisor.AddCallOpenWeather();
+                if (code == ResultCode.Ok)
+                {
+                    call = await supervisor.GetLast30DaysCallsCount();
+                }
+            }
 
-        //    //Assert
-        //    Assert.True(code == ResultCode.Ok);
-        //    Assert.True(call == 1);
-        //}
+            //Assert
+            Assert.True(code == ResultCode.Ok);
+            Assert.True(call == 2);
+        }
     }
 }

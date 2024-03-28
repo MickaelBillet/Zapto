@@ -14,7 +14,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
     public abstract class SupervisorBase : IAsyncLifetime
     {
         #region Properties
-        protected IHost? HostApplication { get; set; }
+        protected IHost? HostApplication { get; set; } = null;
         private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
                                                                 .WithImage("postgres:14.7")
                                                                 .WithDatabase("weatherZaptoDb")
@@ -32,7 +32,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
         #endregion
 
         #region Methods
-        protected virtual async Task Initialyse()
+        protected void CreateHost()
         {
             this.HostApplication = new HostBuilder().ConfigureAppConfiguration((context, configurationBuilder) =>
             {
@@ -52,17 +52,23 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
             })
            .Build();
+        }
 
-            var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
-            foreach (var task in cleanTasks)
+        protected virtual async Task Initialyse()
+        {
+            if (this.HostApplication != null)
             {
-                await task.Execute();
-            }
+                var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
+                foreach (var task in cleanTasks)
+                {
+                    await task.Execute();
+                }
 
-            var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
-            foreach (var task in startupTasks)
-            {
-                await task.Execute();
+                var startupTasks = this.HostApplication.Services.GetServices<IStartupTask>();
+                foreach (var task in startupTasks)
+                {
+                    await task.Execute();
+                }
             }
         }
 
