@@ -15,20 +15,18 @@ namespace WeatherZapto.Data.Supervisors.Tests
     {
         #region Properties
         protected IHost HostApplication { get; }
-        private readonly PostgreSqlContainer _container;
+        private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
+                                                                .WithImage("postgres:14.7")
+                                                                .WithDatabase("weatherZaptoDb")
+                                                                .WithUsername("postgres")
+                                                                .WithPassword("postgres")
+                                                                .WithCleanUp(true)
+                                                                .Build();
         #endregion
 
         #region Constructor
         public SupervisorBase()
         {
-            _container = new PostgreSqlBuilder()
-                                .WithImage("postgres:14.7")
-                                .WithDatabase("weatherZaptoDb")
-                                .WithUsername("postgres")
-                                .WithPassword("postgres")
-                                .WithCleanUp(true)
-                                .Build();
-
             this.HostApplication = new HostBuilder().ConfigureAppConfiguration((context, configurationBuilder) =>
             {
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
