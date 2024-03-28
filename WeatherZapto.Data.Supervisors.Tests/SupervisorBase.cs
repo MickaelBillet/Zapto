@@ -14,7 +14,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
     public abstract class SupervisorBase : IAsyncLifetime
     {
         #region Properties
-        protected IHost HostApplication { get; }
+        protected IHost? HostApplication { get; set; }
         private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
                                                                 .WithImage("postgres:14.7")
                                                                 .WithDatabase("weatherZaptoDb")
@@ -26,6 +26,13 @@ namespace WeatherZapto.Data.Supervisors.Tests
 
         #region Constructor
         public SupervisorBase()
+        {
+           
+        }
+        #endregion
+
+        #region Methods
+        protected virtual async Task Initialyse()
         {
             this.HostApplication = new HostBuilder().ConfigureAppConfiguration((context, configurationBuilder) =>
             {
@@ -44,14 +51,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
             })
-            .Build();
-        }
-        #endregion
-
-        #region Methods
-        protected virtual async Task Initialyse()
-        {
-            await this.InitializeAsync();
+           .Build();
 
             var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
             foreach (var task in cleanTasks)
