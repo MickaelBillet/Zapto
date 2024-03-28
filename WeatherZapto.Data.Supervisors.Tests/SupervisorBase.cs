@@ -51,6 +51,8 @@ namespace WeatherZapto.Data.Supervisors.Tests
         #region Methods
         protected virtual async Task Initialyse()
         {
+            await this.InitializeAsync();
+
             var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
             foreach (var task in cleanTasks)
             {
