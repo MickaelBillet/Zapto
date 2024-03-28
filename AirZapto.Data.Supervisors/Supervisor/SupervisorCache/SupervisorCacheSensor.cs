@@ -22,7 +22,6 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Methods
-
         public async Task<ResultCode> AddUpdateSensorAsync(Sensor sensor)
         {
             await this.CacheService.Set(sensor.Id, sensor);

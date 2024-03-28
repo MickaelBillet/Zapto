@@ -18,7 +18,6 @@ namespace WeatherZapto.Data.Supervisors
         public SupervisorCall(IDalSession session, IRepositoryFactory repositoryFactory)
         {
             _lazyCallRepository = repositoryFactory?.CreateCallRepository(session);
-
         }
         #endregion
 

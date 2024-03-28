@@ -20,7 +20,7 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
             services.AddSingleton<IHostedService, HomeAirPollutionAcquisitionService>();
             services.AddSingleton<IHostedService, HomeWeatherAcquisitionService>();
-            services.AddTransient<IStartupTask, DatabaseStartupTask>();
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddApplicationWeaterZaptoServices();
             services.AddSingleton<CacheSignal>();

@@ -127,3 +127,5 @@
 /AirZaptoWebServer.Tests/obj
 /AirZapto.Data.Supervisors.Tests/bin/Debug/net8.0
 /AirZapto.Data.Supervisors.Tests/obj
+/WeatherZapto.Data.Supervisors.Tests/bin/Debug/net8.0
+/WeatherZapto.Data.Supervisors.Tests/obj

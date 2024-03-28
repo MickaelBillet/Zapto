@@ -1,20 +1,19 @@
-﻿using AirZapto.Data.Database;
-using AirZapto.Data.Services;
-using AirZapto.WebServer.Services;
-using Framework.Data.Abstractions;
+﻿using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WeatherZapto.Data.Repository;
+using WeatherZapto.Data.Services;
+using WeatherZapto.WebServer.Services;
 
-namespace AirZapto.Data.Supervisors.Tests
+namespace WeatherZapto.Data.Supervisors.Tests
 {
     public abstract class SupervisorBase
     {
         #region Properties
         protected IHost HostApplication { get; }
-
         #endregion
 
         #region Constructor
@@ -24,14 +23,14 @@ namespace AirZapto.Data.Supervisors.Tests
             {
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    {"ConnectionStrings:DefaultConnection", "Data Source=.\\airZaptoDb.db3;"},
+                    {"ConnectionStrings:DefaultConnection", "Data Source=.\\weatherZaptoDb.db3;"},
                     {"ConnectionStrings:ServerType", "Sqlite"}
                 });
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
 
-                services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
+                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
@@ -44,7 +43,7 @@ namespace AirZapto.Data.Supervisors.Tests
         #region Methods
         protected virtual async Task Initialyse()
         {
-            var cleanTasks = this.HostApplication.Services.GetServices<ICleanTask>();
+            var cleanTasks = this.HostApplication.Services.GetServices<IStartupTask>();
             foreach (var task in cleanTasks)
             {
                 await task.Execute();
