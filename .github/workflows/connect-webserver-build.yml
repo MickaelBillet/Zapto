@@ -21,7 +21,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           
       - name : Restore
-        run: dotnet restore ./WeatherZapto.WebServer.sln
+        run: dotnet restore ./Connect.WebServer.sln
 
       - name : Build
         run : dotnet build ./Connect.WebServer.sln --configuration release --no-restore
