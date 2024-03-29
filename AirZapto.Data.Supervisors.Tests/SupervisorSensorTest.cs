@@ -211,8 +211,15 @@ namespace AirZapto.Data.Supervisors.Tests
             ResultCode code = await supervisor.AddUpdateSensorAsync(sensor);
             if (code == ResultCode.Ok)
             {
-                supervisor = new SupervisorSensor(this.HostApplication.Services);
                 code = await supervisor.DeleteSensorAsync("1");
+                if (code == ResultCode.Ok)
+                {
+                    (ResultCode code, IEnumerable<Sensor>? sensors) obj = await supervisor.GetSensorsAsync();
+                    //Assert
+                    Assert.True(obj.code == ResultCode.ItemNotFound);
+                    Assert.False(obj.sensors!.Any());
+
+                }
             }
 
             //Assert

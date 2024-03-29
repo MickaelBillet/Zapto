@@ -23,11 +23,6 @@ namespace AirZapto.Data.DataContext
                 connection = new SqliteConnection(connectionString);
                 context = new AirZaptoContextSqlite(connection);
             }
-            else if (server == ServerType.InMemory) 
-            {
-                connection = new SqliteConnection(connectionString);
-                context = new AirZaptoContextSqlite(connection);
-            }
 
             return (connection, context);
         }

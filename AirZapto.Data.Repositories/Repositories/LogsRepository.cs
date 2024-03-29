@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AirZapto.Data.Entities;
 using AirZapto.Data.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Polly.Utilities;
 
 namespace AirZapto.Data.Repositories
 {
@@ -59,12 +60,18 @@ namespace AirZapto.Data.Repositories
 		{
 			bool res = false;
 
-			if (this.DataContext != null)
+			if ((this.DataContext != null) && (this.LogsExists(entity.Id) == true))
 			{
-                if (this.DataContext.Entry(entity).State == EntityState.Detached)
+                //Search the entity in the local context 
+                var existingEntity = this.DataContext.LogsEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
+                if (existingEntity != null)
                 {
-                    this.DataContext.LogsEntities.Attach(entity);
+                    //Detach the entity from the context
+                    this.DataContext.Entry(existingEntity).State = EntityState.Detached;
                 }
+
+                //Rattach
+                this.DataContext.Entry(entity).State = EntityState.Unchanged;
 
                 this.DataContext.Remove<LogsEntity>(entity);
 				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;

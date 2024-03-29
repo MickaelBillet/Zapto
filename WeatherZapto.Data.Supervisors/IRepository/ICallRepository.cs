@@ -6,6 +6,5 @@ namespace WeatherZapto.Data.Services.Repositories
     public interface ICallRepository : IRepository<CallEntity>
     {
         Task<long?> GetLast30DaysCallsCount();
-        Task<long?> GetDayCallsCount(DateTime date);
     }
 }

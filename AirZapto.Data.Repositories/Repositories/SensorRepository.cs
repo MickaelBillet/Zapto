@@ -85,12 +85,18 @@ namespace AirZapto.Data.Repositories
 		{
 			bool res = false;
 
-            if ((this.DataContext != null) && (await this.SensorExists(entity.Id)) == false)
+            if ((this.DataContext != null) && (await this.SensorExists(entity.Id)) == true)
             {
-                if (this.DataContext.Entry(entity).State == EntityState.Detached)
+				//Search the entity in the local context 
+                var existingEntity = this.DataContext.SensorEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
+                if (existingEntity != null)
                 {
-                    this.DataContext.SensorEntities.Attach(entity);
+                    //Detach the entity from the context
+                    this.DataContext.Entry(existingEntity).State = EntityState.Detached;
                 }
+
+                //Rattach
+                this.DataContext.Entry(entity).State = EntityState.Unchanged;
 
                 this.DataContext.Remove<SensorEntity>(entity);
 				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;

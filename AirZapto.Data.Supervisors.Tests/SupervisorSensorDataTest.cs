@@ -34,11 +34,11 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Act
             ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
-            (ResultCode code, IEnumerable<Model.AirZaptoData>? data)? obj2 = await supervisorSensorData!.GetSensorDataAsync(obj1.sensor!.Id, 60);
+            (ResultCode code, IEnumerable<Model.AirZaptoData>? data) obj2 = await supervisorSensorData!.GetSensorDataAsync(obj1.sensor!.Id, 60);
 
             //Assert
-            Assert.True(obj2.Value.code == ResultCode.Ok);
-            Assert.True(obj2.Value.data!.ToList().Exists((item) => item.SensorId == obj1.sensor.Id));
+            Assert.True(obj2.code == ResultCode.Ok);
+            Assert.True(obj2.data!.ToList().Exists((item) => item.SensorId == obj1.sensor.Id));
         }
 
         [Fact]
@@ -51,6 +51,13 @@ namespace AirZapto.Data.Supervisors.Tests
             //Act
             ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
             ResultCode code = await supervisorSensorData.DeleteSensorDataAsync(new TimeSpan(0, 0, 0));
+            if (code == ResultCode.Ok) 
+            {
+                (ResultCode code, IEnumerable<Model.AirZaptoData>? data) obj2 = await supervisorSensorData!.GetSensorDataAsync(obj1.sensor!.Id, 60);
+                //Assert
+                Assert.True(obj2.code == ResultCode.ItemNotFound);
+                Assert.False(obj2.data!.Any());
+            }
 
             //Assert
             Assert.True(code == ResultCode.Ok);
