@@ -1,33 +1,25 @@
-﻿using Framework.Data.Abstractions;
+﻿using Connect.Data.Database;
+using Connect.Data.Repository;
+using Connect.WebServer.Services;
+using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Testcontainers.PostgreSql;
-using WeatherZapto.Data.Repository;
-using WeatherZapto.Data.Services;
-using WeatherZapto.WebServer.Services;
 
-namespace WeatherZapto.Data.Supervisors.Tests
+namespace Connect.Data.Supervisors.Tests
 {
-    public abstract class SupervisorBase : IAsyncLifetime
+    public abstract class SupervisorBase
     {
         #region Properties
         protected IHost? HostApplication { get; set; } = null;
-        private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
-                                                                .WithImage("postgres:14.7")
-                                                                .WithDatabase("weatherZaptoDb")
-                                                                .WithUsername("postgres")
-                                                                .WithPassword("postgres")
-                                                                .WithCleanUp(true)
-                                                                .Build();
         #endregion
 
         #region Constructor
         public SupervisorBase()
         {
-           
+
         }
         #endregion
 
@@ -38,14 +30,15 @@ namespace WeatherZapto.Data.Supervisors.Tests
             {
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    {"ConnectionStrings:DefaultConnection", $"{_container.GetConnectionString()}"},
-                    {"ConnectionStrings:ServerType", "PostGreSQL"}
+                    {"ConnectionStrings:DefaultConnection", $"Data Source=.\\connectDb.db3;"},
+                    {"ConnectionStrings:ServerType", "Sqlite"}
                 });
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
+                services.AddSupervisor();
 
-                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
+                services.AddSingleton<IDatabaseService, ConnectDatabaseService>();
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
@@ -74,10 +67,6 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 }
             }
         }
-
-        public async Task InitializeAsync() => await _container.StartAsync();
-
-        public async Task DisposeAsync() => await _container.DisposeAsync();
         #endregion
     }
 }
