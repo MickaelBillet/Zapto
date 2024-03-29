@@ -85,8 +85,8 @@ namespace AirZapto.Data.Repositories
 		{
 			bool res = false;
 
-			if (this.DataContext != null)
-			{
+            if ((this.DataContext != null) && (await this.SensorExists(entity.Id)) == false)
+            {
                 if (this.DataContext.Entry(entity).State == EntityState.Detached)
                 {
                     this.DataContext.SensorEntities.Attach(entity);
