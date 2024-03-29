@@ -50,6 +50,9 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddSingleton<CacheSignal>();
+                services.AddMemoryCache();
+
             })
            .Build();
         }

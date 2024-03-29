@@ -104,10 +104,16 @@ namespace WeatherZapto.Data.Repositories
             int res = 0;
             if ((this.DataContext != null) && (this.Table != null) && (this.Table.Any()))
             {
-                if (this.DataContext.Entry(entity).State == EntityState.Detached)
+                //Search the entity in the local context 
+                var existingEntity = this.Table.Local.FirstOrDefault(e => e.Id == entity.Id);
+                if (existingEntity != null)
                 {
-                    this.Table.Attach(entity);
+                    //Detach the entity from the context
+                    this.DataContext.Entry(existingEntity).State = EntityState.Detached;
                 }
+
+                //Rattach
+                this.DataContext.Entry(entity).State = EntityState.Unchanged;
                 this.Table.Remove(entity); 
                 res = await this.DataContext.SaveChangesAsync();
             }
