@@ -36,7 +36,7 @@ namespace AirZapto.Data.Repositories
 				foreach (var entity in query)
 				{
                     //Search the entity in the local context 
-                    var existingEntity = this.DataContext.LogsEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
+                    var existingEntity = this.DataContext.SensorDataEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
                     if (existingEntity != null)
                     {
                         //Detach the entity from the context
