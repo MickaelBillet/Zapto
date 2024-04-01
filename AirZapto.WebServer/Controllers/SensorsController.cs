@@ -1,5 +1,5 @@
 ﻿using AirZapto.Application;
-using AirZapto.Data;
+using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -18,14 +18,14 @@ namespace AirZapto.WebServices.Controllers
     public class SensorsController : ControllerBase
     {
         #region Property
-        private ISupervisorSensor Supervisor { get; }
+        private ISupervisorCacheSensor Supervisor { get; }
         private IApplicationSensorServices ApplicationSensorServices { get; }
         #endregion
 
         #region Constructor
         public SensorsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
             this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
         }
         #endregion
@@ -65,7 +65,7 @@ namespace AirZapto.WebServices.Controllers
         {
             try
             {
-                (ResultCode code, IEnumerable<Sensor>? sensors) = await this.Supervisor.GetCacheSensorsAsync();
+                (ResultCode code, IEnumerable<Sensor>? sensors) = await this.Supervisor.GetSensorsAsync();
 
                 if (code == ResultCode.Ok)
                 {

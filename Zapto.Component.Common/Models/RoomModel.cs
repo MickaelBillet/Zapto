@@ -6,8 +6,8 @@ namespace Zapto.Component.Common.Models
 	{
 		private string? _temperature;
 		private string? _humidity;
-
-		public string LocationId { get; set; } = string.Empty;	
+		public string LocationId { get; set; } = string.Empty;
+		public string? LocationName { get; set; } = string.Empty;
 		public string? FileNameImage
 		{
 			get

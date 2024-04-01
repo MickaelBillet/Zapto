@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS8621: Nullability of reference types in return type doesn't match the target delegate (possibly because of nullability attributes).
+dotnet_diagnostic.CS8621.severity = none

@@ -1,4 +1,5 @@
 ﻿using AirZapto.Data;
+using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
@@ -47,7 +48,7 @@ namespace AirZapto.WebServer.Services
 
         private async Task ProcessSensorStatus(IServiceScope scope)
         {
-            ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+            ISupervisorCacheSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
             (ResultCode result, IEnumerable<Sensor>? sensors) = await supervisor.GetSensorsAsync();
 
             //30 minutes

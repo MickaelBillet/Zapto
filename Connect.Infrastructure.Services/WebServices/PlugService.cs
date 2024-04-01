@@ -1,6 +1,5 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Model;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 

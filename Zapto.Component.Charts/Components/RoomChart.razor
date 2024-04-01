@@ -14,7 +14,9 @@
     [Parameter]
     public IEnumerable<string?>? Labels { get; set; } = null;
     [Parameter]
-    public IEnumerable<decimal?>? Temperatures { get; set; } = null;
+    public IEnumerable<decimal?>? TemperatureIN { get; set; } = null;
+    [Parameter]
+    public IEnumerable<decimal?>? TemperatureOUT { get; set; } = null;
     [Parameter]
     public IEnumerable<decimal?>? Humidities { get; set; } = null;
     [Parameter]
@@ -47,8 +49,8 @@
                                 {
                                     Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault()
                                 },
-                                SuggestedMax = this.Temperatures?.Max() + TemperatureMargin,
-                                SuggestedMin = this.Temperatures?.Min() - TemperatureMargin,
+                                SuggestedMax = this.TemperatureIN?.Max() + TemperatureMargin,
+                                SuggestedMin = this.TemperatureIN?.Min() - TemperatureMargin,
                             }
                         },
                         {
@@ -60,8 +62,8 @@
                                 {
                                     Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
                                 },
-                                SuggestedMax = this.Humidities?.Max() + HumidityMargin,
-                                SuggestedMin = this.Humidities?.Min() - HumidityMargin,
+                                SuggestedMax = this.TemperatureOUT?.Max() + HumidityMargin,
+                                SuggestedMin = this.TemperatureOUT?.Min() - HumidityMargin,
                             }
                         }
                     }
@@ -70,12 +72,12 @@
 
             this.Config.Data.Labels = this.Labels.ToList();
 
-            if (this.Temperatures?.Any() == true)
+            if (this.TemperatureIN?.Any() == true)
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
                 {
                     Label = this.Localizer["Temperature"],
-                    Data = this.Temperatures.ToList(),
+                    Data = this.TemperatureIN.ToList(),
                     BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
                     DataLabels = new DataLabels()
                     {
@@ -92,12 +94,12 @@
                 });
             }
 
-            if (this.Humidities?.Any() == true)
+            if (this.TemperatureOUT?.Any() == true)
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
                 {
                     Label = this.Localizer["Humidity"],
-                    Data = this.Humidities.ToList(),
+                    Data = this.TemperatureOUT.ToList(),
                     BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
                     DataLabels = new DataLabels()
                     {

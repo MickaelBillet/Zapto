@@ -40,6 +40,7 @@
 {
     [Parameter]
     public RoomModel? Model { get; set; }
+
     public bool HasLaunch = false;
 
     protected override async Task OnInitializedAsync()
@@ -69,9 +70,12 @@
 
     public void ShowChartButton()
     {
-        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.Model?.Id) == false) && (string.IsNullOrEmpty(this.Model?.Name) == false))
+        if ((this.ViewModel != null) 
+            && (string.IsNullOrEmpty(this.Model?.Id) == false) 
+            && (string.IsNullOrEmpty(this.Model?.Name) == false)
+            && (string.IsNullOrEmpty(this.Model?.LocationName) == false))
         {
-            this.ViewModel.OpenChart(this.Model.Id, this.Model.Name);
+            this.ViewModel.OpenChart(this.Model.Id, this.Model.Name, this.Model.LocationName);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AirZapto.Application;
 using AirZapto.Data;
 using AirZapto.Data.Database;
+using AirZapto.Model;
 using AirZapto.WebServer.Services;
+using Framework.Common.Services;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
@@ -27,6 +29,12 @@ namespace AirZapto.WebServices.Configuration
             services.AddSingleton<IHostedService, DailyService>();
             services.AddTransient<IStartupTask, DatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
+            services.AddCacheServices();
+        }
+
+        public static void AddCacheServices(this IServiceCollection services)
+        {
+            services.AddSingleton<ICacheZaptoService<Sensor>, CacheZaptoService<Sensor>>();
         }
     }
 }

@@ -10,6 +10,7 @@ namespace WeatherZapto.Application
 			services.AddTransient<IApplicationWeatherService, ApplicationWeatherService>();
 			services.AddTransient<IApplicationAirPollutionService, ApplicationAirPollutionService>();
 			services.AddTransient<IApplicationLocationService, ApplicationLocationService>();
+			services.AddTransient<IApplicationTemperatureService, ApplicationTemperatureService>();
 			services.AddTransient<IApplicationOWService, ApplicationOWService>();
 			services.AddTransient<IApplicationOWServiceCache, ApplicationOWServiceCache>();
 			services.AddTransient<IApplicationHealthCheckWeatherZaptoServices, ApplicationHealthChechWeatherZaptoService>();

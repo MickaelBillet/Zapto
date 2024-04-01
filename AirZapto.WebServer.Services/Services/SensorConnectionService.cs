@@ -1,5 +1,6 @@
 ﻿using AirZapto.Application;
 using AirZapto.Data;
+using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
@@ -38,7 +39,7 @@ namespace AirZapto.WebServer.Services
 
             try
             {
-                ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorCacheSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 (ResultCode code, IEnumerable<Sensor>? sensors) result = await supervisor.GetSensorsAsync();
                 bool isConnected = false;

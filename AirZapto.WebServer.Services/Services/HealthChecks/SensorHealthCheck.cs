@@ -1,4 +1,5 @@
 ﻿using AirZapto.Data;
+using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Microsoft.Extensions.Configuration;
@@ -10,14 +11,14 @@ namespace AirZapto.WebServer.Services
     public class SensorHealthCheck : IHealthCheck
     {
 		#region Properties
-		private ISupervisorSensor Supervisor { get; }
+		private ISupervisorCacheSensor Supervisor { get; }
 		#endregion
 
 		#region Constructor
 
 		public SensorHealthCheck(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
         }
 
         #endregion

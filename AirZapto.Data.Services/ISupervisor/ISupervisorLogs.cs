@@ -1,7 +1,7 @@
 ﻿using Framework.Core.Base;
 using Framework.Core.Domain;
 
-namespace AirZapto.Data
+namespace AirZapto.Data.Services
 {
     public interface ISupervisorLogs
 	{

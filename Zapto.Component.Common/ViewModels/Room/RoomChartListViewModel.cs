@@ -2,9 +2,8 @@
 using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
-using MudBlazor;
 using Serilog;
-using System.Diagnostics;
+using WeatherZapto.Application.Services;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -20,12 +19,15 @@ namespace Zapto.Component.Common.ViewModels
     {
         #region Properties
         private IApplicationOperationDataService ApplicationOperationDataService { get; }
+        private IApplicationTemperatureService ApplicationTemperatureService { get; }
+        private string? Location { get; set; }
         #endregion
 
         #region Constructor
         public RoomChartListViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this.ApplicationOperationDataService = serviceProvider.GetRequiredService<IApplicationOperationDataService>();
+            this.ApplicationTemperatureService = serviceProvider.GetRequiredService<IApplicationTemperatureService>();
         }
         #endregion
 
@@ -33,6 +35,8 @@ namespace Zapto.Component.Common.ViewModels
         public override async Task InitializeAsync(string? parameter)
         {
             await base.InitializeAsync(parameter);
+
+            this.Location = parameter as string;
         }
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
@@ -67,28 +71,34 @@ namespace Zapto.Component.Common.ViewModels
 
         public async Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId)
         {
-            List<RoomChartModel>? data = null;
+            List<RoomChartModel>? models = null;
             try
             {
                 this.IsLoading = true;
 
                 if (this.ApplicationOperationDataService != null)
                 {
-                    data = new List<RoomChartModel>();
+                    models = new List<RoomChartModel>();
                     for (DateTime? date = startDate; date <= endDate; date = date + new TimeSpan(1, 0, 0, 0))
                     {
+                        RoomChartModel model = new RoomChartModel();
+
                         IEnumerable<OperatingData?> operatingData = await this.ApplicationOperationDataService.GetRoomOperatingDataOfDay(roomId, date);
                         if ((operatingData != null) && operatingData.Any())
                         {
-                            RoomChartModel model = new RoomChartModel()
-                            {
-                                Temperatures = operatingData.Select((data) => (decimal?)data?.Temperature).ToList(),
-                                Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList(),
-                                Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList(),
-                                Day = (date != null) ? date.Value.ToString("D") : string.Empty,
-                            };                        
-                            data.Add(model);
+                            model.TemperaturesIN = operatingData.Select((data) => (decimal?)data?.Temperature).ToList();
+                            model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
+                            model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
+                            model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
+                        };                        
+
+                        IEnumerable<double?> temperaturesOut = await this.ApplicationTemperatureService.GetTemperatureOfDay(this.Location, date);
+                        if ((temperaturesOut != null) && temperaturesOut.Any())
+                        {
+                            model.TemperaturesOUT = temperaturesOut.Select((data) => (decimal?)data).ToList();
                         }
+                        
+                        models.Add(model);                        
                     }
                 }
             }
@@ -101,7 +111,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 this.IsLoading = false;
             }
-            return data;
+            return models;
         }
         #endregion
     }

@@ -11,7 +11,7 @@
 {
     foreach (RoomChartModel model in this.Models)
     {
-        <RoomChart Labels="@model.Labels" Humidities="@model.Humidities" Temperatures="@model.Temperatures" CurrentDay="@model.Day"></RoomChart>
+        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" CurrentDay="@model.Day"></RoomChart>
     }
 }
 else
@@ -23,6 +23,7 @@ else
 {
     private bool isdisplayed = false;
 
+    #region Properties
     public event EventHandler? PropertyChanged;
 
     [Parameter]
@@ -31,9 +32,12 @@ else
     [Parameter]
     public string RoomName { get; set; } = string.Empty;
 
-    public DateTime? MaxDate { get; set; }
+    [Parameter]
+    public string Location { get; set; } = string.Empty;
 
-    public DateTime? MinDate { get; set; }
+    private DateTime? MaxDate { get; set; }
+
+    private DateTime? MinDate { get; set; }
 
     public bool IsDisplayed
     {
@@ -55,29 +59,31 @@ else
         }
     }
 
-    public DateTime? StartDate { get; set; } = DateTime.Today;
+    private DateTime? StartDate { get; set; } = DateTime.Today;
 
     private DateTime? EndDate { get; set; } = DateTime.Today;
 
     private IEnumerable<RoomChartModel>? Models { get; set; }
+    #endregion
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (this.ViewModel != null)
-        {
-            await this.ViewModel.InitializeAsync(null);
-            this.PropertyChanged += this.PropertyChangedHandler;
-        }
-    }
+    #region Methods
     protected override async Task OnParametersSetAsync()
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
         {
+            await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
             await this.DisplayCharts();
         }
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        this.PropertyChanged += this.PropertyChangedHandler;
+    }
+
     public void Dispose()
     {
         this.ViewModel?.Dispose();
@@ -101,6 +107,7 @@ else
         await this.DisplayCharts();
         this.StateHasChanged();
     }
+    #endregion
 }
 
 

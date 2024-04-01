@@ -1,4 +1,5 @@
 ﻿using AirZapto.Data.Entities;
+using AirZapto.Data.Services;
 using Framework.Core.Base;
 
 namespace AirZapto.Data.Supervisors
