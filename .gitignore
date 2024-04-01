@@ -123,3 +123,12 @@
 /Framework.Common.Services/bin/Release/netstandard2.1
 /WeatherZapto.Data.Services/bin/Release/net8.0
 /Zapto.Web.Dashboard/bin/Release/net8.0
+/AirZapto.Data.Supervisors.Tests/bin/Debug/net8.0
+/AirZapto.Data.Supervisors.Tests/obj/Debug/net8.0
+/AirZaptoWebServer.Tests/bin/Debug/net8.0
+/AirZapto.Data.Supervisors.Tests/obj
+/AirZaptoWebServer.Tests/obj
+/Connect.Data.Supervisors.Tests/bin/Debug/net8.0
+/WeatherZapto.Data.Supervisors.Tests/bin/Debug/net8.0
+/WeatherZapto.Data.Supervisors.Tests/obj
+/Connect.Data.Supervisors.Tests/obj
