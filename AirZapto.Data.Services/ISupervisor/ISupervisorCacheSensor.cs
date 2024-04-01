@@ -7,7 +7,6 @@ namespace AirZapto.Data.Services
     {
         Task<ResultCode> AddUpdateSensorAsync(Sensor sensor);
         Task<ResultCode> UpdateSensorAsync(Sensor sensor);
-        Task<(ResultCode, Sensor?)> GetSensorAsync(string id);
         Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket);
         Task<ResultCode> DeleteSensorAsync(string idSocket);
         Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync();

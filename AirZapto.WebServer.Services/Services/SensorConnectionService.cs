@@ -46,7 +46,8 @@ namespace AirZapto.WebServer.Services
 
                 if ((result.code == ResultCode.Ok) && (result.sensors != null)) 
                 {
-                    foreach (Sensor sensor in result.sensors)
+                    List<Sensor> sensors = result.sensors.ToList();
+                    foreach (Sensor sensor in sensors)
                     {
                         isConnected = await applicationSensorServices.SendCommandAsync(sensor, Command.Connection);
                         if (isConnected == false)

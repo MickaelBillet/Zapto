@@ -7,5 +7,6 @@ namespace Framework.Data.Abstractions
 	{
 		Task ConfigureDatabase();
         public bool DatabaseIsInitialized();
+        public bool DropDatabase();
     }
 }

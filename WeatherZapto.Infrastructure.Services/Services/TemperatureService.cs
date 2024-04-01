@@ -12,9 +12,9 @@ namespace WeatherZapto.Infrastructure.WebServices
         #endregion
 
         #region Method
-        public async Task<IEnumerable<double?>> GetHomeTemperatures(DateTime? day, string location, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<double?>> GetLocationTemperatures(DateTime dateTime, string location, CancellationToken cancellationToken = default)
         {
-            return await WebService.GetCollectionAsync<double?>(string.Format(WeatherZaptoConstants.UrlTemperaturesDay, day!.Value.ToString("dd-MM-yyyy"), location), this.SerializerOptions, cancellationToken); ;
+            return await WebService.GetCollectionAsync<double?>(string.Format(WeatherZaptoConstants.UrlTemperaturesDay, location, dateTime.ToString("yyyy-MM-ddTHH:mm:ss")), this.SerializerOptions, cancellationToken); ;
         }
         #endregion
     }

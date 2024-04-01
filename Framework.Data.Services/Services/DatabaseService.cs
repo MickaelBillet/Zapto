@@ -63,13 +63,19 @@ namespace Framework.Data.Services
             return await Task.FromResult<bool>(true);
         }
 
-        protected bool DropDatabase(ConnectionType connectionType)
+        public bool DropDatabase()
 		{
 			bool res = false;
 
 			if (this.DataContextFactory != null)
 			{
-				using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
+                ConnectionType connectionType = new()
+                {
+                    ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
+                    ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
+                };
+
+                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
 				{
 					if ((context != null) && (context.DataBaseExists() == true))
 					{

@@ -23,9 +23,9 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<OperatingData>> GetRoomOperatingDataOfDay(string roomId, DateTime? day, CancellationToken token = default)
+        public async Task<IEnumerable<OperatingData>> GetRoomOperatingDataOfDay(string roomId, DateTime? dateTime, CancellationToken token = default)
         {
-            IEnumerable<OperatingData>? operatingData = (this.OperatingDataService != null) ? await this.OperatingDataService.GetRoomOperatingDataOfDay(roomId, day, token) : null;
+            IEnumerable<OperatingData>? operatingData = (this.OperatingDataService != null) ? await this.OperatingDataService.GetRoomOperatingDataOfDay(roomId, dateTime, token) : null;
             return (operatingData ?? Enumerable.Empty<OperatingData>());
         }
 

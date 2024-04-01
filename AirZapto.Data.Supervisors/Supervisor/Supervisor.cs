@@ -12,7 +12,6 @@ namespace AirZapto.Data.Supervisors
         private readonly Lazy<IRepository>? _lazyRepository;
 
 		#region Properties
-		public ConnectionType? ConnectionType { get; set; }
         protected IRepository? Repository => _lazyRepository?.Value;
 		#endregion
 

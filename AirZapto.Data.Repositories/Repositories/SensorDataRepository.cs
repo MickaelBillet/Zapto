@@ -35,11 +35,17 @@ namespace AirZapto.Data.Repositories
 
 				foreach (var entity in query)
 				{
-					if (this.DataContext.Entry(entity).State == EntityState.Detached)
-					{
-						this.DataContext.SensorDataEntities.Attach(entity);
-					}
-				}
+                    //Search the entity in the local context 
+                    var existingEntity = this.DataContext.SensorDataEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
+                    if (existingEntity != null)
+                    {
+                        //Detach the entity from the context
+                        this.DataContext.Entry(existingEntity).State = EntityState.Detached;
+                    }
+
+                    //Rattach
+                    this.DataContext.Entry(entity).State = EntityState.Unchanged;
+                }
 
                 this.DataContext.SensorDataEntities.RemoveRange(query);
 				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;

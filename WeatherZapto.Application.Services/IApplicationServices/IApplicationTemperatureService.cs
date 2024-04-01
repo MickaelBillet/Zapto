@@ -2,6 +2,6 @@
 {
     public interface IApplicationTemperatureService
     {
-        Task<IEnumerable<double?>> GetTemperatureOfDay(string location, DateTime? day, CancellationToken token = default);
+        Task<IEnumerable<double?>> GetTemperatureOfDay(string location, DateTime? dateTime, CancellationToken token = default);
     }
 }

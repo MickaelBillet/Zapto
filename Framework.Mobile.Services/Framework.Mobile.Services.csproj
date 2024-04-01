@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Zapto\Framework.Core\Framework.Core.csproj" />
-    <ProjectReference Include="..\..\Zapto\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj" />
+    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
   </ItemGroup>
 
 </Project>

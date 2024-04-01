@@ -67,6 +67,13 @@ else
     #endregion
 
     #region Methods
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.PropertyChanged += this.PropertyChangedHandler;
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
@@ -76,12 +83,6 @@ else
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
             await this.DisplayCharts();
         }
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        this.PropertyChanged += this.PropertyChangedHandler;
     }
 
     public void Dispose()

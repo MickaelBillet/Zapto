@@ -49,7 +49,7 @@ namespace AirZapto.WebServer.Services
         private async Task ProcessSensorStatus(IServiceScope scope)
         {
             ISupervisorCacheSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
-            (ResultCode result, IEnumerable<Sensor>? sensors) = await supervisor.GetSensorsAsync();
+            (ResultCode result, IEnumerable<Sensor>? sensors) result = await supervisor.GetSensorsAsync();
 
             //30 minutes
             int period = 30;
@@ -59,8 +59,9 @@ namespace AirZapto.WebServer.Services
                 int.TryParse(this.Configuration["ValidityPeriod"], out period);
             }
 
-            if ((result == ResultCode.Ok) && (sensors != null))  
+            if ((result.result == ResultCode.Ok) && (result.sensors != null))  
             {
+                List<Sensor> sensors = result.sensors.ToList();
                 foreach (Sensor sensor in sensors)
                 {
                     if (sensor.Date + new TimeSpan(0, period, 0) < Clock.Now)

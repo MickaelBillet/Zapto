@@ -18,6 +18,7 @@
         MySql = 2,
         SqlServer = 4,
         PostgreSQL = 5,
+        InMemory = 6,
     }
 
     public enum OrmType

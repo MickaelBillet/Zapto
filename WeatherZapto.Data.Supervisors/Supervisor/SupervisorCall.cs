@@ -18,7 +18,6 @@ namespace WeatherZapto.Data.Supervisors
         public SupervisorCall(IDalSession session, IRepositoryFactory repositoryFactory)
         {
             _lazyCallRepository = repositoryFactory?.CreateCallRepository(session);
-
         }
         #endregion
 
@@ -29,7 +28,9 @@ namespace WeatherZapto.Data.Supervisors
 
             AutoReset.WaitOne();
 
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().Date.Equals(Clock.Now.ToUniversalTime().Date));
+            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(Clock.Now.Year)
+                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(Clock.Now.Month)
+                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(Clock.Now.Day));
             if (entity != null) 
             {
                 entity.Count++;
@@ -51,9 +52,14 @@ namespace WeatherZapto.Data.Supervisors
             return result;
         }
 
-        public async Task<long?> GetDayCallsCount(DateTime date)
+        public async Task<long?> GetDayCallsCount(DateTime day)
         {
-            long? count = (await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Equals(date.ToUniversalTime().Date))).Count;
+            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
+                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
+                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day));
+
+            long? count = entities.Count();
+
             return count;
         }
 

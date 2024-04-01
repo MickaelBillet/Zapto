@@ -42,8 +42,10 @@ namespace WeatherZapto.Data.Supervisors
             IEnumerable<double> temperatures = null;           
             if (this.WeatherRepository != null)
             {
-                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Equals(day.ToUniversalTime().Date)
-                                                                                            && item.Location.Equals(location)))
+                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
+                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
+                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+                                                                                        && item.Location.Equals(location)))
                                                             .Select((item) => double.Parse(item.Temperature));
             }
             return temperatures;
@@ -66,9 +68,9 @@ namespace WeatherZapto.Data.Supervisors
                         if (this.WeatherRepository != null)
                         {
                             IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
-                                                                                                        && item.Location.Equals(location));
+                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
+                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+                                                                                                                            && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
                             {
@@ -103,9 +105,9 @@ namespace WeatherZapto.Data.Supervisors
                         if (this.WeatherRepository != null)
                         {
                             IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
-                                                                                && item.Location.Equals(location));
+                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
+                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+                                                                                                                            && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
                             { 

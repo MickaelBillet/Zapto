@@ -31,28 +31,20 @@ namespace Connect.WebApi.Controllers
         #region Method
 
         [HttpGet("~/connect/data/date/{date}/rooms/{roomId}")]
-        public async Task<IActionResult> GetDataOfRoom(string date, string roomId)
+        public async Task<IActionResult> GetDataOfRoom(DateTime date, string roomId)
         {
             IEnumerable<OperatingData>? data;
 
             try
             {
-                string[] tab = date.Split("-");
-                if ((tab != null) && (tab.Length > 0))
+                data = await this.SupervisorOperatingData.GetRoomOperatingDataOfDay(roomId, date);
+                if (data != null)
                 {
-                    data = await this.SupervisorOperatingData.GetRoomOperatingDataOfDay(roomId, new DateTime(int.Parse(tab[2]), int.Parse(tab[1]), int.Parse(tab[0])));
-                    if (data != null)
-                    {
-                        return StatusCode(200, data);
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
+                    return StatusCode(200, data);
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
             }
             catch (Exception ex)

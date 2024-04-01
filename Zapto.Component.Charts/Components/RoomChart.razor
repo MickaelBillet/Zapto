@@ -76,7 +76,7 @@
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
                 {
-                    Label = this.Localizer["Temperature"],
+                    Label = this.Localizer["Inside Temperature"],
                     Data = this.TemperatureIN.ToList(),
                     BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
                     DataLabels = new DataLabels()
@@ -98,7 +98,7 @@
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
                 {
-                    Label = this.Localizer["Humidity"],
+                    Label = this.Localizer["Outside Temperature"],
                     Data = this.TemperatureOUT.ToList(),
                     BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
                     DataLabels = new DataLabels()

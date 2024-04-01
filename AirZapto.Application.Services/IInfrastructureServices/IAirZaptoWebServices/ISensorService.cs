@@ -9,6 +9,6 @@ namespace AirZapto.Application.Infrastructure
 		public Task<IEnumerable<Sensor>?> GetSensors();
 		public Task<bool?> CalibrationSensor(Sensor sensor);
 		public Task<bool?> RestartSensor(Sensor sensor);
-		Task<Sensor?> GetSensor(string sensorId);
+		Task<Sensor?> GetSensor(string idSocket);
 	}
 }

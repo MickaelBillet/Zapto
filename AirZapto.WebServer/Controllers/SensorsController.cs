@@ -37,7 +37,7 @@ namespace AirZapto.WebServices.Controllers
         {
             try
             {
-                (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorAsync(id);
+                (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorFromIdSocketAsync(id);
 
                 if (code == ResultCode.Ok)
                 {
@@ -113,7 +113,7 @@ namespace AirZapto.WebServices.Controllers
                 }
                 else
                 {
-                    (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorAsync(id);
+                    (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorFromIdSocketAsync(id);
 
                     if ((code == ResultCode.Ok) && (sensor != null))
                     {
@@ -197,7 +197,7 @@ namespace AirZapto.WebServices.Controllers
                 }
                 else
                 {
-                    (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorAsync(id);
+                    (ResultCode code, Sensor? sensor) = await this.Supervisor.GetSensorFromIdSocketAsync(id);
 
                     if ((code == ResultCode.Ok) && (sensor != null))
                     {

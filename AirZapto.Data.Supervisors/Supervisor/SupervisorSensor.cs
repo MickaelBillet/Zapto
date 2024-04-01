@@ -98,10 +98,9 @@ namespace AirZapto.Data.Supervisors
 			if (this.Repository != null)
 			{
 				SensorEntity? entity = await this.Repository.GetSensorFromIdSocketAsync(idSocket);
-
 				if (entity != null)
 				{
-					result = (await this.Repository.DeleteSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem; ;
+					result = (await this.Repository.DeleteSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
 				}
 				else
 				{

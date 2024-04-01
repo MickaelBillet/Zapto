@@ -46,6 +46,10 @@ namespace WeatherZapto.Infrastructure.Services
             {
                 return new HealthCheckWeatherZaptoService(service, httpClientName);
             });
+            services.AddTransient<ITemperatureService, TemperatureService>((service) =>
+            {
+                return new TemperatureService(service, httpClientName);
+            });
         }
     }
 }

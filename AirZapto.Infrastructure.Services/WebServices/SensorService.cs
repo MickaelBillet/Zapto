@@ -29,10 +29,10 @@ namespace AirZapto.Infrastructure.WebServices
             return await this.WebService.GetCollectionAsync<Sensor>(AirZaptoConstants.RestUrlSensors, this.SerializerOptions, new CancellationToken());
         }
 
-        public async Task<Sensor?> GetSensor(string sensorId)
+        public async Task<Sensor?> GetSensor(string idSocket)
         {
             return await this.WebService.GetAsync<Sensor>(AirZaptoConstants.RestUrlSensor,
-                                                                    sensorId,
+                                                                    idSocket,
                                                                     this.SerializerOptions,
                                                                     new CancellationToken());
         }
@@ -41,14 +41,14 @@ namespace AirZapto.Infrastructure.WebServices
         {
             return await this.WebService.PutAsync<int[]>(AirZaptoConstants.RestUrlSensorCalibration,
                                                             Array.Empty<int>(),
-                                                            sensor.Id); ;
+                                                            sensor.IdSocket);
         }
 
         public async Task<bool?> RestartSensor(Sensor sensor)
         {
             return await this.WebService.PutAsync<int[]>(AirZaptoConstants.RestUrlSensorRestart,
                                                             Array.Empty<int>(),
-                                                            sensor.Id); ;
+                                                            sensor.IdSocket);
         }
 
         #endregion
