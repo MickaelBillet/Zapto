@@ -28,7 +28,9 @@ namespace WeatherZapto.Data.Supervisors
 
             AutoReset.WaitOne();
 
-            CallEntity entity = await this.CallRepository.GetAsync(item => item.CreationDateTime.ToUniversalTime().Date.Equals(Clock.Now.ToUniversalTime().Date));
+            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(Clock.Now.Year)
+                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(Clock.Now.Month)
+                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(Clock.Now.Day));
             if (entity != null) 
             {
                 entity.Count++;

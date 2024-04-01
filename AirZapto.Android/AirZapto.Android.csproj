@@ -59,6 +59,9 @@
     <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Framework.Common.Services">
+      <HintPath>..\Framework.Common.Services\bin\Debug\netstandard2.1\Framework.Common.Services.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -144,15 +147,11 @@
       <Project>{b0341b9a-9a03-4629-b9d9-733a91781d83}</Project>
       <Name>Framework.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj">
-      <Project>{2b98e0d7-beb6-44f7-a215-1820a780c273}</Project>
-      <Name>Framework.Infrastructure.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadUnhandledDeviceExceptionAirZaptoAndroidHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarAirZaptoAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionAirZaptoAndroidHideInfoBar="True" TriggeredFromHotReload="False" />
+      <UserProperties TriggeredFromHotReload="False" XamarinHotReloadDebuggerTimeoutExceptionAirZaptoAndroidHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarAirZaptoAndroidHideInfoBar="True" XamarinHotReloadUnhandledDeviceExceptionAirZaptoAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

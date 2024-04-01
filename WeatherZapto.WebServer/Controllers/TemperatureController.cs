@@ -21,29 +21,21 @@ namespace WeatherZapto.WebServer.Controllers
 
         #region Methods 
         //WeatherZaptoConstants.UrlTemperaturesDay
-        [HttpGet("data/date={date}&location={location}")]
-        public async Task<IActionResult> GetTemperatures(string date, string location)
+        [HttpGet()]
+        public async Task<IActionResult> GetTemperature(string location, DateTime date)
         {
             IEnumerable<double>? temperatures = null;
 
             try
             {
-                string[] tab = date.Split("-");
-                if ((tab != null) && (tab.Length > 0))
+                temperatures = await this.Supervisor.GetTemperatures(location, date);
+                if (temperatures != null)
                 {
-                    temperatures = await this.Supervisor.GetTemperatures(location, new DateTime(int.Parse(tab[2]), int.Parse(tab[1]), int.Parse(tab[0])));
-                    if (temperatures != null)
-                    {
-                        return StatusCode(200, temperatures);
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
+                    return StatusCode(200, temperatures);
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
             }
             catch (HttpRequestException ex)
@@ -52,7 +44,7 @@ namespace WeatherZapto.WebServer.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new CustomErrorResponse
+                return BadRequest(new CustomErrorResponse
                 {
                     Message = ex.Message,
                     Description = string.Empty,

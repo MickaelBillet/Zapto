@@ -20,7 +20,7 @@ namespace Connect.Infrastructure.WebServices
         #region Method   
         public async Task<IEnumerable<OperatingData>?> GetRoomOperatingDataOfDay(string roomId, DateTime? day, CancellationToken token = default)
         {
-            return await WebService.GetCollectionAsync<OperatingData>(string.Format(ConnectConstants.RestUrlRoomOperatingData, day!.Value.ToString("dd-MM-yyyy"), roomId), SerializerOptions, token); ;
+            return await WebService.GetCollectionAsync<OperatingData>(string.Format(ConnectConstants.RestUrlRoomOperatingData, day!.Value.ToString("yyyy-MM-ddTHH:mm:ss"), roomId), SerializerOptions, token); ;
         }
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId, CancellationToken token = default)

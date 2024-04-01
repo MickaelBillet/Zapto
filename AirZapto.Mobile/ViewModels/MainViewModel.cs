@@ -160,7 +160,7 @@ namespace AirZapto.ViewModel
             {
                 try
                 {
-                    Sensor sensor = await this.ApplicationSensorServices.GetSensorsAsync(this.CurrentSensorViewModel?.Sensor.Id).ConfigureAwait(true);
+                    Sensor sensor = await this.ApplicationSensorServices.GetSensorsAsync(this.CurrentSensorViewModel?.Sensor.IdSocket).ConfigureAwait(true);
                     await this.CurrentSensorViewModel.Initialize(sensor);
                     this.ErrorHandlerService.CleanError(this.HideError);
                 }

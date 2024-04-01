@@ -198,6 +198,9 @@
   <data name="Inside Pollution" xml:space="preserve">
     <value>Pollution intérieure</value>
   </data>
+  <data name="Inside Temperature" xml:space="preserve">
+    <value>Température intérieure</value>
+  </data>
   <data name="Loading..." xml:space="preserve">
     <value>Chargement...</value>
   </data>
@@ -233,6 +236,9 @@
   </data>
   <data name="Outside Pollution" xml:space="preserve">
     <value>Pollution extérieure</value>
+  </data>
+  <data name="Outside Temperature" xml:space="preserve">
+    <value>Température extérieure</value>
   </data>
   <data name="Petite chambre" xml:space="preserve">
     <value>Petite chambre</value>

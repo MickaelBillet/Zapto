@@ -19,7 +19,7 @@
         public const string UrlWeather = @"weather/lon={0}&lat={1}&cul={2}";
         public const string UrlWeatherLocation = @"weather/location={0}&lon={1}&lat={2}&cul={3}";
         public const string UrlHealthCheck = @"health";
-        public const string UrlTemperaturesDay = @"temperature/data/date={0}&location={1}";
+        public const string UrlTemperaturesDay = @"temperature?location={0}&date={1}";
 
         public const string Application_Prefix = @"/WeatherZapto";
     }

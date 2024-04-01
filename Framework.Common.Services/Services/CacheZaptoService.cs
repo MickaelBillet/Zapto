@@ -58,7 +58,14 @@ namespace Framework.Common.Services
 
                 try
                 {
-                    this.Cache.Add(key, value);
+                    if (this.Cache.ContainsKey(key))
+                    {
+                        this.Cache[key] = value;
+                    }
+                    else
+                    {
+                        this.Cache.Add(key, value);
+                    }
                 }
                 finally
                 {

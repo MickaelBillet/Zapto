@@ -37,9 +37,9 @@ namespace AirZapto.Application.Services
 			return (this.SensorService != null) ? await this.SensorService.GetSensors() : null;
 		}
 
-		public async Task<Sensor?> GetSensorsAsync(string sensorId)
+		public async Task<Sensor?> GetSensorsAsync(string idSocket)
 		{
-			return (this.SensorService != null) ? await this.SensorService.GetSensor(sensorId) : null;
+			return (this.SensorService != null) ? await this.SensorService.GetSensor(idSocket) : null;
 		}
 
 		public async Task<bool?> RestartAsync(Sensor sensor)

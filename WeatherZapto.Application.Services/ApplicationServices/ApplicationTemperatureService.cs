@@ -17,9 +17,9 @@ namespace WeatherZapto.Application.Services
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<double?>> GetTemperatureOfDay(string location, DateTime? day, CancellationToken token = default)
+        public async Task<IEnumerable<double?>> GetTemperatureOfDay(string location, DateTime? dateTime, CancellationToken token = default)
         {
-            IEnumerable<double?> temperatures = (this.TemperatureService != null) ? await this.TemperatureService.GetHomeTemperatures(day, location, token) : null;
+            IEnumerable<double?> temperatures = ((this.TemperatureService != null) && (dateTime != null)) ? await this.TemperatureService.GetLocationTemperatures(dateTime.Value, location, token) : null;
             return (temperatures ?? Enumerable.Empty<double?>());
         }
         #endregion
