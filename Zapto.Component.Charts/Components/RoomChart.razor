@@ -47,7 +47,7 @@
                                 Position =  PSC.Blazor.Components.Chartjs.Models.Common.Position.Left,
                                 Ticks = new Ticks()
                                 {
-                                    Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault()
+                                    Color = ZaptoColors.PaletteBorder.FirstOrDefault()
                                 },
                                 SuggestedMax = this.TemperatureIN?.Max() + TemperatureMargin,
                                 SuggestedMin = this.TemperatureIN?.Min() - TemperatureMargin,
@@ -60,10 +60,10 @@
                                 Position = PSC.Blazor.Components.Chartjs.Models.Common.Position.Right,
                                 Ticks = new Ticks()
                                 {
-                                    Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
+                                    Color = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
                                 },
-                                SuggestedMax = this.TemperatureOUT?.Max() + HumidityMargin,
-                                SuggestedMin = this.TemperatureOUT?.Min() - HumidityMargin,
+                                SuggestedMax = this.TemperatureOUT?.Max() + TemperatureMargin,
+                                SuggestedMin = this.TemperatureOUT?.Min() - TemperatureMargin,
                             }
                         }
                     }
@@ -100,10 +100,10 @@
                 {
                     Label = this.Localizer["Outside Temperature"],
                     Data = this.TemperatureOUT.ToList(),
-                    BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
+                    BorderColor = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
                     DataLabels = new DataLabels()
                     {
-                        BackgroundColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
+                        BackgroundColor = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
                         BorderRadius = 4,
                         Color = "white",
                         Font = new Font()
@@ -124,7 +124,7 @@
 
     public async Task OnHoverChart(HoverContext hoverContext)
     {
-        HoverString = $"X: {hoverContext.DataX} - Y: {hoverContext.DataY}";
+        this.HoverString = $"X: {hoverContext.DataX} - Y: {hoverContext.DataY}";
         await Task.FromResult<bool>(true);
     }
 }

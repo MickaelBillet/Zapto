@@ -1,10 +1,6 @@
 ﻿@page "/roomchartlist/{Location}/{RoomId}/{RoomName}"
 
-<AuthorizeView Policy="administrator">
-    <Authorized>
-        <RoomChartListView RoomId="@RoomId" RoomName="@RoomName" Location="@Location"></RoomChartListView>
-    </Authorized>
-</AuthorizeView>
+<RoomChartListView RoomId="@RoomId" RoomName="@RoomName" Location="@Location"></RoomChartListView>
 
 @code {
     [Parameter]
