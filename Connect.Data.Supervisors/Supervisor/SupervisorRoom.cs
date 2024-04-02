@@ -108,10 +108,10 @@ namespace Connect.Data.Supervisors
 
                     room.ConnectedObjectsList.Add(obj);
 
-                    IEnumerable<NotificationEntity> notificationEntities_2 = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.RoomId == room.Id));
-                    if (notificationEntities_2 != null)
+                    IEnumerable<NotificationEntity> notificationEntities = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.RoomId == room.Id));
+                    if (notificationEntities != null)
                     {
-                        room.NotificationsList = notificationEntities_2.Select(item => NotificationMapper.Map(item)).ToList();
+                        room.NotificationsList = notificationEntities.Select(item => NotificationMapper.Map(item)).ToList();
                     }
                 }
             }
