@@ -74,7 +74,7 @@ namespace Connect.Data.Supervisors
                 rooms = entities.Select(item => RoomMapper.Map(item)).ToList();
                 for (int i = 0; i < rooms.Count(); i++)
 				{
-                    rooms[i] = await this.GetRoomDetails(rooms[i]);
+                    await this.SetRoomDetails(rooms[i]);
                 }
             }
             return rooms;
@@ -85,12 +85,12 @@ namespace Connect.Data.Supervisors
             Room room = RoomMapper.Map(await this.RoomRepository.GetAsync(id));
             if (room != null)
             {
-                room = await this.GetRoomDetails(room);
+                await this.SetRoomDetails(room);
             }
             return room;
         }
 
-        private async Task<Room> GetRoomDetails(Room room)
+        private async Task SetRoomDetails(Room room)
         {
             IEnumerable<SensorEntity> sensorEntities = await this.SensorRepository.GetCollectionAsync((sensor) => sensor.RoomId == room.Id);
             if (sensorEntities != null)
@@ -104,27 +104,7 @@ namespace Connect.Data.Supervisors
                 List<ConnectedObject> objects = objectEntities.Select(item => ConnectedObjectMapper.Map(item)).ToList();
                 foreach (ConnectedObject obj in objects)
                 {
-                    IEnumerable<NotificationEntity> notificationEntities_1 = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.ConnectedObjectId == obj.Id));
-                    if (notificationEntities_1 != null)
-                    {
-                        obj.NotificationsList = notificationEntities_1.Select(item => NotificationMapper.Map(item)).ToList();
-                    }
-
-                    PlugEntity plugEntity = await this.PlugRepository.GetAsync((plug) => plug.ConnectedObjectId == obj.Id);
-                    if (plugEntity != null)
-                    {
-                        Plug plug = PlugMapper.Map(plugEntity);
-                        plug.Configuration = ConfigurationMapper.Map(await this.ConfigurationRepository.GetAsync((arg) => arg.Id == plug.ConfigurationId));
-                        plug.Program = ProgramMapper.Map(await this.ProgramRepository.GetAsync((arg) => arg.Id == plug.ProgramId));
-                        plug.Condition = ConditionMapper.Map(await this.ConditionRepository.GetAsync((arg) => arg.Id == plug.ConditionId));
-                        obj.Plug = plug;
-                    }
-
-                    SensorEntity sensorEntity = await this.SensorRepository.GetAsync((sensor) => sensor.ConnectedObjectId == obj.Id);
-                    if (sensorEntity != null)
-                    {
-                        obj.Sensor = SensorMapper.Map(sensorEntity);
-                    }
+                    await this.SetConnectedObjectDetails(obj);
 
                     room.ConnectedObjectsList.Add(obj);
 
@@ -137,8 +117,31 @@ namespace Connect.Data.Supervisors
             }
 
             room.SetStatusSensors();
+        }
 
-            return room;
+        private async Task SetConnectedObjectDetails(ConnectedObject connectedObject)
+        {
+            IEnumerable<NotificationEntity> notificationEntities = (await this.NotificationRepository.GetCollectionAsync((notification) => notification.ConnectedObjectId == connectedObject.Id));
+            if (notificationEntities != null)
+            {
+                connectedObject.NotificationsList = notificationEntities.Select(item => NotificationMapper.Map(item)).ToList();
+            }
+
+            PlugEntity plugEntity = await this.PlugRepository.GetAsync((plug) => plug.ConnectedObjectId == connectedObject.Id);
+            if (plugEntity != null)
+            {
+                Plug plug = PlugMapper.Map(plugEntity);
+                plug.Configuration = ConfigurationMapper.Map(await this.ConfigurationRepository.GetAsync((arg) => arg.Id == plug.ConfigurationId));
+                plug.Program = ProgramMapper.Map(await this.ProgramRepository.GetAsync((arg) => arg.Id == plug.ProgramId));
+                plug.Condition = ConditionMapper.Map(await this.ConditionRepository.GetAsync((arg) => arg.Id == plug.ConditionId));
+                connectedObject.Plug = plug;
+            }
+
+            SensorEntity sensorEntity = await this.SensorRepository.GetAsync((sensor) => sensor.ConnectedObjectId == connectedObject.Id);
+            if (sensorEntity != null)
+            {
+                connectedObject.Sensor = SensorMapper.Map(sensorEntity);
+            }
         }
 
         public async Task<Room> GetRoomFromPlugId(string plugId)

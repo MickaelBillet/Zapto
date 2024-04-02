@@ -34,12 +34,11 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             {
                 ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
                 ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)
                 {
-                    await ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices, supervisorConnectedObject, status);
+                    await ProcessPlugStatus(supervisorPlug, supervisorRoom, applicationPlugServices, status);
                 }
             }
             catch (Exception ex)
@@ -51,7 +50,6 @@ namespace Connect.WebServer.Services.Services.ScheduleService
         private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug,
                                                 ISupervisorRoom supervisorRoom,
                                                 IApplicationPlugServices applicationPlugServices,
-                                                ISupervisorConnectedObject supervisorConnectedObject,
                                                 CommandStatus status)
         {
             Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);

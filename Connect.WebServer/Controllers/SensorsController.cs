@@ -94,11 +94,9 @@ namespace Connect.WebApi.Controllers
         public async Task<IActionResult> GetFromRoom(string roomId)
         {
             IEnumerable<Sensor>? sensors;
-
             try
             {
                 sensors = await this.SupervisorSensor.GetSensors(roomId);
-
                 if (sensors != null)
                 {
                     return StatusCode(200, sensors);
