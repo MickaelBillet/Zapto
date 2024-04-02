@@ -3,7 +3,9 @@ name: AirZapto-WebServer-Deploy.yml
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: 
+    - main
+    - AirZaptoWebServer
 
 jobs:
   build:
