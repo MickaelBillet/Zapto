@@ -52,110 +52,123 @@ namespace Connect.Application.Services
         }
 
         public async Task NotifiyRoomCondition(string locationId, IEnumerable<Notification> notifications, Room room)
+        {            
+            if (notifications?.Count() > 0)
+            {
+                foreach (Notification notification in notifications)
+                {
+                    if (notification.IsEnabled)
+                    {
+                        if (notification.Parameter == ParameterType.Temperature)
+                        {
+                            await this.NotifiyTemperatureCondition(notification, locationId, room);
+                        }
+                        else if (notification.Parameter == ParameterType.Humidity)
+                        {
+                            await this.NotifiyHumidityCondition(notification, locationId, room);
+                        }
+                    }
+                }
+            }
+        }
+
+        private async Task NotifiyHumidityCondition(Notification notification, string locationId, Room room)
         {
             if (this.AlertService != null)
             {
-                if (notifications?.Count() > 0)
+                if (notification.Sign == SignType.Upper)
                 {
-                    foreach (Notification notification in notifications)
+                    if (room.Humidity > notification.Value)
                     {
-                        if (notification.IsEnabled)
+                        if (notification.ConfirmationFlag >= Notification.LIMIT)
                         {
-                            if (notification.Parameter == ParameterType.Temperature)
-                            {
-                                if (notification.Sign == SignType.Upper)
-                                {
-                                    if (room.Temperature > notification.Value)
-                                    {
-                                        if (notification.ConfirmationFlag >= Notification.LIMIT)
-                                        {
-                                            await this.AlertService.SendAlertAsync(locationId,
-                                                                                    room.Name,
-                                                                                    $"Avertissement Température de {room.Temperature?.ToString("F1")}°C" +
-                                                                                    $" (Supérieure à {notification.Value}°C) pour {room.Name}");
-                                        }
-                                        else
-                                        {
-                                            notification.ConfirmationFlag++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        notification.ConfirmationFlag = 0;
-                                    }
-                                }
-                                else if (notification.Sign == SignType.Lower)
-                                {
-                                    if (room.Temperature < notification.Value)
-                                    {
-                                        if (notification.ConfirmationFlag >= Notification.LIMIT)
-                                        {
-                                            await this.AlertService.SendAlertAsync(locationId,
-                                                                                    room.Name,
-                                                                                    $"Avertissement Température de {room.Temperature?.ToString("F1")}°C" +
-                                                                                    $" (Inférieure à {notification.Value}°C) pour  {room.Name}");
-                                        }
-                                        else
-                                        {
-                                            notification.ConfirmationFlag++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        notification.ConfirmationFlag = 0;
-                                    }
-                                }
-                            }
-                            else if (notification.Parameter == ParameterType.Humidity)
-                            {
-                                if (notification.Sign == SignType.Upper)
-                                {
-                                    if (room.Humidity > notification.Value)
-                                    {
-                                        if (notification.ConfirmationFlag >= Notification.LIMIT)
-                                        {
-                                            await this.AlertService.SendAlertAsync(locationId,
-                                                                                    room.Name,
-                                                                                    $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
-                                                                                    $" (Supérieure à {notification.Value}%) pour {room.Name}");
-                                        }
-                                        else
-                                        {
-                                            notification.ConfirmationFlag++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        notification.ConfirmationFlag = 0;
-                                    }
-                                }
-                                else if (notification.Sign == SignType.Lower)
-                                {
-                                    if (room.Humidity < notification.Value)
-                                    {
-                                        if (notification.ConfirmationFlag >= Notification.LIMIT)
-                                        {
-                                            await this.AlertService.SendAlertAsync(locationId,
-                                                                                        room.Name,
-                                                                                        $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
-                                                                                        $" (Inférieure à {notification.Value}%) pour  {room.Name}");
-
-                                        }
-                                        else
-                                        {
-                                            notification.ConfirmationFlag++;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        notification.ConfirmationFlag = 0;
-                                    }
-                                }
-                            }
+                            await this.AlertService.SendAlertAsync(locationId,
+                                                                    room.Name,
+                                                                    $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
+                                                                    $" (Supérieure à {notification.Value}%) pour {room.Name}");
+                        }
+                        else
+                        {
+                            notification.ConfirmationFlag++;
                         }
                     }
-                };
-            };
+                    else
+                    {
+                        notification.ConfirmationFlag = 0;
+                    }
+                }
+                else if (notification.Sign == SignType.Lower)
+                {
+                    if (room.Humidity < notification.Value)
+                    {
+                        if (notification.ConfirmationFlag >= Notification.LIMIT)
+                        {
+                            await this.AlertService.SendAlertAsync(locationId,
+                                                                        room.Name,
+                                                                        $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
+                                                                        $" (Inférieure à {notification.Value}%) pour  {room.Name}");
+
+                        }
+                        else
+                        {
+                            notification.ConfirmationFlag++;
+                        }
+                    }
+                    else
+                    {
+                        notification.ConfirmationFlag = 0;
+                    }
+                }
+            }
+        }
+
+        private async Task NotifiyTemperatureCondition(Notification notification, string locationId, Room room)
+        {
+            if (this.AlertService != null)
+            {
+                if (notification.Sign == SignType.Upper)
+                {
+                    if (room.Temperature > notification.Value)
+                    {
+                        if (notification.ConfirmationFlag >= Notification.LIMIT)
+                        {
+                            await this.AlertService.SendAlertAsync(locationId,
+                                                                    room.Name,
+                                                                    $"Avertissement Température de {room.Temperature?.ToString("F1")}°C" +
+                                                                    $" (Supérieure à {notification.Value}°C) pour {room.Name}");
+                        }
+                        else
+                        {
+                            notification.ConfirmationFlag++;
+                        }
+                    }
+                    else
+                    {
+                        notification.ConfirmationFlag = 0;
+                    }
+                }
+                else if (notification.Sign == SignType.Lower)
+                {
+                    if (room.Temperature < notification.Value)
+                    {
+                        if (notification.ConfirmationFlag >= Notification.LIMIT)
+                        {
+                            await this.AlertService.SendAlertAsync(locationId,
+                                                                    room.Name,
+                                                                    $"Avertissement Température de {room.Temperature?.ToString("F1")}°C" +
+                                                                    $" (Inférieure à {notification.Value}°C) pour  {room.Name}");
+                        }
+                        else
+                        {
+                            notification.ConfirmationFlag++;
+                        }
+                    }
+                    else
+                    {
+                        notification.ConfirmationFlag = 0;
+                    }
+                }
+            }
         }
         #endregion
     }
