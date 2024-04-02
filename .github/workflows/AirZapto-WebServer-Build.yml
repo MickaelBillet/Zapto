@@ -4,7 +4,9 @@ name: AirZapto-WebServer-Build.yml
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - AirZaptoWebServer
 
 env:
   DOTNET_VERSION: "8.x"
