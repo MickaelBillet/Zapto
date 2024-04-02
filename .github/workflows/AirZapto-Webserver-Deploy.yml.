@@ -1,4 +1,4 @@
-name: AirZapto-WebServer.yml
+name: AirZapto-Webserver-Deploy.yml
 
 on:
   workflow_dispatch:
