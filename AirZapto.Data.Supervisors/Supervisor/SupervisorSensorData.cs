@@ -60,7 +60,7 @@ namespace AirZapto.Data.Supervisors
 				IEnumerable<SensorDataEntity>? output = null;
 				if (entities != null)
 				{
-					int coef = AirZaptoData.GetCoefMoyenneMobile(minutes, entities.Count);
+					int coef = AirZaptoData.GetCoefMovingAverage(minutes, entities.Count);
 					output = (coef > 1) ? this.AverageMoving(entities, coef) : entities;
 					data = (output != null) ? output.Select((item) => SensorDataMapper.Map(item)) : null;
 				}
