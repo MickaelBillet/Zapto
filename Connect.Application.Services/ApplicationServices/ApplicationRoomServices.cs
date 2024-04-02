@@ -30,7 +30,6 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-
         public IObservable<Room>? GetRoom(string roomId)
 		{
 			return this.RoomService?.GetRoom(roomId, true);
