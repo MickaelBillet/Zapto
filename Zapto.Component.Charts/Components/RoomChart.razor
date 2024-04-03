@@ -77,8 +77,8 @@
                                 {
                                     Color = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
                                 },
-                                SuggestedMax = this.TemperatureOUT?.Max() + TemperatureMargin,
-                                SuggestedMin = this.TemperatureOUT?.Min() - TemperatureMargin,
+                                SuggestedMax = this.Humidities?.Max() + HumidityMargin,
+                                SuggestedMin = this.Humidities?.Min() - HumidityMargin,
                             }
                         }
                     }
@@ -115,6 +115,28 @@
                     {
                         Label = this.Localizer["Outside Temperature"],
                         Data = this.TemperatureOUT.ToList(),
+                        BorderColor = ZaptoColors.PaletteBorder.Skip(3).FirstOrDefault(),
+                        DataLabels = new DataLabels()
+                        {
+                            BackgroundColor = ZaptoColors.PaletteBorder.Skip(3).FirstOrDefault(),
+                            BorderRadius = 4,
+                            Color = "white",
+                            Font = new Font()
+                            {
+                                Weight = "bold"
+                            },
+                            Padding = new Padding(6)
+                        },
+                        YAxisId = "y"
+                    });
+            }
+
+            if (this.Humidities?.Any() == true)
+            {
+                this.Config.Data.Datasets.Add(new LineDataset()
+                    {
+                        Label = this.Localizer["Humidity"],
+                        Data = this.Humidities.ToList(),
                         BorderColor = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
                         DataLabels = new DataLabels()
                         {
