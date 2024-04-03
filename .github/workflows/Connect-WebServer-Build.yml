@@ -1,9 +1,11 @@
-name: Connect.WebServer.build.yml
+name: Connect.WebServer.Build.yml
 
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - ConnectWebServer
 
 env:
   DOTNET_VERSION: "8.x"
@@ -13,15 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name : Checkout
+        uses : actions/checkout@v3
   
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
+      - name : Setup .NET
+        uses : actions/setup-dotnet@v3
+        with :
           dotnet-version: ${{ env.DOTNET_VERSION }}
           
       - name : Restore
-        run: dotnet restore ./Connect.WebServer.sln
+        run : dotnet restore ./Connect.WebServer.sln
 
       - name : Build
         run : dotnet build ./Connect.WebServer.sln --configuration release --no-restore
