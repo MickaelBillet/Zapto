@@ -5,6 +5,7 @@
 		void NavigateTo(string path, Object data, bool forceReload = false);
         void NavigateTo(string path, bool forceReload = false);
 		public void NavigateToLogout(string path, string? returnurl = null);
+		public void NavigateToLogin(string path);
         string GetUri();
 		string GetBaseUri();
 		void ShowMessage(string message, byte severity);

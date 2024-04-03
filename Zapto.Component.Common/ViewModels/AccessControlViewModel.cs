@@ -3,6 +3,7 @@
     public interface IAccessControlViewModel : IBaseViewModel
 	{
 		public void SignOut();
+		public void SignIn();
 	}
 
 	public sealed class AccessControlViewModel : BaseViewModel, IAccessControlViewModel
@@ -20,6 +21,10 @@
 		public void SignOut()
 		{
 			this.NavigationService.NavigateToLogout("authentication/logout");
+		}
+		public void SignIn()
+		{
+			this.NavigationService.NavigateToLogin("authentication/login");
 		}
 		#endregion
 	}
