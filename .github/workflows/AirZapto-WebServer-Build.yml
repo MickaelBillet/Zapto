@@ -25,7 +25,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           
       - name : Restore
-        run: dotnet restore ./AirZapto.WebServer.sln
+        run : dotnet restore ./AirZapto.WebServer.sln
 
       - name : Build
         run : dotnet build ./AirZapto.WebServer.sln --configuration release --no-restore
