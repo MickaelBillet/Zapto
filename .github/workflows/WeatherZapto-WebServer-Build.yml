@@ -9,11 +9,11 @@ on:
       - WeatherZaptoWebServer
 
 env:
-  DOTNET_VERSION: "8.x"
+  DOTNET_VERSION : "8.x"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on : ubuntu-latest
 
     steps:
       - name : Checkout
@@ -22,7 +22,7 @@ jobs:
       - name : Setup .NET
         uses : actions/setup-dotnet@v3
         with :
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version : ${{ env.DOTNET_VERSION }}
           
       - name : Restore
         run : dotnet restore ./WeatherZapto.WebServer.sln
