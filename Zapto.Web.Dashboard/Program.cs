@@ -75,6 +75,9 @@ builder.Services.AddHttpClient("OpenWeather", client =>
 	client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 });
 
+/// <learn>
+/// https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standalone-with-authentication-library?view=aspnetcore-8.0&tabs=visual-studio
+/// </learn>
 builder.Services.AddOidcAuthentication(options =>
 {
     options.ProviderOptions.MetadataUrl = builder.Configuration["Keycloak:MetadataUrl"];
