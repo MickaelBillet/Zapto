@@ -9,11 +9,11 @@ on:
       - AirZaptoWebServer
 
 env:
-  DOTNET_VERSION: "8.x"
+  DOTNET_VERSION : "8.x"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on : ubuntu-latest
 
     steps:
       - name : Checkout
