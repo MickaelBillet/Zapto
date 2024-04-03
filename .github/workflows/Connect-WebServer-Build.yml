@@ -1,4 +1,4 @@
-name: Connect.WebServer.Build.yml
+name: Connect-WebServer-Build.yml
 
 on:
   workflow_dispatch:
