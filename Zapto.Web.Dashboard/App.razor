@@ -16,7 +16,14 @@
                     <p>@Localizer["Determining session state, please wait..."]</p>
                 </Authorizing>
                 <NotAuthorized>
-                    <p>@Localizer["You're not authorized to reach this page. You need to log in."]</p>
+                    @if (context.User.Identity?.IsAuthenticated != true)
+                    {
+                        <RedirectToLogin/>
+                    }
+                    else
+                    {
+                        <p>@Localizer["You're not authorized to reach this page. You need to log in."]</p>
+                    }
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>

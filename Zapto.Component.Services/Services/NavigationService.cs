@@ -40,6 +40,11 @@ namespace Zapto.Component.Services
             this.NavigationManager.NavigateToLogout(path, returnurl);
         }
 
+		public void NavigateToLogin(string path)
+		{
+            this.NavigationManager.NavigateToLogin(path);
+        }
+
         public string GetUri()
 		{
 			return this.NavigationManager.Uri;

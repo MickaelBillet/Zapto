@@ -1,0 +1,34 @@
+name: WeatherZapto-WebServer-Build.yml
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - main
+      - WeatherZaptoWebServer
+
+env:
+  DOTNET_VERSION : "8.x"
+
+jobs:
+  build:
+    runs-on : ubuntu-latest
+
+    steps:
+      - name : Checkout
+        uses : actions/checkout@v4
+  
+      - name : Setup .NET
+        uses : actions/setup-dotnet@v3
+        with :
+          dotnet-version : ${{ env.DOTNET_VERSION }}
+          
+      - name : Restore
+        run : dotnet restore ./WeatherZapto.WebServer.sln
+
+      - name : Build
+        run : dotnet build ./WeatherZapto.WebServer.sln --configuration release --no-restore
+
+      - name : Test
+        run : dotnet test ./WeatherZapto.WebServer.sln --configuration release --no-restore --no-build
+    
