@@ -11,7 +11,7 @@
 {
     foreach (RoomChartModel model in this.Models)
     {
-        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" CurrentDay="@model.Day"></RoomChart>
+        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" Humidities="model.Humidities" CurrentDay="@model.Day"></RoomChart>
     }
 }
 else
