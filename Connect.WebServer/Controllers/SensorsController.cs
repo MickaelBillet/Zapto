@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -28,7 +27,6 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Method
-
         //ConnectConstants.RestUrlSensorNoLeak
         //PUT connect/sensors/5/noleak
         [HttpPut("~/connect/Sensors/{id}/noleak/")]
@@ -80,7 +78,6 @@ namespace Connect.WebApi.Controllers
                 });
             }
         }
-
         #endregion
     }
 }

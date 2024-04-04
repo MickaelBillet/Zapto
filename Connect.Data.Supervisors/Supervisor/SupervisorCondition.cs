@@ -28,12 +28,6 @@ namespace Connect.Data.Supervisors
             return (await this.ConditionRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<IEnumerable<Condition>> GetConditions()
-        {
-            IEnumerable<ConditionEntity> entities = await this.ConditionRepository.GetCollectionAsync();
-            return entities.Select(item => ConditionMapper.Map(item));
-        }
-
         public async Task<Condition> GetCondition(string id)
         {
             ConditionEntity entity = await this.ConditionRepository.GetAsync(id);
