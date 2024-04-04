@@ -36,35 +36,6 @@ namespace Connect.WebApi.Controllers
 
         #region HttpRequest
 
-        // GET connect/plugs/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            Plug? plug;
-
-            try
-            {
-                plug = await this.SupervisorPlug.GetPlug(id);
-                if (plug != null)
-                {
-                    return StatusCode(200, plug);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
         //ConnectConstants.RestUrlPlugCommand
         //ConnectConstants.RestUrlPlugOrder
         //PUT connect/plugs/5/mode/

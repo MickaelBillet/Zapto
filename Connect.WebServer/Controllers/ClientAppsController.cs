@@ -27,37 +27,8 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        // GET connect/clientapps
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<ClientApp>? clientApps;
-
-            try
-            {
-                clientApps = await this.Supervisor.GetClientApps();
-
-                if (clientApps != null)
-                {
-                    return StatusCode(200, clientApps);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // GET connect/clientapps/token/5
+        //ConnectConstants.RestUrlClientAppsToken
+        //GET connect/clientapps/token/5
         [HttpGet("~/connect/Clientapps/token/{token}")]
         public async Task<IActionResult> Get(string token)
         {
@@ -86,7 +57,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/clientapps/token/5
+        //ConnectConstants.RestUrlClientAppsToken
+        //DELETE connect/clientapps/token/5
         [HttpDelete("~/connect/Clientapps/token/{token}")]
         public async Task<IActionResult> Delete(string token)
         {
@@ -128,7 +100,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // POST connect/clientapps
+        //ConnectConstants.RestUrlClientApps
+        //POST connect/clientapps
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClientApp clientApp)
         {

@@ -31,67 +31,8 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        // GET connect/operationranges
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<OperationRange>? operationRanges;
-
-            try
-            {
-                operationRanges = await this.SupervisorOperationRange.GetOperationRanges();
-
-                if (operationRanges != null)
-                {
-                    return StatusCode(200, operationRanges);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // GET connect/operationranges/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            OperationRange? operationRange;
-
-            try
-            {
-                operationRange = await this.SupervisorOperationRange.GetOperationRange(id);
-
-                if (operationRange != null)
-                {
-                    return StatusCode(200, operationRange);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // POST connect/operationranges
+        //ConnectConstants.RestUrlOperationRanges
+        //POST connect/operationranges
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]OperationRange operationRange)
         {
@@ -134,7 +75,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/operationranges/5
+        //ConnectConstants.RestUrlOperationRangesId
+        //DELETE connect/operationranges/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -162,7 +104,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/programs/5/operationranges
+        //ConnectConstants.RestUrlProgramOperationRanges
+        //GET connect/programs/5/operationranges
         [HttpGet("~/connect/Programs/{id}/Operationranges")]
         public async Task<IActionResult> GetFromProgram(string id)
         {
@@ -192,7 +135,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/programs/{id}/operationranges
+        //ConnectConstants.RestUrlProgramOperationRanges
+        //DELETE connect/programs/{id}/operationranges
         [HttpDelete("~/connect/Programs/{id}/Operationranges")]
         public async Task<IActionResult> DeleteFromProgram(string id)
         {

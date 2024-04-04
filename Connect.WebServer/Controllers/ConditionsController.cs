@@ -31,67 +31,8 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        // GET connect/conditions
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<Condition>? conditions;
-
-            try
-            {
-                conditions = await this.SupervisorCondition.GetConditions();
-
-                if (conditions != null)
-                {
-                    return StatusCode(200, conditions);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // GET connect/conditions/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            Condition? condition;
-
-            try
-            {
-                condition = await this.SupervisorCondition.GetCondition(id);
-
-                if (condition != null)
-                {
-                    return StatusCode(200, condition);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // POST connect/conditions
+        //ConnectConstants.RestUrlConditions
+        //POST connect/conditions
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Condition condition)
         {
@@ -134,7 +75,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // PUT connect/conditions/5
+        //ConnectConstants.RestUrlConditionsId
+        //PUT connect/conditions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]Condition condition)
         {
@@ -197,6 +139,7 @@ namespace Connect.WebApi.Controllers
             }
         }
 
+        //ConnectConstants.RestUrlConditionsId
         // DELETE connect/conditions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(String id)

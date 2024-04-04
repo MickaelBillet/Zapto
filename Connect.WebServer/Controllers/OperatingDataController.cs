@@ -30,6 +30,7 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
+        //ConnectConstants.RestUrlRoomOperatingData
         [HttpGet("~/connect/data/date/{date}/rooms/{roomId}")]
         public async Task<IActionResult> GetDataOfRoom(DateTime date, string roomId)
         {
@@ -58,6 +59,7 @@ namespace Connect.WebApi.Controllers
             }
         }
 
+        //ConnectConstants.RestUrlMaxDateOperatingData
         [HttpGet("~/connect/data/rooms/{roomId}/datemax/")]
         public async Task<IActionResult> GetRoomMaxDate(string roomId)
         {
@@ -86,6 +88,7 @@ namespace Connect.WebApi.Controllers
             }
         }
 
+        //ConnectConstants.RestUrlMinDateOperatingData
         [HttpGet("~/connect/data/rooms/{roomId}/datemin/")]
         public async Task<IActionResult> GetRoomMinDate(string roomId)
         {

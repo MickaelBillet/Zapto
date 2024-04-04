@@ -111,12 +111,13 @@ namespace Connect.WebApi.Controllers
         //ConnectConstants.RestUrlLocationRooms
         //GET connect/locations/5/rooms
         [HttpGet("~/connect/Locations/{id}/Rooms")]
-        public async Task<IActionResult> GetRooms(string id)
-		{
+        public async Task<IActionResult> GetRooms(string locationId)
+
+        {
             IEnumerable<Room> rooms;
             try
             {
-                rooms = await this.SupervisorRoom.GetRooms(id);
+                rooms = await this.SupervisorRoom.GetRooms(locationId);
                 if (rooms != null)
                 {
                     return StatusCode(200, rooms);

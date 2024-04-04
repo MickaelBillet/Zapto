@@ -31,36 +31,6 @@ namespace Connect.WebApi.Controllers
 
         #region Method
 
-        //GET connect/rooms
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<Room>? rooms;
-
-            try
-            {
-                rooms = await this.SupervisorRoom.GetRooms();
-
-                if (rooms != null)
-                {
-                    return StatusCode(200, rooms);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
         //ConnectConstants.RestUrlRoomsId
         //GET connect/rooms/5
         [HttpGet("{id}")]

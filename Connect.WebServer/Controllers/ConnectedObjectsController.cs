@@ -30,7 +30,8 @@ namespace Connect.WebApi.Controllers
 
         #region HttpRequest
 
-        // GET connect/connectedobjects/5
+        //ConnectConstants.RestUrlConnectedObjectId
+        //GET connect/connectedobjects/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
