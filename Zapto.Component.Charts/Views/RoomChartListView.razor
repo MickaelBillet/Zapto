@@ -11,7 +11,7 @@
 {
     foreach (RoomChartModel model in this.Models)
     {
-        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" CurrentDay="@model.Day"></RoomChart>
+        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" Humidities="model.Humidities" CurrentDay="@model.Day"></RoomChart>
     }
 }
 else
@@ -92,15 +92,7 @@ else
     }   
     public async Task DisplayCharts()
     {
-        if (this.ViewModel != null)
-        {
-            this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
-        }
-        else
-        {
-            this.Models = null;
-        }
-
+        this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
         this.IsDisplayed = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)

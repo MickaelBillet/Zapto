@@ -30,15 +30,30 @@
 
     protected override void OnParametersSet()
     {
-        if (Labels?.Any() == true)
+        this.CreateChartConfig();
+    }
+
+    public void Dispose()
+    {
+    }
+
+    public async Task OnHoverChart(HoverContext hoverContext)
+    {
+        this.HoverString = $"X: {hoverContext.DataX} - Y: {hoverContext.DataY}";
+        await Task.FromResult<bool>(true);
+    }
+
+    private void CreateChartConfig()
+    {
+        if (this.Labels?.Any() == true)
         {
             this.Config = new LineChartConfig()
-            {
-                Options = new Options()
                 {
-                    Responsive = true,
-                    MaintainAspectRatio = false,
-                    Scales = new Dictionary<string, Axis>()
+                    Options = new Options()
+                    {
+                        Responsive = true,
+                        MaintainAspectRatio = false,
+                        Scales = new Dictionary<string, Axis>()
                     {
                         {
                             Scales.YAxisId, new Axis()
@@ -47,7 +62,7 @@
                                 Position =  PSC.Blazor.Components.Chartjs.Models.Common.Position.Left,
                                 Ticks = new Ticks()
                                 {
-                                    Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault()
+                                    Color = ZaptoColors.PaletteBorder.FirstOrDefault()
                                 },
                                 SuggestedMax = this.TemperatureIN?.Max() + TemperatureMargin,
                                 SuggestedMin = this.TemperatureIN?.Min() - TemperatureMargin,
@@ -60,71 +75,83 @@
                                 Position = PSC.Blazor.Components.Chartjs.Models.Common.Position.Right,
                                 Ticks = new Ticks()
                                 {
-                                    Color = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
+                                    Color = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault()
                                 },
-                                SuggestedMax = this.TemperatureOUT?.Max() + HumidityMargin,
-                                SuggestedMin = this.TemperatureOUT?.Min() - HumidityMargin,
+                                SuggestedMax = this.Humidities?.Max() + HumidityMargin,
+                                SuggestedMin = this.Humidities?.Min() - HumidityMargin,
                             }
                         }
                     }
-                }
-            };
+                    }
+                };
 
             this.Config.Data.Labels = this.Labels.ToList();
 
             if (this.TemperatureIN?.Any() == true)
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
-                {
-                    Label = this.Localizer["Inside Temperature"],
-                    Data = this.TemperatureIN.ToList(),
-                    BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
-                    DataLabels = new DataLabels()
                     {
-                        BackgroundColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
-                        BorderRadius = 4,
-                        Color = "white",
-                        Font = new Font()
+                        Label = this.Localizer["Inside Temperature"],
+                        Data = this.TemperatureIN.ToList(),
+                        BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
+                        DataLabels = new DataLabels()
                         {
-                            Weight = "bold"
+                            BackgroundColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.FirstOrDefault(),
+                            BorderRadius = 4,
+                            Color = "white",
+                            Font = new Font()
+                            {
+                                Weight = "bold"
+                            },
+                            Padding = new Padding(6)
                         },
-                        Padding = new Padding(6)
-                    },
-                    YAxisId = "y"
-                });
+                        YAxisId = "y"
+                    });
             }
 
             if (this.TemperatureOUT?.Any() == true)
             {
                 this.Config.Data.Datasets.Add(new LineDataset()
-                {
-                    Label = this.Localizer["Outside Temperature"],
-                    Data = this.TemperatureOUT.ToList(),
-                    BorderColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
-                    DataLabels = new DataLabels()
                     {
-                        BackgroundColor = Zapto.Component.Common.Helpers.ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
-                        BorderRadius = 4,
-                        Color = "white",
-                        Font = new Font()
+                        Label = this.Localizer["Outside Temperature"],
+                        Data = this.TemperatureOUT.ToList(),
+                        BorderColor = ZaptoColors.PaletteBorder.Skip(3).FirstOrDefault(),
+                        DataLabels = new DataLabels()
                         {
-                            Weight = "bold"
+                            BackgroundColor = ZaptoColors.PaletteBorder.Skip(3).FirstOrDefault(),
+                            BorderRadius = 4,
+                            Color = "white",
+                            Font = new Font()
+                            {
+                                Weight = "bold"
+                            },
+                            Padding = new Padding(6)
                         },
-                        Padding = new Padding(6)
-                    },
-                    YAxisId = "y2"
-                });
+                        YAxisId = "y"
+                    });
+            }
+
+            if (this.Humidities?.Any() == true)
+            {
+                this.Config.Data.Datasets.Add(new LineDataset()
+                    {
+                        Label = this.Localizer["Humidity"],
+                        Data = this.Humidities.ToList(),
+                        BorderColor = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
+                        DataLabels = new DataLabels()
+                        {
+                            BackgroundColor = ZaptoColors.PaletteBorder.Skip(4).FirstOrDefault(),
+                            BorderRadius = 4,
+                            Color = "white",
+                            Font = new Font()
+                            {
+                                Weight = "bold"
+                            },
+                            Padding = new Padding(6)
+                        },
+                        YAxisId = "y2"
+                    });
             }
         }
-    }
-
-    public void Dispose()
-    {
-    }
-
-    public async Task OnHoverChart(HoverContext hoverContext)
-    {
-        HoverString = $"X: {hoverContext.DataX} - Y: {hoverContext.DataY}";
-        await Task.FromResult<bool>(true);
     }
 }

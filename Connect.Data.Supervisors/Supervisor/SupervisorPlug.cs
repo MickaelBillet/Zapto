@@ -46,6 +46,7 @@ namespace Connect.Data.Supervisors
             return (await this.PlugRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
+        //Don't cache this Method
         public async Task<IEnumerable<Plug>> GetPlugs()
         {
             List<Plug> plugs = null;

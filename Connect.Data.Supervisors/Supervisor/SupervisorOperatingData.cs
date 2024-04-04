@@ -26,7 +26,6 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-
         public async Task<ResultCode> OperatinDataExists(string id)
         {
             return (await this.OperatingDataRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
@@ -97,16 +96,16 @@ namespace Connect.Data.Supervisors
             double duration = 0;
 
             IEnumerable<PlugEntity> entities = await this.PlugRepository.GetCollectionAsync((plug) => plug.RoomId == roomId
-                                                                                        && plug.ConditionType == conditionType);
+                                                                                                    && plug.ConditionType == conditionType);
             if (entities != null)
             {
                 foreach (PlugEntity entity in entities)
                 {
                     duration = duration + (await this.OperatingDataRepository.GetCollectionAsync((data) => data.CreationDateTime.Day == day.Day
-                                                                                         && data.CreationDateTime.Month == day.Month
-                                                                                         && data.CreationDateTime.Year == day.Year
-                                                                                         && data.RoomId == roomId
-                                                                                         && data.ConnectedObjectId == entity.Id))
+                                                                                                         && data.CreationDateTime.Month == day.Month
+                                                                                                         && data.CreationDateTime.Year == day.Year
+                                                                                                         && data.RoomId == roomId
+                                                                                                         && data.ConnectedObjectId == entity.Id))
                                                                                 .Max<OperatingDataEntity>((data) => data.WorkingDuration).Value;
                 }
             }

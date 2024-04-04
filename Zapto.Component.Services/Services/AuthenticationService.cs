@@ -2,6 +2,7 @@
 using Framework.Infrastructure.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Security.Claims;
 
 namespace Zapto.Component.Services
@@ -46,7 +47,7 @@ namespace Zapto.Component.Services
 #if DEBUG
                 foreach (var claim in principal.Claims) 
                 {
-                    Console.WriteLine(claim);
+                    Log.Information(claim.Type + " :" + claim.Value);
                 }
 #endif
 

@@ -10,7 +10,7 @@ namespace AirZapto.Model
 
 		public string SensorId { get; set; } = string.Empty;
 
-		public static int GetCoefMoyenneMobile(int minutes, int count)
+		public static int GetCoefMovingAverage(int minutes, int count)
 		{
 			int coef = 1;
 

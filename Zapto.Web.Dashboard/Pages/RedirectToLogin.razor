@@ -1,0 +1,12 @@
+﻿@inject IAccessControlViewModel ViewModel
+
+@code 
+{
+    protected override void OnInitialized()
+    {
+        if (this.ViewModel != null)
+        {
+            this.ViewModel.SignIn();
+        }
+    }
+}
