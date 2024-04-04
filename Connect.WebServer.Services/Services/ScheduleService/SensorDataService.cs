@@ -120,7 +120,7 @@ namespace Connect.WebServer.Services
                                                         ISupervisorNotification supervisorNotification,
                                                         Sensor sensor)
         {
-            ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId, true);
+            ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId);
             if (connectedObject != null)
             {
                 Room room = await supervisorRoom.GetRoom(connectedObject.RoomId);

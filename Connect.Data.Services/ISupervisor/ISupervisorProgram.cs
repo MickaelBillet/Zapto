@@ -1,7 +1,5 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Connect.Data
 {
@@ -9,7 +7,6 @@ namespace Connect.Data
     {
         Task<ResultCode> AddProgram(Program program);
         Task<ResultCode> ProgramExists(string id);
-        Task<IEnumerable<Program>> GetPrograms();
         Task<Program> GetProgram(string id);
     }
 }

@@ -38,12 +38,6 @@ namespace Connect.Data.Supervisors
             return (await this.ProgramRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<IEnumerable<Program>> GetPrograms()
-        {
-            IEnumerable<ProgramEntity> entities = await this.ProgramRepository.GetCollectionAsync();
-            return entities.Select(item => ProgramMapper.Map(item));
-        }
-
         public async Task<Program> GetProgram(string id)
         {
             Program program = null;

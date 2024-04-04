@@ -85,8 +85,6 @@ namespace Connect.WebApi.Controllers
 
             try
             {
-                var claims = User.Claims;
-
                 locations = await this.SupervisorLocation.GetLocations();
                 if (locations != null)
                 {

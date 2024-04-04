@@ -24,7 +24,6 @@ namespace Framework.Common.Services
         #endregion
 
         #region Methods
-
         public async Task<(ResultCode, T)> GetOrCreate(string key, Func<string, Task<(ResultCode, T)>> createItem)
         {
             T cacheEntry = null;
@@ -111,7 +110,6 @@ namespace Framework.Common.Services
             }
             return cacheEntry;
         }
-
         public async Task<ResultCode> Delete(string key) 
         {
             ResultCode code = ResultCode.CouldNotDeleteItem;

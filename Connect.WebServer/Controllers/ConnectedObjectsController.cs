@@ -39,7 +39,7 @@ namespace Connect.WebApi.Controllers
 
             try
             {
-                obj = await this.SupervisorConnectedObject.GetConnectedObject(id, true);
+                obj = await this.SupervisorConnectedObject.GetConnectedObject(id);
 
                 if (obj != null)
                 {

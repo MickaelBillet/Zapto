@@ -58,7 +58,6 @@ namespace Connect.Data.Supervisors
                     location.RoomsList = new ObservableCollection<Room>(roomEntities.Select(item => RoomMapper.Map(item)));
                 }
             }
-
             return location;
         }
 
@@ -69,7 +68,6 @@ namespace Connect.Data.Supervisors
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
-
         #endregion
     }
 }

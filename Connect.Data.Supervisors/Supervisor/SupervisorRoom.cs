@@ -52,15 +52,11 @@ namespace Connect.Data.Supervisors
 
         public async Task<IEnumerable<Room>> GetRooms()
         {
-            List<Room> rooms = null;
+            IEnumerable<Room> rooms = null;
             IEnumerable<RoomEntity> entities = (await this.RoomRepository.GetCollectionAsync()).OrderBy((room) => room.Id);
             if (entities != null)
             {
-                rooms = entities.Select(item => RoomMapper.Map(item)).ToList();                
-                foreach (Room room in rooms)
-                {
-                    room.SetStatusSensors();
-                }
+                rooms = entities.Select(item => RoomMapper.Map(item));                
             }
             return rooms;
         }
@@ -72,9 +68,9 @@ namespace Connect.Data.Supervisors
             if (entities != null)
 			{
                 rooms = entities.Select(item => RoomMapper.Map(item)).ToList();
-                for (int i = 0; i < rooms.Count(); i++)
+                foreach(Room room in rooms)
 				{
-                    await this.SetRoomDetails(rooms[i]);
+                    await this.SetRoomDetails(room);
                 }
             }
             return rooms;

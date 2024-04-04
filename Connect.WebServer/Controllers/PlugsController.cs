@@ -17,25 +17,18 @@ namespace Connect.WebApi.Controllers
     {
         #region Services
         private ISupervisorPlug SupervisorPlug { get; }
-        private ISupervisorRoom SupervisorRoom { get; }
-        private IApplicationPlugServices ApplicationPlugServices { get; }
         private ISendCommandService SendCommandService { get; }
         #endregion
 
         #region Constructor
-
         public PlugsController(IServiceProvider serviceProvider)
         {
             this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
-            this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
             this.SendCommandService = serviceProvider.GetRequiredService<ISendCommandService>();
         }
-
         #endregion
 
         #region HttpRequest
-
         //ConnectConstants.RestUrlPlugCommand
         //ConnectConstants.RestUrlPlugOrder
         //PUT connect/plugs/5/mode/
@@ -116,7 +109,6 @@ namespace Connect.WebApi.Controllers
                 });
             }
         }
-
         #endregion
     }
 }

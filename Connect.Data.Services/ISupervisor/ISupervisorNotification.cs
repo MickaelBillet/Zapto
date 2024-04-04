@@ -8,7 +8,6 @@ namespace Connect.Data
     public interface ISupervisorNotification
     {
         Task<ResultCode> NotificationExists(string id);
-        Task<IEnumerable<Notification>> GetNotifications();
         Task<Notification> GetNotification(string id);
         Task<ResultCode> AddNotification(Notification notification);
         Task<ResultCode> DeleteNotification(Notification notification);

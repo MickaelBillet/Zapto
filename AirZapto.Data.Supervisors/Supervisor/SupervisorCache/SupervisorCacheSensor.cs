@@ -24,14 +24,22 @@ namespace AirZapto.Data.Supervisors
         #region Methods
         public async Task<ResultCode> AddUpdateSensorAsync(Sensor sensor)
         {
-            await this.CacheService.Set(sensor.IdSocket, sensor);
-            return await this.Supervisor.AddUpdateSensorAsync(sensor);
+            ResultCode code = await this.Supervisor.AddUpdateSensorAsync(sensor);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Set(sensor.IdSocket, sensor);
+            }
+            return code;
         }
 
         public async Task<ResultCode> UpdateSensorAsync(Sensor sensor)
         {
-            await this.CacheService.Set(sensor.IdSocket, sensor);
-            return await this.Supervisor.UpdateSensorAsync(sensor);
+            ResultCode code = await this.Supervisor.UpdateSensorAsync(sensor);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Set(sensor.IdSocket, sensor);
+            }
+            return code; 
         }
 
         public async Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket)
@@ -51,8 +59,12 @@ namespace AirZapto.Data.Supervisors
 
         public async Task<ResultCode> DeleteSensorAsync(string idSocket)
         {
-            await this.CacheService.Delete(idSocket);
-            return await this.Supervisor.DeleteSensorAsync(idSocket);
+            ResultCode code = await this.Supervisor.DeleteSensorAsync(idSocket);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Delete(idSocket);
+            }
+            return code;
         }
 
         public async Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync()

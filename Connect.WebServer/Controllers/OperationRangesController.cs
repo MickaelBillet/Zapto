@@ -48,7 +48,7 @@ namespace Connect.WebApi.Controllers
                     });
                 }
 
-                ResultCode resultCode = await this.SupervisorOperationRange.AddOperationrange(operationRange);
+                ResultCode resultCode = await this.SupervisorOperationRange.AddOperationRange(operationRange);
 
                 if (resultCode == ResultCode.Ok)
                 {

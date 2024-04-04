@@ -34,12 +34,6 @@ namespace Connect.Data.Supervisors
             return entities.Select(item => SensorMapper.Map(item));
         }
 
-        public async Task<IEnumerable<Sensor>> GetSensors(string roomId)
-        {
-            IEnumerable<SensorEntity> entities = await this.SensorRepository.GetCollectionAsync((sensor) => sensor.RoomId == roomId);
-            return entities.Select(item => SensorMapper.Map(item));
-        }
-
         public async Task<Sensor> GetSensor(string id)
         {
             return SensorMapper.Map(await this.SensorRepository.GetAsync(id));
@@ -74,11 +68,6 @@ namespace Connect.Data.Supervisors
             }
 
             return (result, sensor);
-        }
-
-        public async Task<ResultCode> DeleteSensor(Sensor sensor)
-        {
-            return (await this.SensorRepository.DeleteAsync(SensorMapper.Map(sensor)) > 0) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
         }
 
         #endregion

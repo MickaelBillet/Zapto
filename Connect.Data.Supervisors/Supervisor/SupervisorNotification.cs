@@ -28,12 +28,6 @@ namespace Connect.Data.Supervisors
             return (await this.NotificationRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<IEnumerable<Notification>> GetNotifications()
-        {
-            IEnumerable<NotificationEntity> entities = await this.NotificationRepository.GetCollectionAsync();
-            return entities.Select(item => NotificationMapper.Map(item));
-        }
-
         public async Task<Notification> GetNotification(string id)
         {
             return NotificationMapper.Map(await this.NotificationRepository.GetAsync(id));

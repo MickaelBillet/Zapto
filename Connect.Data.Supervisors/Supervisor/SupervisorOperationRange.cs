@@ -87,7 +87,7 @@ namespace Connect.Data.Supervisors
             return operationRanges;
         }
 
-        public async Task<ResultCode> AddOperationrange(OperationRange operationRange)
+        public async Task<ResultCode> AddOperationRange(OperationRange operationRange)
         {
             ResultCode result = ResultCode.CouldNotCreateItem;
             if (operationRange.Condition != null)
@@ -107,8 +107,6 @@ namespace Connect.Data.Supervisors
                 await this.ConditionRepository.DeleteAsync(ConditionMapper.Map(operationRange.Condition));
                 result = ResultCode.CouldNotCreateItem;
             }
-
-
             return result;
         }
 
@@ -161,10 +159,8 @@ namespace Connect.Data.Supervisors
                     return ResultCode.Ok;
                 }
             }
-
             return result;
         }
-
         #endregion
     }
 }
