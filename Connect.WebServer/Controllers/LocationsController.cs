@@ -108,7 +108,7 @@ namespace Connect.WebApi.Controllers
 
         //ConnectConstants.RestUrlLocationRooms
         //GET connect/locations/5/rooms
-        [HttpGet("~/connect/Locations/{id}/Rooms")]
+        [HttpGet("~/connect/Locations/{locationId}/Rooms")]
         public async Task<IActionResult> GetRooms(string locationId)
 
         {

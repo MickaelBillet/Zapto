@@ -37,6 +37,7 @@
 		public const string RestUrlRoomOperatingData = @"connect/data/date/{0}/rooms/{1}/";
 		public const string RestUrlMaxDateOperatingData = @"connect/data/rooms/{0}/datemax/";
         public const string RestUrlMinDateOperatingData = @"connect/data/rooms/{0}/datemin/";
+        public const string RestUrlLogs = @"connect/logs/";
 
         public const int ValidityPeriodLoginDay = 7;
         public const int MinutesPerDay = 1440;
