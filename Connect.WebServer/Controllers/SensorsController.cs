@@ -14,14 +14,14 @@ namespace Connect.WebApi.Controllers
     public class SensorsController : Controller
     {
         #region Property
-        ISupervisorSensor SupervisorSensor { get; }
+        ISupervisorCacheSensor SupervisorSensor { get; }
         #endregion
 
         #region Constructor
 
         public SensorsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
         }
 
         #endregion

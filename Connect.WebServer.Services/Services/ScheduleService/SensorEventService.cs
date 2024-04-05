@@ -33,8 +33,8 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorCacheRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
+                ISupervisorCacheSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
                 if (@event != null)
@@ -66,7 +66,7 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessRoomData(IApplicationSensorServices applicationSensorServices, ISupervisorRoom supervisorRoom, Sensor sensor)
+        private async Task ProcessRoomData(IApplicationSensorServices applicationSensorServices, ISupervisorCacheRoom supervisorRoom, Sensor sensor)
         {
             Room? room = await supervisorRoom.GetRoom(sensor.RoomId);
             if (room != null)

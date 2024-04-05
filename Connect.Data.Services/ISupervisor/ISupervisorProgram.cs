@@ -8,5 +8,6 @@ namespace Connect.Data
         Task<ResultCode> AddProgram(Program program);
         Task<ResultCode> ProgramExists(string id);
         Task<Program> GetProgram(string id);
+        Task<IEnumerable<Program>> GetPrograms();
     }
 }

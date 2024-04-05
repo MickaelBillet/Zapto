@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheSensor : SupervisorCache
+    public class SupervisorCacheSensor : SupervisorCache, ISupervisorCacheSensor
     {
         #region Services
         private ISupervisorSensor Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public async Task Initialize()
+        public override async Task Initialize()
         {
             IEnumerable<Sensor> sensors = await this.Supervisor.GetSensors();
             foreach (var item in sensors)
@@ -47,28 +47,16 @@ namespace Connect.Data.Supervisors
         public async Task<Sensor> GetSensor(string id)
         {
             Sensor sensor = await this.CacheSensorService.Get((arg) => arg.Id == id);
-            if (sensor == null) 
-            {
-                sensor = await this.Supervisor.GetSensor(id);
-            }
             return sensor;
         }
         public async Task<Sensor> GetSensor(string type, string channel)
         {
             Sensor sensor = await this.CacheSensorService.Get((arg) => arg.Name == type && arg.Channel == channel);
-            if (sensor == null) 
-            {
-                sensor = await this.Supervisor.GetSensor(type, channel);
-            }
             return sensor;
         }
         public async Task<IEnumerable<Sensor>> GetSensors()
         {
             IEnumerable<Sensor> sensors = await this.CacheSensorService.GetAll();
-            if (sensors == null)
-            {
-                sensors = await this.Supervisor.GetSensors();
-            }
             return sensors;
         }
 

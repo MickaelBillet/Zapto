@@ -16,7 +16,7 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        ISupervisorNotification SupervisorNotification { get; }
+        ISupervisorCacheNotification SupervisorNotification { get; }
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace Connect.WebApi.Controllers
 
         public NotificationsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorNotification>();
+            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorCacheNotification>();
         }
 
         #endregion

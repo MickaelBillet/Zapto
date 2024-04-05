@@ -27,13 +27,16 @@ namespace Connect.Data.Supervisors
         {
             return (await this.ConfigurationRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
-
         public async Task<ResultCode> AddConfiguration(Configuration configuration)
         {
             configuration.Id = string.IsNullOrEmpty(configuration.Id) ? Guid.NewGuid().ToString() : configuration.Id;
             int res = await this.ConfigurationRepository.InsertAsync(ConfigurationMapper.Map(configuration));
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
+        }
+        public async Task<IEnumerable<Configuration>> GetConfigurations()
+        {
+            return (await this.ConfigurationRepository.GetCollectionAsync()).Select((arg) => ConfigurationMapper.Map(arg));
         }
         #endregion
     }

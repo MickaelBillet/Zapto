@@ -66,7 +66,6 @@ namespace Framework.Data.Services
         public bool DropDatabase()
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
                 ConnectionType connectionType = new()
@@ -83,14 +82,12 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 
         protected bool CreateDatabase(ConnectionType connectionType)
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
                 using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
@@ -101,14 +98,12 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 
         protected bool DatabaseExist(ConnectionType connectionType)
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
                 using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
@@ -119,7 +114,6 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 

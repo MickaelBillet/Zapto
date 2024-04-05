@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheConnectedObject : SupervisorCache
+    public class SupervisorCacheConnectedObject : SupervisorCache, ISupervisorCacheConnectedObject
     {
         #region Services
         private ISupervisorConnectedObject Supervisor { get; }
@@ -29,10 +29,17 @@ namespace Connect.Data.Supervisors
             }
             return connectedObject;
         }
-
         public async Task<IEnumerable<ConnectedObject>> GetConnectedObjects()
         {
             return await this.GetConnectedObjectsFromCache(null);
+        }
+        public override async Task Initialize()
+        {
+            IEnumerable<ConnectedObject> connectedObjects = await this.Supervisor.GetConnectedObjects();
+            foreach (var item in connectedObjects)
+            {
+                await this.CacheConnectedObjectService.Set(item.Id, item);
+            }
         }
 
         public async Task<ResultCode> AddConnectedObject(ConnectedObject obj)

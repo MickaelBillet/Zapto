@@ -1,14 +1,11 @@
-﻿using Connect.Data.Entities;
-using Connect.Data.Mappers;
-using Connect.Model;
+﻿using Connect.Model;
 using Framework.Core.Base;
-using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCachePlug : SupervisorCache
+    public sealed class SupervisorCachePlug : SupervisorCache, ISupervisorCachePlug
     {
         #region Services
         private ISupervisorPlug Supervisor { get; }
@@ -31,7 +28,7 @@ namespace Connect.Data.Supervisors
             }
             return code;
         }
-        public async Task Initialize()
+        public override async Task Initialize()
         {
             IEnumerable<Plug> plugs = await this.Supervisor.GetPlugs();
             foreach (var item in plugs)
@@ -42,19 +39,11 @@ namespace Connect.Data.Supervisors
         public async Task<IEnumerable<Plug>> GetPlugs()
         {
             IEnumerable<Plug> plugs = await this.GetPlugsFromCache();
-            if (plugs  == null)
-            {
-                plugs = await this.Supervisor.GetPlugs();
-            }
             return plugs;
         }
         public async Task<Plug> GetPlug(string id)
         {
             Plug plug = await this.GetPlugFromCache((arg) => arg.Id == id);
-            if (plug == null) 
-            {
-                plug = await this.Supervisor.GetPlug(id);
-            }
             return plug;
         }
         public async Task<ResultCode> UpdatePlug(Plug plug)
@@ -69,10 +58,6 @@ namespace Connect.Data.Supervisors
         public async Task<Plug> GetPlug(string address, string unit)
         {
             Plug plug = await this.GetPlugFromCache(address, unit);
-            if (plug == null)
-            {
-                plug = await this.Supervisor.GetPlug(address, unit);
-            }
             return plug;
         }
         public async Task<ResultCode> ResetWorkingDuration(Plug plug)

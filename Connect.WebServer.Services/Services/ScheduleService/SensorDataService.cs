@@ -41,10 +41,10 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+                ISupervisorCacheRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
+                ISupervisorCacheSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
+                ISupervisorCacheNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorCacheNotification>();
+                ISupervisorCacheConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConnectedObject>();
                 ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
                 IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                 IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
@@ -86,8 +86,8 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessRoomData(ISupervisorRoom supervisorRoom,
-                                            ISupervisorNotification supervisorNotification,
+        private async Task ProcessRoomData(ISupervisorCacheRoom supervisorRoom,
+                                            ISupervisorCacheNotification supervisorNotification,
                                             IApplicationRoomServices applicationRoomServices,
                                             Sensor sensor)
         {
@@ -114,10 +114,10 @@ namespace Connect.WebServer.Services
             }
         }
 
-        private async Task ProcessConnectedObjectData(ISupervisorRoom supervisorRoom,
-                                                        ISupervisorConnectedObject supervisorConnectedObject,
+        private async Task ProcessConnectedObjectData(ISupervisorCacheRoom supervisorRoom,
+                                                        ISupervisorCacheConnectedObject supervisorConnectedObject,
                                                         IApplicationConnectedObjectServices applicationConnectedObjectServices,
-                                                        ISupervisorNotification supervisorNotification,
+                                                        ISupervisorCacheNotification supervisorNotification,
                                                         Sensor sensor)
         {
             ConnectedObject connectedObject = await supervisorConnectedObject.GetConnectedObject(sensor.ConnectedObjectId);

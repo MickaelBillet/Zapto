@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheLocation : SupervisorCache
+    public class SupervisorCacheLocation : SupervisorCache, ISupervisorCacheLocation
     {
         #region Services
         private ISupervisorLocation Supervisor { get; }
@@ -18,14 +18,17 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public override async Task Initialize()
+        {
+            IEnumerable<Location> locations = await this.Supervisor.GetLocations();
+            foreach (var item in locations)
+            {
+                await this.CacheLocationService.Set(item.Id, item);
+            }
+        }
         public async Task<IEnumerable<Location>> GetLocations()
         {
-            IEnumerable<Location> locations = await this.CacheLocationService.GetAll();
-            if (locations == null) 
-            {
-                locations = await this.Supervisor.GetLocations();
-            }
-            return locations;
+            return await this.CacheLocationService.GetAll();
         }
         public async Task<Location> GetLocation(string id)
         {
@@ -33,10 +36,6 @@ namespace Connect.Data.Supervisors
             if (location != null)
             {
                 location.RoomsList = await this.CacheRoomService.GetAll((arg) => arg.LocationId == id);
-            }
-            else
-            {
-                location = await this.Supervisor.GetLocation(id);
             }
             return location;
         }

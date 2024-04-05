@@ -56,7 +56,11 @@ namespace Connect.Data.Supervisors
             IEnumerable<RoomEntity> entities = (await this.RoomRepository.GetCollectionAsync()).OrderBy((room) => room.Id);
             if (entities != null)
             {
-                rooms = entities.Select(item => RoomMapper.Map(item));                
+                rooms = entities.Select(item => RoomMapper.Map(item));
+                foreach (Room room in rooms)
+                {
+                    await this.SetRoomDetails(room);
+                }
             }
             return rooms;
         }

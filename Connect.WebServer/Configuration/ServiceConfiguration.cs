@@ -20,6 +20,7 @@ namespace Connect.Server.Configuration
             services.AddMailService();
             services.AddUdpService();
             services.AddSupervisor();
+            services.AddCacheSupervisor();
             services.AddRepositories();
             services.AddApplicationConnectServices();
             services.AddConnectWebServices();

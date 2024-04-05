@@ -9,14 +9,14 @@ namespace Connect.WebServer.Services
     public class SensorHealthCheck : IHealthCheck
     {
 		#region Properties
-		private ISupervisorSensor Supervisor { get; }
+		private ISupervisorCacheSensor Supervisor { get; }
 		#endregion
 
 		#region Constructor
 
 		public SensorHealthCheck(IServiceProvider serviceProvider)
 		{
-			this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+			this.Supervisor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
 		}
 
 		#endregion

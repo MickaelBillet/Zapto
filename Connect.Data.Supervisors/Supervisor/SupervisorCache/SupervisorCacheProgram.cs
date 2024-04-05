@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheProgram : SupervisorCache
+    public sealed class SupervisorCacheProgram : SupervisorCache, ISupervisorCacheProgram
     {
         #region Services
         private ISupervisorProgram Supervisor { get; }
@@ -19,6 +19,14 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public override async Task Initialize()
+        {
+            IEnumerable<Program> programs = await this.Supervisor.GetPrograms();
+            foreach (var item in programs)
+            {
+                await this.CacheProgramService.Set(item.Id, item);
+            }
+        }
         public async Task<ResultCode> AddProgram(Program program)
         {
             ResultCode code = await this.Supervisor.AddProgram(program);
@@ -34,10 +42,6 @@ namespace Connect.Data.Supervisors
             if (program != null)
             {
                 await this.SetProgramDetails(program);
-            }
-            else
-            {
-                program = await this.Supervisor?.GetProgram(id);
             }
             return program;
         }

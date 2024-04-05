@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -16,7 +15,7 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        private ISupervisorProgram SupervisorProgram { get; set; }
+        private ISupervisorCacheProgram SupervisorProgram { get; set; }
 
         #endregion
 
@@ -24,7 +23,7 @@ namespace Connect.WebApi.Controllers
 
         public ProgramsController(IServiceProvider serviceProvider )
         {
-            this.SupervisorProgram = serviceProvider.GetRequiredService<ISupervisorProgram>();
+            this.SupervisorProgram = serviceProvider.GetRequiredService<ISupervisorCacheProgram>();
         }
 
         #endregion

@@ -25,23 +25,8 @@ namespace Connect.Data.Database
             bool res = true;
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {
-                ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                List<Plug> plugs = (await supervisor.GetPlugs()).ToList();
-                foreach (Plug plug in plugs)
-                {
-                    plug.WorkingDuration = 0;
-
-                    if (plug.Status is Status.ON or Status.OffON)  
-                    {
-                        plug.LastDateTimeOn = DateTime.Now;
-                    }
-                    else
-                    {
-                        plug.LastDateTimeOn = null;
-                    }
-
-                    await supervisor.UpdatePlug(plug);
-                }
+                await this.InitializePlugsAsync(scope);
+                await this.LoadCacheAsync(scope);
             }
             return res;
         }
@@ -600,6 +585,59 @@ namespace Connect.Data.Database
                 await scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>().AddConnectedObject(obj5);
                 await scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>().AddConnectedObject(obj8);
             }
+        }
+        private async Task InitializePlugsAsync(IServiceScope scope)
+        {
+            ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+            List<Plug> plugs = (await supervisor.GetPlugs()).ToList();
+            foreach (Plug plug in plugs)
+            {
+                plug.WorkingDuration = 0;
+
+                if (plug.Status is Status.ON or Status.OffON)
+                {
+                    plug.LastDateTimeOn = DateTime.Now;
+                }
+                else
+                {
+                    plug.LastDateTimeOn = null;
+                }
+
+                await supervisor.UpdatePlug(plug);
+            }
+        }
+
+        private async Task LoadCacheAsync(IServiceScope scope)
+        {
+            ISupervisorCacheCondition supervisorCacheCondition = scope.ServiceProvider.GetRequiredService<ISupervisorCacheCondition>();
+            await supervisorCacheCondition.Initialize();
+
+            ISupervisorCacheConfiguration supervisorCacheConfiguration = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConfiguration>();
+            await supervisorCacheConfiguration.Initialize();
+
+            ISupervisorCacheConnectedObject supervisorCacheConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConnectedObject>();   
+            await supervisorCacheConnectedObject.Initialize();
+
+            ISupervisorCacheLocation supervisorCacheLocation = scope.ServiceProvider.GetRequiredService<ISupervisorCacheLocation>();
+            await supervisorCacheLocation.Initialize();
+
+            ISupervisorCacheNotification supervisorCacheNotification = scope.ServiceProvider.GetRequiredService<ISupervisorCacheNotification>();
+            await supervisorCacheNotification.Initialize();
+
+            ISupervisorCacheOperationRange supervisorCacheOperationRange = scope.ServiceProvider.GetRequiredService<ISupervisorCacheOperationRange>();
+            await supervisorCacheOperationRange.Initialize();
+
+            ISupervisorCachePlug supervisorCachePlug = scope.ServiceProvider.GetRequiredService<ISupervisorCachePlug>();
+            await supervisorCachePlug.Initialize(); 
+
+            ISupervisorCacheProgram supervisorCacheProgram = scope.ServiceProvider.GetRequiredService<ISupervisorCacheProgram>();
+            await supervisorCacheProgram.Initialize();
+
+            ISupervisorCacheRoom supervisorCacheRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
+            await supervisorCacheRoom.Initialize();
+
+            ISupervisorCacheSensor supervisorCacheSensor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
+            await supervisorCacheSensor.Initialize();   
         }
         #endregion
     }

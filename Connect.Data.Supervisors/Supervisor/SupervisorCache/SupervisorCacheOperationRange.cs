@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheOperationRange : SupervisorCache
+    public sealed class SupervisorCacheOperationRange : SupervisorCache, ISupervisorCacheOperationRange
     {
         #region Services
         private ISupervisorOperationRange Supervisor { get; }
@@ -18,6 +18,14 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public override async Task Initialize()
+        {
+            IEnumerable<OperationRange> operationRanges = await this.Supervisor.GetOperationRanges();
+            foreach (var item in operationRanges)
+            {
+                await this.CacheOperationRangeService.Set(item.Id, item);
+            }
+        }
         public async Task<OperationRange> GetOperationRange(string id)
         {
             OperationRange operationRange = await this.CacheOperationRangeService.Get((arg) => arg.Id == id);
@@ -25,13 +33,8 @@ namespace Connect.Data.Supervisors
             {
                 await this.SetOperationRangeDetails(operationRange);
             }
-            else
-            {
-                operationRange = await this.Supervisor.GetOperationRange(id);
-            }
             return operationRange;
         }
-
         public async Task<IEnumerable<OperationRange>> GetOperationRanges(string programId)
         {
             List<OperationRange> operationRanges = (await this.CacheOperationRangeService.GetAll((arg) => arg.ProgramId == programId)).ToList();
@@ -42,14 +45,9 @@ namespace Connect.Data.Supervisors
                     await this.SetOperationRangeDetails(arg);
                 });
             }
-            else
-            {
-                operationRanges = (await this.Supervisor.GetOperationRanges(programId)).ToList();
-            }
             return operationRanges;
         }
-
-        public async Task<ResultCode> AddOperationrange(OperationRange operationRange)
+        public async Task<ResultCode> AddOperationRange(OperationRange operationRange)
         {
             ResultCode code = await this.Supervisor.AddOperationRange(operationRange);
             if (code == ResultCode.Ok)
@@ -62,7 +60,6 @@ namespace Connect.Data.Supervisors
             }
             return code;
         }
-
         public async Task<ResultCode> DeleteOperationRange(OperationRange operationRange)
         {
             ResultCode code = await this.Supervisor?.DeleteOperationRange(operationRange);
@@ -76,7 +73,6 @@ namespace Connect.Data.Supervisors
             }
             return code;
         }
-
         public async Task<ResultCode> DeleteOperationRanges(IEnumerable<OperationRange> operationRanges)
         {
             ResultCode code = await this.Supervisor?.DeleteOperationRanges(operationRanges);
@@ -94,7 +90,6 @@ namespace Connect.Data.Supervisors
             }
             return code;
         }
-
         private async Task SetOperationRangeDetails(OperationRange operationRange)
         {
             operationRange.Condition = await this.CacheConditionService.Get((arg) => arg.Id == operationRange.ConditionId);

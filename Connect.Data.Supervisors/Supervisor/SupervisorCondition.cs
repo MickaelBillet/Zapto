@@ -34,6 +34,11 @@ namespace Connect.Data.Supervisors
             return ConditionMapper.Map(entity);
         }
 
+        public async Task<IEnumerable<Condition>> GetConditions()
+        {
+            return (await this.ConditionRepository.GetCollectionAsync()).Select((arg) => ConditionMapper.Map(arg));
+        }
+
         public async Task<ResultCode> AddCondition(Condition condition)
         {
             condition.Id = string.IsNullOrEmpty(condition.Id) ? Guid.NewGuid().ToString() : condition.Id;

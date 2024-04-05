@@ -39,8 +39,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorCachePlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorCachePlug>();
+                ISupervisorCacheSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
                 ISendCommandService sendCommandService = scope.ServiceProvider.GetRequiredService<ISendCommandService>();
 
                 await ProcessPlugStatus(supervisorPlug, sendCommandService);
@@ -52,7 +52,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             }
         }
 
-        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, ISendCommandService sendCommandService)
+        private async Task ProcessPlugStatus(ISupervisorCachePlug supervisorPlug, ISendCommandService sendCommandService)
         {
             List<Plug> plugs = (await supervisorPlug.GetPlugs()).ToList();
             foreach (Plug plug in plugs)
@@ -61,7 +61,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             }
         }
 
-        private async Task ProcessSensorStatus(ISupervisorSensor supervisorSensor)
+        private async Task ProcessSensorStatus(ISupervisorCacheSensor supervisorSensor)
         {
             List<Sensor> sensors = (await supervisorSensor.GetSensors()).ToList();
 

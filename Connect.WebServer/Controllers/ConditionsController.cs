@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -16,7 +15,7 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        ISupervisorCondition SupervisorCondition { get; }
+        ISupervisorCacheCondition SupervisorCondition { get; }
 
         #endregion
 
@@ -24,7 +23,7 @@ namespace Connect.WebApi.Controllers
 
         public ConditionsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCondition>();
+            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCacheCondition>();
         }
 
         #endregion

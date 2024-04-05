@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheNotification : SupervisorCache
+    public class SupervisorCacheNotification : SupervisorCache, ISupervisorCacheNotification
     {
         #region Services
         private ISupervisorNotification Supervisor { get; }
@@ -18,13 +18,17 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public override async Task Initialize()
+        {
+            IEnumerable<Notification> notifications = await this.Supervisor.GetNotifications();
+            foreach (var item in notifications)
+            {
+                await this.CacheNotificationService.Set(item.Id, item);
+            }
+        }
         public async Task<Notification> GetNotification(string id)
         {
             Notification notification = await this.CacheNotificationService.Get((arg) => arg.Id == id);
-            if (notification == null) 
-            {
-                notification = await this.Supervisor.GetNotification(id);
-            }
             return notification;
         }
         public async Task<ResultCode> AddNotification(Notification notification)
@@ -53,22 +57,35 @@ namespace Connect.Data.Supervisors
                 await this.CacheNotificationService.Delete(notification.Id);
             }
         }
+        public async Task<ResultCode> DeleteNotification(Notification notification)
+        {
+            ResultCode code = await this.Supervisor.DeleteNotification(notification);
+            if (code == ResultCode.Ok) 
+            {
+                await this.CacheNotificationService.Delete(notification.Id);
+            }
+            return code;
+        }
+        public async Task<ResultCode> DeleteNotifications(IEnumerable<Notification> notifications)
+        {
+            ResultCode code = await this.Supervisor.DeleteNotifications(notifications);
+            if (code == ResultCode.Ok)
+            {
+                foreach(Notification notification in notifications)
+                {
+                    await this.CacheNotificationService.Delete(notification.Id);
+                }
+            }
+            return code;
+        }
         public async Task<IEnumerable<Notification>> GetNotificationsFromRoom(string roomId)
         {
             IEnumerable<Notification> notifications = await this.CacheNotificationService.GetAll((arg) =>  arg.RoomId == roomId);
-            if (notifications == null)
-            {
-                notifications  = await this.Supervisor.GetNotificationsFromRoom(roomId);
-            }
             return notifications;
         }
         public async Task<IEnumerable<Notification>> GetNotificationsFromConnectedObject(string connectedObjectId)
         {
             IEnumerable<Notification> notifications = await this.CacheNotificationService.GetAll((arg) => arg.ConnectedObjectId == connectedObjectId);
-            if (notifications == null)
-            {
-                notifications = await this.Supervisor.GetNotificationsFromConnectedObject(connectedObjectId);
-            }
             return notifications;
         }
         #endregion

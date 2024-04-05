@@ -70,6 +70,33 @@ namespace Connect.Data.Supervisors
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
+
+        public async Task<IEnumerable<Program>> GetPrograms()
+        {
+            List<Program> programs = (await this.ProgramRepository.GetCollectionAsync()).Select((arg) => ProgramMapper.Map(arg)).ToList();
+            if (programs != null)
+            {
+                programs.ForEach(async program => 
+                {
+                    IEnumerable<OperationRangeEntity> entities = await this.OperationRangeRepository.GetCollectionAsync((arg) => (arg.ProgramId == program.Id));
+                    if (entities != null)
+                    {
+                        List<OperationRange> operationRanges = entities.Select((arg) => OperationRangeMapper.Map(arg)).ToList();
+                        operationRanges.ForEach(async operationRange =>
+                        {                            
+                            ConditionEntity condition = await this.ConditionRepository.GetAsync((arg) => arg.OperationRangetId == operationRange.Id);
+                            if (condition != null)
+                            {
+                                operationRange.Condition = ConditionMapper.Map(condition);
+                            }
+                        });
+
+                        program.OperationRangeList = new ObservableCollection<OperationRange>(operationRanges);
+                    }
+                });
+            }
+            return programs;
+        }
         #endregion
     }
 }

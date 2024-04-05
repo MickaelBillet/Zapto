@@ -15,16 +15,16 @@ namespace Connect.WebServer.Services
     internal class SendCommandService : ISendCommandService
     {
         #region Services
-        private ISupervisorRoom SupervisorRoom { get; }
+        private ISupervisorCacheRoom SupervisorRoom { get; }
         private IApplicationPlugServices ApplicationPlugServices { get; }
-        private ISupervisorPlug SupervisorPlug { get; }
+        private ISupervisorCachePlug SupervisorPlug { get; }
         #endregion
 
         #region Constructor
         public SendCommandService(IServiceProvider serviceProvider) 
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorCacheRoom>();
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorCachePlug>();
             this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
         }
         #endregion

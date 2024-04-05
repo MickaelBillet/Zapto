@@ -1,7 +1,5 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Connect.Data
 {
@@ -12,5 +10,6 @@ namespace Connect.Data
         Task<ResultCode> UpdateCondition(string id, Condition condition);
         Task<ResultCode> DeleteCondition(Condition condition);
         Task<ResultCode> ConditionExists(string id);
+        Task<IEnumerable<Condition>> GetConditions();
     }
 }

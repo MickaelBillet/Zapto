@@ -17,16 +17,16 @@ namespace Connect.WebApi.Controllers
     public class LocationsController : Controller
     {
         #region Property
-        ISupervisorLocation SupervisorLocation { get; }
-        ISupervisorRoom SupervisorRoom { get; }
+        ISupervisorCacheLocation SupervisorLocation { get; }
+        ISupervisorCacheRoom SupervisorRoom { get; }
         private IAlertService? AlertService { get; }
         #endregion
 
         #region Constructor
         public LocationsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorLocation>();
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorCacheLocation>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorCacheRoom>();
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
         #endregion

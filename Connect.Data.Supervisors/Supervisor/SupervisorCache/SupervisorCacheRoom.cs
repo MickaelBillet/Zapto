@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheRoom : SupervisorCache
+    public sealed class SupervisorCacheRoom : SupervisorCache, ISupervisorCacheRoom
     {
         #region Services
         private ISupervisorRoom Supervisor { get; }
@@ -19,7 +19,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public async Task Initialize()
+        public override async Task Initialize()
         {
             IEnumerable<Room> rooms = await this.Supervisor.GetRooms();
             foreach (var item in rooms)
@@ -37,24 +37,30 @@ namespace Connect.Data.Supervisors
                     await this.SetRoomDetails(room);    
                 });
             }
-            else
-            {
-                rooms = (await this.Supervisor.GetRooms()).ToList();
-            }
             return rooms;
         }
+
         public async Task<Room> GetRoom(string id)
         {
-            Room room = await this.CacheRoomService.Get((arg) => arg.Id == id);
+            Room room = (await this.CacheRoomService.Get((arg) => arg.Id == id));
             if (room != null)
             {
                 await this.SetRoomDetails(room);
             }
-            else
-            {
-                room = await this.Supervisor.GetRoom(id);
-            }
             return room;
+        }
+
+        public async Task<IEnumerable<Room>> GetRooms(string locationId)
+        {
+            List<Room> rooms = (await this.CacheRoomService.GetAll((arg) => arg.LocationId == locationId)).ToList();
+            if (rooms != null)
+            {
+                rooms.ForEach(async (room) =>
+                {
+                    await this.SetRoomDetails(room);
+                });
+            }
+            return rooms;
         }
         public async Task<Room> GetRoomFromPlugId(string plugId)
         {
@@ -67,11 +73,6 @@ namespace Connect.Data.Supervisors
                 {
                     room = await this.CacheRoomService.Get((room) => room.Id == connectedObject.RoomId);
                 }
-            }
-
-            if (room == null)
-            {
-                room = await this.Supervisor.GetRoomFromPlugId(plugId);
             }
             return room;
         }

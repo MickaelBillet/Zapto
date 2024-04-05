@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -16,17 +15,15 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        ISupervisorRoom SupervisorRoom { get; }
+        ISupervisorCacheRoom SupervisorRoom { get; }
 
         #endregion
 
         #region Constructor
-
         public RoomsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorCacheRoom>();
         }
-
         #endregion
 
         #region Method

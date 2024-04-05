@@ -16,14 +16,14 @@ namespace Connect.WebApi.Controllers
     public class PlugsController : Controller
     {
         #region Services
-        private ISupervisorPlug SupervisorPlug { get; }
+        private ISupervisorCachePlug SupervisorPlug { get; }
         private ISendCommandService SendCommandService { get; }
         #endregion
 
         #region Constructor
         public PlugsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorCachePlug>();
             this.SendCommandService = serviceProvider.GetRequiredService<ISendCommandService>();
         }
         #endregion
