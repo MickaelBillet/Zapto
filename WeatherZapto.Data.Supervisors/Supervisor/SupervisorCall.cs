@@ -28,9 +28,9 @@ namespace WeatherZapto.Data.Supervisors
 
             AutoReset.WaitOne();
 
-            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime.Date.Year.Equals(Clock.Now.Year)
-                                                                            && item.CreationDateTime.Date.Month.Equals(Clock.Now.Month)
-                                                                            && item.CreationDateTime.Date.Day.Equals(Clock.Now.Day));
+            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime.Date.ToLocalTime().Year.Equals(Clock.Now.Year)
+                                                                            && item.CreationDateTime.Date.ToLocalTime().Month.Equals(Clock.Now.Month)
+                                                                            && item.CreationDateTime.Date.ToLocalTime().Day.Equals(Clock.Now.Day));
             if (entity != null) 
             {
                 entity.Count++;
@@ -54,9 +54,9 @@ namespace WeatherZapto.Data.Supervisors
 
         public async Task<long?> GetDayCallsCount(DateTime day)
         {
-            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime.Date.Year.Equals(day.Year)
-                                                                                                        && item.CreationDateTime.Date.Month.Equals(day.Month)
-                                                                                                        && item.CreationDateTime.Date.Day.Equals(day.Day));
+            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime.Date.ToLocalTime().Year.Equals(day.Year)
+                                                                                                        && item.CreationDateTime.Date.ToLocalTime().Month.Equals(day.Month)
+                                                                                                        && item.CreationDateTime.Date.ToLocalTime().Day.Equals(day.Day));
 
             long? count = entities.Count();
 
