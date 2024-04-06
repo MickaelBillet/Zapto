@@ -46,7 +46,7 @@ namespace WeatherZapto.Data.Supervisors
                                                                                         && item.CreationDateTime.Date.ToLocalTime().Month.Equals(day.Month)
                                                                                         && item.CreationDateTime.Date.ToLocalTime().Day.Equals(day.Day)
                                                                                         && item.Location.Equals(location)))
-                                                            .Select((item) => double.Parse(item.Temperature));
+                                                            .Select((item) => double.Parse(item.Temperature.Replace('.', ',')));
             }
             return temperatures;
         }
@@ -74,7 +74,7 @@ namespace WeatherZapto.Data.Supervisors
 
                             if ((entities != null) && (entities.Any()))
                             {
-                                temperatureMin = entities.Min((item) => double.Parse(item.Temperature));
+                                temperatureMin = entities.Min((item) => double.Parse(item.Temperature.Replace('.', ',')));
                                 this.Cache.Set($"TemperatureMin-{location}", temperatureMin, this.MemoryCacheEntryOptions);
                             }
                         }
@@ -111,7 +111,7 @@ namespace WeatherZapto.Data.Supervisors
 
                             if ((entities != null) && (entities.Any()))
                             { 
-                                temperatureMax = entities.Max((item) => double.Parse(item.Temperature));
+                                temperatureMax = entities.Max((item) => double.Parse(item.Temperature.Replace('.', ',')));
                                 this.Cache.Set($"TemperatureMax-{location}", temperatureMax, this.MemoryCacheEntryOptions);
                             }
                         }
