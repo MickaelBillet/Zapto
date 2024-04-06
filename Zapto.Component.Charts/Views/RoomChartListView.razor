@@ -5,7 +5,7 @@
 
 <h3>@RoomName</h3>
 
-<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsDisplayed></SelectDates>
+<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
 
 @if ((this.Models != null) && (this.Models.Any() == true))
 {
@@ -21,7 +21,7 @@ else
 
 @code 
 {
-    private bool isdisplayed = false;
+    private bool isclicked = false;
 
     #region Properties
     public event EventHandler? PropertyChanged;
@@ -39,19 +39,19 @@ else
 
     private DateTime? MinDate { get; set; }
 
-    public bool IsDisplayed
+    public bool IsClicked
     {
         get
         {
-            return isdisplayed;
+            return isclicked;
         }
 
         set
         {
-            if (isdisplayed != value)
+            if (isclicked != value)
             {
-                isdisplayed = value;
-                if ((this.PropertyChanged != null) && (isdisplayed == true))
+                isclicked = value;
+                if ((this.PropertyChanged != null) && (isclicked == true))
                 {
                     this.PropertyChanged.Invoke(this, new EventArgs());
                 }
@@ -93,12 +93,11 @@ else
     public async Task DisplayCharts()
     {
         this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
-        this.IsDisplayed = false;
+        this.IsClicked = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
         await this.DisplayCharts();
-        this.StateHasChanged();
     }
     #endregion
 }

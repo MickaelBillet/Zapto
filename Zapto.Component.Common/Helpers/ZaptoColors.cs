@@ -4,13 +4,13 @@
     {
         public static List<string> PaletteBorder = new List<string>()
         {
-            "rgb(255, 99, 132)",
-            "rgb(255, 159, 64)",
-            "rgb(255, 205, 86)",
-            "rgb(75, 192, 192)",
-            "rgb(54, 162, 235)",
-            "rgb(153, 102, 255)",
-            "rgb(201, 203, 207)"
+            "rgb(255, 99, 132)", //Rose foncé
+            "rgb(255, 159, 64)", //Orange clair
+            "rgb(255, 205, 86)", //Orange Jaune
+            "rgb(75, 192, 192)", //Bleu vert
+            "rgb(54, 162, 235)", //Bleu
+            "rgb(153, 102, 255)", //Bleu Mauve
+            "rgb(201, 203, 207)" //Gris
         };
 
         public const string Red5 = "#E74C3C";
