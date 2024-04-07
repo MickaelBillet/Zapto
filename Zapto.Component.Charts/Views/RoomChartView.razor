@@ -1,23 +1,11 @@
-﻿@inject IRoomChartListViewModel ViewModel
+﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
 @inject ISnackbar Snackbar
 @implements IDisposable
 
-<h3>@RoomName</h3>
-
 <SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
 
-@if ((this.Models != null) && (this.Models.Any() == true))
-{
-    foreach (RoomChartModel model in this.Models)
-    {
-        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" Humidities="model.Humidities" CurrentDay="@model.Day"></RoomChart>
-    }
-}
-else
-{
-    <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-}
+<RoomChartListView Models="@this.Models"></RoomChartListView>
 
 @code 
 {
@@ -38,6 +26,8 @@ else
     private DateTime? MaxDate { get; set; }
 
     private DateTime? MinDate { get; set; }
+
+    public IEnumerable<RoomChartModel>? Models { get; set; }
 
     public bool IsClicked
     {
@@ -63,7 +53,6 @@ else
 
     private DateTime? EndDate { get; set; } = DateTime.Today;
 
-    private IEnumerable<RoomChartModel>? Models { get; set; }
     #endregion
 
     #region Methods
@@ -81,7 +70,7 @@ else
             await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
-            await this.DisplayCharts();
+            this.DisplayCharts();
         }
     }
 
@@ -90,14 +79,18 @@ else
         this.ViewModel?.Dispose();
         this.PropertyChanged -= this.PropertyChangedHandler;
     }   
-    public async Task DisplayCharts()
+    public void DisplayCharts()
     {
-        this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
+        Task.Run(async () =>
+        {
+            this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
+        });
         this.IsClicked = false;
     }
-    private async void PropertyChangedHandler(object? sender, EventArgs? args)
+    private void PropertyChangedHandler(object? sender, EventArgs? args)
     {
-        await this.DisplayCharts();
+        this.DisplayCharts();
+        this.StateHasChanged();
     }
     #endregion
 }

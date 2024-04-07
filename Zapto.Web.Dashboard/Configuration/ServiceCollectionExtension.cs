@@ -23,7 +23,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IRoomListViewModel, RoomListViewModel>();
 			services.AddTransient<IRoomViewModel, RoomViewModel>();
 			services.AddTransient<ISensorDataListViewModel, SensorDataListViewModel>();
-			services.AddTransient<IRoomChartListViewModel, RoomChartListViewModel>();
+			services.AddTransient<IRoomChartViewModel, RoomChartViewModel>();
 			services.AddTransient<ISelectDateViewModel,  SelectDateViewModel>();
             services.AddTransient<ISensorEventListViewModel, SensorEventListViewModel>();
             services.AddTransient<ISensorDataViewModel, SensorDataViewModel>();
