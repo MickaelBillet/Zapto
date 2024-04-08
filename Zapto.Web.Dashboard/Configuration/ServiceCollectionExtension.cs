@@ -6,7 +6,6 @@ using Connect.Infrastructure.Services;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Infrastructure.Services;
-using Zapto.Component.Common.IServices;
 using Zapto.Component.Common.Services;
 using Zapto.Component.Common.ViewModels;
 using Zapto.Component.Services;

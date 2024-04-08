@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {

@@ -5,7 +5,7 @@ using Serilog;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels

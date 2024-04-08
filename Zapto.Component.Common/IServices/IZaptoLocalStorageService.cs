@@ -1,4 +1,4 @@
-﻿namespace Zapto.Component.Common.IServices
+﻿namespace Zapto.Component.Common.Services
 {
     public interface IZaptoLocalStorageService
     {

@@ -1,5 +1,6 @@
 ﻿@inject ISelectDateViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
+@inject IZaptoLocalStorageService ZaptoLocalStorageService
 @implements IDisposable
 
 @if ((this.MinDate != null) && (this.MaxDate != null))
@@ -30,6 +31,7 @@
 
 @code
 {
+    #region Properties
     MudBaseDatePicker? StartDatePicker;
 
     MudBaseDatePicker? EndDatePicker;
@@ -51,7 +53,9 @@
 
     [Parameter]
     public EventCallback<DateTime?> EndDateChanged { get; set; }
+    #endregion
 
+    #region Methods
     public void Dispose()
     {
     }
@@ -59,12 +63,21 @@
     private async void CloseStartDatePicker(bool submit)
     {
         this.StartDatePicker?.Close(submit);
-       // await this.StartDateChanged.InvokeAsync(this.StartDate);
+        if (this.StartDate != null)
+        {
+            string res = this.StartDate.Value.ToShortDateString();
+            await this.ZaptoLocalStorageService.SetItemAsync<string>("StartDate", res);
+        }
     }
 
     private async void CloseEndDatePicker(bool submit)
     {
         this.EndDatePicker?.Close(submit);
-        await this.EndDateChanged.InvokeAsync(this.EndDate);
+        if (this.EndDate != null)
+        {
+            string res = this.EndDate.Value.ToShortDateString();
+            await this.ZaptoLocalStorageService.SetItemAsync<string>("EndDate", res);
+        }
     }
+    #endregion
 }

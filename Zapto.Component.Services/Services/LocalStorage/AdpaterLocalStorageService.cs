@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Services
 {

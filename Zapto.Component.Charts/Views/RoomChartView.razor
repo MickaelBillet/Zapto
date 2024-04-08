@@ -1,6 +1,7 @@
 ﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
 @inject PersistentComponentState ApplicationState
+@inject IZaptoLocalStorageService ZaptoLocalStorageService
 @inject ISnackbar Snackbar
 @implements IDisposable
 
@@ -8,10 +9,9 @@
 
 @if ((this.MinDate != null) && (this.MaxDate != null))
 {
-
     <MudContainer Class="d-flex flex-row justify-start align-center gap-0 ml-0">
         <SelectDates MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate></SelectDates>
-        <MudButton Variant="Variant.Filled" Style="height:60px" OnClick="@this.DisplayChartsAsync" Color="MudBlazor.Color.Primary">@Localizer["DisplayCharts"]</MudButton>
+        <MudButton Variant="Variant.Filled" Style="height:60px" OnClick="@this.SelectDateAsync" Color="MudBlazor.Color.Primary">@Localizer["DisplayCharts"]</MudButton>
     </MudContainer>
 }
 
@@ -21,10 +21,9 @@
 {
     private PersistingComponentStateSubscription persistingSubscription;
 
-    private const string gamesDataKey = "GamesData";
+    private const string chartsDataKey = "ChartsDataKey";
 
     #region Properties
-
     private bool ShouldRefresh = true;
 
     public DateTime? StartDate { get; set; } = DateTime.Today;
@@ -45,16 +44,13 @@
     public string Location { get; set; } = string.Empty;
 
     public IEnumerable<RoomChartModel>? Models { get; set; }
-
     #endregion
 
     #region Methods
-
     protected override void OnInitialized()
     {
         persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
     }
-
     protected override async Task OnParametersSetAsync()
     {
         if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
@@ -63,7 +59,7 @@
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
 
-            if (!ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(gamesDataKey, out var restored))
+            if (ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(chartsDataKey, out var restored) == false)
             {
                 this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
             }
@@ -75,14 +71,12 @@
     }
     private Task PersistData()
     {
-        ApplicationState.PersistAsJson(gamesDataKey, this.Models);
-
+        ApplicationState.PersistAsJson(chartsDataKey, this.Models);
         return Task.CompletedTask;
     }
     public void Dispose()
     {
         this.ViewModel?.Dispose();
-
         persistingSubscription.Dispose();
     }   
     public async Task DisplayChartsAsync()
@@ -103,6 +97,16 @@
             this.ShouldRefresh = true;
             this.Models = await task;
         }
+    }
+    private async Task SelectDateAsync()
+    {
+        string? startDateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>("StartDate");
+        this.StartDate = (startDateStr != null) ? DateTime.Parse(startDateStr) : DateTime.Now;
+
+        string? endDateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>("EndDate");
+        this.EndDate = (endDateStr != null) ? DateTime.Parse(endDateStr) : DateTime.Now;
+
+        await this.DisplayChartsAsync();
     }
     #endregion
 }

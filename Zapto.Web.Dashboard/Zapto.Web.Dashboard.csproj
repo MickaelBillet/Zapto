@@ -7,6 +7,13 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Extensions\**" />
+	  <Content Remove="Extensions\**" />
+	  <EmbeddedResource Remove="Extensions\**" />
+	  <None Remove="Extensions\**" />
+	</ItemGroup>
+
   <ItemGroup>
     <BlazorWebAssemblyLazyLoad Include="Zapto.Component.Dashboard.wasm" />
     <BlazorWebAssemblyLazyLoad Include="Zapto.Component.Charts.wasm" />
@@ -41,10 +48,6 @@
 	  <ProjectReference Include="..\Zapto.Component.HealthCheck\Zapto.Component.Healthcheck.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Home\Zapto.Component.Home.csproj" />
 	  <ProjectReference Include="..\Zapto.Component.Services\Zapto.Component.Services.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Extensions\" />
 	</ItemGroup>
 	
 	

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 using ILocalStorageService = Blazored.LocalStorage.ILocalStorageService;
 
 namespace Zapto.Component.Services
