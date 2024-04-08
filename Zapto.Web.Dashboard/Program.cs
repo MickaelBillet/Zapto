@@ -1,4 +1,5 @@
 using AirZapto;
+using Blazored.LocalStorage;
 using Connect.Model;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -22,11 +23,14 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Debug("Hello, Zapto !");
 
-
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddBlazoredLocalStorage(config =>
+{
+    config.JsonSerializerOptions.WriteIndented = true;
+});
 
 builder.Services.AddHttpClient("ConnectClient", client =>
 {

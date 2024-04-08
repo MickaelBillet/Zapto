@@ -12,13 +12,13 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class MainViewModel : BaseViewModel, IMainViewModel
 	{
 		#region Properties
-        private IStorageService StorageService { get; }
+        private IZaptoLocalStorageService StorageService { get; }
 		#endregion
 
 		#region Constructor
 		public MainViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-            this.StorageService = serviceProvider.GetRequiredService<IStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
 		}
         #endregion
 
@@ -32,7 +32,7 @@ namespace Zapto.Component.Common.ViewModels
 
             if (result == null)
             {
-                await this.StorageService.SetItemAsync("culture", defaultCulture);
+                await this.StorageService.SetItemAsync<string>("culture", defaultCulture);
             }
 
             CultureInfo.DefaultThreadCurrentCulture = culture;

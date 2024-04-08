@@ -21,7 +21,7 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		private IApplicationWeatherService ApplicationWeatherService { get; }
 		private IApplicationOWService ApplicationOWService { get; }
-        private IStorageService LocalStorageService { get; }
+        private IZaptoLocalStorageService LocalStorageService { get; }
         #endregion
 
         #region Constructor
@@ -29,7 +29,7 @@ namespace Zapto.Component.Common.ViewModels
 		{
 			this.ApplicationWeatherService = serviceProvider.GetRequiredService<IApplicationWeatherService>();
 			this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
-            this.LocalStorageService = serviceProvider.GetRequiredService<IStorageService>();
+            this.LocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
         #endregion
 
