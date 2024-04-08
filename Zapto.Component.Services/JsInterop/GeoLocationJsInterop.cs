@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.JsInterop
         public GeoLocationJsInterop(IJSRuntime jsRuntime)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./scripts/geoLocations/GeoLocationJsInterop.js").AsTask());
+               "import", "./scripts/geoLocations/geoLocationJsInterop.js").AsTask());
 
             dotNetObjectReference = DotNetObjectReference.Create(this);
         }

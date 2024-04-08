@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\scripts\geoLocations\GeoLocationJsInterop.js" />
+    <None Include="wwwroot\scripts\geoLocations\geoLocationJsInterop.js" />
   </ItemGroup>
 
   <ItemGroup>
