@@ -1,6 +1,6 @@
 ﻿
 
-@if ((this.Models != null) && (this.Models.Any() == true))
+@if ((this.Models != null) && (this.Models.Any() == true) && (this.ShouldRefresh == true))
 {
     foreach (RoomChartModel model in this.Models)
     {
@@ -17,4 +17,7 @@ else
 {
     [Parameter]
     public IEnumerable<RoomChartModel>? Models { get; set; }
+
+    [Parameter]
+    public bool ShouldRefresh { get; set; } = true;
 }

@@ -1,18 +1,39 @@
 ﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
+@inject PersistentComponentState ApplicationState
 @inject ISnackbar Snackbar
 @implements IDisposable
 
-<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
+<h3>@RoomName</h3>
 
-<RoomChartListView Models="@this.Models"></RoomChartListView>
+@if ((this.MinDate != null) && (this.MaxDate != null))
+{
+
+    <MudContainer Class="d-flex flex-row justify-start align-center gap-0 ml-0">
+        <SelectDates MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate></SelectDates>
+        <MudButton Variant="Variant.Filled" Style="height:60px" OnClick="@this.DisplayChartsAsync" Color="MudBlazor.Color.Primary">@Localizer["DisplayCharts"]</MudButton>
+    </MudContainer>
+}
+
+<RoomChartListView Models="@this.Models" ShouldRefresh="@this.ShouldRefresh"></RoomChartListView>
 
 @code 
 {
-    private bool isclicked = false;
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    private const string gamesDataKey = "GamesData";
 
     #region Properties
-    public event EventHandler? PropertyChanged;
+
+    private bool ShouldRefresh = true;
+
+    public DateTime? StartDate { get; set; } = DateTime.Today;
+
+    public DateTime? EndDate { get; set; } = DateTime.Today;
+
+    public DateTime? MaxDate { get; set; }
+
+    public DateTime? MinDate { get; set; }
 
     [Parameter]
     public string RoomId { get; set; } = string.Empty;
@@ -23,35 +44,7 @@
     [Parameter]
     public string Location { get; set; } = string.Empty;
 
-    private DateTime? MaxDate { get; set; }
-
-    private DateTime? MinDate { get; set; }
-
     public IEnumerable<RoomChartModel>? Models { get; set; }
-
-    public bool IsClicked
-    {
-        get
-        {
-            return isclicked;
-        }
-
-        set
-        {
-            if (isclicked != value)
-            {
-                isclicked = value;
-                if ((this.PropertyChanged != null) && (isclicked == true))
-                {
-                    this.PropertyChanged.Invoke(this, new EventArgs());
-                }
-            }
-        }
-    }
-
-    private DateTime? StartDate { get; set; } = DateTime.Today;
-
-    private DateTime? EndDate { get; set; } = DateTime.Today;
 
     #endregion
 
@@ -59,8 +52,7 @@
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-        this.PropertyChanged += this.PropertyChangedHandler;
+        persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -70,27 +62,47 @@
             await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
-            this.DisplayCharts();
+
+            if (!ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(gamesDataKey, out var restored))
+            {
+                this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+            }
+            else
+            {
+                this.Models = restored;
+            }
         }
     }
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson(gamesDataKey, this.Models);
 
+        return Task.CompletedTask;
+    }
     public void Dispose()
     {
         this.ViewModel?.Dispose();
-        this.PropertyChanged -= this.PropertyChangedHandler;
+
+        persistingSubscription.Dispose();
     }   
-    public void DisplayCharts()
+    public async Task DisplayChartsAsync()
     {
-        Task.Run(async () =>
+        this.ShouldRefresh = false;
+
+        await Task.Delay(10);
+
+        Task<IEnumerable<RoomChartModel>?> task = this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+
+        while (task.IsCompleted == false)
         {
-            this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
-        });
-        this.IsClicked = false;
-    }
-    private void PropertyChangedHandler(object? sender, EventArgs? args)
-    {
-        this.DisplayCharts();
-        this.StateHasChanged();
+            await Task.Delay(10);
+        }
+
+        if (task.IsCompleted)
+        {
+            this.ShouldRefresh = true;
+            this.Models = await task;
+        }
     }
     #endregion
 }
