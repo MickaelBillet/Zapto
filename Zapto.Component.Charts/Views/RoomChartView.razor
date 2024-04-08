@@ -100,13 +100,31 @@
     }
     private async Task SelectDateAsync()
     {
+        bool hasChanged = false;
         string? startDateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>("StartDate");
-        this.StartDate = (startDateStr != null) ? DateTime.Parse(startDateStr) : DateTime.Now;
+        if (DateTime.TryParse(startDateStr, out DateTime startdate))
+        {
+            if (this.StartDate!.Value.Day != startdate.Day)
+            {
+                this.StartDate = startdate;
+                hasChanged = true;
+            }
 
-        string? endDateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>("EndDate");
-        this.EndDate = (endDateStr != null) ? DateTime.Parse(endDateStr) : DateTime.Now;
+            string? endDateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>("EndDate");
+            if (DateTime.TryParse(endDateStr, out DateTime enddate))
+            {
+                if (this.EndDate!.Value.Day != enddate.Day)
+                {
+                    this.EndDate = enddate;
+                    hasChanged = true;
+                }
+            }
+        }
 
-        await this.DisplayChartsAsync();
+        if (hasChanged == true)
+        {
+            await this.DisplayChartsAsync();
+        }
     }
     #endregion
 }
