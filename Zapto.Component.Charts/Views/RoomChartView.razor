@@ -64,8 +64,7 @@
     protected override void OnInitialized()
     {
         this.PropertyChanged += this.PropertyChangedHandler;
-        this.PersistingSubscription = ApplicationState.RegisterOnPersisting(this.PersistData);
-        base.OnInitialized();
+        this.PersistingSubscription = this.ApplicationState.RegisterOnPersisting(this.PersistData);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -76,14 +75,7 @@
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
 
-            if (ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(chartsDataKey, out var restored) == false)
-            {
-                this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
-            }
-            else
-            {
-                this.Models = restored;
-            }
+            await this.DisplayCharts();
         }
     }
     public void Dispose()
@@ -94,7 +86,14 @@
     }
     public async Task DisplayCharts()
     {
-        this.Models = (this.ViewModel != null) ? await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId) : null;
+        if (this.ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(chartsDataKey, out var restored) == false)
+        {
+            this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+        }
+        else
+        {
+            this.Models = restored;
+        }
         this.IsClicked = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
@@ -104,7 +103,7 @@
     }
     private Task PersistData()
     {
-        ApplicationState.PersistAsJson(chartsDataKey, this.Models);
+        this.ApplicationState.PersistAsJson(chartsDataKey, this.Models);
         return Task.CompletedTask;
     }
     #endregion
