@@ -1,31 +1,20 @@
 ﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
+@inject PersistentComponentState ApplicationState
 @inject ISnackbar Snackbar
 @implements IDisposable
 
 <h3>@RoomName</h3>
 
 <SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
-
-@if ((this.Models != null) && (this.Models.Any() == true))
-{
-    foreach (RoomChartModel model in this.Models)
-    {
-        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" Humidities="model.Humidities" CurrentDay="@model.Day"></RoomChart>
-    }
-}
-else
-{
-    <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-}
+<RoomChartListView Models="@this.Models"></RoomChartListView>
 
 @code
 {
     private bool isclicked = false;
+    private const string chartsDataKey = "ChartsDataKey";
 
     #region Properties
-    public event EventHandler? PropertyChanged;
-
     [Parameter]
     public string RoomId { get; set; } = string.Empty;
 
@@ -34,6 +23,10 @@ else
 
     [Parameter]
     public string Location { get; set; } = string.Empty;
+
+    private event EventHandler? PropertyChanged;
+
+    private PersistingComponentStateSubscription PersistingSubscription { get; set; }
 
     private DateTime? MaxDate { get; set; }
 
@@ -70,8 +63,9 @@ else
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
         this.PropertyChanged += this.PropertyChangedHandler;
+        this.PersistingSubscription = ApplicationState.RegisterOnPersisting(this.PersistData);
+        base.OnInitialized();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -81,14 +75,22 @@ else
             await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
-            await this.DisplayCharts();
+
+            if (ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(chartsDataKey, out var restored) == false)
+            {
+                this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+            }
+            else
+            {
+                this.Models = restored;
+            }
         }
     }
-
     public void Dispose()
     {
         this.ViewModel?.Dispose();
         this.PropertyChanged -= this.PropertyChangedHandler;
+        this.PersistingSubscription.Dispose();
     }
     public async Task DisplayCharts()
     {
@@ -99,6 +101,11 @@ else
     {
         await this.DisplayCharts();
         this.StateHasChanged();
+    }
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson(chartsDataKey, this.Models);
+        return Task.CompletedTask;
     }
     #endregion
 }

@@ -1,0 +1,18 @@
+﻿@if ((this.Models != null) && (this.Models.Any() == true))
+{
+    foreach (RoomChartModel model in this.Models)
+    {
+        <RoomChart Labels="@model.Labels" TemperatureOUT="@model.TemperaturesOUT" TemperatureIN="@model.TemperaturesIN" Humidities="model.Humidities" CurrentDay="@model.Day"></RoomChart>
+    }
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
+}
+
+@code
+{
+    [Parameter]
+    public IEnumerable<RoomChartModel>? Models { get; set; }
+
+}
