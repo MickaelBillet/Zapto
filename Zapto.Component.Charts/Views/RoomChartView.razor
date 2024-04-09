@@ -1,6 +1,6 @@
 ﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
-@inject PersistentComponentState ApplicationState
+@inject IZaptoLocalStorageService ZaptoLocalStorageService
 @inject ISnackbar Snackbar
 @implements IDisposable
 
@@ -64,7 +64,6 @@
     protected override void OnInitialized()
     {
         this.PropertyChanged += this.PropertyChangedHandler;
-        this.PersistingSubscription = this.ApplicationState.RegisterOnPersisting(this.PersistData);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -86,25 +85,41 @@
     }
     public async Task DisplayCharts()
     {
-        if (this.ApplicationState.TryTakeFromJson<IEnumerable<RoomChartModel>>(chartsDataKey, out var restored) == false)
-        {
-            this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
-        }
-        else
-        {
-            this.Models = restored;
-        }
+        this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
         this.IsClicked = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
-        await this.DisplayCharts();
-        this.StateHasChanged();
-    }
-    private Task PersistData()
-    {
-        this.ApplicationState.PersistAsJson(chartsDataKey, this.Models);
-        return Task.CompletedTask;
+        bool hasChanged = false;
+
+        if (this.ZaptoLocalStorageService != null)
+        {
+            String? startdateStr = await this.ZaptoLocalStorageService.GetItemAsync<String>("StartDate");
+            if (DateTime.TryParse(startdateStr, out DateTime startdate))
+            {
+                if ((this.StartDate != null) && (this.StartDate.Value.Day != startdate.Day))
+                {
+                    this.StartDate = startdate;
+                    hasChanged = true;
+                }
+            }
+
+            String? enddatestr = await this.ZaptoLocalStorageService.GetItemAsync<String>("EndDate");
+            if (DateTime.TryParse(enddatestr, out DateTime enddate))
+            {
+                if ((this.EndDate != null) && (this.EndDate.Value.Day != enddate.Day))
+                {
+                    this.EndDate = enddate;
+                    hasChanged = true;
+                }
+            }
+
+            if (hasChanged == true)
+            {
+                await this.DisplayCharts();
+                this.StateHasChanged();
+            }
+        }       
     }
     #endregion
 }
