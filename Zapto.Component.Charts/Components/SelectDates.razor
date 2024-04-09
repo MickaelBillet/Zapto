@@ -57,12 +57,8 @@
     public async Task SelectDatesClick()
     {
         this.IsClicked = true;
-        //await this.StartDateChanged.InvokeAsync(this.StartDate);
-        //await this.EndDateChanged.InvokeAsync(this.EndDate);
-
-        await this.ZaptoLocalStorageService.SetItemAsync<DateTime?>("StartDate", this.StartDate);
-        await this.ZaptoLocalStorageService.SetItemAsync<DateTime?>("EndDate", this.EndDate);
-
+        await this.ZaptoLocalStorageService.SetItemAsync<String>("StartDate", this.StartDate!.Value.ToString());
+        await this.ZaptoLocalStorageService.SetItemAsync<String>("EndDate", this.EndDate!.Value.ToString());
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }
