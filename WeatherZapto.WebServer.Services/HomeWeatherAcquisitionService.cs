@@ -1,8 +1,8 @@
 ﻿using Framework.Core.Base;
 using Framework.Data.Abstractions;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
@@ -10,63 +10,49 @@ using WeatherZapto.Model;
 
 namespace WeatherZapto.WebServer.Services
 {
-    public sealed class HomeWeatherAcquisitionService : BackgroundService
+    public sealed class HomeWeatherAcquisitionService : CronScheduledService
     {
         #region Properties
-        private TimeSpan AcquisitionPeriod { get; init; }
-        #endregion
-
-        #region Services
-        private IConfiguration Configuration { get; }
-        private IApplicationOWService ApplicationOWService { get; }
-        private IServiceScopeFactory ServiceScopeFactory { get; }
-        private IDatabaseService DatabaseService { get; }
+        //Every 10 minutes
+        protected override string Schedule => "*/10 * * * *";
         #endregion
 
         #region Constructor
-        public HomeWeatherAcquisitionService(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base()
+        public HomeWeatherAcquisitionService(IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
         {
-            this.Configuration = configuration;
-            this.ApplicationOWService = serviceProvider?.GetRequiredService<IApplicationOWService>();
-            this.DatabaseService = serviceProvider?.GetRequiredService<IDatabaseService>();
-            this.ServiceScopeFactory = serviceScopeFactory;
-            this.AcquisitionPeriod = new TimeSpan(0, int.Parse(this.Configuration["AcquisitionPeriod"]), 0);
+
         }
         #endregion
 
         #region Methods
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public override async Task ProcessInScope(IServiceScope scope)
         {
-            while (stoppingToken.IsCancellationRequested == false)
+            try
             {
-                try
+                IApplicationOWService applicationOWService = scope.ServiceProvider.GetRequiredService<IApplicationOWService>();
+                IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                IDatabaseService databaseService = scope.ServiceProvider.GetRequiredService<IDatabaseService>();    
+
+                ZaptoWeather zaptoWeather = await applicationOWService.GetCurrentWeather(configuration["OpenWeatherAPIKey"],
+                                                                                                    configuration["HomeLocation"],
+                                                                                                    configuration["HomeLongitude"],
+                                                                                                    configuration["HomeLatitude"],
+                                                                                                    "fr");
+                if (zaptoWeather != null)
                 {
-                    ZaptoWeather zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"],
-                                                                                                        this.Configuration["HomeLocation"],
-                                                                                                        this.Configuration["HomeLongitude"],
-                                                                                                        this.Configuration["HomeLatitude"],
-                                                                                                        "fr");
-                    if (zaptoWeather != null)
+                    if (databaseService.DatabaseIsInitialized())
                     {
-                        using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+                        ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorWeather>().AddWeatherAsync(zaptoWeather);
+                        if (code != ResultCode.Ok)
                         {
-                            if (this.DatabaseService.DatabaseIsInitialized())
-                            {
-                                ResultCode code = await scope.ServiceProvider.GetRequiredService<ISupervisorWeather>().AddWeatherAsync(zaptoWeather);
-                                if (code != ResultCode.Ok)
-                                {
-                                    Log.Error("Error : No Storage for Weather");
-                                }
-                            }
+                            Log.Error("Error : No Storage for Weather");
                         }
                     }
-
-                    await Task.Delay(this.AcquisitionPeriod, stoppingToken);
                 }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
             }
         }
         #endregion

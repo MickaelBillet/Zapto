@@ -30,10 +30,10 @@ namespace WeatherZapto.WebServer.Middleware
                     partition => new SlidingWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
-                        PermitLimit = 60,
+                        PermitLimit = 120,
                         Window = TimeSpan.FromMinutes(1),
                         QueueLimit = 0,
-                        SegmentsPerWindow = 60,
+                        SegmentsPerWindow = 120,
                     });
             }
 
@@ -41,10 +41,10 @@ namespace WeatherZapto.WebServer.Middleware
                 partition => new SlidingWindowRateLimiterOptions
                 {
                     AutoReplenishment = true,
-                    PermitLimit = 30,
+                    PermitLimit = 60,
                     Window = TimeSpan.FromMinutes(1),
                     QueueLimit = 0,
-                    SegmentsPerWindow = 60,
+                    SegmentsPerWindow = 120,
                 });
         }
         #endregion
