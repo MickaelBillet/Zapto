@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorPlug : ISupervisorPlug
+    public sealed class SupervisorPlug : Supervisor, ISupervisorPlug
     {
         private readonly Lazy<IPlugRepository> _lazyPlugRepository;
         private readonly Lazy<IRepository<ConfigurationEntity>> _lazyConfigurationRepository;

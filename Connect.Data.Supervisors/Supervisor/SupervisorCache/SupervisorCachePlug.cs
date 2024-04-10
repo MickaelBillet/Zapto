@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCachePlug : SupervisorCache, ISupervisorCachePlug
+    public sealed class SupervisorCachePlug : SupervisorCache, ISupervisorPlug
     {
         #region Services
         private ISupervisorPlug Supervisor { get; }
@@ -19,6 +19,10 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
+        public Task<ResultCode> Upgrade1_1()
+        {
+            return this.Supervisor.Upgrade1_1();
+        }
         public async Task<ResultCode> AddPlug(Plug plug)
         {
             ResultCode code = await this.Supervisor.AddPlug(plug);
@@ -28,7 +32,7 @@ namespace Connect.Data.Supervisors
             }
             return code;
         }
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Plug> plugs = await this.Supervisor.GetPlugs();
             foreach (var item in plugs)

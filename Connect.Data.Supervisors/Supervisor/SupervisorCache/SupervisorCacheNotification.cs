@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheNotification : SupervisorCache, ISupervisorCacheNotification
+    public class SupervisorCacheNotification : SupervisorCache, ISupervisorNotification
     {
         #region Services
         private ISupervisorNotification Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Notification> notifications = await this.Supervisor.GetNotifications();
             foreach (var item in notifications)
@@ -26,6 +26,11 @@ namespace Connect.Data.Supervisors
                 await this.CacheNotificationService.Set(item.Id, item);
             }
         }
+        public async Task<IEnumerable<Notification>> GetNotifications()
+        {
+            return await this.Supervisor.GetNotifications();
+        }
+
         public async Task<Notification> GetNotification(string id)
         {
             Notification notification = await this.CacheNotificationService.Get((arg) => arg.Id == id);

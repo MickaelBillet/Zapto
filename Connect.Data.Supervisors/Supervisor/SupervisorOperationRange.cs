@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorOperationRange : ISupervisorOperationRange
+    public sealed class SupervisorOperationRange : Supervisor, ISupervisorOperationRange
     {
         private readonly Lazy<IRepository<OperationRangeEntity>> _lazyOperationRangeRepository;
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;

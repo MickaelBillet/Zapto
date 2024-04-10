@@ -1,6 +1,6 @@
 ﻿namespace Connect.Data
 {
-    public interface ISupervisorCache
+    public interface ISupervisor
     {
         public Task Initialize();
     }

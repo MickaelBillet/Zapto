@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorSensor : ISupervisorSensor
+    public sealed class SupervisorSensor : Supervisor, ISupervisorSensor
     {
         private readonly Lazy<IRepository<SensorEntity>> _lazySensorRepository;
 

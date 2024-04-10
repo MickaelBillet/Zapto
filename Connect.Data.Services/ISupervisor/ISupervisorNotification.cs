@@ -3,9 +3,8 @@ using Framework.Core.Base;
 
 namespace Connect.Data
 {
-    public interface ISupervisorNotification
+    public interface ISupervisorNotification : ISupervisor
     {
-        Task<ResultCode> NotificationExists(string id);
         Task<Notification> GetNotification(string id);
         Task<ResultCode> AddNotification(Notification notification);
         Task<ResultCode> DeleteNotification(Notification notification);

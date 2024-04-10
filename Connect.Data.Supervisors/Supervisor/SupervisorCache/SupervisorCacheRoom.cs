@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheRoom : SupervisorCache, ISupervisorCacheRoom
+    public sealed class SupervisorCacheRoom : SupervisorCache, ISupervisorRoom
     {
         #region Services
         private ISupervisorRoom Supervisor { get; }
@@ -19,7 +19,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Room> rooms = await this.Supervisor.GetRooms();
             foreach (var item in rooms)

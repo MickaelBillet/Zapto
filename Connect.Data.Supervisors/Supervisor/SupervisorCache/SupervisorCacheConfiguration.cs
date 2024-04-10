@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheConfiguration : SupervisorCache, ISupervisorCacheConfiguration
+    public sealed class SupervisorCacheConfiguration : SupervisorCache, ISupervisorConfiguration
     {
         #region Services
         private ISupervisorConfiguration Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Configuration> configurations = await this.Supervisor.GetConfigurations();
             foreach (var item in configurations)
@@ -26,6 +26,11 @@ namespace Connect.Data.Supervisors
                 await this.CacheConfigurationService.Set(item.Id, item);
             }
         }
+        public async Task<IEnumerable<Configuration>> GetConfigurations()
+        {
+            return await this.Supervisor.GetConfigurations();
+        }
+
         public async Task<ResultCode> AddConfiguration(Configuration configuration)
         {
             ResultCode code = await this.Supervisor.AddConfiguration(configuration);

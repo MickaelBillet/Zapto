@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorRoom : ISupervisorRoom
+    public sealed class SupervisorRoom : Supervisor, ISupervisorRoom
     {
         private readonly Lazy<IRoomRepository> _lazyRoomRepository;
         private readonly Lazy<IRepository<SensorEntity>> _lazySensorRepository;

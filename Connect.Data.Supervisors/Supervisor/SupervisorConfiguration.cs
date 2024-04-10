@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorConfiguration : ISupervisorConfiguration
+    public sealed class SupervisorConfiguration : Supervisor, ISupervisorConfiguration
     {
         private readonly Lazy<IRepository<ConfigurationEntity>> _lazyConfigurationRepository;
 

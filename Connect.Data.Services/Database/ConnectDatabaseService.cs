@@ -609,34 +609,34 @@ namespace Connect.Data.Database
 
         private async Task LoadCacheAsync(IServiceScope scope)
         {
-            ISupervisorCacheCondition supervisorCacheCondition = scope.ServiceProvider.GetRequiredService<ISupervisorCacheCondition>();
+            ISupervisorCondition supervisorCacheCondition = scope.ServiceProvider.GetRequiredService<ISupervisorCondition>();
             await supervisorCacheCondition.Initialize();
 
-            ISupervisorCacheConfiguration supervisorCacheConfiguration = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConfiguration>();
+            ISupervisorConfiguration supervisorCacheConfiguration = scope.ServiceProvider.GetRequiredService<ISupervisorConfiguration>();
             await supervisorCacheConfiguration.Initialize();
 
-            ISupervisorCacheConnectedObject supervisorCacheConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConnectedObject>();   
+            ISupervisorConnectedObject supervisorCacheConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();   
             await supervisorCacheConnectedObject.Initialize();
 
-            ISupervisorCacheLocation supervisorCacheLocation = scope.ServiceProvider.GetRequiredService<ISupervisorCacheLocation>();
+            ISupervisorLocation supervisorCacheLocation = scope.ServiceProvider.GetRequiredService<ISupervisorLocation>();
             await supervisorCacheLocation.Initialize();
 
-            ISupervisorCacheNotification supervisorCacheNotification = scope.ServiceProvider.GetRequiredService<ISupervisorCacheNotification>();
+            ISupervisorNotification supervisorCacheNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
             await supervisorCacheNotification.Initialize();
 
-            ISupervisorCacheOperationRange supervisorCacheOperationRange = scope.ServiceProvider.GetRequiredService<ISupervisorCacheOperationRange>();
+            ISupervisorOperationRange supervisorCacheOperationRange = scope.ServiceProvider.GetRequiredService<ISupervisorOperationRange>();
             await supervisorCacheOperationRange.Initialize();
 
-            ISupervisorCachePlug supervisorCachePlug = scope.ServiceProvider.GetRequiredService<ISupervisorCachePlug>();
+            ISupervisorPlug supervisorCachePlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
             await supervisorCachePlug.Initialize(); 
 
-            ISupervisorCacheProgram supervisorCacheProgram = scope.ServiceProvider.GetRequiredService<ISupervisorCacheProgram>();
+            ISupervisorProgram supervisorCacheProgram = scope.ServiceProvider.GetRequiredService<ISupervisorProgram>();
             await supervisorCacheProgram.Initialize();
 
-            ISupervisorCacheRoom supervisorCacheRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
+            ISupervisorRoom supervisorCacheRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
             await supervisorCacheRoom.Initialize();
 
-            ISupervisorCacheSensor supervisorCacheSensor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
+            ISupervisorSensor supervisorCacheSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
             await supervisorCacheSensor.Initialize();   
         }
         #endregion

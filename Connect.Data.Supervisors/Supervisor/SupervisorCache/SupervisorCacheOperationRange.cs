@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCacheOperationRange : SupervisorCache, ISupervisorCacheOperationRange
+    public sealed class SupervisorCacheOperationRange : SupervisorCache, ISupervisorOperationRange
     {
         #region Services
         private ISupervisorOperationRange Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<OperationRange> operationRanges = await this.Supervisor.GetOperationRanges();
             foreach (var item in operationRanges)
@@ -26,6 +26,12 @@ namespace Connect.Data.Supervisors
                 await this.CacheOperationRangeService.Set(item.Id, item);
             }
         }
+
+        public async Task<IEnumerable<OperationRange>> GetOperationRanges()
+        {
+            return await this.Supervisor.GetOperationRanges();
+        }
+
         public async Task<OperationRange> GetOperationRange(string id)
         {
             OperationRange operationRange = await this.CacheOperationRangeService.Get((arg) => arg.Id == id);

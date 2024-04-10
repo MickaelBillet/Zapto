@@ -3,9 +3,8 @@ using Framework.Core.Base;
 
 namespace Connect.Data
 {
-    public interface ISupervisorSensor
+    public interface ISupervisorSensor : ISupervisor
     {
-        Task<ResultCode> SensorExists(string id);
         Task<IEnumerable<Sensor>> GetSensors();
         Task<Sensor> GetSensor(string id);
         Task<Sensor> GetSensor(string? type, string? channel);

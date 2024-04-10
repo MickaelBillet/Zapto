@@ -15,7 +15,7 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        private ISupervisorCacheProgram SupervisorProgram { get; set; }
+        private ISupervisorProgram SupervisorProgram { get; set; }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace Connect.WebApi.Controllers
 
         public ProgramsController(IServiceProvider serviceProvider )
         {
-            this.SupervisorProgram = serviceProvider.GetRequiredService<ISupervisorCacheProgram>();
+            this.SupervisorProgram = serviceProvider.GetRequiredService<ISupervisorProgram>();
         }
 
         #endregion

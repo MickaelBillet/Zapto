@@ -3,9 +3,8 @@ using Framework.Core.Base;
 
 namespace Connect.Data
 {
-    public interface ISupervisorPlug
+    public interface ISupervisorPlug : ISupervisor
     {
-        Task<ResultCode> PlugExists(string id);
         Task<IEnumerable<Plug>> GetPlugs();
         Task<Plug> GetPlug(string address, string unit);
         Task<Plug> GetPlug(string id);

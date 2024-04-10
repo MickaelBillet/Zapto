@@ -14,18 +14,14 @@ namespace Connect.WebApi.Controllers
     public class ConditionsController : Controller
     {
         #region Property
-
-        ISupervisorCacheCondition SupervisorCondition { get; }
-
+        ISupervisorCondition SupervisorCondition { get; }
         #endregion
 
         #region Constructor
-
         public ConditionsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCacheCondition>();
+            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCondition>();
         }
-
         #endregion
 
         #region Method

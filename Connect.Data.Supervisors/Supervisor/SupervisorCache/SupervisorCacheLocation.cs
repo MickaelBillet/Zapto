@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheLocation : SupervisorCache, ISupervisorCacheLocation
+    public class SupervisorCacheLocation : SupervisorCache, ISupervisorLocation
     {
         #region Services
         private ISupervisorLocation Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Location> locations = await this.Supervisor.GetLocations();
             foreach (var item in locations)

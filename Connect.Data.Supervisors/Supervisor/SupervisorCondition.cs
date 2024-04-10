@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCondition : ISupervisorCondition
+    public sealed class SupervisorCondition : Supervisor, ISupervisorCondition
     {
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
 

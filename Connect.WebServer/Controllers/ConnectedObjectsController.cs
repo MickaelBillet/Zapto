@@ -15,7 +15,7 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        private ISupervisorCacheConnectedObject SupervisorConnectedObject { get; }
+        private ISupervisorConnectedObject SupervisorConnectedObject { get; }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace Connect.WebApi.Controllers
 
         public ConnectedObjectsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorConnectedObject = serviceProvider.GetRequiredService<ISupervisorCacheConnectedObject>();
+            this.SupervisorConnectedObject = serviceProvider.GetRequiredService<ISupervisorConnectedObject>();
         }
 
         #endregion

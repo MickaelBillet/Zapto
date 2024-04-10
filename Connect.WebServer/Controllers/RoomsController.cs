@@ -15,14 +15,14 @@ namespace Connect.WebApi.Controllers
     {
         #region Property
 
-        ISupervisorCacheRoom SupervisorRoom { get; }
+        ISupervisorRoom SupervisorRoom { get; }
 
         #endregion
 
         #region Constructor
         public RoomsController(IServiceProvider serviceProvider)
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorCacheRoom>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
         }
         #endregion
 

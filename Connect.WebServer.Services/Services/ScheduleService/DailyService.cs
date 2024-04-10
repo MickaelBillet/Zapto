@@ -37,7 +37,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorCachePlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCachePlug>();
+                ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
                 IEnumerable<Plug> plugs = await supervisor.GetPlugs();
 
                 //Reset the WorkingDuration daily

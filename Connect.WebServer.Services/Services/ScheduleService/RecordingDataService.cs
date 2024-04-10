@@ -36,8 +36,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             try
             {
                 ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
-                ISupervisorCacheRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
-                ISupervisorCacheConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorCacheConnectedObject>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
 
                 await AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
                 await AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);
@@ -48,7 +48,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             }
         }
 
-        private async Task AddOperatingDataForRoom(ISupervisorCacheRoom supervisorRoom, ISupervisorOperatingData supervisorOperatingData)
+        private async Task AddOperatingDataForRoom(ISupervisorRoom supervisorRoom, ISupervisorOperatingData supervisorOperatingData)
         {
             int roomCount = 0;
 
@@ -75,7 +75,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             Log.Information("RecordingDataService - rooms : " + roomCount);
         }
 
-        private async Task AddOperatingDataForConnectedObject(ISupervisorCacheConnectedObject supervisorConnectedObject, ISupervisorOperatingData supervisorOperatingData)
+        private async Task AddOperatingDataForConnectedObject(ISupervisorConnectedObject supervisorConnectedObject, ISupervisorOperatingData supervisorOperatingData)
         {
             int objectCount = 0;
 

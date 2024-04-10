@@ -15,13 +15,13 @@ namespace Connect.WebApi.Controllers
     public class OperationRangesController : Controller
     {
         #region Property
-        private ISupervisorCacheOperationRange SupervisorOperationRange { get; set; }
+        private ISupervisorOperationRange SupervisorOperationRange { get; set; }
         #endregion
 
         #region Constructor
         public OperationRangesController(IServiceProvider serviceProvider)
         {
-            this.SupervisorOperationRange = serviceProvider.GetRequiredService<ISupervisorCacheOperationRange>();
+            this.SupervisorOperationRange = serviceProvider.GetRequiredService<ISupervisorOperationRange>();
         }
         #endregion
 

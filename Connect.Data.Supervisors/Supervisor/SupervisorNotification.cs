@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorNotification : ISupervisorNotification
+    public sealed class SupervisorNotification : Supervisor, ISupervisorNotification
     {
         private readonly Lazy<IRepository<NotificationEntity>> _lazyNotificationRepository;
 

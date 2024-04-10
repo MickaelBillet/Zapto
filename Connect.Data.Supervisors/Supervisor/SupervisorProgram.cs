@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorProgram : ISupervisorProgram
+    public sealed class SupervisorProgram : Supervisor, ISupervisorProgram
     {
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
         private readonly Lazy<IRepository<OperationRangeEntity>> _lazyOperationRangeRepository;

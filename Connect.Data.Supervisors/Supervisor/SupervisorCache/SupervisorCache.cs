@@ -37,8 +37,6 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Method
-        public abstract Task Initialize();
-
         protected async Task<Plug> GetPlugFromCache(Func<Plug, bool> func)
         {
             Plug plug = await this.CachePlugService.Get(func);

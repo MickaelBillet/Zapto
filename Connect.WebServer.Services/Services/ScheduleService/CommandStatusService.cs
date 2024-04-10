@@ -32,8 +32,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorCachePlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorCachePlug>();
-                ISupervisorCacheRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorCacheRoom>();
+                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)
@@ -47,8 +47,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             }
         }
 
-        private async Task ProcessPlugStatus(ISupervisorCachePlug supervisorPlug,
-                                                ISupervisorCacheRoom supervisorRoom,
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug,
+                                                ISupervisorRoom supervisorRoom,
                                                 IApplicationPlugServices applicationPlugServices,
                                                 CommandStatus status)
         {

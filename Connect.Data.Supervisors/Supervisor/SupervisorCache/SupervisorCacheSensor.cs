@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.Data.Supervisors
 {
-    public class SupervisorCacheSensor : SupervisorCache, ISupervisorCacheSensor
+    public class SupervisorCacheSensor : SupervisorCache, ISupervisorSensor
     {
         #region Services
         private ISupervisorSensor Supervisor { get; }
@@ -18,7 +18,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public override async Task Initialize()
+        public async Task Initialize()
         {
             IEnumerable<Sensor> sensors = await this.Supervisor.GetSensors();
             foreach (var item in sensors)

@@ -26,16 +26,16 @@ namespace Connect.Data
 
         public static void AddCacheSupervisor(this IServiceCollection services)
         {
-            services.AddScoped<ISupervisorCacheSensor, SupervisorCacheSensor>();
-            services.AddScoped<ISupervisorCacheRoom, SupervisorCacheRoom>();
-            services.AddScoped<ISupervisorCacheProgram, SupervisorCacheProgram>();
-            services.AddScoped<ISupervisorCachePlug, SupervisorCachePlug>();
-            services.AddScoped<ISupervisorCacheOperationRange, SupervisorCacheOperationRange>();
-            services.AddScoped<ISupervisorCacheNotification, SupervisorCacheNotification>();
-            services.AddScoped<ISupervisorCacheLocation, SupervisorCacheLocation>();
-            services.AddScoped<ISupervisorCacheConnectedObject, SupervisorCacheConnectedObject>();
-            services.AddScoped<ISupervisorCacheConfiguration, SupervisorCacheConfiguration>();
-            services.AddScoped<ISupervisorCacheCondition, SupervisorCacheCondition>();
+            services.AddScoped<ISupervisorSensor, SupervisorCacheSensor>();
+            services.AddScoped<ISupervisorRoom, SupervisorCacheRoom>();
+            services.AddScoped<ISupervisorProgram, SupervisorCacheProgram>();
+            services.AddScoped<ISupervisorPlug, SupervisorCachePlug>();
+            services.AddScoped<ISupervisorOperationRange, SupervisorCacheOperationRange>();
+            services.AddScoped<ISupervisorNotification, SupervisorCacheNotification>();
+            services.AddScoped<ISupervisorLocation, SupervisorCacheLocation>();
+            services.AddScoped<ISupervisorConnectedObject, SupervisorCacheConnectedObject>();
+            services.AddScoped<ISupervisorConfiguration, SupervisorCacheConfiguration>();
+            services.AddScoped<ISupervisorCondition, SupervisorCacheCondition>();
         }
     }
 }
