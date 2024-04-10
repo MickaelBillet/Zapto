@@ -1,7 +1,5 @@
 ﻿@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
-@inject IZaptoLocalStorageService ZaptoLocalStorageService
-@inject ISnackbar Snackbar
 @implements IDisposable
 
 <h3>@RoomName</h3>
@@ -60,7 +58,6 @@
     #endregion
 
     #region Methods
-
     protected override void OnInitialized()
     {
         this.PropertyChanged += this.PropertyChangedHandler;
@@ -73,7 +70,6 @@
             await this.ViewModel.InitializeAsync(this.Location);
             this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
             this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
-
             await this.DisplayCharts();
         }
     }
@@ -90,36 +86,36 @@
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
-        bool hasChanged = false;
-
-        if (this.ZaptoLocalStorageService != null)
+        bool startDateHasChanged = await this.UpdateStartDate();
+        bool endDateHasChanged = await this.UpdateEndDate();           
+        if ((startDateHasChanged == true) || (endDateHasChanged == true))
         {
-            String? startdateStr = await this.ZaptoLocalStorageService.GetItemAsync<String>("StartDate");
-            if (DateTime.TryParse(startdateStr, out DateTime startdate))
-            {
-                if ((this.StartDate != null) && (this.StartDate.Value.Day != startdate.Day))
-                {
-                    this.StartDate = startdate;
-                    hasChanged = true;
-                }
-            }
-
-            String? enddatestr = await this.ZaptoLocalStorageService.GetItemAsync<String>("EndDate");
-            if (DateTime.TryParse(enddatestr, out DateTime enddate))
-            {
-                if ((this.EndDate != null) && (this.EndDate.Value.Day != enddate.Day))
-                {
-                    this.EndDate = enddate;
-                    hasChanged = true;
-                }
-            }
-
-            if (hasChanged == true)
-            {
-                await this.DisplayCharts();
-                this.StateHasChanged();
-            }
-        }       
+            await this.DisplayCharts();
+            await Task.Delay(10);
+            this.StateHasChanged();
+        }
+    }
+    private async Task<bool> UpdateStartDate()
+    {
+        bool hasChanged = false;
+        DateTime? startDate = await this.ViewModel.GetDateFromLocalStorage("StartDate");
+        if ((startDate != null) && (this.StartDate != null) && (this.StartDate.Value.Day != startDate.Value.Day))
+        {
+            this.StartDate = startDate;
+            hasChanged = true;
+        }
+        return hasChanged;
+    }
+    private async Task<bool> UpdateEndDate()
+    {
+        bool hasChanged = false;
+        DateTime? endDate = await this.ViewModel.GetDateFromLocalStorage("EndDate");
+        if ((endDate != null) && (this.EndDate != null) && (this.EndDate.Value.Day != endDate.Value.Day))
+        {
+            this.EndDate = endDate;
+            hasChanged = true;
+        }
+        return hasChanged;
     }
     #endregion
 }

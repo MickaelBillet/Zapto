@@ -1,6 +1,5 @@
 ﻿@inject ISelectDateViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
-@inject IZaptoLocalStorageService ZaptoLocalStorageService
 @implements IDisposable
 
 @if ((this.MinDate != null) && (this.MaxDate != null))
@@ -53,12 +52,14 @@
 
     public void Dispose()
     {
+        this.ViewModel?.Dispose();
     }
     public async Task SelectDatesClick()
     {
         this.IsClicked = true;
-        await this.ZaptoLocalStorageService.SetItemAsync<String>("StartDate", this.StartDate!.Value.ToString());
-        await this.ZaptoLocalStorageService.SetItemAsync<String>("EndDate", this.EndDate!.Value.ToString());
+        await this.ViewModel.SetDateFromLocalStorage("StartDate", this.StartDate!.Value.ToString());
+        await this.ViewModel.SetDateFromLocalStorage("EndDate", this.EndDate!.Value.ToString());
+        await Task.Delay(10);
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }

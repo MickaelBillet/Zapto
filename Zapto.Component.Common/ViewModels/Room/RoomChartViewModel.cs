@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using WeatherZapto.Application.Services;
 using Zapto.Component.Common.Models;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -13,6 +14,7 @@ namespace Zapto.Component.Common.ViewModels
         Task<DateTime?> GetRoomMaxDate(string roomId);
         Task<DateTime?> GetRoomMinDate(string roomId);
         Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId);
+        Task<DateTime?> GetDateFromLocalStorage(string key);
     }
 
     public class RoomChartViewModel : BaseViewModel, IRoomChartViewModel
@@ -20,6 +22,7 @@ namespace Zapto.Component.Common.ViewModels
         #region Properties
         private IApplicationOperationDataService ApplicationOperationDataService { get; }
         private IApplicationTemperatureService ApplicationTemperatureService { get; }
+        private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
         private string? Location { get; set; }
         #endregion
 
@@ -28,6 +31,7 @@ namespace Zapto.Component.Common.ViewModels
         {
             this.ApplicationOperationDataService = serviceProvider.GetRequiredService<IApplicationOperationDataService>();
             this.ApplicationTemperatureService = serviceProvider.GetRequiredService<IApplicationTemperatureService>();
+            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
         #endregion
 
@@ -35,7 +39,6 @@ namespace Zapto.Component.Common.ViewModels
         public override async Task InitializeAsync(string? parameter)
         {
             await base.InitializeAsync(parameter);
-
             this.Location = parameter as string;
         }
 
@@ -112,6 +115,12 @@ namespace Zapto.Component.Common.ViewModels
                 this.IsLoading = false;
             }
             return models;
+        }
+
+        public async Task<DateTime?> GetDateFromLocalStorage(string key)
+        {
+            string? dateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>(key);
+            return (DateTime.TryParse(dateStr, out DateTime date)) ? date : null;
         }
         #endregion
     }
