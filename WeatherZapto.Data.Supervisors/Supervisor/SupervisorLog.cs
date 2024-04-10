@@ -25,7 +25,7 @@ namespace WeatherZapto.Data.Supervisors
         #region Methods
         public async Task<IEnumerable<Logs>> GetLogsInf24H()
 		{
-            IEnumerable<LogsEntity> entities = (await this.LogsRepository.GetCollectionAsync(arg => (Clock.Now <= arg.CreationDateTime.ToLocalTime().AddHours(24f))));
+            IEnumerable<LogsEntity> entities = (await this.LogsRepository.GetCollectionAsync(arg => (DateTime.UtcNow <= arg.CreationDateTime.AddHours(24f))));
             return (entities != null) ? entities.Select(item => LogsMapper.Map(item)) : Enumerable.Empty<Logs>();
 		}
 

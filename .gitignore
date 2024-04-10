@@ -131,3 +131,4 @@
 /WeatherZapto.Data.Supervisors.Tests/obj
 /Connect.Data.Supervisors.Tests/bin/Debug/net8.0
 /Connect.Data.Supervisors.Tests/obj
+/WeatherZapto.WebServer/WeatherZapto.WebServer.csproj.user

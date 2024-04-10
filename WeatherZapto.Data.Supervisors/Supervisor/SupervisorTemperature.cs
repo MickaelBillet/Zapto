@@ -1,4 +1,5 @@
-﻿using Framework.Data.Abstractions;
+﻿using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,10 +42,9 @@ namespace WeatherZapto.Data.Supervisors
         {
             IEnumerable<double> temperatures = null;           
             if (this.WeatherRepository != null)
-            {
-                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToLocalTime().Year.Equals(day.Year)
-                                                                                        && item.CreationDateTime.ToLocalTime().Month.Equals(day.Month)
-                                                                                        && item.CreationDateTime.ToLocalTime().Day.Equals(day.Day)
+            { 
+                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                        && item.CreationDateTime <= DateTime.UtcNow
                                                                                         && item.Location.Equals(location)))
                                                             .Select((item) => item.Temperature);
             }
@@ -67,9 +67,8 @@ namespace WeatherZapto.Data.Supervisors
                     {
                         if (this.WeatherRepository != null)
                         {
-                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToLocalTime().Year.Equals(day.Year)
-                                                                                                                            && item.CreationDateTime.ToLocalTime().Month.Equals(day.Month)
-                                                                                                                            && item.CreationDateTime.ToLocalTime().Day.Equals(day.Day)
+                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                                                            && item.CreationDateTime <= DateTime.UtcNow
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
@@ -104,9 +103,8 @@ namespace WeatherZapto.Data.Supervisors
                     {
                         if (this.WeatherRepository != null)
                         {
-                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToLocalTime().Year.Equals(day.Year)
-                                                                                                                            && item.CreationDateTime.ToLocalTime().Month.Equals(day.Month)
-                                                                                                                            && item.CreationDateTime.ToLocalTime().Day.Equals(day.Day)
+                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                                                            && item.CreationDateTime <= DateTime.UtcNow
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
