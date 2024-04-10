@@ -44,7 +44,7 @@ namespace WeatherZapto.Data.Supervisors
             if (this.WeatherRepository != null)
             { 
                 temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
-                                                                                        && item.CreationDateTime <= DateTime.UtcNow
+                                                                                        && item.CreationDateTime < (day + new TimeSpan(1,0,0,0)).ToUniversalTime()
                                                                                         && item.Location.Equals(location)))
                                                             .Select((item) => item.Temperature);
             }
@@ -68,7 +68,7 @@ namespace WeatherZapto.Data.Supervisors
                         if (this.WeatherRepository != null)
                         {
                             IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
-                                                                                                                            && item.CreationDateTime <= DateTime.UtcNow
+                                                                                                                            && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime()
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
@@ -104,7 +104,7 @@ namespace WeatherZapto.Data.Supervisors
                         if (this.WeatherRepository != null)
                         {
                             IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
-                                                                                                                            && item.CreationDateTime <= DateTime.UtcNow
+                                                                                                                            && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime()
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))

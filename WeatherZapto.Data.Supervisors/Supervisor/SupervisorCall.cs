@@ -54,7 +54,7 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<long?> GetDayCallsCount(DateTime day)
         {
             IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
-                                                                                                    && item.CreationDateTime <= DateTime.UtcNow);
+                                                                                                    && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime());
 
             long? count = entities.Count();
 
