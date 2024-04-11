@@ -20,16 +20,13 @@ namespace Connect.WebServer.Services
         #endregion
 
         #region Constructor
-
         public SensorDataService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 10)
         {
             this.Configuration = configuration;
         }
-
         #endregion
 
         #region Methods 
-
         /// <summary>
         /// Process the data in a scoped service which is launched at the startup of the app
         /// </summary>

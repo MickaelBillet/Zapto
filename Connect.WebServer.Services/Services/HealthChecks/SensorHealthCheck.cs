@@ -14,12 +14,10 @@ namespace Connect.WebServer.Services
 		#endregion
 
 		#region Constructor
-
 		public SensorHealthCheck(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
 			this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(configuration["Cache"]!));
 		}
-
 		#endregion
 
 		#region Methods
