@@ -23,7 +23,7 @@ namespace Connect.WebServer.Services
 
         public SensorDataService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 10)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         #endregion
@@ -41,11 +41,11 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
-                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorNotification>();
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
-                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
                 IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                 IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();

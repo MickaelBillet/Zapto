@@ -12,11 +12,13 @@ namespace Connect.WebServer.Services
     public class SensorEventService : ScheduledService
     {
         #region Properties
+        private IConfiguration Configuration { get; }
         #endregion
 
         #region Constructor
         public SensorEventService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 10)
         {
+            this.Configuration = configuration; 
         }
         #endregion
 
@@ -33,8 +35,8 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
                 if (@event != null)

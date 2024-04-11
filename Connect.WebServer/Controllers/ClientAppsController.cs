@@ -19,7 +19,7 @@ namespace Connect.WebApi.Controllers
 
         public ClientAppsController(IServiceProvider serviceProvider)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorClientApps>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactoryClientApp>().CreateSupervisor();
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace Connect.Data.Supervisors
         #region Constructor
         public SupervisorCacheNotification(IServiceProvider serviceProvider) : base (serviceProvider) 
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorNotification>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(0);
         }
         #endregion
 

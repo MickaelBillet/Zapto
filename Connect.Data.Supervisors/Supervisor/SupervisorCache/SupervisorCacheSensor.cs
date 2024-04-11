@@ -13,7 +13,7 @@ namespace Connect.Data.Supervisors
         #region Constructor
         public SupervisorCacheSensor(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0);
         }
         #endregion
 

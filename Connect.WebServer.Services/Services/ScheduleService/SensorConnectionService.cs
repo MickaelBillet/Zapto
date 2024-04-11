@@ -11,14 +11,14 @@ namespace Connect.WebServer.Services
     public class SensorConnectionService : ScheduledService
     {
         #region Properties
-
+        private IConfiguration Configuration { get; }
         #endregion
 
         #region Constructor
 
         public SensorConnectionService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, Convert.ToInt32(configuration["ConnectionPeriod"]))
         {
-
+            this.Configuration = configuration;
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace Connect.WebServer.Services
             try
             {
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
-                ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
                 IEnumerable<Sensor> sensors = await supervisor.GetSensors();
                 foreach (Sensor sensor in sensors)
                 {

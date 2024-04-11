@@ -5,6 +5,7 @@ using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,10 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-        public LocationsController(IServiceProvider serviceProvider)
+        public LocationsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorLocation>();
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
         #endregion

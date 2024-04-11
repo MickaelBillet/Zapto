@@ -22,7 +22,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
         public ProcessingDataService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, Convert.ToInt32(configuration["ProcessingDataPeriod"]))
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         #endregion
@@ -39,8 +39,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
                 ISendCommandService sendCommandService = scope.ServiceProvider.GetRequiredService<ISendCommandService>();
 
                 await ProcessPlugStatus(supervisorPlug, sendCommandService);

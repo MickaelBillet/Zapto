@@ -36,7 +36,6 @@ namespace Connect.Data.Supervisors.Tests
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
-                services.AddSupervisor();
 
                 services.AddSingleton<IDatabaseService, ConnectDatabaseService>();
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();

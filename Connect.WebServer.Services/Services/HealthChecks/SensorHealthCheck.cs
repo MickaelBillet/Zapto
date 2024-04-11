@@ -1,6 +1,7 @@
 ﻿using Connect.Data;
 using Connect.Model;
 using Framework.Core.Base;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -14,9 +15,9 @@ namespace Connect.WebServer.Services
 
 		#region Constructor
 
-		public SensorHealthCheck(IServiceProvider serviceProvider)
+		public SensorHealthCheck(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
-			this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+			this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(configuration["Cache"]!));
 		}
 
 		#endregion

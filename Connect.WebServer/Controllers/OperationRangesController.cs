@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,9 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-        public OperationRangesController(IServiceProvider serviceProvider)
+        public OperationRangesController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorOperationRange = serviceProvider.GetRequiredService<ISupervisorOperationRange>();
+            this.SupervisorOperationRange = serviceProvider.GetRequiredService<ISupervisorFactoryOperationRange>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
         #endregion
 

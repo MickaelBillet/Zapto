@@ -1,10 +1,10 @@
-﻿using Connect.Application;
-using Connect.Data;
+﻿using Connect.Data;
 using Connect.Model;
 using Connect.WebServer.Services;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -21,9 +21,9 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-        public PlugsController(IServiceProvider serviceProvider)
+        public PlugsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(configuration["Cache"]!));
             this.SendCommandService = serviceProvider.GetRequiredService<ISendCommandService>();
         }
         #endregion

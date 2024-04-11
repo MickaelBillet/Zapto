@@ -2,6 +2,7 @@
 using Connect.Data;
 using Connect.Model;
 using Framework.Core.Base;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -21,10 +22,11 @@ namespace Connect.WebServer.Services
         #endregion
 
         #region Constructor
-        public SendCommandService(IServiceProvider serviceProvider) 
+        public SendCommandService(IServiceProvider serviceProvider)
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
+            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(configuration["Cache"]!));
             this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
         }
         #endregion

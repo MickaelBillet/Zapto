@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,9 @@ namespace Connect.WebApi.Controllers
 
         #region Constructor
 
-        public NotificationsController(IServiceProvider serviceProvider)
+        public NotificationsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorNotification>();
+            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
 
         #endregion

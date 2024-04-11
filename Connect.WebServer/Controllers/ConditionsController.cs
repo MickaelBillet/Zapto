@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -18,9 +19,9 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-        public ConditionsController(IServiceProvider serviceProvider)
-        {
-            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCondition>();
+        public ConditionsController(IServiceProvider serviceProvider, IConfiguration configuration)
+        {            
+            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
         #endregion
 

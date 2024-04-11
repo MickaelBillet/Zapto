@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -18,12 +19,10 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-
-        public SensorsController(IServiceProvider serviceProvider)
+        public SensorsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
-
         #endregion
 
         #region Method

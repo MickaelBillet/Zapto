@@ -1,8 +1,8 @@
 ﻿using Connect.Application;
 using Connect.Application.Infrastructure;
-using Connect.Data;
 using Connect.Data.Database;
 using Connect.Data.Repository;
+using Connect.Data.Supervisors;
 using Connect.Model;
 using Connect.WebServer.Services;
 using Connect.WebServer.Services.Services.ScheduleService;
@@ -21,12 +21,11 @@ namespace Connect.Server.Configuration
 		{
             services.AddMailService();
             services.AddUdpService();
-            services.AddSupervisor();
-            services.AddCacheSupervisor();
             services.AddRepositories();
             services.AddApplicationConnectServices();
             services.AddConnectWebServices();
             services.AddCacheServices();
+            services.AddSupervisors();
             services.AddSingleton<CacheSignal>();
             services.AddSingleton<IDatabaseService, ConnectDatabaseService>(); 
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();

@@ -23,7 +23,7 @@ namespace Connect.WebApi.Controllers
 
         public OperatingDataController(IServiceProvider serviceProvider)
         {
-            this.SupervisorOperatingData = serviceProvider.GetRequiredService<ISupervisorOperatingData>();
+            this.SupervisorOperatingData = serviceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
         }
 
         #endregion

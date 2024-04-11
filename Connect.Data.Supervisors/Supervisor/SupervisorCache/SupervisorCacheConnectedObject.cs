@@ -13,7 +13,7 @@ namespace Connect.Data.Supervisors
         #region Constructor
         public SupervisorCacheConnectedObject(IServiceProvider serviceProvider) : base(serviceProvider) 
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorConnectedObject>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0);
         }
         #endregion
 
