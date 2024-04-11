@@ -13,9 +13,9 @@ namespace Connect.WebServer.Services
 		#endregion
 
 		#region Constructor
-		public ErrorHealthCheck(ISupervisorLog supervisor)
+		public ErrorHealthCheck(ISupervisorFactoryLog factory)
 		{
-			this.Supervisor = supervisor;
+			this.Supervisor = factory.CreateSupervisor();
 		}
 		#endregion
 
