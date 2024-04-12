@@ -35,8 +35,8 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 SensorEvent? @event = await applicationSensorServices.ReceiveEventAsync();
                 if (@event != null)

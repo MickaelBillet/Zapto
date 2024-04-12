@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class CommandStatusService : ScheduledService
     {
@@ -22,9 +22,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
         #endregion
 
         #region Methods 
-
         /// <summary>
-        /// Process the data in a scoped service which is launched at the startup of the app
+        /// Process the data in a scoped service that is launched at the startup of the app
         /// </summary>
         /// <returns></returns>
         public override async Task ProcessInScope(IServiceScope scope)
@@ -34,8 +33,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             try
             {
                 IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(configuration["Cache"]!));
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
                 IApplicationPlugServices applicationPlugServices = scope.ServiceProvider.GetRequiredService<IApplicationPlugServices>();
                 CommandStatus? status = await applicationPlugServices.ReceiveCommandStatus();
                 if (status != null)

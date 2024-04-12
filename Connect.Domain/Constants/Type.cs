@@ -1,25 +1,25 @@
 ﻿namespace Connect.Model
 {
-    public static class Mode
+    public struct Mode
     {
         public const short Manual = 0;
         public const short Programing = 1;
     }
 
-    public static class Order
+    public struct Order
 	{
         public const int Off = 0;
         public const int On = 1;
 	}
 
-    public static class CommandType
+    public struct CommandType
 	{
         public const int Off = 1;
         public const int Manual = 2;
         public const int Programing = 3;
 	}
 
-    public static class Status
+    public struct Status
     {
         public const short OFF = 0;
         public const short ON = 1;
@@ -27,7 +27,7 @@
         public const short OffON = 3;
     }
 
-    public static class DeviceType
+    public struct DeviceType
     {
         public const int None = 0;
         public const int Module = 1;
@@ -38,7 +38,7 @@
         public const int Sensor_Water_Leak = 32;
     }
 
-    public static class ErrorType
+    public struct ErrorType
     {
         public const short None = 0;
         public const short ErrorSoftware = 1;
@@ -46,14 +46,14 @@
         public const short Warning = 3;
     }
 
-    public static class ParameterType
+    public struct ParameterType
     {
         public const short None = 0;
         public const short Temperature = 1;
         public const short Humidity = 2;
     }
 
-    public static class SignType
+    public struct SignType
     {
         public const short None = 0;
         public const short Equal = 1;
@@ -61,7 +61,7 @@
         public const short Upper = 3;
     }
 
-    public static class RoomType
+    public struct RoomType
 	{
         public const short None = 0;
         public const short SmallBedroom = 1;
@@ -70,11 +70,17 @@
         public const short Kitchen = 4;
 	}
 
-    public static class ServiceAlertType
+    public struct ServiceAlertType
     {
         public const short None = 0;
         public const short SignalR = 1;
         public const short Firebase = 2;
         public const short Mail = 3;
+    }
+
+    public struct CacheType
+    {
+        public const byte None = 0;
+        public const byte MemoryCache = 1;
     }
 }

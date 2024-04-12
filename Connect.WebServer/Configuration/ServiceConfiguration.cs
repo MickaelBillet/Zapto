@@ -5,7 +5,6 @@ using Connect.Data.Repository;
 using Connect.Data.Supervisors;
 using Connect.Model;
 using Connect.WebServer.Services;
-using Connect.WebServer.Services.Services.ScheduleService;
 using Framework.Common.Services;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;

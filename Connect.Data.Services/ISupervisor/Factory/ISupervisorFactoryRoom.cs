@@ -2,6 +2,6 @@
 {
     public interface ISupervisorFactoryRoom
     {
-        public ISupervisorRoom CreateSupervisor(int? cacheIsHandled);
+        public ISupervisorRoom CreateSupervisor(byte? cacheIsHandled);
     }
 }

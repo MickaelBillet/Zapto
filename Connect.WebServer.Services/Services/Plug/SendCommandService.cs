@@ -25,8 +25,8 @@ namespace Connect.WebServer.Services
         public SendCommandService(IServiceProvider serviceProvider)
         {
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
             this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
         }
         #endregion
@@ -45,8 +45,8 @@ namespace Connect.WebServer.Services
                 plug.UpdateOrder(room.Humidity, room.Temperature);
 
                 //We send the command to the Arduino when the order changes or when the last command has not been received after one minute
-                if ((plug.Order != previousOrder) 
-                    || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0,1,0)) && (plug.CommandReceived == 0)))
+                if ((plug.Order != previousOrder)
+                    || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0, 1, 0)) && (plug.CommandReceived == 0)))
                 {
                     //Send Command to Arduino
                     if (await this.ApplicationPlugServices.SendCommandAsync(plug) <= 0)

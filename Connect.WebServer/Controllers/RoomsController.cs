@@ -23,7 +23,7 @@ namespace Connect.WebApi.Controllers
         #region Constructor
         public RoomsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
         }
         #endregion
 

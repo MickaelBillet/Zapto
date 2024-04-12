@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class RecordingDataService : CronScheduledService
     {
@@ -38,8 +38,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             {
                 IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                 ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
 
                 await AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
                 await AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);

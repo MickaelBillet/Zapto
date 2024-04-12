@@ -53,7 +53,7 @@ namespace Connect.Data.Database
 
                         if (softwareVersion.CompareTo(new Version(1, 0, 0)) > 0)
                         {
-                            ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0);
+                            ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None);
                             ResultCode code = await supervisorPlug.Upgrade1_1();
                         }
                     }
@@ -548,47 +548,47 @@ namespace Connect.Data.Database
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {
                 await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor().AddVersion();
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(0).AddLocation(location);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(0).AddRoom(livingRoom);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(0).AddRoom(bathRoom);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(0).AddRoom(bedRoom);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(0).AddRoom(smallBedRoom);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0).AddPlug(plug1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0).AddPlug(plug2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0).AddPlug(plugA1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0).AddPlug(plugA2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(0).AddConfiguration(configA1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(0).AddConfiguration(configA2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(0).AddConfiguration(configA3);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(0).AddConfiguration(configA4);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(0).AddCondition(condition1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(0).AddCondition(condition2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(0).AddCondition(conditionA1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(0).AddCondition(conditionA2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(0).AddProgram(program1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(0).AddProgram(program2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(0).AddProgram(programA1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(0).AddProgram(programA2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(CacheType.None).AddLocation(location);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(livingRoom);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(bathRoom);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(bedRoom);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(smallBedRoom);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None).AddPlug(plug1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None).AddPlug(plug2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None).AddPlug(plugA1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None).AddPlug(plugA2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(CacheType.None).AddConfiguration(configA1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(CacheType.None).AddConfiguration(configA2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(CacheType.None).AddConfiguration(configA3);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(CacheType.None).AddConfiguration(configA4);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(CacheType.None).AddCondition(condition1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(CacheType.None).AddCondition(condition2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(CacheType.None).AddCondition(conditionA1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(CacheType.None).AddCondition(conditionA2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(CacheType.None).AddProgram(program1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(CacheType.None).AddProgram(program2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(CacheType.None).AddProgram(programA1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(CacheType.None).AddProgram(programA2);
                 // await this.Supervisor.AddSensor(sensor1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor3);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor4);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor5);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor6);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor7);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor8);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(0).AddSensor(sensor9);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj1);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj2);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj3);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj4);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj5);
-                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(0).AddConnectedObject(obj8);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor3);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor4);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor5);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor6);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor7);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor8);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(CacheType.None).AddSensor(sensor9);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj1);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj2);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj3);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj4);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj5);
+                await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(CacheType.None).AddConnectedObject(obj8);
             }
         }
         private async Task InitializePlugsAsync(IServiceScope scope)
         {
-            ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(0);
+            ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(CacheType.None);
             List<Plug> plugs = (await supervisor.GetPlugs()).ToList();
             foreach (Plug plug in plugs)
             {

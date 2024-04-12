@@ -26,8 +26,8 @@ namespace Connect.WebApi.Controllers
         #region Constructor
         public LocationsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(int.Parse(configuration["Cache"]!));
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(configuration["Cache"]!));
+            this.SupervisorLocation = serviceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
         }
         #endregion

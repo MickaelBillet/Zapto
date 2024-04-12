@@ -7,7 +7,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class ServerIotConnectionService : ScheduledService
     {

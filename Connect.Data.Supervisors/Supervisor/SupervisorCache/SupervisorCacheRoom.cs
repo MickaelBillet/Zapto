@@ -14,7 +14,7 @@ namespace Connect.Data.Supervisors
         #region Constructor
         public SupervisorCacheRoom(IServiceProvider serviceProvider) : base (serviceProvider)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(0);    
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None);    
         }
         #endregion
 

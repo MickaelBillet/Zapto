@@ -38,10 +38,10 @@ namespace Connect.WebServer.Services
 
             try
             {
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
-                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
+                ISupervisorNotification supervisorNotification = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(byte.Parse(this.Configuration["Cache"]!));
                 ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
                 IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                 IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
