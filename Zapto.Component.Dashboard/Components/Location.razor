@@ -22,7 +22,7 @@
     public EventCallback<LocationModel?> ModelChanged { get; set; }
 
     [Parameter]
-    public bool IsLoading { get; set; } = false;
+    public bool IsLoading { get; set; } = true;
 
     [Parameter]
     public EventCallback<bool> IsLoadingChanged { get; set; }
@@ -47,7 +47,8 @@
                 await this.ModelChanged.InvokeAsync(this.Model);
             }
 
-            await this.IsLoadingChanged.InvokeAsync(this.ViewModel.IsLoading);
+            this.IsLoading = this.ViewModel.IsLoading;
+            await this.IsLoadingChanged.InvokeAsync(this.IsLoading);
         }
     }
 

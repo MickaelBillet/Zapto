@@ -3,7 +3,7 @@
 @implements IDisposable
 
 <Location @bind-Model="@this.Location" @bind-IsLoading="@this.IsLoading"></Location>
-<Loading IsLoading="@(this.IsLoading == true)">
+<Loading IsLoading="@(this.IsLoading == false)">
     <Weather></Weather>
     <Pollution></Pollution>
     <RoomList Location="@this.Location"></RoomList>
@@ -13,7 +13,7 @@
 {
     public LocationModel? Location { get; set; }
 
-    public bool IsLoading { get; set; } = false;
+    public bool IsLoading { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
