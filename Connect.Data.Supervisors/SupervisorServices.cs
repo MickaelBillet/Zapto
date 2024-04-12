@@ -2,7 +2,7 @@
 
 namespace Connect.Data.Supervisors
 {
-    public static class Supervisors
+    public static class SupervisorServices
     {
         public static void AddSupervisors(this IServiceCollection services)
         {

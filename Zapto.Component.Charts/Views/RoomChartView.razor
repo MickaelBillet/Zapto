@@ -82,6 +82,10 @@
     public async Task DisplayCharts()
     {
         this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+        if (this.Models != null)
+        {
+            this.Models.OrderByDescending((model) =>  model.Day);
+        }
         this.IsClicked = false;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)

@@ -114,7 +114,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 this.IsLoading = false;
             }
-            return models;
+            return (models != null) ? models.OrderByDescending((item) => DateTime.Parse(item.Day!)) : null;
         }
 
         public async Task<DateTime?> GetDateFromLocalStorage(string key)
