@@ -21,6 +21,12 @@
     [Parameter]
     public EventCallback<LocationModel?> ModelChanged { get; set; }
 
+    [Parameter]
+    public bool IsLoading { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> IsLoadingChanged { get; set; }
+
     private string? Text { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
@@ -40,6 +46,8 @@
             {
                 await this.ModelChanged.InvokeAsync(this.Model);
             }
+
+            await this.IsLoadingChanged.InvokeAsync(this.ViewModel.IsLoading);
         }
     }
 

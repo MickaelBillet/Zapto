@@ -2,8 +2,8 @@
 @inject IStringLocalizer<Resource> Localizer
 @implements IDisposable
 
-<Location @bind-Model="@this.Location"></Location>
-<Loading IsLoading="@(this.Location == null)">
+<Location @bind-Model="@this.Location" @bind-IsLoading="@this.IsLoading"></Location>
+<Loading IsLoading="@(this.IsLoading == true)">
     <Weather></Weather>
     <Pollution></Pollution>
     <RoomList Location="@this.Location"></RoomList>
@@ -11,7 +11,9 @@
 
 @code 
 {
-    public LocationModel? Location { get; set; } 
+    public LocationModel? Location { get; set; }
+
+    public bool IsLoading { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
