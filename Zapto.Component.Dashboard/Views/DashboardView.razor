@@ -2,8 +2,8 @@
 @inject IStringLocalizer<Resource> Localizer
 @implements IDisposable
 
+<Location @bind-Model="@this.Location"></Location>
 <Loading IsLoading="@(this.Location == null)">
-    <Location @bind-Model="@this.Location"></Location>
     <Weather></Weather>
     <Pollution></Pollution>
     <RoomList Location="@this.Location"></RoomList>
