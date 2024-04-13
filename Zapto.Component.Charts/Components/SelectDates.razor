@@ -59,7 +59,7 @@
         this.IsClicked = true;
         await this.ViewModel.SetDateFromLocalStorage("StartDate", this.StartDate!.Value.ToString());
         await this.ViewModel.SetDateFromLocalStorage("EndDate", this.EndDate!.Value.ToString());
-        await Task.Delay(10);
+        await Task.Delay(20);
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }
