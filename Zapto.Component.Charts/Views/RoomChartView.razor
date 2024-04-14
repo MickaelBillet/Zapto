@@ -97,8 +97,8 @@
         if ((startDateHasChanged == true) || (endDateHasChanged == true))
         {
             this.IsLoading = true;
+            this.StateHasChanged();
             await this.DisplayCharts();
-            await Task.Delay(10);
             this.StateHasChanged();
         }
     }
