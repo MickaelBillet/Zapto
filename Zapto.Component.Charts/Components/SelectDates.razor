@@ -27,10 +27,10 @@
     public string RoomId { get; set; } = string.Empty;
 
     [Parameter]
-    public DateTime? StartDate { get; set; } = DateTime.Today;
+    public DateTime? StartDate { get; set; }
 
     [Parameter]
-    public DateTime? EndDate { get; set; } = DateTime.Today;
+    public DateTime? EndDate { get; set; }
 
     [Parameter]
     public DateTime? MaxDate { get; set; }
@@ -59,7 +59,7 @@
         this.IsClicked = true;
         await this.ViewModel.SetDateFromLocalStorage("StartDate", this.StartDate!.Value.ToString());
         await this.ViewModel.SetDateFromLocalStorage("EndDate", this.EndDate!.Value.ToString());
-        await Task.Delay(10);
+        await Task.Delay(20);
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }

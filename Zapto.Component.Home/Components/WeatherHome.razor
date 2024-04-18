@@ -60,16 +60,9 @@
         </MudItem>
         <MudItem xs="12" sm="6" md="3" Style="min-width:380px">
             <MudContainer Class="d-flex align-center justify-content-center" Style="height:110px;">
-                @if (this.Model != null)
-                {
-                    <MudText Typo="Typo.h4" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">P</MudText>
-                    <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Pressure</MudText>
-                    <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
-                }
-                else
-                {
-                    <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-                }
+                <MudText Typo="Typo.h4" Color="Color.Primary" Style="font-weight:bold" Class="ml-4">P</MudText>
+                <MudText Typo="Typo.h4" Class="ml-4">@this.Model?.Pressure</MudText>
+                <MudText Typo="Typo.h5" Align="Align.Left" Class="mx-2">hPa</MudText>
             </MudContainer>
         </MudItem>
     </MudGrid>

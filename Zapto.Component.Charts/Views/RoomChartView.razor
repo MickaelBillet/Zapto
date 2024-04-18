@@ -1,11 +1,14 @@
-﻿@inject IRoomChartViewModel ViewModel
+﻿@using System.Globalization
+@inject IRoomChartViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
 @implements IDisposable
 
-<h3>@RoomName</h3>
 
-<SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
-<RoomChartListView Models="@this.Models"></RoomChartListView>
+<Loading IsLoading="@this.IsLoading">
+    <h3>@RoomName</h3>
+    <SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
+    <RoomChartListView Models="@this.Models"></RoomChartListView>
+</Loading>
 
 @code
 {
@@ -23,6 +26,8 @@
     public string Location { get; set; } = string.Empty;
 
     private event EventHandler? PropertyChanged;
+
+    public bool IsLoading { get; set; } = true;
 
     private PersistingComponentStateSubscription PersistingSubscription { get; set; }
 
@@ -82,11 +87,8 @@
     public async Task DisplayCharts()
     {
         this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
-        if (this.Models != null)
-        {
-            this.Models.OrderByDescending((model) =>  model.Day);
-        }
         this.IsClicked = false;
+        this.IsLoading = this.ViewModel.IsLoading;
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
@@ -94,8 +96,9 @@
         bool endDateHasChanged = await this.UpdateEndDate();           
         if ((startDateHasChanged == true) || (endDateHasChanged == true))
         {
+            this.IsLoading = true;
+            this.StateHasChanged();
             await this.DisplayCharts();
-            await Task.Delay(10);
             this.StateHasChanged();
         }
     }

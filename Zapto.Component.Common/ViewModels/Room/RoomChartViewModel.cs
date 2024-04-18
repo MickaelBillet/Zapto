@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Globalization;
 using WeatherZapto.Application.Services;
 using Zapto.Component.Common.Models;
 using Zapto.Component.Common.Services;
@@ -24,6 +25,7 @@ namespace Zapto.Component.Common.ViewModels
         private IApplicationTemperatureService ApplicationTemperatureService { get; }
         private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
         private string? Location { get; set; }
+        private string? Culture { get; set; }
         #endregion
 
         #region Constructor
@@ -38,8 +40,9 @@ namespace Zapto.Component.Common.ViewModels
         #region Methods
         public override async Task InitializeAsync(string? parameter)
         {
-            await base.InitializeAsync(parameter);
+            const string defaultCulture = "en-US";
             this.Location = parameter as string;
+            this.Culture = await this.ZaptoLocalStorageService.GetItemAsync<string>("culture") ?? defaultCulture;
         }
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
@@ -93,15 +96,15 @@ namespace Zapto.Component.Common.ViewModels
                             model.Labels = operatingData.Select((data) => $"{data?.Date.Hour}.{data?.Date.Minute}").ToList();
                             model.Humidities = operatingData.Select((data) => (decimal?)data?.Humidity).ToList();
                             model.Day = (date != null) ? date.Value.ToString("D") : string.Empty;
-                        };                        
 
-                        IEnumerable<double?> temperaturesOut = await this.ApplicationTemperatureService.GetTemperatureOfDay(this.Location, date);
-                        if ((temperaturesOut != null) && temperaturesOut.Any())
-                        {
-                            model.TemperaturesOUT = temperaturesOut.Select((data) => (decimal?)data).ToList();
+                            IEnumerable<double?> temperaturesOut = await this.ApplicationTemperatureService.GetTemperatureOfDay(this.Location, date);
+                            if ((temperaturesOut != null) && temperaturesOut.Any())
+                            {
+                                model.TemperaturesOUT = temperaturesOut.Select((data) => (decimal?)data).ToList();
+                            }
+
+                            models.Add(model);
                         }
-                        
-                        models.Add(model);                        
                     }
                 }
             }
@@ -114,7 +117,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 this.IsLoading = false;
             }
-            return (models != null) ? models.OrderByDescending((item) => DateTime.Parse(item.Day!)) : null;
+            return (models != null) ? models.OrderByDescending((item) => DateTime.ParseExact(item.Day!, "D", new CultureInfo(this.Culture))) : null;
         }
 
         public async Task<DateTime?> GetDateFromLocalStorage(string key)
