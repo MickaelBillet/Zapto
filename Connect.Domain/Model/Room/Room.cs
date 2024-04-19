@@ -35,14 +35,12 @@ namespace Connect.Model
         public string Name
         {
             get { return name; }
-
             set { SetProperty(ref name, value); }
         }
 
         public string Description
         {
             get { return description; }
-
             set { SetProperty(ref description, value); }
         }
 
@@ -129,7 +127,7 @@ namespace Connect.Model
             double pressureSensor = 0;
             double sumPressure = 0;
 
-            foreach (Sensor sensor in SensorsList)
+            foreach (Sensor sensor in this.SensorsList)
             {
                 if (sensor.Date + new TimeSpan(0, validityPeriod, 0) > Clock.Now)
                 {
@@ -164,17 +162,17 @@ namespace Connect.Model
 
             if (temperatureSensor > 0)
             {
-                Temperature = sumTemperature / temperatureSensor;
+                this.Temperature = sumTemperature / temperatureSensor;
             }
 
             if (humidityeSensor > 0)
             {
-                Humidity = sumHumidity / humidityeSensor;
+                this.Humidity = sumHumidity / humidityeSensor;
             }
 
             if (pressureSensor > 0)
             {
-                Pressure = sumPressure / pressureSensor;
+                this.Pressure = sumPressure / pressureSensor;
             }
         }
 
@@ -183,9 +181,9 @@ namespace Connect.Model
             int sensorsDownCount = 0;
             int sensorsUpCount = 0;
 
-            if (SensorsList != null && SensorsList.Any())
+            if (this.SensorsList != null && this.SensorsList.Any())
             {
-                List<Sensor> sensors = SensorsList.Where(sensor => ((sensor.Type & Model.DeviceType.Sensor_Water_Leak) != Model.DeviceType.Sensor_Water_Leak)).ToList();
+                List<Sensor> sensors = this.SensorsList.Where(sensor => ((sensor.Type & Model.DeviceType.Sensor_Water_Leak) != Model.DeviceType.Sensor_Water_Leak)).ToList();
                 foreach (Sensor sensor in sensors)
                 {
                     if (sensor.IsRunning == RunningStatus.UnHealthy)
@@ -200,20 +198,20 @@ namespace Connect.Model
 
                 if (sensors.Count() == sensorsDownCount)
                 {
-                    StatusSensors = RunningStatus.UnHealthy;
+                    this.StatusSensors = RunningStatus.UnHealthy;
                 }
                 else if (sensors.Count() == sensorsUpCount)
                 {
-                    StatusSensors = RunningStatus.Healthy;
+                    this.StatusSensors = RunningStatus.Healthy;
                 }
                 else
                 {
-                    StatusSensors = RunningStatus.Degraded;
+                    this.StatusSensors = RunningStatus.Degraded;
                 }
             }
             else
             {
-                StatusSensors = RunningStatus.None;
+                this.StatusSensors = RunningStatus.None;
             }
         }
 

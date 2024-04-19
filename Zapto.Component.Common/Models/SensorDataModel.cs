@@ -17,6 +17,6 @@
             }
         }
 
-        public int IsRunning { get; set; }
+        public byte IsRunning { get; set; }
     }
 }

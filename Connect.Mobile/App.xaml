@@ -45,10 +45,12 @@
                 x:Key="ParameterConverter" />
             <c:IntToStringConverter
                 x:Key="IntToStringConverter" />
-
+            <c:StatusSensorConverter x:Key="StatusSensorConverter"></c:StatusSensorConverter>
 
             <Color x:Key="MediumGray">#9F9F9F</Color> <!--Gris foncé-->
             <Color x:Key="WarningColor">#FFB733</Color> <!--Orange-->
+            <Color x:Key="NoneColor">#C5C5C5</Color>
+            <Color x:Key="RunningColor">#4BB81F</Color>
             <Color x:Key="AlertColor">#E74C3C</Color> <!--Rouge-->
             <Color x:Key="OffColor">#C5C5C5</Color> <!--Gris-->
             <Color x:Key="OnColor">#4BB81F</Color> <!--Vert-->

@@ -31,16 +31,23 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Margin="20,0,20,0"
-                FontAttributes="None"
-                FontSize="25"
-                HorizontalOptions="FillAndExpand"
-                Text="{Binding Name}"
-                VerticalOptions="CenterAndExpand" />
+            <StackLayout Orientation="Horizontal"
+                         Grid.Row="0"
+                         HorizontalOptions="StartAndExpand"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="3"
+                         Margin="20,0,20,0">
+                <Label FontAttributes="None"
+                       FontSize="25"
+                       HorizontalOptions="Start"
+                       Text="{Binding Name}"
+                       VerticalOptions="CenterAndExpand" />
+                <Ellipse Fill="{Binding Path=StatusSensors, Converter={StaticResource StatusSensorConverter}}"
+                         Margin="10"
+                         WidthRequest="15"
+                         HorizontalOptions="Start"
+                         HeightRequest="10"></Ellipse>
+            </StackLayout>
 
             <BoxView
                 Grid.Row="1"
