@@ -5,7 +5,6 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface ISelectDateViewModel : IBaseViewModel
     {
-        Task SetDateFromLocalStorage<T>(string key, T value);
     }
 
     public class SelectDateViewModel : BaseViewModel, ISelectDateViewModel
@@ -22,10 +21,6 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-        public async Task SetDateFromLocalStorage<T>(string key, T value)
-        {
-            await this.ZaptoLocalStorageService.SetItemAsync<T>(key, value);
-        }
         #endregion
     }
 }
