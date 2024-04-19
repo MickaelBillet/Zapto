@@ -15,7 +15,6 @@ namespace Zapto.Component.Common.ViewModels
         Task<DateTime?> GetRoomMaxDate(string roomId);
         Task<DateTime?> GetRoomMinDate(string roomId);
         Task<IEnumerable<RoomChartModel>?> GetChartsData(DateTime? startDate, DateTime? endDate, string roomId);
-        Task<DateTime?> GetDateFromLocalStorage(string key);
     }
 
     public class RoomChartViewModel : BaseViewModel, IRoomChartViewModel
@@ -25,7 +24,7 @@ namespace Zapto.Component.Common.ViewModels
         private IApplicationTemperatureService ApplicationTemperatureService { get; }
         private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
         private string? Location { get; set; }
-        private string? Culture { get; set; }
+        private string Culture { get; set; } = string.Empty;
         #endregion
 
         #region Constructor
@@ -118,12 +117,6 @@ namespace Zapto.Component.Common.ViewModels
                 this.IsLoading = false;
             }
             return (models != null) ? models.OrderByDescending((item) => DateTime.ParseExact(item.Day!, "D", new CultureInfo(this.Culture))) : null;
-        }
-
-        public async Task<DateTime?> GetDateFromLocalStorage(string key)
-        {
-            string? dateStr = await this.ZaptoLocalStorageService.GetItemAsync<string>(key);
-            return (DateTime.TryParse(dateStr, out DateTime date)) ? date : null;
         }
         #endregion
     }

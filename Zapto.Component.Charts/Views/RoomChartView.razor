@@ -29,8 +29,6 @@
 
     public bool IsLoading { get; set; } = true;
 
-    private PersistingComponentStateSubscription PersistingSubscription { get; set; }
-
     private DateTime? MaxDate { get; set; }
 
     private DateTime? MinDate { get; set; }
@@ -82,7 +80,6 @@
     {
         this.ViewModel?.Dispose();
         this.PropertyChanged -= this.PropertyChangedHandler;
-        this.PersistingSubscription.Dispose();
     }
     public async Task DisplayCharts()
     {
@@ -92,38 +89,12 @@
     }
     private async void PropertyChangedHandler(object? sender, EventArgs? args)
     {
-        bool startDateHasChanged = await this.UpdateStartDate();
-        bool endDateHasChanged = await this.UpdateEndDate();           
-        if ((startDateHasChanged == true) || (endDateHasChanged == true))
-        {
-            this.IsLoading = true;
-            this.StateHasChanged();
-            await this.DisplayCharts();
-            this.StateHasChanged();
-        }
+        this.IsLoading = true;
+        this.StateHasChanged();
+        await this.DisplayCharts();
+        this.StateHasChanged();
     }
-    private async Task<bool> UpdateStartDate()
-    {
-        bool hasChanged = false;
-        DateTime? startDate = await this.ViewModel.GetDateFromLocalStorage("StartDate");
-        if ((startDate != null) && (this.StartDate != null) && (this.StartDate.Value.Day != startDate.Value.Day))
-        {
-            this.StartDate = startDate;
-            hasChanged = true;
-        }
-        return hasChanged;
-    }
-    private async Task<bool> UpdateEndDate()
-    {
-        bool hasChanged = false;
-        DateTime? endDate = await this.ViewModel.GetDateFromLocalStorage("EndDate");
-        if ((endDate != null) && (this.EndDate != null) && (this.EndDate.Value.Day != endDate.Value.Day))
-        {
-            this.EndDate = endDate;
-            hasChanged = true;
-        }
-        return hasChanged;
-    }
+
     #endregion
 }
 

@@ -56,10 +56,9 @@
     }
     public async Task SelectDatesClick()
     {
+        await this.StartDateChanged.InvokeAsync(this.StartDate);
+        await this.EndDateChanged.InvokeAsync(this.EndDate);
         this.IsClicked = true;
-        await this.ViewModel.SetDateFromLocalStorage("StartDate", this.StartDate!.Value.ToString());
-        await this.ViewModel.SetDateFromLocalStorage("EndDate", this.EndDate!.Value.ToString());
-        await Task.Delay(20);
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }
