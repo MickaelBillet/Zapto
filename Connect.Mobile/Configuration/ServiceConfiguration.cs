@@ -9,8 +9,6 @@ using Framework.Mobile.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Sinks.Email;
-using System.Net;
 using ErrorHandlerWebService = Framework.Mobile.Core.Services.ErrorHandlerWebService;
 using IErrorHandlerService = Connect.Mobile.Interfaces.IErrorHandlerService;
 
@@ -39,22 +37,6 @@ namespace Connect.Mobile.Services
         public static void AddLogServices(this IServiceCollection services)
         {
 			ILogger logger = new LoggerConfiguration()// Set default log level limit to Debug				
-									.WriteTo.Logger(config => config
-									.MinimumLevel.Error()
-									.WriteTo.Email(new EmailConnectionInfo
-									{
-										MailServer = "smtp.gmail.com",
-										FromEmail = "mickaconnect.zapto@gmail.com",
-										ToEmail = "mickaconnect.zapto@gmail.com",
-										EmailSubject = "Fatal error",
-										NetworkCredentials = new NetworkCredential
-										{
-											UserName = "mickaconnect.zapto@gmail.com",
-											Password = "beauTemps?08"
-										},
-										EnableSsl = true,
-										Port = 465,
-									}))
 									.CreateLogger();
 
 			services.AddSingleton<ILogger>(logger);
