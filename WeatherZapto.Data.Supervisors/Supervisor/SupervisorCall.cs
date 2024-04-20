@@ -53,11 +53,11 @@ namespace WeatherZapto.Data.Supervisors
 
         public async Task<long?> GetDayCallsCount(DateTime day)
         {
-            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
-                                                                                                    && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime());
-
-            long? count = entities.Count();
-
+            DateTime universalDateTime = day.ToUniversalTime();
+            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime.Year == universalDateTime.Year
+                                                                                                        && item.CreationDateTime.Month == universalDateTime.Month
+                                                                                                        && item.CreationDateTime.Day == universalDateTime.Day);
+            long ? count = entities.Count();
             return count;
         }
 
