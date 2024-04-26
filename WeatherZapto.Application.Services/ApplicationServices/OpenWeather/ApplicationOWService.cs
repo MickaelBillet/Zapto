@@ -36,7 +36,6 @@ namespace WeatherZapto.Application.Services
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
                     await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather();
-
                     zaptoLocations = locations.Select((location) =>
                     {
                         return new ZaptoLocation()
@@ -61,7 +60,8 @@ namespace WeatherZapto.Application.Services
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather(); return new ZaptoLocation()
+                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather(); 
+                    return new ZaptoLocation()
                     {
                         Latitude = location.lat,
                         Longitude = location.lon,
@@ -82,7 +82,8 @@ namespace WeatherZapto.Application.Services
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather(); zaptoLocation = new ZaptoLocation()
+                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather(); 
+                    zaptoLocation = new ZaptoLocation()
                     {
                         Latitude = location.lat,
                         Longitude = location.lon,
@@ -101,8 +102,7 @@ namespace WeatherZapto.Application.Services
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather(); 
-                    
+                    await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather();                     
                     zaptoAirPollution = new ZaptoAirPollution()
                     {
                         aqi = airPollution?.list != null ? airPollution?.list[0]?.main?.aqi : null,
@@ -133,7 +133,6 @@ namespace WeatherZapto.Application.Services
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
                     await scope.ServiceProvider.GetRequiredService<ISupervisorCall>().AddCallOpenWeather();                 
-
                     zaptoWeather = new ZaptoWeather()
                     {
                         TimeSpam = DateTimeHelper.ParseUnixTimestamp(weather.dt),

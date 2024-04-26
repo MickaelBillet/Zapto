@@ -11,7 +11,6 @@ namespace WeatherZapto.Data.Supervisors
 
         #region Properties
         private ICallRepository CallRepository => _lazyCallRepository?.Value;
-        private static AutoResetEvent AutoReset = new AutoResetEvent(true);
         #endregion
 
         #region Constructor
@@ -26,8 +25,7 @@ namespace WeatherZapto.Data.Supervisors
         {
             int res = 0;
 
-            AutoReset.WaitOne();
-
+            //Search CallEntity between the beginning of the day and now
             CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime >= new DateTime(Clock.Now.Year, Clock.Now.Month, Clock.Now.Day).ToUniversalTime()
                                                                               && item.CreationDateTime <= DateTime.UtcNow);
             if (entity != null) 
@@ -45,8 +43,6 @@ namespace WeatherZapto.Data.Supervisors
                 });                
             }
 
-            AutoReset.Set();
-
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
@@ -56,7 +52,11 @@ namespace WeatherZapto.Data.Supervisors
             DateTime universalDateTime = day.ToUniversalTime();
             IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime >= new DateTime(day.Year, day.Month, day.Day).ToUniversalTime()
                                                                                                         && item.CreationDateTime <= new DateTime(day.Year, day.Month, day.Day + 1).ToUniversalTime());
-            long ? count = entities.Count();
+            long? count = 0;
+            entities.ToList().ForEach(entity =>
+            {
+                count = count + entity.Count;
+            });
             return count;
         }
 
