@@ -11,6 +11,7 @@ namespace WeatherZapto.Data.Supervisors
 
         #region Properties
         private ICallRepository CallRepository => _lazyCallRepository?.Value;
+        private static AutoResetEvent AutoReset = new AutoResetEvent(true);
         #endregion
 
         #region Constructor
@@ -24,6 +25,7 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOpenWeather()
         {
             int res = 0;
+            AutoReset.WaitOne();
 
             //Search CallEntity between the beginning of the day and now
             CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime >= new DateTime(Clock.Now.Year, Clock.Now.Month, Clock.Now.Day).ToUniversalTime()
@@ -43,6 +45,7 @@ namespace WeatherZapto.Data.Supervisors
                 });                
             }
 
+            AutoReset.Set();
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }

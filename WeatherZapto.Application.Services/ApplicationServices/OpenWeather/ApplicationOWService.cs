@@ -1,6 +1,7 @@
 ﻿using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
+using System.Reflection;
 using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Data;
 using WeatherZapto.Model;

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Reflection;
 using WeatherZapto.Data;
 using WeatherZapto.Model;
 

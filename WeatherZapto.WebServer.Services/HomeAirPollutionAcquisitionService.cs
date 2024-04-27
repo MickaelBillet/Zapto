@@ -66,6 +66,10 @@ namespace WeatherZapto.WebServer.Services
                 {
                     break;
                 }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex.Message);
+                }
             }
         }
         #endregion
