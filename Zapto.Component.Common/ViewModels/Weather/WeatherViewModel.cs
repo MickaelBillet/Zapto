@@ -107,7 +107,7 @@ namespace Zapto.Component.Common.ViewModels
                     {
                         this.IsLoading = true;
 
-                        ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(location.Location, location.Longitude.ToString(), location.Latitude.ToString(), culture);
+                        ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(location.Longitude.ToString(), location.Latitude.ToString(), culture);
                         if (weather != null)
                         {
                             model = new WeatherModel()
