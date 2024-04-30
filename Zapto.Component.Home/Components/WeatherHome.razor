@@ -85,7 +85,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (this.ViewModel != null)
+        if ((this.ViewModel != null) && (this.Location != null) && (this.Location.Location != null))
         {
             this.Model = await this.ViewModel.GetWeatherModel(this.Location);
             if (this.Model != null)

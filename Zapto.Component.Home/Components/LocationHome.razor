@@ -18,11 +18,11 @@
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         if ((this.ViewModel != null) && (this.Model != null))                
         {
-            this.Text = await this.ViewModel.GetLocation(this.Model);
+            this.Text = this.Model.Location;
         }
     }
 

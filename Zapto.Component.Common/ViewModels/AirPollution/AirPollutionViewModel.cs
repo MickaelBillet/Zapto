@@ -96,7 +96,7 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     this.IsLoading = true;
 
-                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location.Longitude.ToString(), location.Latitude.ToString());
+                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location.Location, location.Longitude.ToString(), location.Latitude.ToString());
                     if (zaptoAirPollution != null)
                     {
                         model = this.Map(zaptoAirPollution);

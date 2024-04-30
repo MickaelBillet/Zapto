@@ -15,7 +15,7 @@
 <AirPollutionHome Location="@this.Model"></AirPollutionHome>
 
 @code
-    {
+{
     private bool? LocalizationIsAvailable { get; set; } = null;
 
     private LocationModel Model { get; set; } = new LocationModel();
@@ -53,6 +53,7 @@
         this.Model.Longitude = Math.Round(longitude,6);
         this.Model.Latitude = Math.Round(latitude,6);
         this.Model.LocalizationIsAvailable = await Task.FromResult<bool>(true);
+        await this.ViewModel.GetLocation(this.Model);
 
         //Warning don't delete this line
         this.StateHasChanged();
@@ -63,8 +64,9 @@
         this.ViewModel?.Dispose();
     }
 
-    private void SelectLocation(LocationModel model)
+    private async Task SelectLocation(LocationModel model)
     {
         this.Model = model;
+        await this.ViewModel.GetLocation(this.Model);
     }
 }
