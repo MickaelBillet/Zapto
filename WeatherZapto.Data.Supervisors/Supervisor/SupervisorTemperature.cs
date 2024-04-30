@@ -1,5 +1,4 @@
-﻿using Framework.Core.Base;
-using Framework.Data.Abstractions;
+﻿using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +36,6 @@ namespace WeatherZapto.Data.Supervisors
         #endregion
 
         #region Methods
-        
         public async Task<IEnumerable<double>> GetTemperatures(string location, DateTime day)
         {
             IEnumerable<double> temperatures = null;           
