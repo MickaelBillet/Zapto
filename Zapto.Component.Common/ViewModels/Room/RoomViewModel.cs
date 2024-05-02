@@ -26,7 +26,7 @@ namespace Zapto.Component.Common.ViewModels
 
 		#region Methods
 
-		public override async Task InitializeAsync(string? parameter)
+		public override async Task InitializeAsync(object? parameter)
 		{
 			await base.InitializeAsync(parameter);
 		}

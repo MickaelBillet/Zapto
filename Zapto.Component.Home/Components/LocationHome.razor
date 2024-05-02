@@ -22,7 +22,7 @@
     {
         if ((this.ViewModel != null) && (this.Model != null))                
         {
-            this.Text = this.Model.Location;
+            this.Text = this.ViewModel.GetLocation(this.Model);
         }
     }
 

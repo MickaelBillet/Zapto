@@ -2,7 +2,7 @@
 
 namespace Zapto.Component.Common.Models
 {
-	public class RoomModel : BaseModel
+    public class RoomModel : BaseModel
 	{
 		private string? _temperature;
 		private string? _humidity;

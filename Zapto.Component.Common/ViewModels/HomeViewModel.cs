@@ -1,5 +1,4 @@
-﻿using Connect.Application;
-using Framework.Core.Base;
+﻿using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using WeatherZapto.Application;
@@ -10,91 +9,72 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IHomeViewModel : IBaseViewModel
     {
-        Task<string> GetLocation(LocationModel model);
-        Task<(LocationModel? model, string location)> GetLocationModel(); 
-        Task<string?> GetReverseLocation(string latitude, string longitude);
+        Task SetLocation(double longitude, double latitude);
+        LocationModel SetLocationModel(LocationModel model);
+        Task SetError();
     }
 
     public sealed class HomeViewModel : BaseViewModel, IHomeViewModel
     {
         #region Properties
         private IApplicationLocationService ApplicationLocationServices { get; }
-        private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
         private LocationModel? Model { get; set; }
-        private bool LocationFound
-        {
-            get
-            {
-                return string.IsNullOrEmpty(this.Model?.Location) == false;
-            }
-        }
-
-        private bool LocalizationFound
-        {
-            get
-            {
-                return (this.Model != null) && (this.Model.Latitude != null) && (this.Model.Longitude != null);
-            }
-        }
-
-        private bool? LocalizationIsAvailable
-        {
-            get
-            {
-                return this.Model?.LocalizationIsAvailable;
-            }
-        }
+      
         #endregion
 
         #region Constructor
         public HomeViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this.ApplicationLocationServices = serviceProvider.GetRequiredService<IApplicationLocationService>();
-            this.ApplicationConnectLocationServices = serviceProvider.GetRequiredService<IApplicationConnectLocationServices>();
         }
         #endregion
 
         #region Methods
-        public async Task<string> GetLocation(LocationModel model)
-        {
-            string location = string.Empty;
-            this.Model = model;
 
+        public override async Task InitializeAsync(object? parameter)
+        {            
+            this.Model = parameter as LocationModel;
+            if (this.Model != null)
+            {
+                this.Model.LocalizationIsAvailable = ProgressStaus.InProgress;
+                this.Model.LocationIsAvailable = ProgressStaus.NoAvailable;
+            }
+            await Task.CompletedTask;
+        }
+        public async Task SetLocation(double longitude, double latitude)
+        {
             try
             {
                 if (this.Model != null)
                 {
+                    this.Model.LocalizationIsAvailable = ProgressStaus.Available;
                     this.IsLoading = true;
 
-                    if ((this.LocationFound == true) && (this.LocalizationFound == true))
+                    if ((this.Model.LocalizationIsAvailable == ProgressStaus.Available) && (this.Model.LocationIsAvailable == ProgressStaus.NoAvailable))
                     {
-                        location = this.Model.Location!;
-                    }
-                    if ((this.LocalizationIsAvailable == null) && (this.LocationFound == false))
-                    {
-                        location = this.Localizer["Location in progress"];
-                    }
-                    else if ((this.LocalizationIsAvailable == true) && (this.LocationFound == false) && (this.LocalizationFound == true))
-                    {
-                        this.Model.Location = await this.GetReverseLocation(this.Model.Latitude.ToString()!, this.Model.Longitude.ToString()!);
-                        if (this.Model?.Location != null)
+                        this.Model.Location = await this.GetReverseLocation(latitude.ToString()!, longitude.ToString()!);
+                        if (this.Model != null)
                         {
-                            location = this.Model.Location;
+                            if (this.Model?.Location != null)
+                            {
+                                this.Model.Latitude = latitude;
+                                this.Model.Longitude = longitude;
+                                this.Model.LocationIsAvailable = ProgressStaus.Available;
+                            }
+                            else
+                            {
+                                this.Model!.LocationIsAvailable = ProgressStaus.NoAvailable;
+                            }
                         }
-                        else
-                        {
-                            location = this.Localizer["Unable to locate"];
-                        }
-                    }
-                    else if (this.LocalizationIsAvailable == false)
-                    {
-                        location = this.Localizer["Unable to locate"];
                     }
                 }
             }
             catch (Exception ex)
             {
-                location = this.Localizer["Unable to locate"];
+                if (this.Model != null)
+                {
+                    this.Model.LocationIsAvailable = ProgressStaus.NoAvailable;
+                }
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 this.NavigationService.ShowMessage("Location Unable", ZaptoSeverity.Error);
             }
@@ -102,10 +82,24 @@ namespace Zapto.Component.Common.ViewModels
             {
                 this.IsLoading = false;
             }
-
-            return location;
         }
-        public async Task<string?> GetReverseLocation(string latitude, string longitude)
+
+        public LocationModel SetLocationModel(LocationModel model)
+        {
+            model.LocalizationIsAvailable = ProgressStaus.Available;
+            model.LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable;
+            return model;
+        }
+
+        public async Task SetError()
+        {
+            if (this.Model != null)
+            {
+                this.Model.LocalizationIsAvailable = await Task.FromResult<byte>(ProgressStaus.NoAvailable);
+            }
+        }
+
+        private async Task<string?> GetReverseLocation(string latitude, string longitude)
         {
             ZaptoLocation? zaptoLocation = null;
             try
@@ -123,42 +117,6 @@ namespace Zapto.Component.Common.ViewModels
                 this.IsLoading = false;
             }
             return zaptoLocation?.Location;
-        }
-        public async Task<(LocationModel? model, string location)> GetLocationModel()
-        {
-            string location = string.Empty;
-            LocationModel? model = null;
-
-            try
-            {
-                this.IsLoading = true;
-
-                model = (await this.ApplicationConnectLocationServices.GetLocations())?.Select((location) => new LocationModel()
-                {
-                    Location = location.City,
-                    Id = location.Id
-                }).FirstOrDefault();
-
-                if (model?.Location != null)
-                {
-                    location = model.Location;
-                }
-                else
-                {
-                    location = this.Localizer["Unable to locate"];
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                location = this.Localizer["Unable to locate"];
-                this.NavigationService.ShowMessage("Location Service Exception", ZaptoSeverity.Error);
-            }
-            finally
-            {
-                this.IsLoading = false;
-            }
-            return (model, location);
         }
         #endregion
     }

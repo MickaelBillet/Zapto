@@ -40,7 +40,7 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-		public override async Task InitializeAsync(string? parameter)
+		public override async Task InitializeAsync(object? parameter)
         {
             await Task.Run(() =>
             {

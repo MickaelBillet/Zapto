@@ -1,5 +1,4 @@
-﻿using MudBlazor;
-using Zapto.Component.Common.Helpers;
+﻿using Zapto.Component.Common.Helpers;
 
 namespace Zapto.Component.Common.Models
 {
