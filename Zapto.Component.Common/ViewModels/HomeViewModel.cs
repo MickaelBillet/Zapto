@@ -86,7 +86,7 @@ namespace Zapto.Component.Common.ViewModels
 
         public void UpdateLocationModel(LocationModel model)
         {
-            if (this.Model != null)
+            if ((this.Model != null) && (model != null)) 
             {
                 this.Model.Location = model.Location;
                 this.Model.Latitude = model.Latitude;
