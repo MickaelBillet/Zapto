@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public record SensorCO2Model : BaseModel
+    public sealed record SensorCO2Model : BaseModel
     {
         private int[] _thresholdCO2 = { 800, 1100 };
         public int Mode { get; set; }

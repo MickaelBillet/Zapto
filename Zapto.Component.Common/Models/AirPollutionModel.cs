@@ -2,7 +2,7 @@
 
 namespace Zapto.Component.Common.Models
 {
-    public record AirPollutionModel : BaseModel
+    public sealed record AirPollutionModel : BaseModel
     {
         public string? Location { get; set; }
         public double Longitude { get; set; }

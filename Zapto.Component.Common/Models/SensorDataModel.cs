@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-	public record SensorDataModel : ObjectConnectedModel
+	public sealed record SensorDataModel : ObjectConnectedModel
 	{
         private string? _temperature;
 

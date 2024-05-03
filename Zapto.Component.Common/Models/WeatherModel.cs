@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public record WeatherModel : BaseModel
+    public sealed record WeatherModel : BaseModel
     {
 		public string? Image { get; set; }
 		public string? WeatherText { get; set; }

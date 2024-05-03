@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public record PositionModel : BaseModel
+    public sealed record PositionModel : BaseModel
     {
         public string? CurrentLongitude { get; set; }
         public string? CurrentLatitude { get; set; }

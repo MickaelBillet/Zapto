@@ -57,9 +57,7 @@ namespace Zapto.Component.Common.ViewModels
                 res = model.Location!;
             }
             return res;
-        }
-
-        
+        }        
         #endregion
     }
 }

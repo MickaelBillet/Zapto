@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
     public interface IHomeViewModel : IBaseViewModel
     {
         Task SetLocation(double longitude, double latitude);
-        LocationModel SetLocationModel(LocationModel model);
+        void UpdateLocationModel(LocationModel model);
         Task SetError();
     }
 
@@ -39,7 +39,7 @@ namespace Zapto.Component.Common.ViewModels
                 this.Model.LocalizationIsAvailable = ProgressStaus.InProgress;
                 this.Model.LocationIsAvailable = ProgressStaus.NoAvailable;
             }
-            await Task.CompletedTask;
+            await base.InitializeAsync(parameter);
         }
         public async Task SetLocation(double longitude, double latitude)
         {
@@ -84,11 +84,14 @@ namespace Zapto.Component.Common.ViewModels
             }
         }
 
-        public LocationModel SetLocationModel(LocationModel model)
-        {
-            model.LocalizationIsAvailable = ProgressStaus.Available;
-            model.LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable;
-            return model;
+        public void UpdateLocationModel(LocationModel model)
+        {            
+            this.Model = model with { Location = model.Location,
+                                        LocalizationIsAvailable = ProgressStaus.Available,
+                                        LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable,
+                                        Longitude = model.Longitude,
+                                        Latitude = model.Latitude,
+            };
         }
 
         public async Task SetError()

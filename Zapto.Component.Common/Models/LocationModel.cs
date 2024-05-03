@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public record LocationModel : BaseModel
+    public sealed record LocationModel : BaseModel
 	{
         public string? Location { get; set; }
         public double? Latitude { get; set; }

@@ -15,6 +15,8 @@ namespace Zapto.Component.Common.ViewModels
 	{
         #region Properties
         private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
+        public byte LocalizationIsAvailable { get; set; } = ProgressStaus.None;
+        public byte LocationIsAvailable { get; set; } = ProgressStaus.None;
         #endregion
 
         #region Constructor
