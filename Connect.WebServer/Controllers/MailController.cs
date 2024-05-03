@@ -1,4 +1,5 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using MailKit;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +16,8 @@ namespace Connect.WebApi.Controllers
     public class MailController : Controller
 	{
         #region Property
-
         private IMailService MailService { get; }
-
+        private IKeyVaultService KeyVaultService { get; }
         #endregion
 
         #region Constructor
@@ -25,6 +25,7 @@ namespace Connect.WebApi.Controllers
         public MailController(IServiceProvider serviceProvider)
         {
             this.MailService = serviceProvider.GetRequiredService<IMailService>();
+            this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
         }
 
         #endregion
@@ -36,8 +37,8 @@ namespace Connect.WebApi.Controllers
         {
             try
             {
-                await this.MailService.SendEmailAsync(request, MailSent);
-
+                string password = this.KeyVaultService.GetSecret("MailPassword");
+                await this.MailService.SendEmailAsync(request, MailSent, password);
                 return Ok();
             }
             catch (Exception ex)

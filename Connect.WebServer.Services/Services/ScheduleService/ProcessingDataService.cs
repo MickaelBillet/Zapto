@@ -1,5 +1,6 @@
 ﻿using Connect.Data;
 using Connect.Model;
+using Framework.Common.Services;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;

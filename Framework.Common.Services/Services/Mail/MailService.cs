@@ -29,7 +29,7 @@ namespace Framework.Infrastructure.Services
         #endregion
 
         #region Methods
-        public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent)
+        public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent, string password)
         {
             MimeMessage email = new MimeMessage
             {
@@ -81,9 +81,9 @@ namespace Framework.Infrastructure.Services
 
                     if (smtp.IsConnected)
                     {
-                        if (string.IsNullOrEmpty(MailSettings.Login) == false && string.IsNullOrEmpty(MailSettings.Password) == false)
+                        if (string.IsNullOrEmpty(MailSettings.Login) == false && string.IsNullOrEmpty(password) == false)
                         {
-                            await smtp.AuthenticateAsync(MailSettings.Login, MailSettings.Password, token);
+                            await smtp.AuthenticateAsync(MailSettings.Login, password, token);
                         }
                         await smtp.SendAsync(email, token);
                         isSent = true;
