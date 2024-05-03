@@ -2,7 +2,7 @@
 
 namespace Zapto.Component.Common.Models
 {
-	public class PlugModel : ObjectConnectedModel
+	public record PlugModel : ObjectConnectedModel
 	{
         #region Properties
         public string? FileNameTypeImage

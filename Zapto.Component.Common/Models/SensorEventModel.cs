@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-	public class SensorEventModel : ObjectConnectedModel
+	public record SensorEventModel : ObjectConnectedModel
 	{
         #region Properties
         public int HasLeak { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Zapto.Component.Common.Models
 {
-    public class HealthcheckItemModel : BaseModel
+    public record HealthcheckItemModel : BaseModel
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
