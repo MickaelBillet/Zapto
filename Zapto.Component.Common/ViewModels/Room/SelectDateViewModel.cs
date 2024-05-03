@@ -19,8 +19,5 @@ namespace Zapto.Component.Common.ViewModels
             this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
         #endregion
-
-        #region Methods
-        #endregion
     }
 }

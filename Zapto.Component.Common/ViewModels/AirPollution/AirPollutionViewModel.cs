@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IAirPollutionViewModel : IBaseViewModel
     {
-        Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude);
+        //Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude);
         Task<AirPollutionModel?> GetAirPollutionModel(LocationModel location);
         Task<AirPollutionModel?> GetAirPollutionModel();
         void OpenDetails(AirPollutionModel model);
@@ -53,30 +53,6 @@ namespace Zapto.Component.Common.ViewModels
                 }
             }
             catch(Exception ex)
-            {
-                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                this.NavigationService.ShowMessage("AirPollution Service Exception", ZaptoSeverity.Error);
-            }
-            finally
-            {
-                this.IsLoading = false;
-            }
-            return model;
-        }
-        public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
-        {
-            AirPollutionModel? model = null;
-            try
-            {
-                this.IsLoading = true;
-
-                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
-                if (zaptoAirPollution != null)
-                {
-                    model = this.Map(zaptoAirPollution);
-                }
-            }
-            catch (Exception ex)
             {
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 this.NavigationService.ShowMessage("AirPollution Service Exception", ZaptoSeverity.Error);

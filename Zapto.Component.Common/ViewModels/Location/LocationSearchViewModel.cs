@@ -123,7 +123,6 @@ namespace Zapto.Component.Common.ViewModels
             }
             return output;
         }
-
         #endregion
     }
 }
