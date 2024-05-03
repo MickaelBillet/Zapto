@@ -85,13 +85,15 @@ namespace Zapto.Component.Common.ViewModels
         }
 
         public void UpdateLocationModel(LocationModel model)
-        {            
-            this.Model = model with { Location = model.Location,
-                                        LocalizationIsAvailable = ProgressStaus.Available,
-                                        LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable,
-                                        Longitude = model.Longitude,
-                                        Latitude = model.Latitude,
-            };
+        {
+            if (this.Model != null)
+            {
+                this.Model.Location = model.Location;
+                this.Model.Latitude = model.Latitude;
+                this.Model.Longitude = model.Longitude;
+                this.Model.LocalizationIsAvailable = ProgressStaus.Available;
+                this.Model.LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable;
+            }
         }
 
         public async Task SetError()
