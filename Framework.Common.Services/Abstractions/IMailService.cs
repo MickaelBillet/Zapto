@@ -6,6 +6,6 @@ namespace Framework.Infrastructure.Services
 {
     public interface IMailService
     {
-        Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent, string password);
+        Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent, string mailPassword, string mailAddress);
     }
 }

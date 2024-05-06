@@ -39,7 +39,8 @@ namespace Connect.WebServer.Services
                         ToEmail = "mickael.billet@gmail.com",
                     };
                     string password = this.KeyVaultService.GetSecret("MailPassword");
-                    await this.MailService.SendEmailAsync(mailRequest, MailSent, password);
+                    string address = this.KeyVaultService.GetSecret("MailAddress");
+                    await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
                 }
             }
         }

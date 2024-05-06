@@ -5,6 +5,7 @@ using MailKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 using IMailService = Framework.Infrastructure.Services.IMailService;
@@ -33,12 +34,13 @@ namespace Connect.WebApi.Controllers
         #region Methods
 
         [HttpPost("send")]
-        public async Task<IActionResult> SendMail([FromForm] MailRequest request)
+        public async Task<IActionResult> SendMail([FromForm] MailRequest mailRequest)
         {
             try
             {
                 string password = this.KeyVaultService.GetSecret("MailPassword");
-                await this.MailService.SendEmailAsync(request, MailSent, password);
+                string address = this.KeyVaultService.GetSecret("MailAddress");
+                await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address); 
                 return Ok();
             }
             catch (Exception ex)
@@ -54,6 +56,7 @@ namespace Connect.WebApi.Controllers
 
         private void MailSent(object? sender, MessageSentEventArgs arg)
         {
+            Log.Information("Mail Sent");
         }
 
         #endregion
