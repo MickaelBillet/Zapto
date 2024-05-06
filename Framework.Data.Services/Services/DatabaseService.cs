@@ -29,18 +29,25 @@ namespace Framework.Data.Services
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
 			this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
 
+#if DEBUG
+			this.ConnectionType = new()
+			{
+				ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
+				ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
+			};
+#else
             this.ConnectionType = new()
             {
-                //ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
                 ConnectionString = this.KeyVaultService.GetSecret("ConnectionStrings"),
                 ServerType = ConnectionType.GetServerType(this.KeyVaultService.GetSecret("ServerType"))
             };
-        }
-        #endregion
+#endif
+		}
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        public async Task ConfigureDatabase()
+		public async Task ConfigureDatabase()
         {		
             if (this.DatabaseExist(this.ConnectionType) == false)
             {

@@ -2,8 +2,6 @@
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Data;
 
 namespace Framework.Data.Session
@@ -33,11 +31,19 @@ namespace Framework.Data.Session
 
         public DalSession(IKeyVaultService keyVaultService, IDataContextFactory dataContextFactory, IConfiguration configuration)
         {
-            this.ConnectionType = new ConnectionType()
+#if DEBUG
+            this.ConnectionType = new()
+            {
+                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
+                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"])
+            };
+#else
+            this.ConnectionType = new()
             {
                 ConnectionString = keyVaultService.GetSecret("ConnectionStrings"),
                 ServerType = ConnectionType.GetServerType(keyVaultService.GetSecret("ServerType"))
             };
+#endif
 
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {

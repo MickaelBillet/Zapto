@@ -1,4 +1,5 @@
-﻿using Framework.Data.Abstractions;
+﻿using Framework.Common.Services;
+using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
@@ -26,6 +27,7 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddSingleton<CacheSignal>();
             services.AddSupervisor();
             services.AddRepositories();
+            services.AddTransient<IKeyVaultService, KeyVaultService>();
             services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebService>();
         }
     }
