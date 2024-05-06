@@ -1,8 +1,6 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -14,7 +12,7 @@ namespace Connect.Data.Database
         #endregion
 
         #region Constructor
-        public ConnectDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
+        public ConnectDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         #endregion

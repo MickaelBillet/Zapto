@@ -4,6 +4,7 @@ using Connect.Data.Repositories;
 using Connect.Data.Supervisors;
 using Framework.Core.Domain;
 using Framework.Data.Session;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog.Core;
 using Serilog.Events;
@@ -33,7 +34,7 @@ namespace Connect.WebServer.Services
         {
             if ((this.Configuration != null) && (logEvent.Level >= this.Level))
             {
-                ISupervisorLog supervisor = new SupervisorLog(new DalSession(new DataContextFactory(), this.Configuration), new RepositoryFactory());
+                ISupervisorLog supervisor = new SupervisorLog(new DalSession(new KeyVaultService(this.Configuration), new DataContextFactory(), this.Configuration), new RepositoryFactory());
 
                 //Why I don't have the warning CS4014 
                 supervisor.AddLog(new Logs()

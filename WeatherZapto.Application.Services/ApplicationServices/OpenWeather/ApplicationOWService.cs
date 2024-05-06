@@ -1,7 +1,7 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using System.Reflection;
 using WeatherZapto.Application.Infrastructure;
 using WeatherZapto.Data;
 using WeatherZapto.Model;
@@ -14,7 +14,9 @@ namespace WeatherZapto.Application.Services
         private ILocationOWService LocationOWService { get; }
         private IAirPollutionOWService AirPollutionOWService { get; }
         private IWeatherOWService WeatherOWService { get; }
-        protected IServiceScopeFactory ServiceScopeFactory { get; set; }
+        private IServiceScopeFactory ServiceScopeFactory { get; }
+        private IKeyVaultService KeyVaultService { get; }
+        private string OpenWeatherAPIKey { get; }
         #endregion
 
         #region Constructor
@@ -24,14 +26,16 @@ namespace WeatherZapto.Application.Services
             this.WeatherOWService = serviceProvider.GetService<IWeatherOWService>();
             this.LocationOWService = serviceProvider.GetService<ILocationOWService>();
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
+            this.KeyVaultService = serviceProvider.GetService<IKeyVaultService>();
+            this.OpenWeatherAPIKey = this.KeyVaultService.GetSecret("OpenWeatherAPIKey");
         }
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<ZaptoLocation>> GetLocationFromCity(string APIKey, string city, string stateCode, string countryCode)
+        public async Task<IEnumerable<ZaptoLocation>> GetLocationFromCity(string city, string stateCode, string countryCode)
         {
             IEnumerable<ZaptoLocation> zaptoLocations = null;
-            IEnumerable<Location> locations = LocationOWService != null ? await LocationOWService.GetLocationsFromCity(APIKey, city, stateCode, countryCode) : null;
+            IEnumerable<Location> locations = LocationOWService != null ? await LocationOWService.GetLocationsFromCity(this.OpenWeatherAPIKey, city, stateCode, countryCode) : null;
             if (locations != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -53,10 +57,10 @@ namespace WeatherZapto.Application.Services
             return zaptoLocations;
         }
 
-        public async Task<ZaptoLocation> GetLocationFromZipCode(string APIKey, string zipCode, string countryCode)
+        public async Task<ZaptoLocation> GetLocationFromZipCode(string zipCode, string countryCode)
         {
             ZaptoLocation zaptoLocation = null;
-            Location location = LocationOWService != null ? await LocationOWService.GetLocationFromZipCode(APIKey, zipCode, countryCode) : null;
+            Location location = LocationOWService != null ? await LocationOWService.GetLocationFromZipCode(this.OpenWeatherAPIKey, zipCode, countryCode) : null;
             if (location != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -75,10 +79,10 @@ namespace WeatherZapto.Application.Services
             return zaptoLocation;
         }
 
-        public async Task<ZaptoLocation> GetReverseLocation(string APIKey, string longitude, string latitude)
+        public async Task<ZaptoLocation> GetReverseLocation(string longitude, string latitude)
         {
             ZaptoLocation zaptoLocation = null;
-            Location location = LocationOWService != null ? (await LocationOWService.GetReverseLocations(APIKey, longitude, latitude)).FirstOrDefault() : null;
+            Location location = LocationOWService != null ? (await LocationOWService.GetReverseLocations(this.OpenWeatherAPIKey, longitude, latitude)).FirstOrDefault() : null;
             if (location != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -95,10 +99,10 @@ namespace WeatherZapto.Application.Services
             return zaptoLocation;
         }
 
-        public async Task<ZaptoAirPollution> GetCurrentAirPollution(string APIKey, string locationName, string longitude, string latitude)
+        public async Task<ZaptoAirPollution> GetCurrentAirPollution(string locationName, string longitude, string latitude)
         {
             ZaptoAirPollution zaptoAirPollution = null;
-            AirPollution airPollution = AirPollutionOWService != null ? await AirPollutionOWService.GetAirPollution(APIKey, longitude, latitude) : null;
+            AirPollution airPollution = AirPollutionOWService != null ? await AirPollutionOWService.GetAirPollution(this.OpenWeatherAPIKey, longitude, latitude) : null;
             if (airPollution != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
@@ -125,10 +129,10 @@ namespace WeatherZapto.Application.Services
             return zaptoAirPollution;
         }
 
-        public async Task<ZaptoWeather> GetCurrentWeather(string APIKey, string locationName, string longitude, string latitude, string language)
+        public async Task<ZaptoWeather> GetCurrentWeather(string locationName, string longitude, string latitude, string language)
         {
             ZaptoWeather zaptoWeather = null;
-            OpenWeather weather = WeatherOWService != null ? await WeatherOWService.GetWeather(APIKey, longitude, latitude, language) : null;
+            OpenWeather weather = WeatherOWService != null ? await WeatherOWService.GetWeather(this.OpenWeatherAPIKey, longitude, latitude, language) : null;
             if (weather != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())

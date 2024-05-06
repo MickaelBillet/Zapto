@@ -1,4 +1,5 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,40 +14,44 @@ namespace Framework.Data.Services
 
 		#region Properties
 		protected IDataContextFactory DataContextFactory { get; }
-        protected IServiceScopeFactory ServiceScopeFactory { get; set; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+		protected IKeyVaultService KeyVaultService { get; }
         protected IConfiguration Configuration { get; }
+		protected ConnectionType ConnectionType { get; }
         private bool IsInitialized { get; set; }
 		#endregion
 
 		#region Constructor
-		public DatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
+		public DatabaseService(IServiceProvider serviceProvider)
 		{
-			this.DataContextFactory = dataContextFactory;
-            this.ServiceScopeFactory = serviceScopeFactory;
-            this.Configuration = configuration;
-		}
+			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
+			this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
+
+            this.ConnectionType = new()
+            {
+                //ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
+                ConnectionString = this.KeyVaultService.GetSecret("ConnectionStrings"),
+                ServerType = ConnectionType.GetServerType(this.KeyVaultService.GetSecret("ServerType"))
+            };
+        }
         #endregion
 
         #region Methods
 
         public async Task ConfigureDatabase()
-        {
-            ConnectionType connectionType = new()
+        {		
+            if (this.DatabaseExist(this.ConnectionType) == false)
             {
-                ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
-            };
-
-            if (this.DatabaseExist(connectionType) == false)
-            {
-                bool isCreated = this.CreateDatabase(connectionType);
+                bool isCreated = this.CreateDatabase(this.ConnectionType);
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync();
                 }
             }
 
-            if (this.DatabaseExist(connectionType) == true)
+            if (this.DatabaseExist(this.ConnectionType) == true)
             {
                 bool isUpgraded = await this.UpgradeDatabaseAsync();
                 await this.InitializeDataAsync();
@@ -68,13 +73,7 @@ namespace Framework.Data.Services
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                ConnectionType connectionType = new()
-                {
-                    ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
-                    ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
-                };
-
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
+                using (IDataContext? context = this.DataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType)?.context)
 				{
 					if ((context != null) && (context.DataBaseExists() == true))
 					{

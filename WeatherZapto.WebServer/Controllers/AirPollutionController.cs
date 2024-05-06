@@ -37,10 +37,10 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetReverseLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
+                    ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetReverseLocation(longitude, latitude);
                     if (zaptoLocation != null)
                     {
-                        zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude);
+                        zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(zaptoLocation.Location, longitude, latitude);
                         if (zaptoAirPollution != null)
                         {
                             return StatusCode(200, zaptoAirPollution);
@@ -85,7 +85,7 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.ApplicationOWService != null) && (this.Configuration != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude);
+                    zaptoAirPollution = await this.ApplicationOWServiceCache.GetCurrentAirPollution(location, longitude, latitude);
                     if (zaptoAirPollution != null)
                     {
                         return StatusCode(200, zaptoAirPollution);

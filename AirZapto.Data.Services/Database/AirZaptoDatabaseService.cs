@@ -1,8 +1,6 @@
 ﻿using AirZapto.Data.Services;
 using Framework.Core.Base;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -14,7 +12,7 @@ namespace AirZapto.Data.Database
         #endregion
 
         #region Constructor
-        public AirZaptoDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
+        public AirZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         #endregion
