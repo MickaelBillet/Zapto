@@ -147,3 +147,7 @@
 /Connect.Data.Supervisors.Tests/bin/Release/net8.0
 /Connect.WebServer.Services/bin/Release/net8.0
 /WeatherZapto.Data.Supervisors.Tests/bin/Release/net8.0
+/WeatherZapto.Data.Repositories/bin/Release/net8.0
+/WeatherZapto.Data.Supervisors/bin/Release/net8.0
+/WeatherZapto.WebServer/bin/Release/net8.0
+/WeatherZapto.WebServer.Services/bin/Release/net8.0

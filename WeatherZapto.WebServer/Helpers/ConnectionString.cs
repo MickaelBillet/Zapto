@@ -1,4 +1,5 @@
 ﻿using Framework.Common.Services;
+using Framework.Infrastructure.Services;
 
 namespace WeatherZapto.WebServer.Helpers
 {
@@ -13,8 +14,8 @@ namespace WeatherZapto.WebServer.Helpers
             connectionString = configuration["ConnectionStrings:DefaultConnection"]!;
             serverName = configuration["ConnectionStrings.ServerType"]!;
 #else
-connectionString = new KeyVaultService(builder.Configuration).GetSecret("ConnectionStrings");
-serverName = new KeyVaultService(builder.Configuration).GetSecret("ServerType");
+connectionString = new KeyVaultService(configuration).GetSecret("ConnectionStrings");
+serverName = new KeyVaultService(configuration).GetSecret("ServerType");
 #endif
 
             return (connectionString, serverName);
