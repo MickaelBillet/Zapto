@@ -6,6 +6,7 @@ EXPOSE 5010
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+# copy csproj and restore as distinct layers
 COPY ["WeatherZapto.WebServer/WeatherZapto.WebServer.csproj", "WeatherZapto.WebServer/"]
 COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 COPY ["WeatherZapto.Infrastructure.Services/WeatherZapto.Infrastructure.Services.csproj", "WeatherZapto.Infrastructure.Services/"]
@@ -19,6 +20,8 @@ COPY ["WeatherZapto.Data.Supervisors/WeatherZapto.Data.Supervisors.csproj", "Wea
 COPY ["WeatherZapto.Data.Services/WeatherZapto.Data.Services.csproj", "WeatherZapto.Data.Services/"]
 COPY ["Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
 RUN dotnet restore "WeatherZapto.WebServer/WeatherZapto.WebServer.csproj"
+
+# copy everything else and build app
 COPY ["WeatherZapto.WebServer/*", "WeatherZapto.WebServer/"]
 COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/*", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 COPY ["WeatherZapto.Infrastructure.Services/*", "WeatherZapto.Infrastructure.Services/"]
