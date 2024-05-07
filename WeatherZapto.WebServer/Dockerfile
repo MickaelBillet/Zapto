@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim-arm64v8 AS base
 WORKDIR /app
 EXPOSE 5010
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim-arm64v8 AS build
 WORKDIR /src
 # copy csproj and restore as distinct layers
 COPY ["WeatherZapto.WebServer/WeatherZapto.WebServer.csproj", "WeatherZapto.WebServer/"]
