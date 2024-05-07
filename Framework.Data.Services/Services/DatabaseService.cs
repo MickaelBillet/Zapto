@@ -1,6 +1,7 @@
 ﻿using Framework.Common.Services;
 using Framework.Core.Base;
 using Framework.Data.Abstractions;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -28,20 +29,7 @@ namespace Framework.Data.Services
             this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
 			this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
-
-#if DEBUG
-			this.ConnectionType = new()
-			{
-				ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
-				ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
-			};
-#else
-            this.ConnectionType = new()
-            {
-                ConnectionString = this.KeyVaultService.GetSecret("ConnectionStrings"),
-                ServerType = ConnectionType.GetServerType(this.KeyVaultService.GetSecret("ServerType"))
-            };
-#endif
+			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.KeyVaultService);
 		}
 		#endregion
 
