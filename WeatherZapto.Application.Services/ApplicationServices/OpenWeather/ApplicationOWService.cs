@@ -27,7 +27,10 @@ namespace WeatherZapto.Application.Services
             this.LocationOWService = serviceProvider.GetService<ILocationOWService>();
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
             this.KeyVaultService = serviceProvider.GetService<IKeyVaultService>();
-            this.OpenWeatherAPIKey = this.KeyVaultService.GetSecret("OpenWeatherAPIKey");
+            if (this.KeyVaultService != null)
+            {
+                this.OpenWeatherAPIKey = this.KeyVaultService.GetSecret("OpenWeatherAPIKey");
+            }
         }
         #endregion
 
