@@ -137,16 +137,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-string connectionString = string.Empty;
-string serverName = string.Empty;
-
-#if DEBUG
-connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]!;
-serverName = builder.Configuration["ConnectionStrings.ServerType"]!;
-#else
-connectionString = new KeyVaultService(builder.Configuration).GetSecret("ConnectionStrings");
-serverName = new KeyVaultService(builder.Configuration).GetSecret("ServerType");
-#endif
+(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, new KeyVaultService(builder.Configuration));
 
 builder.Services.AddHealthChecks()
         //Memory
