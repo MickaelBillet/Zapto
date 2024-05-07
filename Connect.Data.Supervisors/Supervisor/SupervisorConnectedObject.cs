@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorConnectedObject : ISupervisorConnectedObject
+    public sealed class SupervisorConnectedObject : Supervisor, ISupervisorConnectedObject
     {
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
         private readonly Lazy<IRepository<OperationRangeEntity>> _lazyOperationRangeRepository;
@@ -80,10 +80,10 @@ namespace Connect.Data.Supervisors
             return (await this.ConnectedObjectRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<ConnectedObject> GetConnectedObject(string id, bool loadDependants)
+        public async Task<ConnectedObject> GetConnectedObject(string id)
         {
             ConnectedObject obj = ConnectedObjectMapper.Map(await this.ConnectedObjectRepository.GetAsync(id));
-            if ((obj != null) && (loadDependants == true))
+            if (obj != null) 
             {
                 PlugEntity plugEntity = await this.PlugRepository.GetAsync((plug) => plug.ConnectedObjectId == id);
                 if (plugEntity != null)

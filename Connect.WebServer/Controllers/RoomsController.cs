@@ -3,9 +3,9 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -21,45 +21,13 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Constructor
-
-        public RoomsController(IServiceProvider serviceProvider)
+        public RoomsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
         }
-
         #endregion
 
         #region Method
-
-        //GET connect/rooms
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<Room>? rooms;
-
-            try
-            {
-                rooms = await this.SupervisorRoom.GetRooms();
-
-                if (rooms != null)
-                {
-                    return StatusCode(200, rooms);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
 
         //ConnectConstants.RestUrlRoomsId
         //GET connect/rooms/5

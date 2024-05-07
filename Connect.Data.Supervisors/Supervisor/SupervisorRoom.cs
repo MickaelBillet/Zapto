@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorRoom : ISupervisorRoom
+    public sealed class SupervisorRoom : Supervisor, ISupervisorRoom
     {
         private readonly Lazy<IRoomRepository> _lazyRoomRepository;
         private readonly Lazy<IRepository<SensorEntity>> _lazySensorRepository;
@@ -52,14 +52,14 @@ namespace Connect.Data.Supervisors
 
         public async Task<IEnumerable<Room>> GetRooms()
         {
-            List<Room> rooms = null;
+            IEnumerable<Room> rooms = null;
             IEnumerable<RoomEntity> entities = (await this.RoomRepository.GetCollectionAsync()).OrderBy((room) => room.Id);
             if (entities != null)
             {
-                rooms = entities.Select(item => RoomMapper.Map(item)).ToList();                
+                rooms = entities.Select(item => RoomMapper.Map(item));
                 foreach (Room room in rooms)
                 {
-                    room.SetStatusSensors();
+                    await this.SetRoomDetails(room);
                 }
             }
             return rooms;
@@ -72,9 +72,9 @@ namespace Connect.Data.Supervisors
             if (entities != null)
 			{
                 rooms = entities.Select(item => RoomMapper.Map(item)).ToList();
-                for (int i = 0; i < rooms.Count(); i++)
+                foreach(Room room in rooms)
 				{
-                    await this.SetRoomDetails(rooms[i]);
+                    await this.SetRoomDetails(room);
                 }
             }
             return rooms;

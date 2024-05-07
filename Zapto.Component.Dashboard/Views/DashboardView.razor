@@ -2,29 +2,35 @@
 @inject IStringLocalizer<Resource> Localizer
 @implements IDisposable
 
-<Location @bind-Model="@this.Location"></Location>
-<Weather></Weather>
-<Pollution></Pollution>
-<RoomList Location="@this.Location"></RoomList>
+<Location Model="@this.Model"></Location>
+<Loading IsLoading="@(this.ViewModel.IsLoading == true)">
+    <Weather></Weather>
+    <Pollution></Pollution>
+    <RoomList Location="@this.Model"></RoomList>
+</Loading>
 
 @code 
 {
-    public LocationModel? Location { get; set; } 
+    private LocationModel? Model { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
         if (this.ViewModel != null)
         {
-            await this.ViewModel.InitializeAsync(null);
+            await this.ViewModel.InitializeAsync(this.Model);
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (this.Model == null))
+        {
+            this.Model = await this.ViewModel.GetLocationModel();
         }
     }
 
     public void Dispose()
     {
-        if (this.ViewModel != null)
-        {
-            this.ViewModel?.Dispose();
-            this.ViewModel = null;
-        }
+        this.ViewModel?.Dispose();
     }
 }

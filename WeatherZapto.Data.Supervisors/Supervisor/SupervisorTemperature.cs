@@ -36,17 +36,15 @@ namespace WeatherZapto.Data.Supervisors
         #endregion
 
         #region Methods
-        
         public async Task<IEnumerable<double>> GetTemperatures(string location, DateTime day)
         {
             IEnumerable<double> temperatures = null;           
             if (this.WeatherRepository != null)
-            {
-                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+            { 
+                temperatures = (await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                        && item.CreationDateTime < (day + new TimeSpan(1,0,0,0)).ToUniversalTime()
                                                                                         && item.Location.Equals(location)))
-                                                            .Select((item) => double.Parse(item.Temperature));
+                                                            .Select((item) => item.Temperature);
             }
             return temperatures;
         }
@@ -67,14 +65,13 @@ namespace WeatherZapto.Data.Supervisors
                     {
                         if (this.WeatherRepository != null)
                         {
-                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                                                            && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime()
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
                             {
-                                temperatureMin = entities.Min((item) => double.Parse(item.Temperature));
+                                temperatureMin = entities.Min((item) => item.Temperature);
                                 this.Cache.Set($"TemperatureMin-{location}", temperatureMin, this.MemoryCacheEntryOptions);
                             }
                         }
@@ -104,14 +101,13 @@ namespace WeatherZapto.Data.Supervisors
                     {
                         if (this.WeatherRepository != null)
                         {
-                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day)
+                            IEnumerable<WeatherEntity> entities = await this.WeatherRepository.GetCollectionAsync((item) => item.CreationDateTime >= day.ToUniversalTime()
+                                                                                                                            && item.CreationDateTime < (day + new TimeSpan(1, 0, 0, 0)).ToUniversalTime()
                                                                                                                             && item.Location.Equals(location));
 
                             if ((entities != null) && (entities.Any()))
                             { 
-                                temperatureMax = entities.Max((item) => double.Parse(item.Temperature));
+                                temperatureMax = entities.Max((item) => item.Temperature);
                                 this.Cache.Set($"TemperatureMax-{location}", temperatureMax, this.MemoryCacheEntryOptions);
                             }
                         }

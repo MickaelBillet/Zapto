@@ -41,8 +41,7 @@ namespace WeatherZapto.WebServer.Services
             {
                 try
                 {
-                    ZaptoWeather zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"],
-                                                                                                        this.Configuration["HomeLocation"],
+                    ZaptoWeather zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(this.Configuration["HomeLocation"],
                                                                                                         this.Configuration["HomeLongitude"],
                                                                                                         this.Configuration["HomeLatitude"],
                                                                                                         "fr");
@@ -66,6 +65,10 @@ namespace WeatherZapto.WebServer.Services
                 catch (OperationCanceledException)
                 {
                     break;
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex.Message);
                 }
             }
         }

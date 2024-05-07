@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -21,16 +22,17 @@ namespace Connect.WebApi.Controllers
 
         #region Constructor
 
-        public ConnectedObjectsController(IServiceProvider serviceProvider)
+        public ConnectedObjectsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorConnectedObject = serviceProvider.GetRequiredService<ISupervisorConnectedObject>();
+            this.SupervisorConnectedObject = serviceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
 
         #endregion
 
         #region HttpRequest
 
-        // GET connect/connectedobjects/5
+        //ConnectConstants.RestUrlConnectedObjectId
+        //GET connect/connectedobjects/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -38,7 +40,7 @@ namespace Connect.WebApi.Controllers
 
             try
             {
-                obj = await this.SupervisorConnectedObject.GetConnectedObject(id, true);
+                obj = await this.SupervisorConnectedObject.GetConnectedObject(id);
 
                 if (obj != null)
                 {

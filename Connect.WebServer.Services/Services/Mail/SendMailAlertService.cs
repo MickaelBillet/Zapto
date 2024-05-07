@@ -1,5 +1,7 @@
-﻿using Framework.Infrastructure.Services;
+﻿using Framework.Common.Services;
+using Framework.Infrastructure.Services;
 using MailKit;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using IMailService = Framework.Infrastructure.Services.IMailService;
 
@@ -9,12 +11,14 @@ namespace Connect.WebServer.Services
     {
         #region Services
         private IMailService MailService { get; }
+        private IKeyVaultService KeyVaultService { get; }
         #endregion
 
         #region Constructor
-        public SendMailAlertService(IMailService mailService)
+        public SendMailAlertService(IServiceProvider serviceProvider)
         {
-            this.MailService = mailService;
+            this.MailService = serviceProvider.GetRequiredService<IMailService>();
+            this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
         }
         #endregion
 
@@ -27,8 +31,9 @@ namespace Connect.WebServer.Services
                 Body = $"{body}",
                 ToEmail = "mickael.billet@gmail.com",
             };
-
-            bool sent = await this.MailService.SendEmailAsync(mailRequest, MailSent);
+            string password = this.KeyVaultService.GetSecret("MailPassword");
+            string address = this.KeyVaultService.GetSecret("MailAddress");
+            await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
         }
 
         private void MailSent(object? sender, MessageSentEventArgs e)

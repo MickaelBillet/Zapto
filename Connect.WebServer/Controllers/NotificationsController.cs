@@ -3,6 +3,7 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,46 +23,17 @@ namespace Connect.WebApi.Controllers
 
         #region Constructor
 
-        public NotificationsController(IServiceProvider serviceProvider)
+        public NotificationsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorNotification>();
+            this.SupervisorNotification = serviceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
 
         #endregion
 
         #region Method
 
-        // GET connect/notifications
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<Notification>? notifications;
-
-            try
-            {
-                notifications = await this.SupervisorNotification.GetNotifications();
-
-                if (notifications != null)
-                {
-                    return StatusCode(200, notifications);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-        
-        // POST connect/notifications
+        //ConnectConstants.RestUrlNotifications
+        //POST connect/notifications
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Notification notification)
         {
@@ -104,7 +76,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // PUT connect/notification/5
+        //ConnectConstants.RestUrlNotificationsId
+        //PUT connect/notification/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]Notification notification)
         {
@@ -168,7 +141,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/notifications/5
+        //ConnectConstants.RestUrlNotificationsId
+        //DELETE connect/notifications/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -196,7 +170,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/rooms/5/notifications
+        //ConnectConstants.RestUrlRoomNotifications
+        //DELETE connect/rooms/5/notifications
         [HttpDelete("~/connect/Rooms/{id}/Notifications")]
         public async Task<IActionResult> DeleteFromRoom(string id)
         {
@@ -239,7 +214,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // DELETE connect/connectedobjects/5/notifications
+        //ConnectConstants.RestUrlConnectedObjectNotifications
+        //DELETE connect/connectedobjects/5/notifications
         [HttpDelete("~/connect/Connectedobjects/{id}/Notifications")]
         public async Task<IActionResult> DeleteFromConnectedObject(string id)
         {
@@ -283,7 +259,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/rooms/5/notifications
+        //ConnectConstants.RestUrlRoomNotifications
+        //GET connect/rooms/5/notifications
         [HttpGet("~/connect/Rooms/{id}/Notifications")]
         public async Task<IActionResult> GetFromRoom(string id)
         {
@@ -313,7 +290,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // GET connect/connectedobjects/5/notifications
+        //ConnectConstants.RestUrlConnectedObjectNotifications
+        //GET connect/connectedobjects/5/notifications
         [HttpGet("~/connect/Connectedobjects/{id}/Notifications")]
         public async Task<IActionResult> GetFromConnectedObject(string id)
         {

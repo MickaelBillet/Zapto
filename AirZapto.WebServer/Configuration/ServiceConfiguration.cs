@@ -30,6 +30,7 @@ namespace AirZapto.WebServices.Configuration
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddCacheServices();
+            services.AddTransient<IKeyVaultService, KeyVaultService>();
         }
 
         public static void AddCacheServices(this IServiceCollection services)

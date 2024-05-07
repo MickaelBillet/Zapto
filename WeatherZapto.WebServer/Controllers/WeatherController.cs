@@ -40,10 +40,10 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetReverseLocation(this.Configuration["OpenWeatherAPIKey"], longitude, latitude);
+                    ZaptoLocation zaptoLocation = await this.ApplicationOWService.GetReverseLocation(longitude, latitude);
                     if (zaptoLocation != null)
                     {
-                        zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], zaptoLocation.Location, longitude, latitude, culture.Substring(0,2));
+                        zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(zaptoLocation.Location, longitude, latitude, culture.Substring(0,2));
                         if (zaptoWeather != null)
                         {
                             (zaptoWeather.TemperatureMin, zaptoWeather.TemperatureMax) = await this.GetTemperatureMinMax(zaptoLocation?.Location);
@@ -89,7 +89,7 @@ namespace WeatherZapto.WebServer.Controllers
             {
                 if ((this.Configuration != null) && (this.ApplicationOWService != null) && (this.ApplicationOWServiceCache != null))
                 {
-                    zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(this.Configuration["OpenWeatherAPIKey"], location, longitude, latitude, culture.Substring(0,2));
+                    zaptoWeather = await this.ApplicationOWServiceCache.GetCurrentWeather(location, longitude, latitude, culture.Substring(0,2));
                     if (zaptoWeather != null)
                     {
                         (zaptoWeather.TemperatureMin, zaptoWeather.TemperatureMax) = await this.GetTemperatureMinMax(location);

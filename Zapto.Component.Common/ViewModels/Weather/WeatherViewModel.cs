@@ -5,7 +5,7 @@ using Serilog;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 using Zapto.Component.Common.Models;
 
 namespace Zapto.Component.Common.ViewModels
@@ -21,7 +21,7 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		private IApplicationWeatherService ApplicationWeatherService { get; }
 		private IApplicationOWService ApplicationOWService { get; }
-        private IStorageService LocalStorageService { get; }
+        private IZaptoLocalStorageService LocalStorageService { get; }
         #endregion
 
         #region Constructor
@@ -29,7 +29,7 @@ namespace Zapto.Component.Common.ViewModels
 		{
 			this.ApplicationWeatherService = serviceProvider.GetRequiredService<IApplicationWeatherService>();
 			this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
-            this.LocalStorageService = serviceProvider.GetRequiredService<IStorageService>();
+            this.LocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
         #endregion
 
@@ -107,7 +107,7 @@ namespace Zapto.Component.Common.ViewModels
                     {
                         this.IsLoading = true;
 
-                        ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(location.Longitude.ToString(), location.Latitude.ToString(), culture);
+                        ZaptoWeather? weather = await this.ApplicationWeatherService.GetCurrentWeather(location.Location, location.Longitude.ToString(), location.Latitude.ToString(), culture);
                         if (weather != null)
                         {
                             model = new WeatherModel()

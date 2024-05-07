@@ -8,7 +8,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IBaseViewModel : IDisposable
 	{
-		public Task InitializeAsync(string? parameter);
+		public Task InitializeAsync(object? parameter);
         public event EventHandler Refresh;
 		public bool IsLoading { get; }
 	}
@@ -49,7 +49,7 @@ namespace Zapto.Component.Common.ViewModels
 			GC.SuppressFinalize(this);
 		}        
 
-		public virtual async Task InitializeAsync(string? parameter)
+		public virtual async Task InitializeAsync(object? parameter)
 		{
 			await Task.FromResult<bool>(true);
 		}

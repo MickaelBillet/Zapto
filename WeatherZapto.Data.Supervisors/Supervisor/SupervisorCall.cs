@@ -25,12 +25,11 @@ namespace WeatherZapto.Data.Supervisors
         public async Task<ResultCode> AddCallOpenWeather()
         {
             int res = 0;
-
             AutoReset.WaitOne();
 
-            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(Clock.Now.Year)
-                                                                            && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(Clock.Now.Month)
-                                                                            && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(Clock.Now.Day));
+            //Search CallEntity between the beginning of the day and now
+            CallEntity entity = await this.CallRepository.GetAsync((item) => item.CreationDateTime >= new DateTime(Clock.Now.Year, Clock.Now.Month, Clock.Now.Day).ToUniversalTime()
+                                                                              && item.CreationDateTime <= DateTime.UtcNow);
             if (entity != null) 
             {
                 entity.Count++;
@@ -47,19 +46,20 @@ namespace WeatherZapto.Data.Supervisors
             }
 
             AutoReset.Set();
-
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
 
         public async Task<long?> GetDayCallsCount(DateTime day)
         {
-            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime.ToUniversalTime().Date.Year.Equals(day.Year)
-                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Month.Equals(day.Month)
-                                                                                                        && item.CreationDateTime.ToUniversalTime().Date.Day.Equals(day.Day));
-
-            long? count = entities.Count();
-
+            DateTime universalDateTime = day.ToUniversalTime();
+            IEnumerable<CallEntity> entities = await this.CallRepository.GetCollectionAsync((item) => item.CreationDateTime >= new DateTime(day.Year, day.Month, day.Day).ToUniversalTime()
+                                                                                                        && item.CreationDateTime <= new DateTime(day.Year, day.Month, day.Day + 1).ToUniversalTime());
+            long? count = 0;
+            entities.ToList().ForEach(entity =>
+            {
+                count = count + entity.Count;
+            });
             return count;
         }
 

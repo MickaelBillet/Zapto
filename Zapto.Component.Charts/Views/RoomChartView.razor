@@ -1,0 +1,100 @@
+﻿@inject IRoomChartViewModel ViewModel
+@inject IStringLocalizer<Resource> Localizer
+@implements IDisposable
+
+
+<Loading IsLoading="@this.IsLoading">
+    <h3>@RoomName</h3>
+    <SelectDates RoomId="@this.RoomId" MaxDate="@this.MaxDate" MinDate="@this.MinDate" @bind-StartDate=@StartDate @bind-EndDate=@EndDate @bind-IsClicked=@IsClicked></SelectDates>
+    <RoomChartListView Models="@this.Models"></RoomChartListView>
+</Loading>
+
+@code
+{
+    private bool isclicked = false;
+    private const string chartsDataKey = "ChartsDataKey";
+
+    #region Properties
+    [Parameter]
+    public string RoomId { get; set; } = string.Empty;
+
+    [Parameter]
+    public string RoomName { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Location { get; set; } = string.Empty;
+
+    private event EventHandler? PropertyChanged;
+
+    public bool IsLoading { get; set; } = true;
+
+    private DateTime? MaxDate { get; set; }
+
+    private DateTime? MinDate { get; set; }
+
+    public bool IsClicked
+    {
+        get
+        {
+            return isclicked;
+        }
+
+        set
+        {
+            if (isclicked != value)
+            {
+                isclicked = value;
+                if ((this.PropertyChanged != null) && (isclicked == true))
+                {
+                    this.PropertyChanged.Invoke(this, new EventArgs());
+                }
+            }
+        }
+    }
+
+    private DateTime? StartDate { get; set; } = DateTime.Today;
+
+    private DateTime? EndDate { get; set; } = DateTime.Today;
+
+    private IEnumerable<RoomChartModel>? Models { get; set; }
+    #endregion
+
+    #region Methods
+    protected override void OnInitialized()
+    {
+        this.PropertyChanged += this.PropertyChangedHandler;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((this.ViewModel != null) && (string.IsNullOrEmpty(this.RoomId) == false))
+        {
+            await this.ViewModel.InitializeAsync(this.Location);
+            this.MaxDate = await this.ViewModel.GetRoomMaxDate(this.RoomId);
+            this.MinDate = await this.ViewModel.GetRoomMinDate(this.RoomId);
+            await this.DisplayCharts();
+        }
+    }
+    public void Dispose()
+    {
+        this.ViewModel?.Dispose();
+        this.PropertyChanged -= this.PropertyChangedHandler;
+    }
+    public async Task DisplayCharts()
+    {
+        this.Models = await this.ViewModel.GetChartsData(this.StartDate, this.EndDate, this.RoomId);
+        this.IsClicked = false;
+        this.IsLoading = this.ViewModel.IsLoading;
+    }
+    private async void PropertyChangedHandler(object? sender, EventArgs? args)
+    {
+        this.IsLoading = true;
+        this.StateHasChanged();
+        await this.DisplayCharts();
+        this.StateHasChanged();
+    }
+
+    #endregion
+}
+
+

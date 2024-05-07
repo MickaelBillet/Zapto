@@ -1,4 +1,5 @@
 using AirZapto;
+using Blazored.LocalStorage;
 using Connect.Model;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -22,11 +23,14 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Debug("Hello, Zapto !");
 
-
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddBlazoredLocalStorage(config =>
+{
+    config.JsonSerializerOptions.WriteIndented = true;
+});
 
 builder.Services.AddHttpClient("ConnectClient", client =>
 {
@@ -75,6 +79,9 @@ builder.Services.AddHttpClient("OpenWeather", client =>
 	client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 });
 
+/// <learn>
+/// https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standalone-with-authentication-library?view=aspnetcore-8.0&tabs=visual-studio
+/// </learn>
 builder.Services.AddOidcAuthentication(options =>
 {
     options.ProviderOptions.MetadataUrl = builder.Configuration["Keycloak:MetadataUrl"];
@@ -115,5 +122,4 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
-
 await builder.Build().RunAsync();

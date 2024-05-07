@@ -2,13 +2,10 @@
 using Zapto.Component.Common.JsInterop;
 using Zapto.Component.Common.Services;
 
-namespace Zapto.Component.Services.GeoLocation
+namespace Zapto.Component.Services
 {
     public class PositionService : IPositionService
     {
-        #region Property
-        #endregion
-
         #region Constructor
         public PositionService(IServiceProvider serviceProvider)
         {

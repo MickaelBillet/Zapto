@@ -64,7 +64,7 @@
         bool? res = null;
         if ((this.Model != null) && (this.ViewModel != null))
         {
-            res = await this.ViewModel.SendCommandAsync(this.Model?.Command, this.Model?.Id);
+            res = await this.ViewModel.SendCommandAsync(this.Model);
         }
     }
 

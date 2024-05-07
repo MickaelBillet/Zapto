@@ -2,7 +2,7 @@
 
 namespace Zapto.Component.Common.Models
 {
-	public class PlugModel : ObjectConnectedModel
+	public sealed record PlugModel : ObjectConnectedModel
 	{
         #region Properties
         public string? FileNameTypeImage
@@ -47,10 +47,10 @@ namespace Zapto.Component.Common.Models
                 }
             }
         }
-        public int Status { get; set; }
-        public int? ConditionType { get; set; }
+        public int Status { get; set; } = Connect.Model.Status.OFF;
+        public int? ConditionType { get; set; } = ParameterType.None;
         public double WorkingDuration { get; set; }
-        public int Command { get; set; } = 1;
+        public int Command { get; set; } = CommandType.Off;
         #endregion
     }
 }

@@ -1,9 +1,8 @@
-﻿using MudBlazor;
-using Zapto.Component.Common.Helpers;
+﻿using Zapto.Component.Common.Helpers;
 
 namespace Zapto.Component.Common.Models
 {
-    public class HealthCheckModel : BaseModel
+    public sealed record HealthCheckModel : BaseModel
     {
         public string? Name { get; set; }
         public int? Status { get; set; }

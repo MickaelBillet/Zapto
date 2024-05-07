@@ -41,8 +41,7 @@ namespace WeatherZapto.WebServer.Services
             {
                 try
                 {
-                    ZaptoAirPollution zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(this.Configuration["OpenWeatherAPIKey"],
-                                                                                                                            this.Configuration["HomeLocation"],
+                    ZaptoAirPollution zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(this.Configuration["HomeLocation"],
                                                                                                                             this.Configuration["HomeLongitude"],
                                                                                                                             this.Configuration["HomeLatitude"]);
                     if (zaptoAirPollution != null) 
@@ -65,6 +64,10 @@ namespace WeatherZapto.WebServer.Services
                 catch (OperationCanceledException)
                 {
                     break;
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex.Message);
                 }
             }
         }

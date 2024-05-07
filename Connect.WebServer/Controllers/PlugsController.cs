@@ -1,10 +1,10 @@
-﻿using Connect.Application;
-using Connect.Data;
+﻿using Connect.Data;
 using Connect.Model;
 using Connect.WebServer.Services;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -17,54 +17,18 @@ namespace Connect.WebApi.Controllers
     {
         #region Services
         private ISupervisorPlug SupervisorPlug { get; }
-        private ISupervisorRoom SupervisorRoom { get; }
-        private IApplicationPlugServices ApplicationPlugServices { get; }
         private ISendCommandService SendCommandService { get; }
         #endregion
 
         #region Constructor
-
-        public PlugsController(IServiceProvider serviceProvider)
+        public PlugsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorPlug>();
-            this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
-            this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorRoom>();
+            this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(configuration["Cache"]!));
             this.SendCommandService = serviceProvider.GetRequiredService<ISendCommandService>();
         }
-
         #endregion
 
         #region HttpRequest
-
-        // GET connect/plugs/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            Plug? plug;
-
-            try
-            {
-                plug = await this.SupervisorPlug.GetPlug(id);
-                if (plug != null)
-                {
-                    return StatusCode(200, plug);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
         //ConnectConstants.RestUrlPlugCommand
         //ConnectConstants.RestUrlPlugOrder
         //PUT connect/plugs/5/mode/
@@ -145,7 +109,6 @@ namespace Connect.WebApi.Controllers
                 });
             }
         }
-
         #endregion
     }
 }

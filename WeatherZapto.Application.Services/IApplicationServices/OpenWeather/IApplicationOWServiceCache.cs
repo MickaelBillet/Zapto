@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using WeatherZapto.Model;
+﻿using WeatherZapto.Model;
 
 namespace WeatherZapto.Application
 {
     public interface IApplicationOWServiceCache
     {
-        Task<ZaptoAirPollution> GetCurrentAirPollution(string APIKey, string locationName, string longitude, string latitude);
-        Task<ZaptoWeather> GetCurrentWeather(string APIKey, string locationName, string longitude, string latitude, string language);
+        Task<ZaptoAirPollution> GetCurrentAirPollution(string locationName, string longitude, string latitude);
+        Task<ZaptoWeather> GetCurrentWeather(string locationName, string longitude, string latitude, string language);
     }
 }

@@ -13,7 +13,6 @@ namespace Connect.Data.Repositories
         #endregion
 
         #region Methods
-
         public async Task<RoomEntity?> GetFromPlugIdAsync(string plugId)
         {
             RoomEntity? entity = null;
@@ -23,7 +22,6 @@ namespace Connect.Data.Repositories
             }
             return entity;
         }
-
         #endregion
     }
 }

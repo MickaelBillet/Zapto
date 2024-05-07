@@ -7,7 +7,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class ServerIotConnectionService : ScheduledService
     {
@@ -38,7 +38,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
             try
             {
                 IApplicationServerIotServices applicationServerIotServices = scope.ServiceProvider.GetRequiredService<IApplicationServerIotServices>();
-                ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorServerIotStatus>();
+                ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryServerIotStatus>().CreateSupervisor();
                 SystemStatus? status = await applicationServerIotServices.ReceiveStatusAsync();
                 if (status != null)
                 {

@@ -35,7 +35,6 @@
     <control:BasePage.CustomToolbar>
         <control:CustomToolbarItem
             IsVisible="True"
-            x:Name="Alerts"
             IconImageSource="alert.png"
             Order="Primary"
             Command="{Binding NotificationCommand}"
@@ -231,52 +230,17 @@
                     VerticalOptions="CenterAndExpand" />
             </StackLayout>
 
-            <Grid
-                Grid.Row="0"
-                Grid.Column="2"
-                Margin="0,0,15,0"
-                HorizontalOptions="End"
-                IsVisible="{Binding Path=Room.DeviceType, ConverterParameter=Pressure, Converter={StaticResource DeviceTypeToVisibilityConverter}}"
-                RowSpacing="0"
-                ColumnSpacing="0"
-                VerticalOptions="EndAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <Label
-                    Grid.Row="0"
-                    Margin="10,0,0,0"
-                    FontAttributes="None"
-                    FontSize="18"
-                    TextColor="{StaticResource LightBlue}"
-                    HorizontalOptions="EndAndExpand"
-                    Style="{StaticResource NormalLabelStyle}"
-                    Text="hPa"
-                    VerticalOptions="End" />
-
-                <Label
-                    Grid.Row="1"
-                    Margin="10,-16,0,0"
-                    FontAttributes="None"
-                    FontSize="40"
-                    HorizontalOptions="EndAndExpand"
-                    TextColor="{StaticResource LightBlue}"
-                    Style="{StaticResource NormalLabelStyle}"
-                    VerticalOptions="End">
-                    <Label.Text>
-                        <Binding
-                            Converter="{StaticResource DoubleToIntegerOrFractionnalPart}"
-                            Path="Room.Pressure">
-                            <Binding.ConverterParameter>
-                                <sys:String>&quot;Integer&quot;</sys:String>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </Label.Text>
-                </Label>
-            </Grid>
-
+            <StackLayout Grid.Row="0"
+                         Grid.Column="2"
+                         Margin="0,0,15,0"
+                         HorizontalOptions="Center"
+                         VerticalOptions="CenterAndExpand">
+                <Ellipse Fill="{Binding Path=Room.StatusSensors, Converter={StaticResource StatusSensorConverter}}"
+                         Margin="10"
+                         WidthRequest="30"
+                         HorizontalOptions="Start"
+                         HeightRequest="30"></Ellipse>
+            </StackLayout>
         </Grid>
     </Grid>
 </control:BasePage>

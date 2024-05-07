@@ -24,6 +24,8 @@ namespace Connect.WebApi.Controllers
         #endregion
 
         #region Method
+
+        //ConnectConstants.RestUrlHealthCheck
         [HttpGet]
         public async Task<IActionResult> Get()
         {

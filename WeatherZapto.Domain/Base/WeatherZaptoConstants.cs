@@ -9,6 +9,7 @@
         public const string UrlOWReverseLocation = @"geo/1.0/reverse?lat={0}&lon={1}&limit={2}&appid={3}";
         public const string UrlOWLocationZipCode = @"geo/1.0/zip?zip={0},{1}&appid={2}";
         public const string UrlOWLocationCity = @"geo/1.0/direct?q={0},{1},{2}&limit={3}&appid={4}";
+        public const string UrlOWWeatherOneCall = @"data/3.0/onecall?lat={0}&lon={1}exclude={2}&appid={3}"; 
 
         public const string UrlAirPollution = @"airpollution/lon={0}&lat={1}";
         public const string UrlAirPollutionLocation = @"airpollution/location={0}&lon={1}&lat={2}";

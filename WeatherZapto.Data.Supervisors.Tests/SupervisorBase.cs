@@ -1,4 +1,5 @@
-﻿using Framework.Data.Abstractions;
+﻿using Framework.Common.Services;
+using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
@@ -50,6 +51,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddTransient<IKeyVaultService, KeyVaultService>();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
 

@@ -9,7 +9,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IRoomListViewModel : IBaseViewModel
 	{
-		Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId, string? locationName);
+		Task<IEnumerable<RoomModel>?> GetRoomModels(LocationModel model);
 	}
 
 	public class RoomListViewModel : BaseViewModel, IRoomListViewModel
@@ -26,28 +26,31 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-		public async Task<IEnumerable<RoomModel>?> GetRoomModels(string? locationId, string? locationName)
+		public async Task<IEnumerable<RoomModel>?> GetRoomModels(LocationModel model)
 		{
 			IEnumerable<RoomModel>? models = null;
 			try
 			{
 				this.IsLoading = true;
 
-				models = (await this.ApplicationRoomServices.GetRoomsAsync(locationId))?.Select((room) => new RoomModel()
+				if ((model.Id != null) && (model.Location != null))
 				{
-					Name = this.Localizer[room.Name],
-					LocationName = locationName,
-					LocationId = room.LocationId,
-					Type = room.Type,
-					Description = room.Description,
-					Humidity = (room.Humidity != null) ? room.Humidity.Value.ToString("00") : null,
-					Temperature = (room.Temperature != null) ? room.Temperature.Value.ToString("0.0") : null,
-					DeviceType = room.DeviceType,
-					ConnectedObjectsList = room.ConnectedObjectsList.OrderBy((arg) => (arg.DeviceType)).ToList<ConnectedObject>(),
-					Sensors = room.SensorsList,
-					StatusSensors = room.StatusSensors,
-					Id = room.Id,
-				})?.OrderByDescending((room) => room.ConnectedObjectsList?.Count);
+					models = (await this.ApplicationRoomServices.GetRoomsAsync(model.Id))?.Select((room) => new RoomModel()
+					{
+						Name = this.Localizer[room.Name],
+						LocationName = model.Location,
+						LocationId = room.LocationId,
+						Type = room.Type,
+						Description = room.Description,
+						Humidity = (room.Humidity != null) ? room.Humidity.Value.ToString("00") : null,
+						Temperature = (room.Temperature != null) ? room.Temperature.Value.ToString("0.0") : null,
+						DeviceType = room.DeviceType,
+						ConnectedObjectsList = room.ConnectedObjectsList.OrderBy((arg) => (arg.DeviceType)).ToList<ConnectedObject>(),
+						Sensors = room.SensorsList,
+						StatusSensors = room.StatusSensors,
+						Id = room.Id,
+					})?.OrderByDescending((room) => room.ConnectedObjectsList?.Count);
+				}
 			}
 			catch (Exception ex) 
 			{ 

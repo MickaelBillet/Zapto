@@ -1,4 +1,5 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -28,13 +29,21 @@ namespace Framework.Data.Session
 
         #region Constructor
 
-        public DalSession(IDataContextFactory dataContextFactory, IConfiguration configuration)
+        public DalSession(IKeyVaultService keyVaultService, IDataContextFactory dataContextFactory, IConfiguration configuration)
         {
-            this.ConnectionType = new ConnectionType()
+#if DEBUG
+            this.ConnectionType = new()
             {
                 ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
+                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"])
             };
+#else
+            this.ConnectionType = new()
+            {
+                ConnectionString = keyVaultService.GetSecret("ConnectionStrings"),
+                ServerType = ConnectionType.GetServerType(keyVaultService.GetSecret("ServerType"))
+            };
+#endif
 
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {

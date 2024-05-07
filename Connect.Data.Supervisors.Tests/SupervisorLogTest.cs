@@ -15,7 +15,7 @@ namespace Connect.Data.Supervisors.Tests
             await this.Initialyse();
 
             //Act
-            ISupervisorLog supervisor = this.HostApplication!.Services.GetRequiredService<ISupervisorLog>();
+            ISupervisorLog supervisor = this.HostApplication!.Services.GetRequiredService<ISupervisorFactoryLog>().CreateSupervisor();
             ResultCode code = await supervisor.AddLog(new Logs()
             {
                 Date = Clock.Now.ToUniversalTime(),

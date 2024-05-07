@@ -6,11 +6,9 @@ using Connect.Infrastructure.Services;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Infrastructure.Services;
-using Zapto.Component.Common.IServices;
 using Zapto.Component.Common.Services;
 using Zapto.Component.Common.ViewModels;
 using Zapto.Component.Services;
-using Zapto.Component.Services.GeoLocation;
 
 namespace Zapto.Web.Dashboard.Configuration
 {
@@ -23,7 +21,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IRoomListViewModel, RoomListViewModel>();
 			services.AddTransient<IRoomViewModel, RoomViewModel>();
 			services.AddTransient<ISensorDataListViewModel, SensorDataListViewModel>();
-			services.AddTransient<IRoomChartListViewModel, RoomChartListViewModel>();
+			services.AddTransient<IRoomChartViewModel, RoomChartViewModel>();
 			services.AddTransient<ISelectDateViewModel,  SelectDateViewModel>();
             services.AddTransient<ISensorEventListViewModel, SensorEventListViewModel>();
             services.AddTransient<ISensorDataViewModel, SensorDataViewModel>();
@@ -60,7 +58,8 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebServiceZapto>();			
 			services.AddTransient<IImageService, ImageService>((service) => new ImageService(service, configuration, "OpenWeather"));
 			services.AddScoped<DataService>();
-            services.AddTransient<IStorageService, StorageService>();
+            services.AddTransient<ILocalStorageService, LocalStorageService>();
+			services.AddTransient<IZaptoLocalStorageService, BlazoredLocalStorageService>();
         }
     }
 }
