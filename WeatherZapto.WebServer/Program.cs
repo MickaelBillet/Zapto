@@ -138,13 +138,15 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 string connectionString = string.Empty;
+string serverName = string.Empty;
 
 #if DEBUG
 connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]!;
+serverName = builder.Configuration["ConnectionStrings.ServerType"]!;
 #else
 connectionString = new KeyVaultService(builder.Configuration).GetSecret("ConnectionStrings");
+serverName = new KeyVaultService(builder.Configuration).GetSecret("ServerType");
 #endif
-
 
 builder.Services.AddHealthChecks()
         //Memory
@@ -153,7 +155,7 @@ builder.Services.AddHealthChecks()
                                         new string[] { "system" })
         //PostGreSql
         .AddNpgSql(connectionString,
-                            name: "PostGreSql",
+                            name: serverName,
                             failureStatus: HealthStatus.Unhealthy,
                             tags: new string[] { "system" })
         //Log error in DB
