@@ -34,4 +34,4 @@ jobs:
           file: ./WeatherZapto.WebServer/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/weatherzaptowebserver:v2
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: linux/arm64
