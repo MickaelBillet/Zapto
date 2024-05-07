@@ -137,13 +137,22 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+string connectionString = string.Empty;
+
+#if DEBUG
+connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]!;
+#else
+connectionString = new KeyVaultService(builder.Configuration).GetSecret("ConnectionStrings");
+#endif
+
+
 builder.Services.AddHealthChecks()
         //Memory
         .AddCheck<MemoryHealthCheck>("Memory",
                                         HealthStatus.Degraded,
                                         new string[] { "system" })
         //PostGreSql
-        .AddNpgSql(builder.Configuration["ConnectionStrings:DefaultConnection"]!,
+        .AddNpgSql(connectionString,
                             name: "PostGreSql",
                             failureStatus: HealthStatus.Unhealthy,
                             tags: new string[] { "system" })
