@@ -8,8 +8,8 @@
         public string? Country { get; set; }
         public string? State { get; set; }
         public string? Zip { get; set; }
-        public byte LocalizationIsAvailable { get; set; } = ProgressStaus.None;
-        public byte LocationIsAvailable { get; set; } = ProgressStaus.None;
+        public byte LocalizationIsAvailable { get; set; } = ProgressStatus.None;
+        public byte LocationIsAvailable { get; set; } = ProgressStatus.None;
 
         public override string ToString()
         {

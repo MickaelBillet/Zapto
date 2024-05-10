@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public static class ProgressStaus
+    public static class ProgressStatus
     {
         public const byte None = 0;
         public const byte Available = 1;

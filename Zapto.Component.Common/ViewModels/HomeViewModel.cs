@@ -36,8 +36,8 @@ namespace Zapto.Component.Common.ViewModels
             this.Model = parameter as LocationModel;
             if (this.Model != null)
             {
-                this.Model.LocalizationIsAvailable = ProgressStaus.InProgress;
-                this.Model.LocationIsAvailable = ProgressStaus.NoAvailable;
+                this.Model.LocalizationIsAvailable = ProgressStatus.InProgress;
+                this.Model.LocationIsAvailable = ProgressStatus.NoAvailable;
             }
             await base.InitializeAsync(parameter);
         }
@@ -47,10 +47,11 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if (this.Model != null)
                 {
-                    this.Model.LocalizationIsAvailable = ProgressStaus.Available;
+                    this.Model.LocalizationIsAvailable = ProgressStatus.Available;
                     this.IsLoading = true;
 
-                    if ((this.Model.LocalizationIsAvailable == ProgressStaus.Available) && (this.Model.LocationIsAvailable == ProgressStaus.NoAvailable))
+                    if ((this.Model.LocalizationIsAvailable == ProgressStatus.Available) 
+                        && (this.Model.LocationIsAvailable == ProgressStatus.NoAvailable))
                     {
                         this.Model.Location = await this.GetReverseLocation(latitude.ToString()!, longitude.ToString()!);
                         if (this.Model != null)
@@ -59,11 +60,11 @@ namespace Zapto.Component.Common.ViewModels
                             {
                                 this.Model.Latitude = latitude;
                                 this.Model.Longitude = longitude;
-                                this.Model.LocationIsAvailable = ProgressStaus.Available;
+                                this.Model.LocationIsAvailable = ProgressStatus.Available;
                             }
                             else
                             {
-                                this.Model!.LocationIsAvailable = ProgressStaus.NoAvailable;
+                                this.Model!.LocationIsAvailable = ProgressStatus.NoAvailable;
                             }
                         }
                     }
@@ -73,8 +74,9 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if (this.Model != null)
                 {
-                    this.Model.LocationIsAvailable = ProgressStaus.NoAvailable;
+                    this.Model.LocationIsAvailable = ProgressStatus.NoAvailable;
                 }
+
                 Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
                 this.NavigationService.ShowMessage("Location Unable", ZaptoSeverity.Error);
             }
@@ -91,8 +93,8 @@ namespace Zapto.Component.Common.ViewModels
                 this.Model.Location = model.Location;
                 this.Model.Latitude = model.Latitude;
                 this.Model.Longitude = model.Longitude;
-                this.Model.LocalizationIsAvailable = ProgressStaus.Available;
-                this.Model.LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStaus.Available : ProgressStaus.NoAvailable;
+                this.Model.LocalizationIsAvailable = ProgressStatus.Available;
+                this.Model.LocationIsAvailable = (string.IsNullOrEmpty(model.Location) == false) ? ProgressStatus.Available : ProgressStatus.NoAvailable;
             }
         }
 
@@ -100,7 +102,7 @@ namespace Zapto.Component.Common.ViewModels
         {
             if (this.Model != null)
             {
-                this.Model.LocalizationIsAvailable = await Task.FromResult<byte>(ProgressStaus.NoAvailable);
+                this.Model.LocalizationIsAvailable = await Task.FromResult<byte>(ProgressStatus.NoAvailable);
             }
         }
 

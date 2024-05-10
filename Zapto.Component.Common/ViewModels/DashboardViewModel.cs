@@ -15,8 +15,8 @@ namespace Zapto.Component.Common.ViewModels
 	{
         #region Properties
         private IApplicationConnectLocationServices ApplicationConnectLocationServices { get; }
-        public byte LocalizationIsAvailable { get; set; } = ProgressStaus.None;
-        public byte LocationIsAvailable { get; set; } = ProgressStaus.None;
+        public byte LocalizationIsAvailable { get; set; } = ProgressStatus.None;
+        public byte LocationIsAvailable { get; set; } = ProgressStatus.None;
         #endregion
 
         #region Constructor
@@ -31,8 +31,8 @@ namespace Zapto.Component.Common.ViewModels
         {
             LocationModel? model = new LocationModel()
             {
-                LocalizationIsAvailable = ProgressStaus.InProgress,
-                LocationIsAvailable = ProgressStaus.NoAvailable
+                LocalizationIsAvailable = ProgressStatus.InProgress,
+                LocationIsAvailable = ProgressStatus.NoAvailable
             };
 
             try
@@ -47,13 +47,13 @@ namespace Zapto.Component.Common.ViewModels
 
                 if (model?.Location != null)
                 {
-                    model.LocationIsAvailable = ProgressStaus.Available;
+                    model.LocationIsAvailable = ProgressStatus.Available;
                 }
                 else
                 {
                     model = new LocationModel()
                     {
-                        LocationIsAvailable = ProgressStaus.NoAvailable
+                        LocationIsAvailable = ProgressStatus.NoAvailable
                     };
                 }
             }
@@ -63,7 +63,7 @@ namespace Zapto.Component.Common.ViewModels
                 this.NavigationService.ShowMessage("Location Service Exception", ZaptoSeverity.Error);
                 model = new LocationModel()
                 {
-                    LocationIsAvailable = ProgressStaus.NoAvailable
+                    LocationIsAvailable = ProgressStatus.NoAvailable
                 };
             }
             finally

@@ -44,15 +44,15 @@ namespace Zapto.Component.Common.ViewModels
         public string GetLocation(LocationModel model)
         {
             string res = string .Empty;
-            if (model.LocalizationIsAvailable == ProgressStaus.InProgress)
+            if (model.LocalizationIsAvailable == ProgressStatus.InProgress)
             {
                 res = this.Localizer["Location in progress"];
             }
-            else if (model.LocationIsAvailable == ProgressStaus.NoAvailable)
+            else if (model.LocationIsAvailable == ProgressStatus.NoAvailable)
             {
                 res = this.Localizer["Unable to locate"];
             }
-            else if (model.LocationIsAvailable == ProgressStaus.Available)
+            else if (model.LocationIsAvailable == ProgressStatus.Available)
             {
                 res = model.Location!;
             }
