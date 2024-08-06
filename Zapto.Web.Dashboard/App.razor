@@ -41,7 +41,7 @@
 {
     private List<Assembly> LazyLoadedAssemblies { get; set; } = new();
 
-    private async Task OnNavigateAsync(NavigationContext args)
+    private async Task OnNavigateAsync(Microsoft.AspNetCore.Components.Routing.NavigationContext args)
     {
         if (args.Path.Contains("dashboard"))
         {

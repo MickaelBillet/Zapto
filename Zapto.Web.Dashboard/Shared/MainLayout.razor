@@ -36,7 +36,7 @@
         <AuthorizeView Policy="user">
             <Authorized>
                 <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                    <MudToolBar DisableGutters="true">
+                    <MudToolBar>
                         <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" Class="ml-3" />
                         <MudSpacer />
                     </MudToolBar>
@@ -73,7 +73,6 @@
         if (this.ViewModel != null)
         {
             this.ViewModel?.Dispose();
-            this.ViewModel = null;
         }
     }
 }
