@@ -43,8 +43,7 @@
         public const int MinutesPerDay = 1440;
         public const int DayPerWeek = 7;
 
-		public const string ArduinoServer = "192.168.1.27";
-       // public const string ArduinoServer = "192.168.1.36";
+		public const string ArduinoServer = "192.168.1.145";
         public const string BMESensor1 = "192.168.1.42";
         public const string BMESensor2 = "192.168.1.46";
         public const string BMESensor3 = "192.168.1.3";
