@@ -9,6 +9,7 @@ using Framework.Common.Services;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,8 +17,9 @@ namespace Connect.Server.Configuration
 {
     public static class ServiceConfiguration
 	{
-		public static void AddServices(this IServiceCollection services)
+		public static void AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
+            services.AddSecretService(configuration);
             services.AddMailService();
             services.AddUdpService();
             services.AddRepositories();
@@ -39,7 +41,6 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, ServerIotConnectionService>();
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
-            services.AddTransient<IKeyVaultService, KeyVaultService>();
             services.AddSingleton<IFirebaseService, FirebaseService>((provider) => new FirebaseService(provider, "./connect-notification-9314f-firebase-adminsdk-m70fo-6cfc9a1076.json"));
         }
 

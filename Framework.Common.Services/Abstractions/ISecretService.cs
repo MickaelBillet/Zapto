@@ -1,6 +1,6 @@
 ﻿namespace Framework.Common.Services
 {
-    public interface IKeyVaultService
+    public interface ISecretService
     {
         string GetSecret(string name);
     }

@@ -30,9 +30,9 @@ namespace Framework.Data.Session
 
         #region Constructor
 
-        public DalSession(IKeyVaultService keyVaultService, IDataContextFactory dataContextFactory, IConfiguration configuration)
+        public DalSession(ISecretService secretService, IDataContextFactory dataContextFactory, IConfiguration configuration)
         {
-            this.ConnectionType = ConnectionString.GetConnectionType(configuration, keyVaultService);
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService);
 
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {

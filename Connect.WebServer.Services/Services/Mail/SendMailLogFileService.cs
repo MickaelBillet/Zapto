@@ -10,14 +10,14 @@ namespace Connect.WebServer.Services
     {
         #region Services
         private IMailService MailService { get; }
-        private IKeyVaultService KeyVaultService { get; }
+        private ISecretService SecretService { get; }
         #endregion
 
         #region Constructor
         public SendMailLogFileService(IServiceProvider serviceProvider)
         {
             this.MailService = serviceProvider.GetRequiredService<IMailService>();
-            this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
+            this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
         }
         #endregion
 
@@ -38,8 +38,8 @@ namespace Connect.WebServer.Services
                         Subject = "Logs Connect " + Clock.Now,
                         ToEmail = "mickael.billet@gmail.com",
                     };
-                    string password = this.KeyVaultService.GetSecret("MailPassword");
-                    string address = this.KeyVaultService.GetSecret("MailAddress");
+                    string password = this.SecretService.GetSecret("MailPassword");
+                    string address = this.SecretService.GetSecret("MailAddress");
                     await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
                 }
             }

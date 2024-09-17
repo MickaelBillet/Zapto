@@ -120,7 +120,7 @@ namespace Connect.WebServer
                     policy.RequireClaim("user_realm_roles", "user", "administrator");
                 });
             });
-            services.AddServices();
+            services.AddServices(this.Configuration);
             services.AddOptions();
             services.AddControllers();
             services.AddSwaggerGen(options =>

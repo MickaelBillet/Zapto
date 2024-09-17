@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Framework.Common.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Framework.Infrastructure.Services
 {
@@ -27,6 +29,18 @@ namespace Framework.Infrastructure.Services
 		public static void AddThreadSynchronizationService(this IServiceCollection services)
 		{
 			services.AddTransient<IThreadSynchronizationService, ThreadSynchronizationService>();
+		}
+
+		public static void AddSecretService(this IServiceCollection services, IConfiguration configuration)
+		{
+			if (byte.Parse(configuration["Secret"]) == 1)
+			{
+				services.AddTransient<ISecretService, VarEnvService>();
+			}
+			else if (byte.Parse(configuration["Secret"]) == 2)
+			{
+				services.AddTransient<ISecretService, KeyVaultService>((provider) => new KeyVaultService(configuration));
+			}
 		}
 	}
 }

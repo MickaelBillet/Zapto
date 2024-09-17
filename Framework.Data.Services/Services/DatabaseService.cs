@@ -16,7 +16,7 @@ namespace Framework.Data.Services
 		#region Properties
 		protected IDataContextFactory DataContextFactory { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
-		protected IKeyVaultService KeyVaultService { get; }
+		protected ISecretService SecretService { get; }
         protected IConfiguration Configuration { get; }
 		protected ConnectionType ConnectionType { get; }
         private bool IsInitialized { get; set; }
@@ -28,8 +28,8 @@ namespace Framework.Data.Services
 			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
-			this.KeyVaultService = serviceProvider.GetRequiredService<IKeyVaultService>();
-			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.KeyVaultService);
+			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
+			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService);
 		}
 		#endregion
 

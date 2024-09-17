@@ -6,45 +6,26 @@ namespace Framework.Infrastructure.Services
 {
     public static class ConnectionString
     {
-        public static (string connectionString, string serverName) GetConnectionString(IConfiguration configuration, IKeyVaultService keyVaultService)
+        public static (string connectionString, string serverName) GetConnectionString(IConfiguration configuration, ISecretService secretService)
         {
             string connectionString = string.Empty;
             string serverName = string.Empty;
 
-            if ((string.IsNullOrEmpty(configuration["KeyVault"]) == false) && (int.Parse(configuration["KeyVault"]!) == 1))
-            {
-                connectionString = configuration["ConnectionStrings:DefaultConnection"]!;
-                serverName = configuration["ConnectionStrings.ServerType"]!;
-            }
-            else
-            {
-                connectionString = keyVaultService.GetSecret("ConnectionStrings");
-                serverName = keyVaultService.GetSecret("ServerType");
-            }
+            connectionString = secretService.GetSecret("ConnectionStrings");
+            serverName = secretService.GetSecret("ServerType");
 
             return (connectionString, serverName);
         }
 
-        public static ConnectionType GetConnectionType(IConfiguration configuration, IKeyVaultService keyVaultService)
+        public static ConnectionType GetConnectionType(IConfiguration configuration, ISecretService secretService)
         {
             ConnectionType connectionType;
 
-            if ((string.IsNullOrEmpty(configuration["KeyVault"]) == false) && (int.Parse(configuration["KeyVault"]!) == 1))
+            connectionType = new ConnectionType()
             {
-                connectionType = new ConnectionType()
-                {
-                    ConnectionString = keyVaultService.GetSecret("ConnectionString"),
-                    ServerType = ConnectionType.GetServerType(keyVaultService.GetSecret("ServerType"))
-                };
-            }
-            else
-            {
-                connectionType = new ConnectionType()
-                {
-                    ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                    ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"])
-                };
-            }
+                ConnectionString = secretService.GetSecret("ConnectionString"),
+                ServerType = ConnectionType.GetServerType(secretService.GetSecret("ServerType"))
+            };
 
             return connectionType;
         }

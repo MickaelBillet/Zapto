@@ -6,7 +6,7 @@ using System;
 
 namespace Framework.Infrastructure.Services
 {
-    public class KeyVaultService : IKeyVaultService
+    public class KeyVaultService : ISecretService
     {
         #region Properties
         private string ClientId { get; }
@@ -22,6 +22,7 @@ namespace Framework.Infrastructure.Services
             this.TenantId = configuration["Tenant_ID"];
             this.KeyVault_ID = configuration["KeyVault_ID"];
             this.AppRegistration = configuration["AppRegistration"];
+
         }
         #endregion
 
@@ -41,6 +42,7 @@ namespace Framework.Infrastructure.Services
             }
             return result;
         }
+
         #endregion
     }
 }
