@@ -15,7 +15,7 @@ namespace WeatherZapto.Application.Services
         private IAirPollutionOWService AirPollutionOWService { get; }
         private IWeatherOWService WeatherOWService { get; }
         private IServiceScopeFactory ServiceScopeFactory { get; }
-        private IKeyVaultService KeyVaultService { get; }
+        private ISecretService SecretService { get; }
         private string OpenWeatherAPIKey { get; }
         #endregion
 
@@ -26,10 +26,10 @@ namespace WeatherZapto.Application.Services
             this.WeatherOWService = serviceProvider.GetService<IWeatherOWService>();
             this.LocationOWService = serviceProvider.GetService<ILocationOWService>();
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
-            this.KeyVaultService = serviceProvider.GetService<IKeyVaultService>();
-            if (this.KeyVaultService != null)
+            this.SecretService = serviceProvider.GetService<ISecretService>();
+            if (this.SecretService != null)
             {
-                this.OpenWeatherAPIKey = this.KeyVaultService.GetSecret("OpenWeatherAPIKey");
+                this.OpenWeatherAPIKey = this.SecretService.GetSecret("OpenWeatherAPIKey");
             }
         }
         #endregion

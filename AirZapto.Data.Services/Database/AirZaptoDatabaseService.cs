@@ -8,11 +8,8 @@ namespace AirZapto.Data.Database
 {
     public sealed class AirZaptoDatabaseService : DatabaseService
     {
-        #region Services
-        #endregion
-
         #region Constructor
-        public AirZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public AirZaptoDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
         {
         }
         #endregion
@@ -53,7 +50,6 @@ namespace AirZapto.Data.Database
                 await supervisor.AddVersionAsync();
             }
         }
-
         #endregion
     }
 }

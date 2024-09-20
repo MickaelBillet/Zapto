@@ -23,13 +23,13 @@ namespace Framework.Data.Services
 		#endregion
 
 		#region Constructor
-		public DatabaseService(IServiceProvider serviceProvider)
+		public DatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey)
 		{
 			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
 			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
-			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService);
+			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService, connectionStringKey, serverTypeKey); 
 		}
 		#endregion
 

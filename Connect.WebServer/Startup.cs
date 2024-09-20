@@ -149,14 +149,16 @@ namespace Connect.WebServer
             });
             services.AddSignalR();
             services.AddSingleton<HostedServiceHealthCheck>();
+
+            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, "ConnectionStringConnect", "ServerTypeConnect");
             services.AddHealthChecks()
                     //Memory
                     .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })
                     //Sqlite
-                    .AddSqlite($"Data Source = {this.Configuration["DataBasePath"]}",
-                                                                failureStatus: HealthStatus.Unhealthy,
-                                                                tags: new string[] { "system" },
-                                                                name: "Sqlite")
+                    .AddSqlite(connectionString: connectionString,
+                                failureStatus: HealthStatus.Unhealthy,
+                                tags: new string[] { "system" },
+                                name: serverName)
                     //Arduino server
                     .AddCheck<HostedServiceHealthCheck>("Server Iot Connection",
                                                                 failureStatus: HealthStatus.Unhealthy,

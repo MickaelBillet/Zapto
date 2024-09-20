@@ -137,8 +137,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, new KeyVaultService(builder.Configuration));
-
+(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, "ConnectionStringWeather", "ServerTypeWeather");
 builder.Services.AddHealthChecks()
         //Memory
         .AddCheck<MemoryHealthCheck>("Memory",

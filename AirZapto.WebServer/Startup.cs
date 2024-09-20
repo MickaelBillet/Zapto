@@ -2,6 +2,7 @@ using AirZapto.WebServer.Services;
 using AirZapto.WebServices.Configuration;
 using AirZapto.WebServices.Helpers;
 using AirZapto.WebServices.Middleware;
+using Framework.Infrastructure.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -19,6 +20,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Linq;
+using MemoryHealthCheck = AirZapto.WebServer.Services.MemoryHealthCheck;
 
 namespace AirZapto.WebServer
 {
@@ -118,7 +120,7 @@ namespace AirZapto.WebServer
                 });
             });
             services.AddMemoryCache();
-            services.AddServices();
+            services.AddServices(this.Configuration);
             services.AddOptions();
             services.AddControllers();
             services.AddSwaggerGen(options =>
@@ -145,14 +147,16 @@ namespace AirZapto.WebServer
                     {securityScheme, Array.Empty<string>()}
                 });
             });
+
+            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, "ConnectionStringAirZapto", "ServerTypeAirZapto");
             services.AddHealthChecks()
                     //Memory
                     .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })
                     //Sqlite
-                    .AddSqlite($"{this.Configuration["ConnectionStrings:DefaultConnection"]}",
-                                                                failureStatus: HealthStatus.Unhealthy,
-                                                                tags: new string[] { "system" },
-                                                                name: "Sqlite")
+                    .AddSqlite(connectionString: connectionString,
+                                failureStatus: HealthStatus.Unhealthy,
+                                tags: new string[] { "system" },
+                                name: serverName)
                     //Log error in DB
                     .AddCheck<ErrorHealthCheck>("Error System",
                                                                 failureStatus: HealthStatus.Degraded,

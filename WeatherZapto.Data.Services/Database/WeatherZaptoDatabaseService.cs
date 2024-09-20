@@ -7,17 +7,13 @@ namespace WeatherZapto.Data.Services
 {
     public sealed class WeatherZaptoDatabaseService : DatabaseService
     {
-        #region Properties
-        #endregion
-
         #region Constructor
-        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
         {
         }
         #endregion
 
         #region Methods
-
         protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
@@ -52,7 +48,6 @@ namespace WeatherZapto.Data.Services
                 await scope.ServiceProvider.GetRequiredService<ISupervisorVersion>().AddVersion();
             }
         }
-
         #endregion
     }
 }

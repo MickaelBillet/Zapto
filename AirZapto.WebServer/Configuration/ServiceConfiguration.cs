@@ -7,6 +7,7 @@ using Framework.Common.Services;
 using Framework.Data.Abstractions;
 using Framework.Data.Services;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -14,15 +15,16 @@ namespace AirZapto.WebServices.Configuration
 {
     public static class ServiceConfiguration
 	{
-		public static void AddServices(this IServiceCollection services)
-		{ 
-			services.AddJsonFileService();
+		public static void AddServices(this IServiceCollection services, IConfiguration configuration)
+		{
+            services.AddSecretService(configuration);
+            services.AddJsonFileService();
 			services.AddSupervisors();
 			services.AddRepositories();
             services.AddSingleton<CacheSignal>();
             services.AddApplicationAirZaptoServices();
 			services.AddSingleton<WebSockerService>();
-            services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
+            services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>(provider => new AirZaptoDatabaseService(provider, "ConnectionStringAirZapto", "ServerTypeAirZapto"));
             services.AddTransient<IWSMessageManager, SensorMessageManager>(); 
 			services.AddSingleton<IHostedService, SensorConnectionService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
@@ -30,7 +32,6 @@ namespace AirZapto.WebServices.Configuration
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddCacheServices();
-            services.AddTransient<IKeyVaultService, KeyVaultService>();
         }
 
         public static void AddCacheServices(this IServiceCollection services)

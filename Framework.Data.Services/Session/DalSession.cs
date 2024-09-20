@@ -3,6 +3,8 @@ using Framework.Core.Base;
 using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Data;
 
 namespace Framework.Data.Session
@@ -29,11 +31,14 @@ namespace Framework.Data.Session
         #endregion
 
         #region Constructor
-
-        public DalSession(ISecretService secretService, IDataContextFactory dataContextFactory, IConfiguration configuration)
+        public DalSession(IServiceProvider serviceProvider, 
+                            string connectionStringKey, 
+                            string serverTypeKey)
         {
-            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService);
-
+            ISecretService secretService = serviceProvider.GetRequiredService<ISecretService>();
+            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {
                 (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
@@ -45,10 +50,26 @@ namespace Framework.Data.Session
             }
         }
 
+        public DalSession(ISecretService secretService,
+                            IDataContextFactory dataContextFactory, 
+                            IConfiguration configuration,
+                            string connectionStringKey,
+                            string serverTypeKey)
+        {
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
+            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
+            {
+                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
+                if (obj != null)
+                {
+                    this.Connection = obj?.connection;
+                    this.DataContext = obj?.context;
+                }
+            }
+        }
         #endregion
 
         #region Methods
-
         public bool OpenConnection()
         {
             bool res = false;

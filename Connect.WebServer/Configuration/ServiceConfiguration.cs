@@ -22,13 +22,13 @@ namespace Connect.Server.Configuration
             services.AddSecretService(configuration);
             services.AddMailService();
             services.AddUdpService();
-            services.AddRepositories();
+            services.AddRepositories("ConnectionStringConnect", "ServerTypeConnect");
             services.AddApplicationConnectServices();
             services.AddConnectWebServices();
             services.AddCacheServices();
             services.AddSupervisors();
             services.AddSingleton<CacheSignal>();
-            services.AddSingleton<IDatabaseService, ConnectDatabaseService>(); 
+            services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider, "ConnectionStringConnect", "ServerTypeConnect"));
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();
             services.AddTransient<ISendMailAlertService, SendMailAlertService>();
             services.AddSingleton<IHostedService, RecordingDataService>();

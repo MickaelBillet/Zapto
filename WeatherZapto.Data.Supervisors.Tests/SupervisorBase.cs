@@ -16,7 +16,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
     {
         #region Properties
         protected IHost? HostApplication { get; set; } = null;
-        private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
+        private readonly PostgreSqlContainer Container = new PostgreSqlBuilder()
                                                                 .WithImage("postgres:14.7")
                                                                 .WithDatabase("weatherZaptoDb")
                                                                 .WithUsername("postgres")
@@ -39,19 +39,18 @@ namespace WeatherZapto.Data.Supervisors.Tests
             {
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    {"ConnectionStrings:DefaultConnection", $"{_container.GetConnectionString()}"},
+                    {"ConnectionStrings:DefaultConnection", $"{Container.GetConnectionString()}"},
                     {"ConnectionStrings:ServerType", "PostGreSQL"}
                 });
             }).ConfigureServices((context, services) =>
             {
-                services.AddRepositories();
-
-                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
+                services.AddRepositories("ConnectionStringWeather", "ServerTypeWeather");
+                services.AddSecretService(context.Configuration);
+                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider, "ConnectionStringWeather", "ServerTypeWeather"));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
-                services.AddTransient<IKeyVaultService, KeyVaultService>();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
 
@@ -77,9 +76,9 @@ namespace WeatherZapto.Data.Supervisors.Tests
             }
         }
 
-        public async Task InitializeAsync() => await _container.StartAsync();
+        public async Task InitializeAsync() => await Container.StartAsync();
 
-        public async Task DisposeAsync() => await _container.DisposeAsync();
+        public async Task DisposeAsync() => await Container.DisposeAsync();
         #endregion
     }
 }

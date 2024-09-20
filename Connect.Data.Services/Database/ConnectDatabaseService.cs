@@ -12,7 +12,7 @@ namespace Connect.Data.Database
         #endregion
 
         #region Constructor
-        public ConnectDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ConnectDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
         {
         }
         #endregion
