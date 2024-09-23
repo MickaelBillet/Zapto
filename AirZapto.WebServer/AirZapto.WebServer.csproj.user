@@ -4,6 +4,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>AirZapto.WebServer.Novacor</ActiveDebugProfile>
+    <ActiveDebugProfile>AirZapto.WebServer.Houilles</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
