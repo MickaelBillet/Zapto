@@ -1,7 +1,9 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Mappers;
+using AirZapto.Data.Services.Repositories;
 using AirZapto.Model;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 
 namespace AirZapto.Data.Supervisors
 {
@@ -12,7 +14,7 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorSensor(IServiceProvider serviceProvider) : base(serviceProvider)
+        public SupervisorSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
         {
 
         }

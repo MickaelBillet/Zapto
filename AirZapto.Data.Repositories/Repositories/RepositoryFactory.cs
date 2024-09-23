@@ -2,15 +2,17 @@
 using AirZapto.Data.Services.Repositories;
 using Framework.Data.Abstractions;
 using System;
+using System.Data;
 
 namespace AirZapto.Data.Repositories
 {
     public class RepositoryFactory : IRepositoryFactory
 	{
-		public Lazy<IRepository>? CreateRepository(IDataContext? context)
+		public Lazy<IRepository>? CreateRepository(IDalSession session, IDataContextFactory contextFactory)
 		{
-			return ((context as AirZaptoContext) != null) ? new Lazy<IRepository>(() => new Repository(context as AirZaptoContext)) : null;
-		}
-	}
+            (IDbConnection? connection, IDataContext? context)? obj = (session != null) ? contextFactory.CreateDbContext(session.ConnectionType?.ConnectionString, session.ConnectionType?.ServerType) : null;
+            return ((obj != null) &&(obj.Value.context as AirZaptoContext) != null) ? new Lazy<IRepository>(() => new Repository(obj.Value.context as AirZaptoContext)) : null;
+        }
+    }
 }
  

@@ -1,13 +1,15 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Services;
+using AirZapto.Data.Services.Repositories;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 
 namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorVersion : Supervisor, ISupervisorVersion
     {
         #region Constructor
-        public SupervisorVersion(IServiceProvider serviceProvider) : base(serviceProvider)
+        public SupervisorVersion(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
         { }
         #endregion
 

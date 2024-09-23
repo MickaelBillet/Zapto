@@ -1,6 +1,7 @@
 ﻿using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AirZapto.Data.Supervisors.Tests
 {
@@ -13,7 +14,7 @@ namespace AirZapto.Data.Supervisors.Tests
             await this.Initialyse();
 
             //Act
-            ISupervisorSensorData supervisor = new SupervisorSensorData(this.HostApplication.Services);
+            ISupervisorSensorData supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
             ResultCode code = await supervisor.AddSensorDataAsync(new Model.AirZaptoData()
             {
                 CO2 = 500,
@@ -33,7 +34,7 @@ namespace AirZapto.Data.Supervisors.Tests
             (ResultCode code, Sensor? sensor) obj1 = await this.CreateSensor();
 
             //Act
-            ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
+            ISupervisorSensorData? supervisorSensorData = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
             (ResultCode code, IEnumerable<Model.AirZaptoData>? data) obj2 = await supervisorSensorData!.GetSensorDataAsync(obj1.sensor!.Id, 60);
 
             //Assert
@@ -49,7 +50,7 @@ namespace AirZapto.Data.Supervisors.Tests
             (ResultCode code, Sensor? sensor) obj1 = await this.CreateSensor();
 
             //Act
-            ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
+            ISupervisorSensorData? supervisorSensorData = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
             ResultCode code = await supervisorSensorData.DeleteSensorDataAsync(new TimeSpan(0, 0, 0));
             if (code == ResultCode.Ok) 
             {
@@ -71,7 +72,7 @@ namespace AirZapto.Data.Supervisors.Tests
             (ResultCode code, Sensor? sensor) obj1 = await this.CreateSensor();
 
             //Act
-            ISupervisorSensorData? supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
+            ISupervisorSensorData? supervisorSensorData = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
             DateTime? dateTime = await supervisorSensorData.GetTimeLastSensorDataAsync(obj1.sensor!.Id);
 
             //Assert
@@ -83,7 +84,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             Sensor? sensor = null;
             ISupervisorSensorData? supervisorSensorData = null;
-            ISupervisorSensor supervisorSensor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisorSensor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisorSensor.AddUpdateSensorAsync(new Sensor()
             {
                 Humidity = 10.5f,
@@ -103,7 +104,7 @@ namespace AirZapto.Data.Supervisors.Tests
                 (code, sensor) = await supervisorSensor.GetSensorFromIdSocketAsync("1");
                 if (code == ResultCode.Ok)
                 {
-                    supervisorSensorData = new SupervisorSensorData(this.HostApplication.Services);
+                    supervisorSensorData = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
                     code = await supervisorSensorData.AddSensorDataAsync(new Model.AirZaptoData()
                     {
                         CO2 = 500,

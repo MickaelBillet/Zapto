@@ -20,7 +20,7 @@ namespace AirZapto.WebServices.Configuration
             services.AddSecretService(configuration);
             services.AddJsonFileService();
 			services.AddSupervisors();
-			services.AddRepositories();
+			services.AddRepositories("ConnectionStringAirZapto", "ServerTypeAirZapto");
             services.AddSingleton<CacheSignal>();
             services.AddApplicationAirZaptoServices();
 			services.AddSingleton<WebSockerService>();

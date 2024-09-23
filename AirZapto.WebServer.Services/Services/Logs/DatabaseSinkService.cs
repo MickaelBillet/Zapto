@@ -3,7 +3,10 @@ using AirZapto.Data.DataContext;
 using AirZapto.Data.Repositories;
 using AirZapto.Data.Services;
 using AirZapto.Data.Supervisors;
+using Framework.Common.Services;
 using Framework.Core.Domain;
+using Framework.Data.Session;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog.Core;
 using Serilog.Events;
@@ -31,9 +34,22 @@ namespace AirZapto.WebServer.Services
         #region Methods
         public void Emit(LogEvent logEvent)
         {
-            if (logEvent.Level >= this.Level)
+            if ((this.Configuration != null) && (logEvent.Level >= this.Level))
             {
-                ISupervisorLogs supervisor = new SupervisorLogs(new DataContextFactory(), new RepositoryFactory(), this.Configuration);
+                ISecretService? secretService = null;
+
+                if (byte.Parse(this.Configuration["Secret"]!) == 1)
+                {
+                    secretService = new VarEnvService();
+                }
+                else if (byte.Parse(this.Configuration["Secret"]!) == 2)
+                {
+                    secretService = new KeyVaultService(this.Configuration);
+                }
+
+                ISupervisorLogs supervisor = new SupervisorLogs(new DalSession(secretService!, new DataContextFactory(), this.Configuration, "ConnectionStringAirZapto", "ServerTypeAirZapto"), 
+                                                                new DataContextFactory(), 
+                                                                new RepositoryFactory());
                 supervisor.AddLogs(new Logs()
                 {
                     Date = logEvent.Timestamp.DateTime,
