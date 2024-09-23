@@ -15,6 +15,9 @@ namespace Connect.Data.Database
         public ConnectDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
         {
         }
+        public ConnectDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
         #endregion
 
         #region Methods
@@ -24,7 +27,7 @@ namespace Connect.Data.Database
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {
                 await this.InitializePlugsAsync(scope);
-                await this.LoadCacheAsync(scope);
+                await this.LoadCacheAsync(scope, int.Parse(this.Configuration["Cache"]));
             }
             return res;
         }
@@ -603,36 +606,36 @@ namespace Connect.Data.Database
             }
         }
 
-        private async Task LoadCacheAsync(IServiceScope scope)
+        private async Task LoadCacheAsync(IServiceScope scope, int? cacheIsHandled)
         {
-            ISupervisorCondition supervisorCacheCondition = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(1);
+            ISupervisorCondition supervisorCacheCondition = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheCondition.Initialize();
 
-            ISupervisorConfiguration supervisorCacheConfiguration = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(1);
+            ISupervisorConfiguration supervisorCacheConfiguration = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConfiguration>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheConfiguration.Initialize();
 
-            ISupervisorConnectedObject supervisorCacheConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(1);   
+            ISupervisorConnectedObject supervisorCacheConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(cacheIsHandled);   
             await supervisorCacheConnectedObject.Initialize();
 
-            ISupervisorLocation supervisorCacheLocation = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(1);
+            ISupervisorLocation supervisorCacheLocation = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheLocation.Initialize();
 
-            ISupervisorNotification supervisorCacheNotification = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(1);
+            ISupervisorNotification supervisorCacheNotification = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryNotification>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheNotification.Initialize();
 
-            ISupervisorOperationRange supervisorCacheOperationRange = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperationRange>().CreateSupervisor(1);
+            ISupervisorOperationRange supervisorCacheOperationRange = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperationRange>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheOperationRange.Initialize();
 
-            ISupervisorPlug supervisorCachePlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(1);
+            ISupervisorPlug supervisorCachePlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(cacheIsHandled);
             await supervisorCachePlug.Initialize(); 
 
-            ISupervisorProgram supervisorCacheProgram = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(1);
+            ISupervisorProgram supervisorCacheProgram = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryProgram>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheProgram.Initialize();
 
-            ISupervisorRoom supervisorCacheRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(1);
+            ISupervisorRoom supervisorCacheRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheRoom.Initialize();
 
-            ISupervisorSensor supervisorCacheSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(1);
+            ISupervisorSensor supervisorCacheSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(cacheIsHandled);
             await supervisorCacheSensor.Initialize();   
         }
         #endregion

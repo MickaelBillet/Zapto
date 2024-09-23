@@ -23,11 +23,19 @@ namespace Framework.Infrastructure.Services
                                                         string connectionStringKey, 
                                                         string serverTypeKey)
         {
-            ConnectionType connectionType;
-            connectionType = new ConnectionType()
+            ConnectionType connectionType = new ConnectionType()
             {
                 ConnectionString = secretService.GetSecret(connectionStringKey),
                 ServerType = ConnectionType.GetServerType(secretService.GetSecret(serverTypeKey))
+            };
+            return connectionType;
+        }
+        public static ConnectionType GetConnectionType(IConfiguration configuration)
+        {
+            ConnectionType connectionType = new ConnectionType()
+            {
+                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
+                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"])
             };
             return connectionType;
         }

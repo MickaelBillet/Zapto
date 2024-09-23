@@ -14,10 +14,10 @@ namespace Framework.Data.Services
 		private bool _disposed = false;
 
 		#region Properties
-		protected IDataContextFactory DataContextFactory { get; }
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
-		protected ISecretService SecretService { get; }
-        protected IConfiguration Configuration { get; }
+		protected IDataContextFactory? DataContextFactory { get; }
+        protected IServiceScopeFactory? ServiceScopeFactory { get; }
+		protected ISecretService? SecretService { get; }
+        protected IConfiguration? Configuration { get; }
 		protected ConnectionType ConnectionType { get; }
         private bool IsInitialized { get; set; }
 		#endregion
@@ -31,11 +31,18 @@ namespace Framework.Data.Services
 			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
 			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService, connectionStringKey, serverTypeKey); 
 		}
-		#endregion
+        public DatabaseService(IServiceProvider serviceProvider)
+        {
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration);
+        }
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public async Task ConfigureDatabase()
+        public async Task ConfigureDatabase()
         {		
             if (this.DatabaseExist(this.ConnectionType) == false)
             {

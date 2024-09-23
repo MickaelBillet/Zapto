@@ -67,6 +67,22 @@ namespace Framework.Data.Session
                 }
             }
         }
+
+        public DalSession(IServiceProvider serviceProvider)
+        {
+            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration);
+            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
+            {
+                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
+                if (obj != null)
+                {
+                    this.Connection = obj?.connection;
+                    this.DataContext = obj?.context;
+                }
+            }
+        }
         #endregion
 
         #region Methods
@@ -92,7 +108,6 @@ namespace Framework.Data.Session
         public void Dispose()
         {
             this.Connection?.Close();
-
             this.DataContext?.Dispose();
             this.Connection?.Dispose();
         }

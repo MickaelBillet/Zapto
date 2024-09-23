@@ -22,7 +22,7 @@ namespace Connect.Data.Supervisors
         #endregion
 
         #region Methods
-        public ISupervisorRoom CreateSupervisor(byte? cacheIsHandled)
+        public ISupervisorRoom CreateSupervisor(int? cacheIsHandled)
         {
             if ((cacheIsHandled != null) && (cacheIsHandled is 1))
             {

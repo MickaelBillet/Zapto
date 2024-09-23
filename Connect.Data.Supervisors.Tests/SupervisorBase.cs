@@ -31,16 +31,17 @@ namespace Connect.Data.Supervisors.Tests
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     {"ConnectionStrings:DefaultConnection", $"Data Source=.\\connectDb.db3;"},
-                    {"ConnectionStrings:ServerType", "Sqlite"}
+                    {"ConnectionStrings:ServerType", "Sqlite"},
+                    {"Cache",  "0"}
                 });
             }).ConfigureServices((context, services) =>
             {
-                services.AddRepositories("ConnectionStringConnect", "ServerTypeConnect");
-                services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider, "ConnectionStringConnect", "ServerTypeConnect"));
+                services.AddRepositories();
+                services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
-                services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddSupervisors();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
 
