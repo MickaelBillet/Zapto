@@ -11,6 +11,9 @@ namespace WeatherZapto.Data.Services
         public WeatherZaptoDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
         {
         }
+        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
         #endregion
 
         #region Methods

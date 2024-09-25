@@ -44,16 +44,14 @@ namespace WeatherZapto.Data.Supervisors.Tests
                 });
             }).ConfigureServices((context, services) =>
             {
-                services.AddRepositories("ConnectionStringWeather", "ServerTypeWeather");
-                services.AddSecretService(context.Configuration);
-                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider, "ConnectionStringWeather", "ServerTypeWeather"));
+                services.AddRepositories();
+                services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
-
             })
            .Build();
         }

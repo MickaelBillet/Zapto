@@ -44,7 +44,6 @@ namespace Connect.Data.Supervisors.Tests
                 services.AddSupervisors();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
-
             })
            .Build();
         }
