@@ -29,12 +29,13 @@ namespace AirZapto.Data.Supervisors.Tests
                 });
             }).ConfigureServices((context, services) =>
             {
-                services.AddRepositories("ConnectionStringAirZapto", "ServerTypeAirZapto");
-                services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>(provider => new AirZaptoDatabaseService(provider, "ConnectionStringAirZapto", "ServerTypeAirZapto"));
+                services.AddRepositories();
+                services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>(provider => new AirZaptoDatabaseService(provider));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddSupervisors();
             })
             .Build();
         }

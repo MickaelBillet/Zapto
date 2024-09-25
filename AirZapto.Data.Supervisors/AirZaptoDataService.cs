@@ -8,10 +8,10 @@ namespace AirZapto.Data
 	{
 		public static void AddSupervisors(this IServiceCollection services)
 		{
-			services.AddTransient<ISupervisorLogs, SupervisorLogs>();
-            services.AddTransient<ISupervisorSensor, SupervisorSensor>();
-            services.AddTransient<ISupervisorSensorData, SupervisorSensorData>();
-            services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+			services.AddTransient<ISupervisorFactoryLogs, SupervisorFactoryLogs>();
+            services.AddTransient<ISupervisorFactorySensor, SupervisorFactorySensor>();
+            services.AddTransient<ISupervisorFactorySensorData, SupervisorFactorySensorData>();
+            services.AddTransient<ISupervisorFactoryVersion, SupervisorFactoryVersion>();
 
             services.AddTransient<ISupervisorCacheSensor, SupervisorCacheSensor>();
         }

@@ -26,7 +26,7 @@ namespace AirZapto.WebServices.Controllers
 
         public SensorDataController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensorData>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
         }
 
         #endregion

@@ -16,7 +16,7 @@ namespace AirZapto.Data.Supervisors
         #region Constructor
         public SupervisorCacheSensor(IServiceProvider serviceProvider)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             this.CacheService = serviceProvider.GetRequiredService<ICacheZaptoService<Sensor>>();
         }
         #endregion

@@ -15,6 +15,13 @@ namespace AirZapto.Data
             services.AddTransient<IDataContextFactory, DataContextFactory>();
             services.AddTransient<IDalSession, DalSession>(provider => new DalSession(provider, connectionStringKey, serverTypeKey));
         }
+
+        public static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IRepositoryFactory, RepositoryFactory>();
+            services.AddTransient<IDataContextFactory, DataContextFactory>();
+            services.AddTransient<IDalSession, DalSession>(provider => new DalSession(provider));
+        }
     }
 }
 
