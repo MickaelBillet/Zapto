@@ -52,6 +52,9 @@
 		public const string Type_HTUD21DF = "HTUD21DF";
 		public const string Type_MC22_1527 = "MC22_1527";
 
-        public static readonly string Application_Prefix = @"/Connect";
+        public const string Application_Prefix = @"/Connect";
+
+        public const string SignalR_AddToLocation = "AddToLocation";
+        public const string SignalR_RemoveFromLocation = "RemoveFromLocation";
     }
 }

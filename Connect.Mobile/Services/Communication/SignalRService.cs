@@ -35,16 +35,15 @@ namespace Connect.Mobile.Services
         #endregion
 
         #region Method
-
         public async Task<bool> StartAsync(string locationId, 
-                                            Action<PlugStatus> actionPlug, 
-                                            Action<RoomStatus> actionRoom, 
-                                            Action<SensorStatus> actionSensor, 
-                                            Action<NotificationStatus> actionNotification)
+                                            Func<PlugStatus, Task> actionPlug,
+                                            Func<RoomStatus, Task> actionRoom,
+                                            Func<SensorStatus, Task> actionSensor,
+                                            Func<NotificationStatus, Task> actionNotification)
         {
             try
             {
-                if (IsConnected == false)
+                if (this.IsConnected == false)
                 {
                     this.HubConnection = new HubConnectionBuilder()
                                                 .WithUrl(url: $"{Configuration["ProtocolSignalR"]}://{Configuration["BackEndUrl"]}" +
@@ -52,7 +51,6 @@ namespace Connect.Mobile.Services
                                                                 $"{UrlHubConnection}")
                                                 .WithAutomaticReconnect(new[] { TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromSeconds(10) })
                                                 .Build();
-
 
                     this.HubConnection.Closed += async (error) =>
                     {
@@ -72,7 +70,7 @@ namespace Connect.Mobile.Services
                     ProcessReceive(actionPlug, actionRoom, actionSensor, actionNotification);
 
                     await this.HubConnection.StartAsync();
-                    await this.HubConnection.InvokeAsync("AddToLocation", locationId);
+                    await this.HubConnection.InvokeAsync(ConnectConstants.SignalR_AddToLocation, locationId);
                 }
             }
             catch (Exception ex)
@@ -102,7 +100,10 @@ namespace Connect.Mobile.Services
             }
         }
 
-        private void ProcessReceive(Action<PlugStatus> actionPlug, Action<RoomStatus> actionRoom, Action<SensorStatus> actionSensor, Action<NotificationStatus> actionNotification)
+        private void ProcessReceive(Func<PlugStatus, Task> actionPlug, 
+                                    Func<RoomStatus, Task> actionRoom, 
+                                    Func<SensorStatus, Task> actionSensor, 
+                                    Func<NotificationStatus, Task> actionNotification)
         {
             this.HubConnection.On(PlugStatus.Name, (PlugStatus status) =>
             {

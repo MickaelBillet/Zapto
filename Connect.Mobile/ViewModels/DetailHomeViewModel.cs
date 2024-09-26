@@ -70,18 +70,17 @@ namespace Connect.Mobile.ViewModel
                 if (item != null)
                 {
                     this.Location = item as Location;
-
                     this.RefreshData();
-
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         this.Title = this.Location.City;
                     });
+                    base.Initialize(item, validateCallback, cancelCallback);
 
                     this.SignalRService.StartAsync(
                         App.LocationId,
                         null,
-                        (roomStatus) =>
+                        async (roomStatus) =>
                         {
                             Room room = this.Location.RoomsList.FirstOrDefault<Room>((Room arg) => arg.Id == roomStatus.RoomId);
                             if (room != null)
@@ -89,13 +88,11 @@ namespace Connect.Mobile.ViewModel
                                 room.Temperature = roomStatus.Temperature;
                                 room.Humidity = roomStatus.Humidity;
                                 room.Pressure = roomStatus.Pressure;
-                                this.CacheService.InsertObject<Room>("room" + room.Id, room);
+                                await this.CacheService.InsertObject<Room>("room" + room.Id, room);
                             }
                         },
                         null,
-                        null);
-
-                    base.Initialize(item, validateCallback, cancelCallback);
+                        null).FireAndForgetSafeAsync();
                 }
             }
             finally

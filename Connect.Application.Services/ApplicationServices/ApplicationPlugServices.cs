@@ -88,11 +88,9 @@ namespace Connect.Application.Services
 			if (this.UdpCommunicationService != null)
 			{
 				byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortPlugStatus);
-
 				if (data?.Length > 0)
 				{
 					status = JsonSerializer.Deserialize<CommandStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-
 					Log.Information("ReceiveCommandStatus - CommandStatus Address " + status?.Address + " Unit " + status?.Unit + " Status " + status?.Status);
 				}
 				else

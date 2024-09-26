@@ -3,7 +3,6 @@
     public struct SensorStatus
     {
         #region Property
-
         public static string Name = "SensorStatus";
 
         public double? Temperature
@@ -34,7 +33,6 @@
         public byte? IsRunning { get; set; }
 
         public byte? LeakDetected { get; set; }
-
         #endregion
     }
 }

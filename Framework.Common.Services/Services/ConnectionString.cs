@@ -39,7 +39,6 @@ namespace Framework.Infrastructure.Services
             };
             return connectionType;
         }
-
         private static ISecretService GetSecretService(IConfiguration configuration)
         {
             ISecretService service = null;

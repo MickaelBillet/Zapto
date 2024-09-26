@@ -28,21 +28,17 @@ namespace Connect.WebServer
         #region Property
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
-
         #endregion
 
         #region Constructor
-
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             this.Configuration = configuration;
             this.Environment = env;
         }
-
         #endregion
 
         #region Method
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
