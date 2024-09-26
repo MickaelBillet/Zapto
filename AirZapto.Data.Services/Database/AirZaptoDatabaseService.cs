@@ -26,7 +26,7 @@ namespace AirZapto.Data.Database
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorVersion>();
+                    ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor();
                     Version dbVersion = await supervisor.GetVersionAsync();
                     Log.Information($"dbVersion : {dbVersion}");
 
