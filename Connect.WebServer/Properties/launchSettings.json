@@ -23,7 +23,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://192.168.1.75:5000/"
+      "applicationUrl": "http://192.168.1.62:5000/"
     },
     "Connect.WebServer.Telephone": {
       "commandName": "Project",
