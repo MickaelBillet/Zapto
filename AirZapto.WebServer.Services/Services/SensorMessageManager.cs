@@ -15,17 +15,16 @@ namespace AirZapto.WebServer.Services
     public class SensorMessageManager : WebSocketHandler, IWSMessageManager
     {
 		#region Properties
-		private ISupervisorCacheSensor SupervisorSensor { get;}
+		private ISupervisorSensor SupervisorSensor { get;}
 		private ISupervisorSensorData SupervisorSensorData { get;}
         #endregion
 
         #region Constructor
         public SensorMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
         {
-            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
-			this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();		
+            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
+            this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();		
 		}
-
 		#endregion
 
 		#region Methods

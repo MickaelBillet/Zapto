@@ -11,14 +11,14 @@ namespace AirZapto.WebServer.Services
     public class SensorHealthCheck : IHealthCheck
     {
 		#region Properties
-		private ISupervisorCacheSensor Supervisor { get; }
+		private ISupervisorSensor Supervisor { get; }
 		#endregion
 
 		#region Constructor
 
 		public SensorHealthCheck(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
         }
 
         #endregion

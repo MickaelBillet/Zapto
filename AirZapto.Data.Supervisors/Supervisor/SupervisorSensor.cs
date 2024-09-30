@@ -59,27 +59,6 @@ namespace AirZapto.Data.Supervisors
 			return result;
 		}
 
-		public async Task<(ResultCode, Sensor?)> GetSensorAsync(string id)
-		{
-			ResultCode result = ResultCode.ItemNotFound;
-			Sensor? sensor = null;
-            if (this.Repository != null)
-            {
-                SensorEntity? entity = await this.Repository.GetSensorAsync(id);
-                sensor = (entity != null) ? SensorMapper.Map(entity) : null;
-                if (sensor != null)
-                {
-                    result = ResultCode.Ok;
-                }
-                else
-                {
-                    result = ResultCode.ItemNotFound;
-                }
-            }
-
-            return (result, sensor);
-		}
-
 		public async Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket)
 		{
 			ResultCode result = ResultCode.ItemNotFound;

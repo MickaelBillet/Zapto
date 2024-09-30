@@ -1,4 +1,5 @@
 ﻿using AirZapto.Application;
+using AirZapto.Data;
 using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
@@ -18,14 +19,14 @@ namespace AirZapto.WebServices.Controllers
     public class SensorsController : ControllerBase
     {
         #region Property
-        private ISupervisorCacheSensor Supervisor { get; }
+        private ISupervisorSensor Supervisor { get; }
         private IApplicationSensorServices ApplicationSensorServices { get; }
         #endregion
 
         #region Constructor
         public SensorsController(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
+            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
         }
         #endregion

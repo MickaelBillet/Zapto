@@ -101,18 +101,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Assert
             Assert.True(code == ResultCode.Ok);
-
-            Sensor? sensor = null;
-            foreach (Sensor item in sensors!)
-            {
-                (code, sensor) = await supervisor.GetSensorAsync(item.Id);
-                if ((code == ResultCode.Ok) && sensor != null)
-                {
-                    break;
-                }
-            }
-
-            Assert.True(sensor != null);
+            Assert.True(sensors != null && sensors.Any() == true);
         }
 
         [Fact]

@@ -1,12 +1,12 @@
-﻿using AirZapto.Data.Services;
+﻿using AirZapto.Data.Services.Repositories;
 using AirZapto.Model;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AirZapto.Data.Supervisors
 {
-    public sealed class SupervisorCacheSensor : ISupervisorCacheSensor
+    public sealed class SupervisorCacheSensor : ISupervisorSensor
     {
         #region Services
         private ISupervisorSensor Supervisor { get; }
@@ -14,10 +14,10 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorCacheSensor(IServiceProvider serviceProvider)
+        public SupervisorCacheSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, ICacheZaptoService<Sensor> cacheZapto)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
-            this.CacheService = serviceProvider.GetRequiredService<ICacheZaptoService<Sensor>>();
+            this.Supervisor = new SupervisorSensor(session, contextFactory, repositoryFactory);
+            this.CacheService = cacheZapto;
         }
         #endregion
 
