@@ -30,10 +30,10 @@ COPY ["AirZapto.Data.Supervisors/*", "AirZapto.Data.Supervisors/"]
 COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
 COPY ["Serilog.Sqlite.Sinks/src/*", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 WORKDIR "/src/AirZapto.WebServer"
-RUN dotnet build "AirZapto.WebServer.csproj" -c Release -o /app/build
+RUN dotnet build "AirZapto.WebServer.csproj" -c Release --runtime linux-arm64 -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "AirZapto.WebServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "AirZapto.WebServer.csproj" -c Release --runtime linux-arm64 -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
