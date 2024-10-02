@@ -1,5 +1,4 @@
-﻿using Framework.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -8,7 +7,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AirZapto.WebServices.Middleware
+namespace Framework.Infrastructure.Services
 {
     public class WebSocketManagerMiddleware
     {
@@ -34,7 +33,7 @@ namespace AirZapto.WebServices.Middleware
             if (!context.WebSockets.IsWebSocketRequest)
                 return;
 
-            WebSocket? socket = null;
+            WebSocket socket = null;
 
             try
             {

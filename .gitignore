@@ -152,3 +152,6 @@
 /WeatherZapto.WebServer/bin/Release/net8.0
 /WeatherZapto.WebServer.Services/bin/Release/net8.0
 /Zapto.Web.Test/bin/Debug/net8.0
+/WebApplicationWebSocket/obj
+/WebApplicationWebSocket/.vs
+/WebApplicationWebSocket/bin/Debug/net8.0
