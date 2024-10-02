@@ -1,5 +1,4 @@
 using Framework.Infrastructure.Services;
-using System.Net.WebSockets;
 using WebApplicationWebSocket.Configuration;
 using WebApplicationWebSocket.Middleware;
 
@@ -15,7 +14,6 @@ app.UseWebSockets(new WebSocketOptions()
 {
     KeepAliveInterval = TimeSpan.FromSeconds(40),
 });
-//app.UseMiddleware<CustomExceptionMiddleware>();
 
 var summaries = new[]
 {

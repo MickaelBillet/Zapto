@@ -10,8 +10,7 @@ namespace Framework.Infrastructure.Services
         public static async Task Echo(WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
-            var receiveResult = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(buffer), CancellationToken.None);
+            var receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
             while (!receiveResult.CloseStatus.HasValue)
             {
