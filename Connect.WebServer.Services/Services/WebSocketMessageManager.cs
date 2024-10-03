@@ -34,10 +34,10 @@ namespace AirZapto.WebServer.Services
 				string idSocket = this.WebSocketConnectionManager.GetId(socket);
 				if (string.IsNullOrEmpty(idSocket) == false)
 				{
-					await Task.CompletedTask;
 				}
             }
-		}
+            await Task.CompletedTask;
+        }
 
         public override async Task<bool> ReceiveAsync(WebSocket webSocket, WebSocketReceiveResult result, byte[] buffer)
         {
