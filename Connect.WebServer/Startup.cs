@@ -197,30 +197,46 @@ namespace Connect.WebServer
                 app.UseExceptionHandler("/Error");
             }
 
-            // Patch path base with forwarded path
-            app.Use(async (context, next) =>
-			{
-                if (context.Request.Headers != null)
-                {
-                    string? forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
-					if (string.IsNullOrEmpty(forwardedPath) == false)
-					{
-                        if (forwardedPath.Equals(ConnectConstants.Application_Prefix))
-                        {
-                            Log.Information(context.Request.PathBase);
-                            Log.Information(context.Request.Path);
-                        }
-					}
-				}
-
-				await next();
-			});			
-
             app.UseRouting();
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseWebSockets();
+
+            // Patch path base with forwarded path
+            app.Use(async (context, next) =>
+			{
+                if (context.Request.Headers != null)
+                {
+                    if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws"))
+                    {
+                        if (context.WebSockets.IsWebSocketRequest)
+                        {
+                            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                            await WebSocketHelper.Echo(webSocket);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        }
+                    }
+                    else
+                    {
+                        string? forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
+                        if (string.IsNullOrEmpty(forwardedPath) == false)
+                        {
+                            if (forwardedPath.Equals(ConnectConstants.Application_Prefix))
+                            {
+                                Log.Information(context.Request.PathBase);
+                                Log.Information(context.Request.Path);
+                            }
+                        }
+                    }
+				}
+
+                await next();
+			});			
+
             app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseEndpoints(endpoints =>
             {
@@ -233,6 +249,8 @@ namespace Connect.WebServer
                 endpoints.MapHub<ConnectHub>(WebConstants.SignalR_Prefix);
                 endpoints.MapControllers();
             });
+
+
 
             app.Run(async context =>
             {
