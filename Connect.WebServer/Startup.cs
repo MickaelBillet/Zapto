@@ -210,15 +210,7 @@ namespace Connect.WebServer
                 {
                     if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws"))
                     {
-                        if (context.WebSockets.IsWebSocketRequest)
-                        {
-                            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            await WebSocketHelper.Echo(webSocket);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                        }
+                        await WebSocketHelper.Process(app.ApplicationServices, context);
                     }
                     else
                     {
@@ -236,7 +228,6 @@ namespace Connect.WebServer
 
                 await next();
 			});			
-
             app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseEndpoints(endpoints =>
             {
@@ -249,9 +240,6 @@ namespace Connect.WebServer
                 endpoints.MapHub<ConnectHub>(WebConstants.SignalR_Prefix);
                 endpoints.MapControllers();
             });
-
-
-
             app.Run(async context =>
             {
                 string error = "Bad Request" + " : " + context.Request.Scheme + " - " + context.Request.Method + " - " + context.Request.Path;

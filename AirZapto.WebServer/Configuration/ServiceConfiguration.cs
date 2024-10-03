@@ -25,7 +25,7 @@ namespace AirZapto.WebServices.Configuration
             services.AddApplicationAirZaptoServices();
 			services.AddSingleton<WebSockerService>();
             services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>(provider => new AirZaptoDatabaseService(provider, "ConnectionStringAirZapto", "ServerTypeAirZapto"));
-            services.AddTransient<IWSMessageManager, SensorMessageManager>(); 
+            services.AddSingleton<IWSMessageManager, SensorMessageManager>(); 
 			services.AddSingleton<IHostedService, SensorConnectionService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, DailyService>();

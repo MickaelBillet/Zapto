@@ -21,13 +21,11 @@ namespace AirZapto.Application.Services
 		#endregion
 
 		#region Constructor
-
 		public ApplicationSensorServices(IServiceProvider serviceProvider)
 		{
 			this.SensorService = serviceProvider.GetService<ISensorService>();
 			this.NotificationsMessageHandler = serviceProvider.GetService<IWSMessageManager>();
 		}
-
 		#endregion
 
 		#region Methods

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AirZapto.WebServer.Services;
+using Framework.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Connect.WebServer.Services
 {
@@ -6,7 +8,8 @@ namespace Connect.WebServer.Services
     {
         public static void AddConnectWebServices(this IServiceCollection services)
         {
-            services.AddScoped<ISendCommandService, SendCommandService>();            
+            services.AddScoped<ISendCommandService, SendCommandService>();   
+            services.AddTransient<IWSMessageManager, WebSocketMessageManager>();
         }
     }
 }

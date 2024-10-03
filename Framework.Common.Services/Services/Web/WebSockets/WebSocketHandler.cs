@@ -17,7 +17,7 @@ namespace Framework.Infrastructure.Services
         #region Constructor
         public WebSocketHandler(WebSockerService webSocketConnectionManager)
         {
-            WebSocketConnectionManager = webSocketConnectionManager;
+            this.WebSocketConnectionManager = webSocketConnectionManager;
         }
         #endregion
 
@@ -25,11 +25,11 @@ namespace Framework.Infrastructure.Services
 
         public virtual bool OnConnected(WebSocket socket)
         {
-            return WebSocketConnectionManager.AddSocket(socket);
+            return this.WebSocketConnectionManager.AddSocket(socket);
         }
         public virtual async Task<bool> OnDisconnected(WebSocket socket)
         {
-            return await WebSocketConnectionManager.RemoveSocket(WebSocketConnectionManager.GetId(socket));
+            return await this.WebSocketConnectionManager.RemoveSocket(this.WebSocketConnectionManager.GetId(socket));
         }
         public async Task<bool> SendMessageAsync(WebSocket socket, string message)
         {
@@ -47,14 +47,14 @@ namespace Framework.Infrastructure.Services
         }
         public async Task<bool> SendMessageAsync(string socketId, string message)
         {
-            return await SendMessageAsync(WebSocketConnectionManager.GetSocketById(socketId), message);
+            return await this.SendMessageAsync(this.WebSocketConnectionManager.GetSocketById(socketId), message);
         }
         public async Task SendMessageToAllAsync(string message)
         {
-            foreach (var pair in WebSocketConnectionManager.GetAll())
+            foreach (var pair in this.WebSocketConnectionManager.GetAll())
             {
                 if (pair.Value.State == WebSocketState.Open)
-                    await SendMessageAsync(pair.Value, message);
+                    await this.SendMessageAsync(pair.Value, message);
             }
         }
         public abstract Task<bool> ReceiveAsync(WebSocket socket, WebSocketReceiveResult result, byte[] buffer);
