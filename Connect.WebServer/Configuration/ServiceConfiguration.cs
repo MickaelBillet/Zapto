@@ -21,7 +21,6 @@ namespace Connect.Server.Configuration
 		{
             services.AddSecretService(configuration);
             services.AddMailService();
-            services.AddUdpService();
             services.AddRepositories("ConnectionStringConnect", "ServerTypeConnect");
             services.AddApplicationConnectServices();
             services.AddConnectWebServices();
@@ -34,11 +33,7 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, RecordingDataService>();
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
-            services.AddSingleton<IHostedService, CommandStatusService>();
             services.AddSingleton<IHostedService, SensorConnectionService>();
-            services.AddSingleton<IHostedService, SensorDataService>();
-            services.AddSingleton<IHostedService, SensorEventService>();
-            services.AddSingleton<IHostedService, ServerIotConnectionService>();
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddSingleton<IFirebaseService, FirebaseService>((provider) => new FirebaseService(provider, "./connect-notification-9314f-firebase-adminsdk-m70fo-6cfc9a1076.json"));

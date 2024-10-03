@@ -31,7 +31,7 @@ namespace AirZapto.WebServices.Middleware
         #region Methods
         public async Task Invoke(HttpContext context)
         {
-            if (!context.WebSockets.IsWebSocketRequest)
+            if (context.WebSockets.IsWebSocketRequest == false)
                 return;
 
             WebSocket? socket = null;

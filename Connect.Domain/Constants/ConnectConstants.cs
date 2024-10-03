@@ -10,6 +10,12 @@
 		public static readonly int PortServerIotStatus = 5005;
 		public static readonly int PortSensorEvent = 5007;
 
+        public const byte PlugStatus = 1;
+        public const byte SensorData = 2;
+        public const byte SensorEvent = 3;
+        public const byte ConnectionData = 4;
+        public const byte ServerIotStatus = 5;
+
 		//URL of REST service
 		public const string RestUrlLocations = @"connect/locations/";
 		public const string RestUrlLocationsId = @"connect/locations/{0}/";

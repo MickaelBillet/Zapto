@@ -97,7 +97,7 @@ namespace Connect.Model
             this.Date = Clock.Now;
         }       
 
-        public (string? data, int port) GetSensorConfiguration()
+        public string? GetSensorConfiguration()
         {
             SensorConfiguration configuration = new SensorConfiguration()
             {
@@ -107,8 +107,7 @@ namespace Connect.Model
             };
 
             string? json = JsonSerializer.Serialize(configuration);
-            int port = ConnectConstants.PortConnectionData;
-            return (json, port);
+            return json;
         }
 
         #endregion

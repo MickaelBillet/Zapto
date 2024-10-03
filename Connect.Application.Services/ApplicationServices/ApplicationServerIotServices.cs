@@ -1,10 +1,11 @@
-﻿using Connect.Model;
+﻿using Connect.Data;
+using Connect.Model;
+using Framework.Core.Base;
 using Framework.Core.Model;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,40 +13,64 @@ namespace Connect.Application.Services
 {
     internal class ApplicationServerIotServices : IApplicationServerIotServices
     {
-		#region Services
-		private IUdpCommunicationService? UdpCommunicationService { get; }
-		#endregion
+        #region Services
+        private IWSMessageManager? WSMessageManager { get; }
+        private IServiceScopeFactory? ServiceScopeFactory { get; }
+        private HostedServiceHealthCheck? HostedServiceHealthCheck { get; }
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		public ApplicationServerIotServices(IServiceProvider serviceProvider)
+        public ApplicationServerIotServices(IServiceProvider serviceProvider, HostedServiceHealthCheck hostedServiceHealthCheck)
 		{
-			this.UdpCommunicationService = serviceProvider.GetService<IUdpCommunicationService>();
-		}
+            this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
+            this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
+            this.HostedServiceHealthCheck = hostedServiceHealthCheck;
+        }
 
         #endregion
 
-        #region Methods        
+        #region Methods     
 
-        public async Task<SystemStatus?> ReceiveStatusAsync()
+        public async Task ReadStatusAsync(string data)
         {
-            SystemStatus? result = null;
-            if (this.UdpCommunicationService != null)
+            Log.Information("ApplicationServerIotServices.ReadStatusAsync");
+
+            try
             {
-                byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortServerIotStatus);
-                if (data!.Length > 0)
+                if (this.ServiceScopeFactory != null)
                 {
-                    result = JsonSerializer.Deserialize<SystemStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-                    Log.Warning("ReceiveStatusAsync - SystemStatus : " + result?.IpAddress + "/" + result?.RSSI + "/" + result?.Status);
-                }
-                else
-                {
-                    Log.Error("ReceiveStatusAsync - No data");
+                    using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+                    {
+                        ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryServerIotStatus>().CreateSupervisor();
+                        SystemStatus? status = JsonSerializer.Deserialize<SystemStatus>(data);
+                        if (status != null)
+                        {
+                            if (this.HostedServiceHealthCheck != null)
+                            {
+                                status.Date = Clock.Now;
+                                this.HostedServiceHealthCheck.SetStatus(status);
+
+                                if (status.Status == Domain.SystemStatus.STARTED)
+                                {
+                                    await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
+                                    {
+                                        Id = Guid.NewGuid().ToString(),
+                                        IpAddress = status.IpAddress,
+                                        ConnectionDate = status.Date,
+                                        Date = Clock.Now,
+                                    });
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            return result;
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+            }
         }
-
         #endregion
     }
 }

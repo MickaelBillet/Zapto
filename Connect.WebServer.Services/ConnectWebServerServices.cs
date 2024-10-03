@@ -9,7 +9,7 @@ namespace Connect.WebServer.Services
         public static void AddConnectWebServices(this IServiceCollection services)
         {
             services.AddScoped<ISendCommandService, SendCommandService>();   
-            services.AddTransient<IWSMessageManager, WebSocketMessageManager>();
+            services.AddSingleton<IWSMessageManager, WebSocketMessageManager>();
         }
     }
 }

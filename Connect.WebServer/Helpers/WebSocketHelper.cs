@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Net.WebSockets;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +47,6 @@ namespace Framework.Infrastructure.Services
                     }
 
                     var buffer = new byte[1024 * 4];
-
                     while (webSocket.State == WebSocketState.Open)
                     {
                         WebSocketReceiveResult receiveResult = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);

@@ -1,10 +1,11 @@
 ﻿using Connect.Application.Infrastructure;
+using Connect.Data;
 using Connect.Model;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -15,18 +16,19 @@ namespace Connect.Application.Services
         #region Services
         private IAlertService? AlertService { get; }
         private IPlugService? PlugService { get; }
-		private IUdpCommunicationService? UdpCommunicationService { get; }
 		private ISignalRConnectService? SignalRConnectService { get; }
-		#endregion
+        private IServiceScopeFactory? ServiceScopeFactory { get; }
+        private IWSMessageManager? WSMessageManager { get; }
+        #endregion
 
-		#region Constructor
-
-		public ApplicationPlugServices(IServiceProvider serviceProvider)
+        #region Constructor
+        public ApplicationPlugServices(IServiceProvider serviceProvider)
 		{
 			this.PlugService = serviceProvider.GetService<IPlugService>();
 			this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
-			this.UdpCommunicationService = serviceProvider.GetService<IUdpCommunicationService>();
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
+			this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
+			this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
         }
         #endregion
 
@@ -41,15 +43,42 @@ namespace Connect.Application.Services
 			return (this.PlugService != null) ? await this.PlugService.OnOffAsync(plug) : null;
 		}
 
-		/// <summary>
-		/// Send the plug command to the iot server
-		/// </summary>
-		public async Task<int> SendCommandAsync(Plug plug)
+        public async Task ReadStatusAsync(string data)
+        {
+            Log.Information("ApplicationPlugServices.ReadStatusAsync");
+
+            try
+            {
+				if (this.ServiceScopeFactory != null)
+				{
+					using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+					{
+						IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+						ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+						ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+						CommandStatus? status = status = JsonSerializer.Deserialize<CommandStatus>(data);
+						if (status != null)
+						{
+							await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, status);
+						}
+					}
+				}
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Send the plug command to the iot server
+        /// </summary>
+        public async Task<int> SendCommandAsync(Plug plug)
 		{
 			string? command = null;
 			int res = -1;
 
-			if (this.UdpCommunicationService != null)
+			if (this.WSMessageManager != null)
 			{
 				if ((plug.Type & DeviceType.Outlet) == DeviceType.Outlet) //Prise
 				{
@@ -71,34 +100,10 @@ namespace Connect.Application.Services
 				};
 
 				string json = JsonSerializer.Serialize<PlugCommand>(plugCommand);
-				res = await this.UdpCommunicationService.SendMessage(json, ConnectConstants.PortPlugCommand, ConnectConstants.ArduinoServer);
-				Log.Information("SendCommand - plug Id : " + plug.Id);
-				Log.Information("SendCommand - size data : " + res);
+				await this.WSMessageManager.SendMessageToAllAsync(json);
+				Log.Information("SendCommandAsync - plug Id : " + plug.Id);
 			}
 			return res;
-		}
-
-		/// <summary>
-		/// Receive the command status plug from the iot server
-		/// </summary>
-		/// <returns></returns>
-		public async Task<CommandStatus?> ReceiveCommandStatus()
-		{
-			CommandStatus? status = null;
-			if (this.UdpCommunicationService != null)
-			{
-				byte[] data = await this.UdpCommunicationService.StartReception(ConnectConstants.PortPlugStatus);
-				if (data?.Length > 0)
-				{
-					status = JsonSerializer.Deserialize<CommandStatus>(Encoding.UTF8.GetString(data, 0, data.Length));
-					Log.Information("ReceiveCommandStatus - CommandStatus Address " + status?.Address + " Unit " + status?.Unit + " Status " + status?.Status);
-				}
-				else
-				{
-					Log.Warning("ReceiveCommandStatus - No data");
-				}
-			}
-			return status;
 		}
 
 		/// <summary>
@@ -133,6 +138,24 @@ namespace Connect.Application.Services
                 else if ((plug.Order == Order.On) && (plug.Status == Status.OFF))
 				{
                     await this.AlertService.SendAlertAsync(locationId, nameConnectedObject, "Coupure manuelle");
+                }
+            }
+        }
+
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug,
+                                                ISupervisorRoom supervisorRoom,
+                                                CommandStatus status)
+        {
+            Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
+            if (plug != null)
+            {
+                plug.UpdateStatus(status.Status);
+                Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
+                if (room != null)
+                {
+                    //Send Status to the clients (Mobile, Web...)
+                    await this.SendStatusToClientAsync(room.LocationId, plug);
+                    await supervisorPlug.UpdatePlug(plug);
                 }
             }
         }

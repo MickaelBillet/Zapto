@@ -10,5 +10,6 @@ namespace Framework.Infrastructure.Services
 		Task<bool> SendMessageAsync(string socketId, string message);
 		Task<bool> OnDisconnected(WebSocket socket);
 		bool OnConnected(WebSocket socket);
-	}
+		Task<int> SendMessageToAllAsync(string message);
+    }
 }

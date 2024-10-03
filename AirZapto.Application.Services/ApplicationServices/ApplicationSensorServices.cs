@@ -13,18 +13,15 @@ namespace AirZapto.Application.Services
     internal class ApplicationSensorServices : IApplicationSensorServices
 	{
 		#region Services
-
 		private ISensorService? SensorService { get; }
-
-		private IWSMessageManager? NotificationsMessageHandler { get; }
-
+		private IWSMessageManager? WSMessageManager { get; }
 		#endregion
 
 		#region Constructor
 		public ApplicationSensorServices(IServiceProvider serviceProvider)
 		{
 			this.SensorService = serviceProvider.GetService<ISensorService>();
-			this.NotificationsMessageHandler = serviceProvider.GetService<IWSMessageManager>();
+			this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
 		}
 		#endregion
 
@@ -64,7 +61,7 @@ namespace AirZapto.Application.Services
 					Period = sensor.Period,
 				});
 
-                isConnected = (this.NotificationsMessageHandler != null) ? await this.NotificationsMessageHandler.SendMessageAsync(sensor.IdSocket, json) : false;
+                isConnected = (this.WSMessageManager != null) ? await this.WSMessageManager.SendMessageAsync(sensor.IdSocket, json) : false;
 			}
 
 			return isConnected;
