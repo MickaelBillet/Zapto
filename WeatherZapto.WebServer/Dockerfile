@@ -35,10 +35,10 @@ COPY ["WeatherZapto.Data.Supervisors/*", "WeatherZapto.Data.Supervisors/"]
 COPY ["WeatherZapto.Data.Services/*", "WeatherZapto.Data.Services/"]
 COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
 WORKDIR "/src/WeatherZapto.WebServer"
-RUN dotnet build "WeatherZapto.WebServer.csproj" -c Release -o /app/build
+RUN dotnet build "WeatherZapto.WebServer.csproj" -c Release --runtime linux-arm64 -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WeatherZapto.WebServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WeatherZapto.WebServer.csproj" -c Release --runtime linux-arm64 -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
