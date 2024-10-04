@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationPlugServices : IApplicationPlugServices
+    internal sealed class ApplicationPlugServices : IApplicationPlugServices
 	{
         #region Services
         private IAlertService? AlertService { get; }
@@ -43,7 +43,7 @@ namespace Connect.Application.Services
 			return (this.PlugService != null) ? await this.PlugService.OnOffAsync(plug) : null;
 		}
 
-        public async Task ReadStatusAsync(string data)
+        public async Task ReadStatus(string data)
         {
             Log.Information("ApplicationPlugServices.ReadStatusAsync");
 
@@ -73,7 +73,7 @@ namespace Connect.Application.Services
         /// <summary>
         /// Send the plug command to the iot server
         /// </summary>
-        public async Task<int> SendCommandAsync(Plug plug)
+        public async Task<int> SendCommand(Plug plug)
 		{
 			string? command = null;
 			int res = -1;
@@ -112,7 +112,7 @@ namespace Connect.Application.Services
 		/// <param name="locationId"></param>
 		/// <param name="plug"></param>
 		/// <returns></returns>
-		public async Task SendStatusToClientAsync(string locationId, Plug plug)
+		public async Task SendStatusToClient(string locationId, Plug plug)
 		{
 			if (this.SignalRConnectService != null)
 			{
@@ -142,9 +142,7 @@ namespace Connect.Application.Services
             }
         }
 
-        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug,
-                                                ISupervisorRoom supervisorRoom,
-                                                CommandStatus status)
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, ISupervisorRoom supervisorRoom, CommandStatus status)
         {
             Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
             if (plug != null)
@@ -154,7 +152,7 @@ namespace Connect.Application.Services
                 if (room != null)
                 {
                     //Send Status to the clients (Mobile, Web...)
-                    await this.SendStatusToClientAsync(room.LocationId, plug);
+                    await this.SendStatusToClient(room.LocationId, plug);
                     await supervisorPlug.UpdatePlug(plug);
                 }
             }

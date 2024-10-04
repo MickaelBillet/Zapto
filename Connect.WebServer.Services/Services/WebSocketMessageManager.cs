@@ -55,7 +55,7 @@ namespace AirZapto.WebServer.Services
 					{
 						if (message.Header == ConnectConstants.PlugStatus)
 						{
-							await this.ApplicationPlugServices.ReadStatusAsync(message.Payload);
+							await this.ApplicationPlugServices.ReadStatus(message.Payload);
 						}
 						else if (message.Header == ConnectConstants.SensorData)
 						{

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationOperationDataService : IApplicationOperationDataService
+    internal sealed class ApplicationOperationDataService : IApplicationOperationDataService
     {
         #region Services
         private IOperatingDataService? OperatingDataService { get; }

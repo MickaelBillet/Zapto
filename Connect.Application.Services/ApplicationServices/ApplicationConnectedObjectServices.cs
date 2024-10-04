@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationConnectedObjectServices : IApplicationConnectedObjectServices
+    internal sealed class ApplicationConnectedObjectServices : IApplicationConnectedObjectServices
     {
         #region Services
 		private IAlertService? AlertService { get; }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationSensorServices : IApplicationSensorServices
+    internal sealed class ApplicationSensorServices : IApplicationSensorServices
     {
         private const double MARGIN = 0.5;
         private const int MEASURES_COUNT = 10;
@@ -29,7 +29,6 @@ namespace Connect.Application.Services
         #endregion
 
         #region Constructor
-
         public ApplicationSensorServices(IServiceProvider serviceProvider)
 		{
             this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
@@ -38,7 +37,6 @@ namespace Connect.Application.Services
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
             this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
         }
-
         #endregion
 
         #region Methods
@@ -317,8 +315,6 @@ namespace Connect.Application.Services
 
             remove.ForEach(async item => await supervisorOperatingData.DeleteOperationData(item, roomId));
         }
-
-
         #endregion
     }
 }

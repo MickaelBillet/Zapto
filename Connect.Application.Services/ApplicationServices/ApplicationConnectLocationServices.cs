@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationConnectLocationServices : IApplicationConnectLocationServices
+    internal sealed class ApplicationConnectLocationServices : IApplicationConnectLocationServices
 	{
 		#region Services
 
@@ -25,7 +25,6 @@ namespace Connect.Application.Services
 		#endregion
 
 		#region Methods
-
 		public async Task<IEnumerable<Location>?> GetLocationCache()
 		{
 			return (this.LocationService != null) ?  await this.LocationService.GetLocationsCacheAsync() : null;
@@ -45,7 +44,6 @@ namespace Connect.Application.Services
 		{
 			return (this.LocationService != null) ? await this.LocationService.TestNotification(locationId) : null;
 		}
-
 		#endregion
 	}
 }

@@ -7,9 +7,9 @@ namespace Connect.Application
 	{
 		Task<bool?> ChangeMode(Plug plug);
 		Task<bool?> SwitchOnOff(Plug plug);
-		Task<int> SendCommandAsync(Plug plug);
-		Task SendStatusToClientAsync(string locationId, Plug plug);
+		Task<int> SendCommand(Plug plug);
+		Task SendStatusToClient(string locationId, Plug plug);
 		Task NotifyPlugStatus(string locationId, Plug plug, string nameConnectedObject);
-		Task ReadStatusAsync(string data);
+		Task ReadStatus(string data);
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationRoomServices : IApplicationRoomServices
+    internal sealed class ApplicationRoomServices : IApplicationRoomServices
 	{
 		#region Services
 		private IRoomService? RoomService { get; }

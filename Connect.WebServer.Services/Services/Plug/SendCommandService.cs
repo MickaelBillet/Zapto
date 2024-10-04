@@ -49,7 +49,7 @@ namespace Connect.WebServer.Services
                     || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0, 1, 0)) && (plug.CommandReceived == 0)))
                 {
                     //Send Command to Arduino
-                    if (await this.ApplicationPlugServices.SendCommandAsync(plug) <= 0)
+                    if (await this.ApplicationPlugServices.SendCommand(plug) <= 0)
                     {
                         //If we cannot send the command to the Arduino, we keep the previous value
                         plug.Order = previousOrder;
@@ -70,7 +70,7 @@ namespace Connect.WebServer.Services
                 plug.ComputeWorkingDuration();
 
                 //Send Status to the clients app (Mobile, Web...)
-                await this.ApplicationPlugServices.SendStatusToClientAsync(room.LocationId, plug);
+                await this.ApplicationPlugServices.SendStatusToClient(room.LocationId, plug);
                 resultCode = await this.SupervisorPlug.UpdatePlug(plug);
             }
             return resultCode;

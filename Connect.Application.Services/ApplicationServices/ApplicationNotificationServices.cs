@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationNotificationServices : IApplicationNotificationServices
+    internal sealed class ApplicationNotificationServices : IApplicationNotificationServices
     {
         #region Services
 

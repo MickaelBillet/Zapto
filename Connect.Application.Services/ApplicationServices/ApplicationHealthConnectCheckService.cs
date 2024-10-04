@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationHealthConnectCheckService : IApplicationHealthCheckConnectServices
+    internal sealed class ApplicationHealthConnectCheckService : IApplicationHealthCheckConnectServices
     {
         #region Services
         private IHealthCheckConnectService? HealthCheckService { get; }

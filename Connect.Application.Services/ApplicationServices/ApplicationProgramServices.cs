@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationProgramServices : IApplicationProgramServices
+    internal sealed class ApplicationProgramServices : IApplicationProgramServices
     {
 		#region Services
-
 		private IOperationRangeService? OperationRangeService { get; }
-
 		#endregion
 
 		#region Constructor

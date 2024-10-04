@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationServerIotServices : IApplicationServerIotServices
+    internal sealed class ApplicationServerIotServices : IApplicationServerIotServices
     {
         #region Services
         private IWSMessageManager? WSMessageManager { get; }
@@ -20,18 +20,15 @@ namespace Connect.Application.Services
         #endregion
 
         #region Constructor
-
         public ApplicationServerIotServices(IServiceProvider serviceProvider, HostedServiceHealthCheck hostedServiceHealthCheck)
 		{
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
             this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
             this.HostedServiceHealthCheck = hostedServiceHealthCheck;
         }
-
         #endregion
 
         #region Methods     
-
         public async Task ReadStatusAsync(string data)
         {
             Log.Information("ApplicationServerIotServices.ReadStatusAsync");
