@@ -2,6 +2,7 @@
 using Serilog;
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Connect.Model
@@ -124,13 +125,6 @@ namespace Connect.Model
         #endregion
 
         #region Method
-
-        /// <summary>
-        /// Update the order of the plug
-        /// </summary>
-        /// <param name="humidity"></param>
-        /// <param name="temperature"></param>
-        /// <returns></returns>
         public void UpdateOrder(double? humidity, double? temperature)
         {
             if (this.OnOff == 1)
@@ -244,9 +238,7 @@ namespace Connect.Model
 
             return order;
         }
-        /// <summary>
-        /// Compute the working duration
-        /// </summary>
+
         public void ComputeWorkingDuration()
         {
             if (this.LastDateTimeOn != null)
@@ -326,6 +318,21 @@ namespace Connect.Model
             return result;
         }
 
+        public string? SerializePlugCommand(string? command)
+        {
+            PlugCommand plugCommand = new PlugCommand()
+            {
+                ProtocolType = this.Configuration?.ProtocolType,
+                Address = this.Configuration?.Address,
+                Unit = this.Configuration?.Unit,
+                Pin0 = this.Configuration?.Pin0.ToString(),
+                Period = this.Configuration?.Period.ToString(),
+                Order = command,
+            };
+
+            string json = JsonSerializer.Serialize<PlugCommand>(plugCommand);
+            return json;
+        }
         #endregion
     }
 }

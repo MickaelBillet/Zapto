@@ -89,18 +89,9 @@ namespace Connect.Application.Services
 					command = (plug.Order == Order.On) ? Command.PLUG_OFF : Command.PLUG_ON;
 				}
 
-				PlugCommand plugCommand = new PlugCommand()
-				{
-					ProtocolType = plug.Configuration?.ProtocolType,
-					Address = plug.Configuration?.Address,
-					Unit = plug.Configuration?.Unit,
-					Pin0 = plug.Configuration?.Pin0.ToString(),
-					Period = plug.Configuration?.Period.ToString(),
-					Order = command,
-				};
-
-				string json = JsonSerializer.Serialize<PlugCommand>(plugCommand);
+				string? json = plug.SerializePlugCommand(command);
 				await this.WSMessageManager.SendMessageToAllAsync(json);
+
 				Log.Information("SendCommandAsync - plug Id : " + plug.Id);
 			}
 			return res;

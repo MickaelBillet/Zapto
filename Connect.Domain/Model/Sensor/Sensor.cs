@@ -97,7 +97,7 @@ namespace Connect.Model
             this.Date = Clock.Now;
         }       
 
-        public string? GetSensorConfiguration()
+        public string? SerializeSensorConfiguration()
         {
             SensorConfiguration configuration = new SensorConfiguration()
             {
@@ -106,7 +106,7 @@ namespace Connect.Model
                 Parameter = this.Parameter,
             };
 
-            string? json = JsonSerializer.Serialize(configuration);
+            string? json = JsonSerializer.Serialize<SensorConfiguration>(configuration);
             return json;
         }
 

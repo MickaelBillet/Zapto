@@ -47,7 +47,7 @@ namespace Connect.Application.Services
         public async Task<int?> Notify(Sensor sensor)
         {
             int? res = 0;
-            string? data = sensor.GetSensorConfiguration();
+            string? data = sensor.SerializeSensorConfiguration();
             if (this.WSMessageManager != null)
             {
                 res = await this.WSMessageManager.SendMessageToAllAsync(data);
