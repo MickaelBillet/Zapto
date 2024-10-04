@@ -234,7 +234,6 @@ namespace Connect.Application.Services
                 }
             }
         }
-
         private async Task<bool> CheckTemperatureValue(ISupervisorOperatingData supervisorOperatingData, float temperature, string roomId)
         {
             bool isValid = false;
@@ -261,7 +260,6 @@ namespace Connect.Application.Services
             }
             return isValid;
         }
-
         private async Task<bool> CheckHumidityValue(ISupervisorOperatingData supervisorOperatingData, float humidity, string roomId)
         {
             bool isValid = false;
@@ -300,7 +298,6 @@ namespace Connect.Application.Services
                 await this.NotifySensorLeak(room.LocationId, room);
             }
         }
-
         private void DeleteFalseMeasure(ISupervisorOperatingData supervisorOperatingData, double? median, IEnumerable<(double?, DateTime)> values, string roomId)
         {
             List<DateTime> remove = new List<DateTime>();
