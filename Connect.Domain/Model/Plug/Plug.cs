@@ -18,7 +18,7 @@ namespace Connect.Model
         private int _conditionType = 0;
         private Configuration? _configuration = null;
 
-        #region Property
+        #region Properties
 
         public string ConfigurationId { get; set; } = string.Empty;
 
