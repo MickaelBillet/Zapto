@@ -10,16 +10,14 @@ namespace Connect.Application.Services
     internal sealed class ApplicationConnectLocationServices : IApplicationConnectLocationServices
 	{
 		#region Services
-
 		private ILocationService? LocationService { get; }
-
 		#endregion
 
 		#region Constructor
 
 		public ApplicationConnectLocationServices(IServiceProvider serviceProvider)
 		{
-			this.LocationService = serviceProvider.GetService<ILocationService>();
+			this.LocationService = serviceProvider.GetRequiredService<ILocationService>();
 		}
 
 		#endregion

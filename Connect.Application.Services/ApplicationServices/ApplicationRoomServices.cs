@@ -105,7 +105,7 @@ namespace Connect.Application.Services
                             await this.AlertService.SendAlertAsync(locationId,
                                                                         room.Name,
                                                                         $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
-                                                                        $" (Inférieure à {notification.Value}%) pour  {room.Name}");
+                                                                        $" (Inférieure à {notification.Value}%) pour {room.Name}");
 
                         }
                         else
