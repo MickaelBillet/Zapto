@@ -3,7 +3,6 @@ using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Net.WebSockets;
@@ -20,7 +19,7 @@ namespace AirZapto.WebServer.Services
         #endregion
 
         #region Constructor
-        public SensorMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
+        public SensorMessageManager(WebSocketService webSocketConnectionManager, IServiceProvider serviceProvider) : base(webSocketConnectionManager)
         {
             this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();		

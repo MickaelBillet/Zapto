@@ -118,7 +118,7 @@ namespace AirZapto.WebServices.Controllers
 
                     if ((code == ResultCode.Ok) && (sensor != null))
                     {
-                        bool isConnected = await this.ApplicationSensorServices.SendCommandAsync(sensor, Command.Calibration);
+                        bool isConnected = await this.ApplicationSensorServices.SendCommand(sensor, Command.Calibration);
 
                         if (isConnected == false)
 						{
@@ -202,7 +202,7 @@ namespace AirZapto.WebServices.Controllers
 
                     if ((code == ResultCode.Ok) && (sensor != null))
                     {
-                        bool isConnected = await this.ApplicationSensorServices.SendCommandAsync(sensor, Command.Restart);
+                        bool isConnected = await this.ApplicationSensorServices.SendCommand(sensor, Command.Restart);
 
                         if (isConnected == false)
                         {

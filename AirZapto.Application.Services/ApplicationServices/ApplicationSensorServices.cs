@@ -27,27 +27,27 @@ namespace AirZapto.Application.Services
 
 		#region Methods
 
-		public async Task<IEnumerable<Sensor>?> GetSensorsAsync()
+		public async Task<IEnumerable<Sensor>?> GetSensors()
 		{
 			return (this.SensorService != null) ? await this.SensorService.GetSensors() : null;
 		}
 
-		public async Task<Sensor?> GetSensorsAsync(string idSocket)
+		public async Task<Sensor?> GetSensors(string idSocket)
 		{
 			return (this.SensorService != null) ? await this.SensorService.GetSensor(idSocket) : null;
 		}
 
-		public async Task<bool?> RestartAsync(Sensor sensor)
+		public async Task<bool?> Restart(Sensor sensor)
 		{
 			return (this.SensorService != null) ? await this.SensorService.RestartSensor(sensor) : null;
 		}
 
-		public async Task<bool?> CalibrationAsync(Sensor sensor)
+		public async Task<bool?> Calibration(Sensor sensor)
 		{
 			return (this.SensorService != null) ? await this.SensorService.CalibrationSensor(sensor) : null;
 		}
 
-		public async Task<bool> SendCommandAsync(Sensor sensor, int cmd)
+		public async Task<bool> SendCommand(Sensor sensor, int cmd)
 		{
 			bool isConnected = false;
 

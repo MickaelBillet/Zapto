@@ -6,10 +6,10 @@ namespace AirZapto.Application
 {
 	public interface IApplicationSensorServices
 	{
-		public Task<bool?> RestartAsync(Sensor sensor);
-		public Task<bool?> CalibrationAsync(Sensor sensor);
-		public Task<IEnumerable<Sensor>?> GetSensorsAsync();
-		public Task<bool> SendCommandAsync(Sensor sensor, int command);
-		public Task<Sensor?> GetSensorsAsync(string sensorId);
+		public Task<bool?> Restart(Sensor sensor);
+		public Task<bool?> Calibration(Sensor sensor);
+		public Task<IEnumerable<Sensor>?> GetSensors();
+		public Task<bool> SendCommand(Sensor sensor, int command);
+		public Task<Sensor?> GetSensors(string sensorId);
 	}
 }
