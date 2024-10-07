@@ -9,9 +9,7 @@ namespace Framework.Infrastructure.Services
     public abstract class WebSocketHandler
     {
         #region Properties
-
         public WebSocketService WebSocketConnectionManager { get; private set; }
-
         #endregion
 
         #region Constructor
