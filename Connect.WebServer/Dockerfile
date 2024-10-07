@@ -3,12 +3,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim-arm64v8 AS base
 WORKDIR /app
 EXPOSE 5000
-EXPOSE 5001/udp
-EXPOSE 5002/udp
-EXPOSE 5003/udp
-EXPOSE 5004/udp
-EXPOSE 5005/udp
-EXPOSE 5007/udp
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
