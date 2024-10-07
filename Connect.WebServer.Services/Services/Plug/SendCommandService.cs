@@ -25,9 +25,9 @@ namespace Connect.WebServer.Services
         public SendCommandService(IServiceProvider serviceProvider)
         {
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
             this.SupervisorRoom = serviceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
             this.SupervisorPlug = serviceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
-            this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
         }
         #endregion
 

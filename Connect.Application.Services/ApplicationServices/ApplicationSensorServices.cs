@@ -30,7 +30,7 @@ namespace Connect.Application.Services
 
         #region Constructor
         public ApplicationSensorServices(IServiceProvider serviceProvider)
-		{
+        {
             this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
             this.SensorService = serviceProvider.GetService<ISensorService>();
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
@@ -63,7 +63,7 @@ namespace Connect.Application.Services
             return res;
         }
 
-        public async Task ReadDataAsync(string data)
+        public async Task ReadData(string data)
         {
             Log.Information("ApplicationSensorServices.ReadDataAsync");
 
@@ -121,7 +121,7 @@ namespace Connect.Application.Services
             }
         }
 
-        public async Task ReadEventAsync(string data)
+        public async Task ReadEvent(string data)
         {
             Log.Information("ApplicationSensorServices.ReadEventAsync");
 
@@ -167,7 +167,7 @@ namespace Connect.Application.Services
             }
         }
 
-        public async Task SendEventToClientAsync(string locationId, Sensor sensor)
+        public async Task SendEventToClient(string locationId, Sensor sensor)
         {
             if (this.SignalRConnectService != null)
             {
@@ -178,7 +178,7 @@ namespace Connect.Application.Services
 
         public async Task NotifySensorLeak(string locationId, Room room)
         {
-            if (this.AlertService != null) 
+            if (this.AlertService != null)
             {
                 await this.AlertService.SendAlertAsync(locationId, "Fuite", "Fuite détectée dans la " + room.Name);
             }
@@ -292,7 +292,7 @@ namespace Connect.Application.Services
             if (room != null)
             {
                 //Send event to the client apps
-                await this.SendEventToClientAsync(room.LocationId, sensor);
+                await this.SendEventToClient(room.LocationId, sensor);
 
                 //Send Notification
                 await this.NotifySensorLeak(room.LocationId, room);

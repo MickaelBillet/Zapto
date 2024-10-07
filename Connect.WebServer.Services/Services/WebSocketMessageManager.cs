@@ -18,7 +18,7 @@ namespace AirZapto.WebServer.Services
         #endregion
 
         #region Constructor
-        public WebSocketMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider) : base(webSocketConnectionManager)
+        public WebSocketMessageManager(WebSocketService webSocketConnectionManager, IServiceProvider serviceProvider) : base(webSocketConnectionManager)
         {
 			this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
 			this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
@@ -59,11 +59,11 @@ namespace AirZapto.WebServer.Services
 						}
 						else if (message.Header == ConnectConstants.SensorData)
 						{
-							await this.ApplicationSensorServices.ReadDataAsync(message.Payload);
+							await this.ApplicationSensorServices.ReadData(message.Payload);
 						}
 						else if (message.Header == ConnectConstants.SensorEvent)
 						{
-							await this.ApplicationSensorServices.ReadEventAsync(message.Payload);
+							await this.ApplicationSensorServices.ReadEvent(message.Payload);
 						}
 						else if (message.Header == ConnectConstants.ServerIotStatus)
 						{

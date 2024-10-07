@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services
 {
-    public class WebSockerService
+    public class WebSocketService
     {
         public ConcurrentDictionary<string, WebSocket> Sockets = new ConcurrentDictionary<string, WebSocket>();
 

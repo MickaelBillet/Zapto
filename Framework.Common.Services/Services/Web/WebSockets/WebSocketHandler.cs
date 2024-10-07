@@ -10,12 +10,12 @@ namespace Framework.Infrastructure.Services
     {
         #region Properties
 
-        public WebSockerService WebSocketConnectionManager { get; private set; }
+        public WebSocketService WebSocketConnectionManager { get; private set; }
 
         #endregion
 
         #region Constructor
-        public WebSocketHandler(WebSockerService webSocketConnectionManager)
+        public WebSocketHandler(WebSocketService webSocketConnectionManager)
         {
             this.WebSocketConnectionManager = webSocketConnectionManager;
         }
