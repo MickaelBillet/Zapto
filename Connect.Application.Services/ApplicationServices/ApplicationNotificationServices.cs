@@ -27,7 +27,7 @@ namespace Connect.Application.Services
 
         #region Methods
 
-        public async Task<ICollection<Notification>?> GetNotificationsAsync(INotificationProvider provider)
+        public async Task<ICollection<Notification>?> GetNotifications(INotificationProvider provider)
         {
             if (this.NotificationService != null)
             {
@@ -44,7 +44,7 @@ namespace Connect.Application.Services
             return null;
         }
 
-        public async Task<bool?> DeleteNotificationAsync(INotificationProvider provider, Notification notification)
+        public async Task<bool?> DeleteNotification(INotificationProvider provider, Notification notification)
         {
             bool? result = false;
 
@@ -56,7 +56,7 @@ namespace Connect.Application.Services
             return result;
         }
 
-        public async Task<bool?> DeleteNotificationsAsync(INotificationProvider provider)
+        public async Task<bool?> DeleteNotifications(INotificationProvider provider)
         {
             bool? result = null;
 
@@ -80,7 +80,7 @@ namespace Connect.Application.Services
             return result;
         }
 
-        public async Task<bool?> AddUpdateNotificationAsync(INotificationProvider provider, Notification notification)
+        public async Task<bool?> AddUpdateNotification(INotificationProvider provider, Notification notification)
         {
             bool? res = false;
 

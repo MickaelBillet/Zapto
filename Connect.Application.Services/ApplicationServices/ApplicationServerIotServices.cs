@@ -29,9 +29,9 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods     
-        public async Task ReadStatusAsync(string data)
+        public async Task ReadStatus(string data)
         {
-            Log.Information("ApplicationServerIotServices.ReadStatusAsync");
+            Log.Information("ApplicationServerIotServices.ReadStatus");
 
             try
             {

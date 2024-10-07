@@ -65,7 +65,7 @@ namespace Connect.Application.Services
 
         public async Task ReadData(string data)
         {
-            Log.Information("ApplicationSensorServices.ReadDataAsync");
+            Log.Information("ApplicationSensorServices.ReadData");
 
             try
             {
@@ -107,7 +107,7 @@ namespace Connect.Application.Services
                                     }
                                     else
                                     {
-                                        Log.Error("ApplicationSensorServices.ReadDataAsync Error");
+                                        Log.Error("ApplicationSensorServices.ReadData Error");
                                     }
                                 }
                             }
@@ -123,7 +123,7 @@ namespace Connect.Application.Services
 
         public async Task ReadEvent(string data)
         {
-            Log.Information("ApplicationSensorServices.ReadEventAsync");
+            Log.Information("ApplicationSensorServices.ReadEvent");
 
             try
             {
@@ -154,7 +154,7 @@ namespace Connect.Application.Services
                                 }
                                 else
                                 {
-                                    Log.Error("ApplicationSensorServices.ReadEventAsync Error");
+                                    Log.Error("ApplicationSensorServices.ReadEvent Error");
                                 }
                             }
                         }
@@ -172,7 +172,7 @@ namespace Connect.Application.Services
             if (this.SignalRConnectService != null)
             {
                 await this.SignalRConnectService.SendSensorStatusAsync(locationId, sensor);
-                Log.Warning("SendEventToClientAsync : " + sensor.Name + "/" + sensor.Channel + " LeakDetected");
+                Log.Warning("SendEventToClient : " + sensor.Name + "/" + sensor.Channel + " LeakDetected");
             }
         }
 
@@ -204,7 +204,7 @@ namespace Connect.Application.Services
                 room.ComputeData(validityPeriod);
 
                 //Send Data to the client app (Mobile, Web...)
-                await applicationRoomServices.SendDataToClientAsync(room.LocationId, room);
+                await applicationRoomServices.SendDataToClient(room.LocationId, room);
 
                 //Send Notification to the Firebase app
                 await applicationRoomServices.NotifiyRoomCondition(room.LocationId, room.NotificationsList, room);
@@ -226,7 +226,7 @@ namespace Connect.Application.Services
                 if (room != null)
                 {
                     //Send data to the client app
-                    await applicationConnectedObjectServices.SendDataToClientAsync(room.LocationId, connectedObject);
+                    await applicationConnectedObjectServices.SendDataToClient(room.LocationId, connectedObject);
 
                     //Send Notification to the Firebase app
                     await applicationConnectedObjectServices.NotifiyConnectedObjectCondition(connectedObject.NotificationsList, room, connectedObject);

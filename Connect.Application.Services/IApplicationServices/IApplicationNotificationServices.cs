@@ -6,9 +6,9 @@ namespace Connect.Application
 {
     public interface IApplicationNotificationServices
 	{
-		Task<ICollection<Notification>?> GetNotificationsAsync(INotificationProvider provider);
-		Task<bool?> DeleteNotificationAsync(INotificationProvider provider, Notification notification);
-		Task<bool?> DeleteNotificationsAsync(INotificationProvider provider);
-		Task<bool?> AddUpdateNotificationAsync(INotificationProvider provider, Notification notification);
+		Task<ICollection<Notification>?> GetNotifications(INotificationProvider provider);
+		Task<bool?> DeleteNotification(INotificationProvider provider, Notification notification);
+		Task<bool?> DeleteNotifications(INotificationProvider provider);
+		Task<bool?> AddUpdateNotification(INotificationProvider provider, Notification notification);
 	}
 }

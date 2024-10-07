@@ -35,12 +35,12 @@ namespace Connect.Application.Services
 			return this.RoomService?.GetRoom(roomId, true);
 		}
 
-		public async Task<IEnumerable<Room>?> GetRoomsAsync(string? locationId)
+		public async Task<IEnumerable<Room>?> GetRooms(string? locationId)
 		{
 			return (this.RoomService != null) ? (await this.RoomService.GetRooms(locationId)) : null;
 		}
 
-        public async Task SendDataToClientAsync(string locationId, Room room)
+        public async Task SendDataToClient(string locationId, Room room)
         {
 			if (this.SignalRConnectService != null)
 			{

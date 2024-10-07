@@ -26,7 +26,7 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-        public async Task SendDataToClientAsync(string locationId, ConnectedObject @object)
+        public async Task SendDataToClient(string locationId, ConnectedObject @object)
         {
             if ((this.SignalRConnectService != null) && (@object.Sensor != null))
             {

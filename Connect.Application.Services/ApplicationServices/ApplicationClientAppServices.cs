@@ -13,12 +13,10 @@ namespace Connect.Application.Services
         #endregion
 
         #region Constructor
-
         public ApplicationClientAppServices(IServiceProvider serviceProvider)
         {
             this.ClientAppService = serviceProvider.GetService<IClientAppService>();
         }
-
         #endregion
 
         #region Methods

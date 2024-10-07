@@ -4,6 +4,6 @@ namespace Connect.Application
 {
     public interface IApplicationServerIotServices
 	{
-        Task ReadStatusAsync(string data);
+        Task ReadStatus(string data);
     }
 }

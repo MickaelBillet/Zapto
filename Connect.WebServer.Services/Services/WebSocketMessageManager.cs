@@ -67,7 +67,7 @@ namespace AirZapto.WebServer.Services
 						}
 						else if (message.Header == ConnectConstants.ServerIotStatus)
 						{
-							await this.ApplicationServerIotServices.ReadStatusAsync(message.Payload);
+							await this.ApplicationServerIotServices.ReadStatus(message.Payload);
 						}
                     }
 				}
