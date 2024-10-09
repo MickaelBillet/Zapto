@@ -3,15 +3,17 @@ using Connect.Model;
 using Framework.Core.Base;
 using Framework.Core.Model;
 using Framework.Infrastructure.Services;
+using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationServerIotServices : IApplicationServerIotServices
+    internal sealed class ApplicationServerIotServices : IApplicationServerIotServices, IEventHandler<MessageArduino>
     {
         #region Services
         private IWSMessageManager? WSMessageManager { get; }
@@ -28,7 +30,12 @@ namespace Connect.Application.Services
         }
         #endregion
 
-        #region Methods     
+        #region Methods    
+        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         public async Task ReadStatus(string data)
         {
             Log.Information("ApplicationServerIotServices.ReadStatus");

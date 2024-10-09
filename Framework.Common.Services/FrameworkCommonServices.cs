@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Framework.Infrastructure.Services
 {
-    public static class FrameworkCommonService
+    public static class FrameworkCommonServices
 	{
         public static void AddMailService(this IServiceCollection services)
         {

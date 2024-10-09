@@ -4,6 +4,7 @@ using Connect.Model;
 using Framework.Core;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
+using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -11,11 +12,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationSensorServices : IApplicationSensorServices
+    internal sealed class ApplicationSensorServices : IApplicationSensorServices, IEventHandler<MessageArduino>
     {
         private const double MARGIN = 0.5;
         private const int MEASURES_COUNT = 10;
@@ -40,6 +42,11 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
+        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         /// <summary>
         /// Send the sensor configuration to the arduino server
         /// </summary>

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Framework.Core.Domain
 {
-	public class Item : ObservableObject
+    public class Item : ObservableObject
 	{
 		private string id = string.Empty;
 		private DateTime date;

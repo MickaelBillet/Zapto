@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Platforms>AnyCPU;x86</Platforms>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <AssemblyName>Framework.Core</AssemblyName>
     <Nullable>disable</Nullable>
   </PropertyGroup>

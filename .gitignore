@@ -155,3 +155,6 @@
 /WebApplicationWebSocket/obj
 /WebApplicationWebSocket/.vs
 /WebApplicationWebSocket/bin/Debug/net8.0
+/Framework.Common.Services/bin/Debug/net8.0
+/Framework.Core.Utils/bin/Debug/net8.0
+/Framework.Core.Utils/obj

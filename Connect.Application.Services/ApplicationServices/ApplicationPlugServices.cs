@@ -1,17 +1,20 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Data;
 using Connect.Model;
+using Framework.Core.Base;
 using Framework.Infrastructure.Services;
+using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationPlugServices : IApplicationPlugServices
+    internal sealed class ApplicationPlugServices : IApplicationPlugServices, IEventHandler<MessageArduino>
 	{
         #region Services
         private IAlertService? AlertService { get; }
@@ -33,6 +36,11 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
+        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         public async Task<bool?> ChangeMode(Plug plug)
 		{
 			return (this.PlugService != null) ? await this.PlugService.ManualProgrammingAsync(plug) : null;
@@ -61,7 +69,7 @@ namespace Connect.Application.Services
 						{
 							await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, status);
 						}
-					}
+                    }
 				}
             }
             catch (Exception ex)
