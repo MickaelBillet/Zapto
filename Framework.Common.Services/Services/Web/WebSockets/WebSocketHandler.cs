@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -9,13 +10,13 @@ namespace Framework.Infrastructure.Services
     public abstract class WebSocketHandler
     {
         #region Properties
-        public WebSocketService WebSocketConnectionManager { get; private set; }
+        public IWebSocketService WebSocketConnectionManager { get; private set; }
         #endregion
 
         #region Constructor
-        public WebSocketHandler(WebSocketService webSocketConnectionManager)
+        public WebSocketHandler(IServiceProvider serviceProvider)
         {
-            this.WebSocketConnectionManager = webSocketConnectionManager;
+            this.WebSocketConnectionManager = serviceProvider.GetRequiredService<IWebSocketService>();
         }
         #endregion
 

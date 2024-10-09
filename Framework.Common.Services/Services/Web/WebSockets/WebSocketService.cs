@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services
 {
-    public class WebSocketService
+    public class WebSocketService : IWebSocketService
     {
-        public ConcurrentDictionary<string, WebSocket> Sockets = new ConcurrentDictionary<string, WebSocket>();
+        private ConcurrentDictionary<string, WebSocket> Sockets = new ConcurrentDictionary<string, WebSocket>();
 
         public WebSocket GetSocketById(string id)
         {

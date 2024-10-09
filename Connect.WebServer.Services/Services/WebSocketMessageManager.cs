@@ -18,12 +18,15 @@ namespace AirZapto.WebServer.Services
         #endregion
 
         #region Constructor
-        public WebSocketMessageManager(WebSocketService webSocketConnectionManager, IServiceProvider serviceProvider) : base(webSocketConnectionManager)
+        public WebSocketMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-			this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
-			this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
-			this.ApplicationServerIotServices = serviceProvider.GetRequiredService<IApplicationServerIotServices>();
-        }
+			using (IServiceScope scope = serviceProvider.CreateScope())
+			{
+				this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
+				this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
+				this.ApplicationServerIotServices = serviceProvider.GetRequiredService<IApplicationServerIotServices>();
+			}
+		}
         #endregion
 
         #region Methods

@@ -1,3 +1,4 @@
+using AirZapto.WebServices.Services;
 using Framework.Infrastructure.Services;
 using WebApplicationWebSocket.Configuration;
 using WebApplicationWebSocket.Middleware;
@@ -36,7 +37,7 @@ app.MapGet("/weatherforecast", () =>
 
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path == "/")
+    if (context.Request.Path == "/ws")
     {
         if (context.WebSockets.IsWebSocketRequest)
         {

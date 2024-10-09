@@ -13,7 +13,7 @@ namespace WebApplicationWebSocket.Services
         #endregion
 
         #region Constructor
-        public WSMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
+        public WSMessageManager(WebSocketService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
         {
 
         }

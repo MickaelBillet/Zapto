@@ -7,7 +7,7 @@ namespace WebApplicationWebSocket.Configuration
     {
         public static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<WebSockerService>();
+            services.AddSingleton<WebSocketService>();
             services.AddTransient<IWSMessageManager, WSMessageManager>();
         }
     }

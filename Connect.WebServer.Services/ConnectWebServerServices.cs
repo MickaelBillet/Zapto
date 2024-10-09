@@ -8,8 +8,9 @@ namespace Connect.WebServer.Services
     {
         public static void AddConnectWebServices(this IServiceCollection services)
         {
+            services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
-            services.AddScoped<IWSMessageManager, WebSocketMessageManager>((provider) => new WebSocketMessageManager(new WebSocketService(), provider));
+            services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
         }
     }
 }

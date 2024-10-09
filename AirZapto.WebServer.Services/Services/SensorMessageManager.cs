@@ -19,7 +19,7 @@ namespace AirZapto.WebServer.Services
         #endregion
 
         #region Constructor
-        public SensorMessageManager(WebSocketService webSocketConnectionManager, IServiceProvider serviceProvider) : base(webSocketConnectionManager)
+        public SensorMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();		
