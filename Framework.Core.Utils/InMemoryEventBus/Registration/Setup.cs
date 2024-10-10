@@ -11,7 +11,6 @@ public static class Setup
     public static IServiceCollection AddInMemoryEvent<T, THandler>(this IServiceCollection services)
         where THandler : class, IEventHandler<T>
     {
-        // TODO: Expose configuration options and allow user to customize
         var bus = Channel.CreateUnbounded<Event<T>>(
             new UnboundedChannelOptions
             {

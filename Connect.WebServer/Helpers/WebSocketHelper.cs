@@ -67,8 +67,6 @@ namespace Framework.Infrastructure.Services
                             }
 
                             Log.Error("Arduino connected");
-
-
                             await messageManager.OnDisconnected(webSocket);
 
                         }

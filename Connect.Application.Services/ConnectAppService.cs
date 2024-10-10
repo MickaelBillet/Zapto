@@ -23,7 +23,7 @@ namespace Connect.Application
             services.AddTransient<IApplicationHealthCheckConnectServices, ApplicationHealthConnectCheckService>();
         }
 
-		public static void AddInMemoryEvent(this IServiceCollection services)
+		public static void AddInMemoryEventServices(this IServiceCollection services)
 		{
             services.AddInMemoryEvent<MessageArduino, ApplicationPlugServices>();
             services.AddInMemoryEvent<MessageArduino, ApplicationSensorServices>();

@@ -33,6 +33,8 @@ namespace Connect.Application.Services
         #region Methods    
         public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
         {
+            Log.Information("ApplicationServerIotServices.Handle");
+
             return ValueTask.CompletedTask;
         }
 

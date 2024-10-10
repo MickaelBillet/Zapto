@@ -2,6 +2,7 @@
 using Connect.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
+using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Net.WebSockets;
@@ -12,20 +13,13 @@ namespace AirZapto.WebServer.Services
     public class WebSocketMessageManager : WebSocketHandler, IWSMessageManager
     {
         #region Properties
-		private IApplicationPlugServices ApplicationPlugServices { get; }
-		private IApplicationSensorServices ApplicationSensorServices { get; }
-		private IApplicationServerIotServices ApplicationServerIotServices { get; }
+		private IProducer<MessageArduino> Producer { get; }
         #endregion
 
         #region Constructor
         public WebSocketMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-			using (IServiceScope scope = serviceProvider.CreateScope())
-			{
-				this.ApplicationPlugServices = serviceProvider.GetRequiredService<IApplicationPlugServices>();
-				this.ApplicationSensorServices = serviceProvider.GetRequiredService<IApplicationSensorServices>();
-				this.ApplicationServerIotServices = serviceProvider.GetRequiredService<IApplicationServerIotServices>();
-			}
+			this.Producer = serviceProvider.GetRequiredService<IProducer<MessageArduino>>();
 		}
         #endregion
 
@@ -48,6 +42,8 @@ namespace AirZapto.WebServer.Services
 
             try
 			{
+                Log.Information("WebSocketMessageManager.ReceiveAsync");
+
                 string received = Encoding.ASCII.GetString(buffer, 0, result.Count).TrimEnd('\0');			
 				if (string.IsNullOrEmpty(received) == false)
 				{
@@ -56,22 +52,31 @@ namespace AirZapto.WebServer.Services
 					MessageArduino message = MessageArduino.Deserialize(received);
 					if (message != null)
 					{
-						if (message.Header == ConnectConstants.PlugStatus)
-						{
-							await this.ApplicationPlugServices.ReadStatus(message.Payload);
-						}
-						else if (message.Header == ConnectConstants.SensorData)
-						{
-							await this.ApplicationSensorServices.ReadData(message.Payload);
-						}
-						else if (message.Header == ConnectConstants.SensorEvent)
-						{
-							await this.ApplicationSensorServices.ReadEvent(message.Payload);
-						}
-						else if (message.Header == ConnectConstants.ServerIotStatus)
-						{
-							await this.ApplicationServerIotServices.ReadStatus(message.Payload);
-						}
+                        //if (message.Header == ConnectConstants.PlugStatus)
+                        //{
+                        //	await this.ApplicationPlugServices.ReadStatus(message.Payload);
+                        //}
+                        //else if (message.Header == ConnectConstants.SensorData)
+                        //{
+                        //	await this.ApplicationSensorServices.ReadData(message.Payload);
+                        //}
+                        //else if (message.Header == ConnectConstants.SensorEvent)
+                        //{
+                        //	await this.ApplicationSensorServices.ReadEvent(message.Payload);
+                        //}
+                        //else if (message.Header == ConnectConstants.ServerIotStatus)
+                        //{
+                        //	await this.ApplicationServerIotServices.ReadStatus(message.Payload);
+                        //}
+
+                        var publishEventsFn = async (int i) =>
+                        {
+                            var @event = new Event<MessageArduino>(message);
+
+                            await this.Producer.Publish(@event).ConfigureAwait(false);
+                        };
+
+                        await publishEventsFn.Invoke(0);
                     }
 				}
 			}
