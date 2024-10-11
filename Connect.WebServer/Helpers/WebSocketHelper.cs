@@ -44,12 +44,14 @@ namespace Framework.Infrastructure.Services
         {
             using (IServiceScope scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                try
-                {
+               
                     IWSMessageManager messageManager = scope.ServiceProvider.GetRequiredService<IWSMessageManager>();
-                    if (context.WebSockets.IsWebSocketRequest == true)
+                if (context.WebSockets.IsWebSocketRequest == true)
+                {
+
+                    using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
                     {
-                        using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
+                        try
                         {
                             if (messageManager.OnConnected(webSocket))
                             {
@@ -68,14 +70,18 @@ namespace Framework.Infrastructure.Services
 
                             Log.Error("Arduino connected");
                             await messageManager.OnDisconnected(webSocket);
-
+                        }
+                    catch (Exception ex)
+                    {
+                        if (webSocket.State == WebSocketState.Open)
+                        {
+                            await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, ex.Message, CancellationToken.None);
                         }
                     }
                 }
-                catch (Exception)
-                {
 
                 }
+
             }
         }
     }
