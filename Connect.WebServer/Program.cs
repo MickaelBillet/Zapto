@@ -35,9 +35,7 @@ namespace Connect.WebServer
                 {
                     await task.Execute();
                 }
-
                 await host.Services.StartConsumers();
-
                 await host.RunAsync();
             }
             catch (Exception ex)

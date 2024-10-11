@@ -86,9 +86,7 @@ internal sealed class InMemoryEventBusConsumer<T> : IConsumer<T>
         ctx.Set(task); // set metadata and begin scope
         using var logScope = _logger.BeginScope(task.Metadata ?? new EventMetadata(Guid.NewGuid().ToString()));
 
-        Task.Run(
-            async () => await handler.Handle(task.Data, token), token
-        ).ConfigureAwait(false);
+        Task.Run(async () => await handler.Handle(task.Data, token), token).ConfigureAwait(false);
 
         return ValueTask.CompletedTask;
     }
