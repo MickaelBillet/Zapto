@@ -10,6 +10,6 @@ namespace Connect.Application
 		Task<int> SendCommand(Plug plug);
 		Task SendStatusToClient(string locationId, Plug plug);
 		Task NotifyPlugStatus(string locationId, Plug plug, string nameConnectedObject);
-		Task ReadStatus(string data);
+		Task ReadStatus(CommandStatus? status);
     }
 }

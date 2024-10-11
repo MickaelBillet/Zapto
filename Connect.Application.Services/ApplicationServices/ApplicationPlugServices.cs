@@ -1,20 +1,16 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Data;
 using Connect.Model;
-using Framework.Core.Base;
 using Framework.Infrastructure.Services;
-using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationPlugServices : IApplicationPlugServices, IEventHandler<MessageArduino>
+    internal sealed class ApplicationPlugServices : IApplicationPlugServices
 	{
         #region Services
         private IAlertService? AlertService { get; }
@@ -36,12 +32,6 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
-        {
-            Log.Information("ApplicationPlugServices.Handle");
-            return ValueTask.CompletedTask;
-        }
-
         public async Task<bool?> ChangeMode(Plug plug)
 		{
 			return (this.PlugService != null) ? await this.PlugService.ManualProgrammingAsync(plug) : null;
@@ -52,9 +42,9 @@ namespace Connect.Application.Services
 			return (this.PlugService != null) ? await this.PlugService.OnOffAsync(plug) : null;
 		}
 
-        public async Task ReadStatus(string data)
+        public async Task ReadStatus(CommandStatus? status)
         {
-            Log.Information("ApplicationPlugServices.ReadStatusAsync");
+            Log.Information("ApplicationPlugServices.ReadStatus");
 
             try
             {
@@ -65,11 +55,7 @@ namespace Connect.Application.Services
 						IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 						ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
 						ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
-						CommandStatus? status = status = JsonSerializer.Deserialize<CommandStatus>(data);
-						if (status != null)
-						{
-							await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, status);
-						}
+						await this.ProcessPlugStatus(supervisorPlug, supervisorRoom, status);
                     }
 				}
             }
@@ -142,20 +128,23 @@ namespace Connect.Application.Services
             }
         }
 
-        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, ISupervisorRoom supervisorRoom, CommandStatus status)
+        private async Task ProcessPlugStatus(ISupervisorPlug supervisorPlug, ISupervisorRoom supervisorRoom, CommandStatus? status)
         {
-            Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
-            if (plug != null)
-            {
-                plug.UpdateStatus(status.Status);
-                Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
-                if (room != null)
-                {
-                    //Send Status to the clients (Mobile, Web...)
-                    await this.SendStatusToClient(room.LocationId, plug);
-                    await supervisorPlug.UpdatePlug(plug);
-                }
-            }
+			if (status != null)
+			{
+				Plug plug = await supervisorPlug.GetPlug(status.Address, status.Unit);
+				if (plug != null)
+				{
+					plug.UpdateStatus(status.Status);
+					Room room = await supervisorRoom.GetRoomFromPlugId(plug.Id);
+					if (room != null)
+					{
+						//Send Status to the clients (Mobile, Web...)
+						await this.SendStatusToClient(room.LocationId, plug);
+						await supervisorPlug.UpdatePlug(plug);
+					}
+				}
+			}
         }
         #endregion
     }

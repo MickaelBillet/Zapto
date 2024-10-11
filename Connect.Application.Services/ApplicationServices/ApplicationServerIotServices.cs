@@ -3,17 +3,14 @@ using Connect.Model;
 using Framework.Core.Base;
 using Framework.Core.Model;
 using Framework.Infrastructure.Services;
-using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationServerIotServices : IApplicationServerIotServices, IEventHandler<MessageArduino>
+    internal sealed class ApplicationServerIotServices : IApplicationServerIotServices
     {
         #region Services
         private IWSMessageManager? WSMessageManager { get; }
@@ -31,14 +28,7 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods    
-        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
-        {
-            Log.Information("ApplicationServerIotServices.Handle");
-
-            return ValueTask.CompletedTask;
-        }
-
-        public async Task ReadStatus(string data)
+        public async Task ReadStatus(SystemStatus? status)
         {
             Log.Information("ApplicationServerIotServices.ReadStatus");
 
@@ -49,24 +39,20 @@ namespace Connect.Application.Services
                     using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                     {
                         ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryServerIotStatus>().CreateSupervisor();
-                        SystemStatus? status = JsonSerializer.Deserialize<SystemStatus>(data);
-                        if (status != null)
+                        if ((this.HostedServiceHealthCheck != null) && (status != null))
                         {
-                            if (this.HostedServiceHealthCheck != null)
-                            {
-                                status.Date = Clock.Now;
-                                this.HostedServiceHealthCheck.SetStatus(status);
+                            status.Date = Clock.Now;
+                            this.HostedServiceHealthCheck.SetStatus(status);
 
-                                if (status.Status == Domain.SystemStatus.STARTED)
+                            if (status.Status == Domain.SystemStatus.STARTED)
+                            {
+                                await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
                                 {
-                                    await supervisorServerIotStatus.AddServerIotStatus(new ServerIotStatus()
-                                    {
-                                        Id = Guid.NewGuid().ToString(),
-                                        IpAddress = status.IpAddress,
-                                        ConnectionDate = status.Date,
-                                        Date = Clock.Now,
-                                    });
-                                }
+                                    Id = Guid.NewGuid().ToString(),
+                                    IpAddress = status.IpAddress,
+                                    ConnectionDate = status.Date,
+                                    Date = Clock.Now,
+                                });
                             }
                         }
                     }

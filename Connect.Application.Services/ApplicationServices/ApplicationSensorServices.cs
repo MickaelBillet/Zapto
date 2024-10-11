@@ -4,7 +4,6 @@ using Connect.Model;
 using Framework.Core;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
-using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -12,13 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal sealed class ApplicationSensorServices : IApplicationSensorServices, IEventHandler<MessageArduino>
-    {
+    internal sealed class ApplicationSensorServices : IApplicationSensorServices
+    { 
         private const double MARGIN = 0.5;
         private const int MEASURES_COUNT = 10;
 
@@ -42,12 +40,6 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-        public ValueTask Handle(MessageArduino? message, CancellationToken cancellationToken = default)
-        {
-            Log.Information("ApplicationSensorServices.Handle");
-            return ValueTask.CompletedTask;
-        }
-
         /// <summary>
         /// Send the sensor configuration to the arduino server
         /// </summary>
@@ -71,7 +63,7 @@ namespace Connect.Application.Services
             return res;
         }
 
-        public async Task ReadData(string data)
+        public async Task ReadData(SensorData? sensorData)
         {
             Log.Information("ApplicationSensorServices.ReadData");
 
@@ -89,7 +81,6 @@ namespace Connect.Application.Services
                         ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
                         IApplicationConnectedObjectServices applicationConnectedObjectServices = scope.ServiceProvider.GetRequiredService<IApplicationConnectedObjectServices>();
                         IApplicationRoomServices applicationRoomServices = scope.ServiceProvider.GetRequiredService<IApplicationRoomServices>();
-                        SensorData? sensorData = JsonSerializer.Deserialize<SensorData>(data);
                         if (sensorData != null)
                         {
                             ResultCode resultCode = ResultCode.ItemNotFound;
@@ -129,7 +120,7 @@ namespace Connect.Application.Services
             }
         }
 
-        public async Task ReadEvent(string data)
+        public async Task ReadEvent(SensorEvent? sensorEvent)
         {
             Log.Information("ApplicationSensorServices.ReadEvent");
 
@@ -142,7 +133,6 @@ namespace Connect.Application.Services
                         IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                         ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
                         ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
-                        SensorEvent? sensorEvent = JsonSerializer.Deserialize<SensorEvent>(data);
                         if (sensorEvent != null)
                         {
                             Sensor sensor = await supervisorSensor.GetSensor(sensorEvent.Type, sensorEvent.Channel);
