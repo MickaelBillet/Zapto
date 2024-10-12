@@ -1,5 +1,6 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
+using Framework.Core.Model;
 using Framework.Infrastructure.Services;
 using InMemoryEventBus.Contracts;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +38,7 @@ namespace Connect.WebServer.Services
             }
             else if (message.Header == ConnectConstants.ServerIotStatus)
             {
-                await this.PublishEvent<ServerIotStatus>(message.Payload);
+                await this.PublishEvent<SystemStatus>(message.Payload);
             }
         }
 

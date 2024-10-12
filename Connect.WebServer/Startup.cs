@@ -201,7 +201,11 @@ namespace Connect.WebServer
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseWebSockets();
+            WebSocketOptions webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(40),
+            };
+            app.UseWebSockets(webSocketOptions);
 
             // Patch path base with forwarded path
             app.Use(async (context, next) =>

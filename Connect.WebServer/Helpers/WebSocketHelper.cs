@@ -71,17 +71,15 @@ namespace Framework.Infrastructure.Services
                             Log.Error("Arduino connected");
                             await messageManager.OnDisconnected(webSocket);
                         }
-                    catch (Exception ex)
-                    {
-                        if (webSocket.State == WebSocketState.Open)
+                        catch (Exception ex)
                         {
-                            await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, ex.Message, CancellationToken.None);
+                            if (webSocket.State == WebSocketState.Open)
+                            {
+                                await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, ex.Message, CancellationToken.None);
+                            }
                         }
                     }
                 }
-
-                }
-
             }
         }
     }
