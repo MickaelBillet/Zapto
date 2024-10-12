@@ -8,14 +8,14 @@ using System.Text.Json;
 
 namespace Connect.WebServer.Services
 {
-    public class InMemoryEvent : IInMemoryEvent
+    public class EventBusProducerConnect : IEventBusProducerConnect
     {
         #region Properties
         private IServiceProvider ServiceProvider { get; }
         #endregion
 
         #region Constructor
-        public InMemoryEvent(IServiceProvider serviceProvider)
+        public EventBusProducerConnect(IServiceProvider serviceProvider)
         {
             this.ServiceProvider = serviceProvider;
         }

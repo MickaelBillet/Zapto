@@ -13,7 +13,7 @@ namespace Connect.WebServer.Services
             services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
             services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
-            services.AddScoped<IInMemoryEvent, InMemoryEvent>();
+            services.AddScoped<IEventBusProducerConnect, EventBusProducerConnect>();
         }
 
         public static void AddInMemoryEventServices(this IServiceCollection services)

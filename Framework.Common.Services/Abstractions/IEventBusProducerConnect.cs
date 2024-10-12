@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services
 {
-    public interface IInMemoryEvent
+    public interface IEventBusProducerConnect
     {
         Task Publish(MessageArduino message);
     }

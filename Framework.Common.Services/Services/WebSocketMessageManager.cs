@@ -11,13 +11,13 @@ namespace Framework.Infrastructure.Services
     public class WebSocketMessageManager : WebSocketHandler, IWSMessageManager
     {
         #region Properties
-		private IInMemoryEvent InMemoryEvent { get; }
+		private IEventBusProducerConnect EventBusProducer { get; }
         #endregion
 
         #region Constructor
         public WebSocketMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-			this.InMemoryEvent = serviceProvider.GetRequiredService<IInMemoryEvent>();
+			this.EventBusProducer = serviceProvider.GetRequiredService<IEventBusProducerConnect>();
 		}
         #endregion
 
@@ -42,15 +42,12 @@ namespace Framework.Infrastructure.Services
 			{
                 Log.Information("WebSocketMessageManager.ReceiveAsync");
 
-                string received = Encoding.ASCII.GetString(buffer, 0, result.Count).TrimEnd('\0');			
-				if (string.IsNullOrEmpty(received) == false)
+				if (result.Count > 0)
 				{
-					Log.Information(received);
-
-					MessageArduino message = MessageArduino.Deserialize(received);
+					MessageArduino message = MessageArduino.Deserialize(buffer, result.Count);
 					if (message != null)
 					{
-                        await this.InMemoryEvent.Publish(message);                        
+                        await this.EventBusProducer.Publish(message);                        
                     }
 				}
 			}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Framework.Core.Base
 {
@@ -19,14 +20,16 @@ namespace Framework.Core.Base
 		#endregion
 
 		#region Methods
-		public static MessageArduino Deserialize(string msg)
+		public static MessageArduino Deserialize(byte[] buffer, int count)
         {
             string[] delimiter = { "Hdr:", "-Pld:" };
 
+            string received = Encoding.ASCII.GetString(buffer, 0, count).TrimEnd('\0');
+
             MessageArduino messageArduino = new MessageArduino()
             {
-                Header = short.Parse(msg.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[0]),
-                Payload = msg.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[1],
+                Header = short.Parse(received.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[0]),
+                Payload = received.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[1],
             };
 
             return messageArduino;
