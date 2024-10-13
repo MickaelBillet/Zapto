@@ -76,7 +76,7 @@ namespace AirZapto.WebServer.Services
 				{
 					Log.Information(received);
 
-					MessageArduino message = MessageArduino.Deserialize(received);
+					MessageArduino message = MessageArduino.Deserialize(buffer, result.Count);
 					if (message != null)
 					{
 						if ((message.Header == SensorMode.Measure) || (message.Header == SensorMode.Startup))
