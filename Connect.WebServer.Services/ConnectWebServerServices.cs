@@ -13,7 +13,6 @@ namespace Connect.WebServer.Services
             services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
             services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
-            services.AddScoped<IEventBusProducerConnect, EventBusProducerConnect>();
         }
 
         public static void AddInMemoryEventServices(this IServiceCollection services)
@@ -22,6 +21,7 @@ namespace Connect.WebServer.Services
             services.AddInMemoryEvent<SensorData, EventHandlerSensorData>();
             services.AddInMemoryEvent<SystemStatus, EventHandlerServerStatus>();
             services.AddInMemoryEvent<SensorEvent, EventHandlerSensorEvent>();
+            services.AddTransient<IEventBusProducerConnect, EventBusProducerConnect>();
         }
     }
 }

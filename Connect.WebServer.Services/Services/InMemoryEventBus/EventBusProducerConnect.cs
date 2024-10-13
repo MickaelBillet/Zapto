@@ -44,10 +44,9 @@ namespace Connect.WebServer.Services
 
         private async Task PublishEvent<T>(string payload)
         {
-            Func<Task>? publishEventsFn = null;
             T? item = JsonSerializer.Deserialize<T>(payload);
             IProducer<T> producer = this.ServiceProvider.GetRequiredService<IProducer<T>>();
-            publishEventsFn = async () =>
+            Func<Task>? publishEventsFn = async () =>
             {
                 var @event = new Event<T>(item);
                 await producer.Publish(@event).ConfigureAwait(false);
