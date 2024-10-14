@@ -32,21 +32,21 @@ internal sealed class InMemoryEventBusConsumer<T> : IConsumer<T>
 
         // factory new scope so we can use it as execution context
         await using var scope = _scopeFactory.CreateAsyncScope();
-
-        // retrieve scoped dependencies
-        var handlers = scope.ServiceProvider.GetServices<IEventHandler<T>>().ToList();
-        var contextAccessor = scope.ServiceProvider.GetRequiredService<IEventContextAccessor<T>>();
-
-        if (handlers.FirstOrDefault() is null)
         {
-            _logger.LogDebug("No handlers defined for event of {type}", typeof(T).Name);
-            return;
-        }
+            // retrieve scoped dependencies
+            var handlers = scope.ServiceProvider.GetServices<IEventHandler<T>>().ToList();
+            var contextAccessor = scope.ServiceProvider.GetRequiredService<IEventContextAccessor<T>>();
+            if (handlers.FirstOrDefault() is null)
+            {
+                _logger.LogDebug("No handlers defined for event of {type}", typeof(T).Name);
+                return;
+            }
 
-        Task.Run(
-            async () => await StartProcessing(handlers, contextAccessor).ConfigureAwait(false),
-            _stoppingToken!.Token
-        ).ConfigureAwait(false);
+            Task.Run(
+                async () => await StartProcessing(handlers, contextAccessor).ConfigureAwait(false),
+                _stoppingToken!.Token
+            ).ConfigureAwait(false);
+        }
     }
 
     private void EnsureStoppingTokenIsCreated(CancellationToken token = default)
