@@ -149,7 +149,7 @@ namespace Connect.Mobile.ViewModel
                 {
                     Notification notification = (item as Notification).Clone<Notification>();
 
-                    if (await this.ApplicationNotificationServices.AddUpdateNotificationAsync(this.Room, notification) == false)
+                    if (await this.ApplicationNotificationServices.AddUpdateNotification(this.Room, notification) == false)
                     {
                         this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                     }

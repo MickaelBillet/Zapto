@@ -110,7 +110,7 @@ namespace Framework.Infrastructure.Services
         /// <param name="cancellationToken"></param>
         /// <param name="attempt"></param>
         /// <returns></returns>
-        public async Task<bool?> HeadAsync<T>(string url, string id, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<bool?> HeadAsync<T>(string url, string? id, CancellationToken cancellationToken = default, int attempt = 1)
         {
             bool? res = null;
 
@@ -172,7 +172,7 @@ namespace Framework.Infrastructure.Services
         /// <param name="url">URL.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async Task<T> GetAsync<T>(string url, string id, JsonSerializerOptions options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
+		public async Task<T> GetAsync<T>(string url, string? id, JsonSerializerOptions? options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
         {
             T item = default;
 
@@ -308,7 +308,7 @@ namespace Framework.Infrastructure.Services
         /// <param name="t">T.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public async Task<bool?> PutAsync<T>(string url, T t, string id, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<bool?> PutAsync<T>(string url, T t, string? id, CancellationToken cancellationToken = default, int attempt = 1)
         {
             bool? res = null;
 
@@ -384,7 +384,7 @@ namespace Framework.Infrastructure.Services
         /// <param name="url">URL.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async Task<bool?> DeleteAsync<T>(string url, string id, CancellationToken cancellationToken = default, int attempt = 1)
+		public async Task<bool?> DeleteAsync<T>(string url, string? id, CancellationToken cancellationToken = default, int attempt = 1)
         {
             bool? res = null;
 
