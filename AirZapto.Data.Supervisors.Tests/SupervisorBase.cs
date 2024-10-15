@@ -1,8 +1,8 @@
 ﻿using AirZapto.Data.Database;
 using AirZapto.Data.Services;
 using AirZapto.WebServer.Services;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
+using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

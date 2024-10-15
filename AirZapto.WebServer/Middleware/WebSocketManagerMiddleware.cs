@@ -65,7 +65,10 @@ namespace AirZapto.WebServices.Middleware
             catch(Exception ex)
 			{
                 Log.Error(ex.Message);
-                await this.WebSocketHandler.HandleErrorAsync(socket);
+                if (socket != null)
+                {
+                    await this.WebSocketHandler.HandleErrorAsync(socket);
+                }
             }
         }
 

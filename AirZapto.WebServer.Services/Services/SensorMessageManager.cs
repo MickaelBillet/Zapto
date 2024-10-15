@@ -36,12 +36,13 @@ namespace AirZapto.WebServer.Services
 				{
                     await this.SupervisorSensor.DeleteSensorAsync(idSocket);
                 }
-            }
 
-            return await base.OnDisconnected(socket);
+                return await base.OnDisconnected(socket);
+            }
+			return false;
         }
 
-        public override async Task HandleErrorAsync(WebSocket socket)
+        public override async Task HandleErrorAsync(WebSocket? socket)
 		{
 			if (socket != null)
 			{
