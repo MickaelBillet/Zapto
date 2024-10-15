@@ -212,7 +212,7 @@ namespace Connect.WebServer
 			{
                 if (context.Request.Headers != null)
                 {
-                    if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws-connect"))
+                    if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws"))
                     {
                         //await WebSocketHelper.Echo(context);
                         await WebSocketHelper.Process(app.ApplicationServices, context);

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -29,7 +29,6 @@
     <ProjectReference Include="..\Connect.Data.Services\Connect.Data.Services.csproj" />
     <ProjectReference Include="..\Connect.Domain\Connect.Domain.csproj" />
     <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
-    <ProjectReference Include="..\Framework.Core.Utils\Framework.Core.Utils.csproj" />
   </ItemGroup>
 
 </Project>
