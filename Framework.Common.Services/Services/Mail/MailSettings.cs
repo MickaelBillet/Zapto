@@ -1,4 +1,7 @@
-﻿namespace Framework.Infrastructure.Services
+﻿
+#nullable disable
+
+namespace Framework.Infrastructure.Services
 {
 	public class MailSettings
 	{

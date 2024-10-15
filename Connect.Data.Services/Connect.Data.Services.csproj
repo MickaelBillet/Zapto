@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>annotations</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Connect.Domain\Connect.Domain.csproj" />
-    <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
   </ItemGroup>
 
 </Project>

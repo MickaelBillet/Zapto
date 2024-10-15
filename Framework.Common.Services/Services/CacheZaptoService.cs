@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace Framework.Common.Services
 {
     public sealed class CacheZaptoService<T> : ICacheZaptoService<T> where T : class

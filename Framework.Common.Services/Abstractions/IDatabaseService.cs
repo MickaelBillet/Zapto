@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Framework.Data.Abstractions
+namespace Framework.Infrastructure.Abstractions
 {
     public interface IDatabaseService : IDisposable
 	{

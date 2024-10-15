@@ -4,6 +4,6 @@ namespace Framework.Infrastructure.Services
 {
     public interface IHttpClientService
 	{
-		public HttpClient GetClient(string name);
+		public HttpClient? GetClient(string name);
 	}
 }

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Connect.Data.Services\Connect.Data.Services.csproj" />
+    <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
   </ItemGroup>
 
 </Project>

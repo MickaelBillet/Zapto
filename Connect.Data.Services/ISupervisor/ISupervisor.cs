@@ -1,4 +1,6 @@
-﻿namespace Connect.Data
+﻿using System.Threading.Tasks;
+
+namespace Connect.Data
 {
     public interface ISupervisor
     {

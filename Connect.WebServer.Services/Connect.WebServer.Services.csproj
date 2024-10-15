@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Connect.Data.Repositories\Connect.Data.Repositories.csproj" />
     <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
     <ProjectReference Include="..\Framework.Core.Utils\Framework.Core.Utils.csproj" />
+    <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
   </ItemGroup>
 
 </Project>

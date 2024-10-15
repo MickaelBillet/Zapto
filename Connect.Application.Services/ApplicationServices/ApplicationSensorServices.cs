@@ -48,7 +48,7 @@ namespace Connect.Application.Services
         {
             int? res = 0;
             string? data = sensor.SerializeSensorConfiguration();
-            if (this.WSMessageManager != null)
+            if ((this.WSMessageManager != null) && (string.IsNullOrEmpty(data) == false))
             {
                 res = await this.WSMessageManager.SendMessageToAllAsync(data);
                 if (res > 0)

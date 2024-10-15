@@ -3,6 +3,7 @@ using Azure.Security.KeyVault.Secrets;
 using Framework.Common.Services;
 using Microsoft.Extensions.Configuration;
 using System;
+#nullable disable
 
 namespace Framework.Infrastructure.Services
 {

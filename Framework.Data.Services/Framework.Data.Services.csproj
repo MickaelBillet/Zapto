@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Framework.Core.Base;
 using Framework.Core.Domain;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Connect.Data
 {

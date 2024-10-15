@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+#nullable disable
 
 namespace Framework.Infrastructure.Services
 {

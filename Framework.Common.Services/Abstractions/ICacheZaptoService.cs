@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Framework.Infrastructure.Services
 {
     public interface ICacheZaptoService<T> where T : class

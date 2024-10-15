@@ -7,7 +7,7 @@ namespace Framework.Infrastructure.Services
     {
         public string GetSecret(string name)
         {
-            string result = null;
+            string? result = null;
 
             if ((string.IsNullOrEmpty(name) == false) && (Environment.GetEnvironmentVariable(name) != null))
             {

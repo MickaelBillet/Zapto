@@ -85,9 +85,11 @@ namespace Connect.Application.Services
 				}
 
 				string? json = plug.SerializePlugCommand(command);
-				await this.WSMessageManager.SendMessageToAllAsync(json);
-
-				Log.Information("SendCommandAsync - plug Id : " + plug.Id);
+				if (string.IsNullOrEmpty(json) == false)
+				{
+					await this.WSMessageManager.SendMessageToAllAsync(json);
+					Log.Information("SendCommandAsync - plug Id : " + plug.Id);
+				}
 			}
 			return res;
 		}

@@ -1,4 +1,5 @@
 ﻿using Framework.Data.Abstractions;
+using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
