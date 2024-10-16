@@ -14,7 +14,7 @@ namespace Connect.WebServer.Services
             services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
             services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
-            services.AddScoped<ISendMessageToArduinoService>();
+            services.AddScoped<ISendMessageToArduinoService, SendMessageToArduinoService>();
         }
 
         public static void AddInMemoryEventServices(this IServiceCollection services)
