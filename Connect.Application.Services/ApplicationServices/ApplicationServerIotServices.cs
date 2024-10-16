@@ -13,7 +13,6 @@ namespace Connect.Application.Services
     internal sealed class ApplicationServerIotServices : IApplicationServerIotServices
     {
         #region Services
-        private IWSMessageManager? WSMessageManager { get; }
         private IServiceScopeFactory? ServiceScopeFactory { get; }
         private HostedServiceHealthCheck? HostedServiceHealthCheck { get; }
         #endregion
@@ -22,7 +21,6 @@ namespace Connect.Application.Services
         public ApplicationServerIotServices(IServiceProvider serviceProvider, HostedServiceHealthCheck hostedServiceHealthCheck)
 		{
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
-            this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
             this.HostedServiceHealthCheck = hostedServiceHealthCheck;
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Data;
 using Connect.Model;
+using Framework.Common.Services;
 using Framework.Core;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
@@ -24,8 +25,8 @@ namespace Connect.Application.Services
         private ISensorService? SensorService { get; }
         private ISignalRConnectService? SignalRConnectService { get; }
         private IAlertService? AlertService { get; }
-        private IWSMessageManager? WSMessageManager { get; }
         private IServiceScopeFactory? ServiceScopeFactory { get; }
+        private ISendMessageToArduinoService? SendMessageToArduino { get; }
         #endregion
 
         #region Constructor
@@ -35,7 +36,7 @@ namespace Connect.Application.Services
             this.SensorService = serviceProvider.GetService<ISensorService>();
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
             this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
-            this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
+            this.SendMessageToArduino = serviceProvider.GetService<ISendMessageToArduinoService>();
         }
         #endregion
 
@@ -48,9 +49,9 @@ namespace Connect.Application.Services
         {
             int? res = 0;
             string? data = sensor.SerializeSensorConfiguration();
-            if ((this.WSMessageManager != null) && (string.IsNullOrEmpty(data) == false))
+            if ((this.SendMessageToArduino != null) && (string.IsNullOrEmpty(data) == false))
             {
-                res = await this.WSMessageManager.SendMessageToAllAsync(data);
+                res = await this.SendMessageToArduino.Send(data);
                 if (res > 0)
                 {
                     Log.Warning("Notify Sensor : " + sensor.IpAddress);

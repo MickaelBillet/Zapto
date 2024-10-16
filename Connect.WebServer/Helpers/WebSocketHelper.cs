@@ -43,12 +43,10 @@ namespace Framework.Infrastructure.Services
         public static async Task Process(IServiceProvider serviceProvider, HttpContext context)
         {
             using (IServiceScope scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-               
-                    IWSMessageManager messageManager = scope.ServiceProvider.GetRequiredService<IWSMessageManager>();
+            {            
+                IWSMessageManager messageManager = scope.ServiceProvider.GetRequiredService<IWSMessageManager>();
                 if (context.WebSockets.IsWebSocketRequest == true)
                 {
-
                     using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
                     {
                         try

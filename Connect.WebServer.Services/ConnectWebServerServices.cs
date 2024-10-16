@@ -1,4 +1,5 @@
 ﻿using Connect.Model;
+using Framework.Common.Services;
 using Framework.Core.InMemoryEventBus.Registration;
 using Framework.Core.Model;
 using Framework.Infrastructure.Services;
@@ -13,6 +14,7 @@ namespace Connect.WebServer.Services
             services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
             services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
+            services.AddScoped<ISendMessageToArduinoService>();
         }
 
         public static void AddInMemoryEventServices(this IServiceCollection services)

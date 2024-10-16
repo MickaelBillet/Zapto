@@ -1,6 +1,7 @@
 ﻿using Connect.Application.Infrastructure;
 using Connect.Data;
 using Connect.Model;
+using Framework.Common.Services;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,7 @@ namespace Connect.Application.Services
         private IPlugService? PlugService { get; }
 		private ISignalRConnectService? SignalRConnectService { get; }
         private IServiceScopeFactory? ServiceScopeFactory { get; }
-        private IWSMessageManager? WSMessageManager { get; }
+		private ISendMessageToArduinoService? SendMessageToArduino { get; }
         #endregion
 
         #region Constructor
@@ -26,8 +27,8 @@ namespace Connect.Application.Services
 			this.PlugService = serviceProvider.GetService<IPlugService>();
 			this.SignalRConnectService = serviceProvider.GetService<ISignalRConnectService>();
             this.AlertService = AlertServiceFactory.CreateAlerteService(serviceProvider, ServiceAlertType.Mail);
+			this.SendMessageToArduino = serviceProvider.GetService<ISendMessageToArduinoService>();
 			this.ServiceScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
-			this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
         }
         #endregion
 
@@ -73,7 +74,7 @@ namespace Connect.Application.Services
 			string? command = null;
 			int res = -1;
 
-			if (this.WSMessageManager != null)
+			if (this.SendMessageToArduino != null)
 			{
 				if ((plug.Type & DeviceType.Outlet) == DeviceType.Outlet) //Prise
 				{
@@ -87,7 +88,7 @@ namespace Connect.Application.Services
 				string? json = plug.SerializePlugCommand(command);
 				if (string.IsNullOrEmpty(json) == false)
 				{
-					await this.WSMessageManager.SendMessageToAllAsync(json);
+					await this.SendMessageToArduino.Send(json);
 					Log.Information("SendCommandAsync - plug Id : " + plug.Id);
 				}
 			}
