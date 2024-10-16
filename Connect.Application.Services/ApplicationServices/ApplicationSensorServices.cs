@@ -51,7 +51,13 @@ namespace Connect.Application.Services
             string? data = sensor.SerializeSensorConfiguration();
             if ((this.SendMessageToArduino != null) && (string.IsNullOrEmpty(data) == false))
             {
-                res = await this.SendMessageToArduino.Send(data);
+                MessageArduino message = new MessageArduino()
+                {
+                    Header = ConnectConstants.SensorConfig,
+                    Payload = data
+                };
+
+                res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(message));
                 if (res > 0)
                 {
                     Log.Warning("Notify Sensor : " + sensor.IpAddress);

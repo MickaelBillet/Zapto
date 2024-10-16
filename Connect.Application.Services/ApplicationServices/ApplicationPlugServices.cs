@@ -2,6 +2,7 @@
 using Connect.Data;
 using Connect.Model;
 using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,8 +89,15 @@ namespace Connect.Application.Services
 				string? json = plug.SerializePlugCommand(command);
 				if (string.IsNullOrEmpty(json) == false)
 				{
-					await this.SendMessageToArduino.Send(json);
+					MessageArduino message = new MessageArduino()
+					{
+						Header = ConnectConstants.PlugCommand,
+						Payload = json
+					};
+
+					res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(message));
 					Log.Information("SendCommandAsync - plug Id : " + plug.Id);
+					Log.Information("SendCommandAsync - res : " + res);
 				}
 			}
 			return res;

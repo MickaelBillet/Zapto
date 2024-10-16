@@ -15,6 +15,8 @@
         public const byte SensorEvent = 3;
         public const byte ConnectionData = 4;
         public const byte ServerIotStatus = 5;
+        public const byte PlugCommand = 6;
+        public const byte SensorConfig = 7;
 
 		//URL of REST service
 		public const string RestUrlLocations = @"connect/locations/";
