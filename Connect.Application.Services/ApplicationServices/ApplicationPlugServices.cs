@@ -89,13 +89,12 @@ namespace Connect.Application.Services
 				string? json = plug.SerializePlugCommand(command);
 				if (string.IsNullOrEmpty(json) == false)
 				{
-					MessageArduino message = new MessageArduino()
-					{
-						Header = ConnectConstants.PlugCommand,
-						Payload = json
-					};
+					res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(new MessageArduino()
+                    {
+                        Header = ConnectConstants.PlugCommand,
+                        Payload = json
+                    }));
 
-					res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(message));
 					Log.Information("SendCommandAsync - plug Id : " + plug.Id);
 					Log.Information("SendCommandAsync - res : " + res);
 				}
