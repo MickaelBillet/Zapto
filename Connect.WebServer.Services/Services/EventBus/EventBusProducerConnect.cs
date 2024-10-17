@@ -26,7 +26,7 @@ namespace Connect.WebServer.Services
         {
             if (message.Header == ConnectConstants.PlugStatus)
             {
-                await this.PublishEvent<PlugStatus>(message.Payload);
+                await this.PublishEvent<CommandStatus>(message.Payload);
             }
             else if (message.Header == ConnectConstants.SensorData)
             {
