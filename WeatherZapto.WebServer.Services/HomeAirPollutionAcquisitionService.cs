@@ -1,5 +1,5 @@
 ﻿using Framework.Core.Base;
-using Framework.Data.Abstractions;
+using Framework.Infrastructure.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
