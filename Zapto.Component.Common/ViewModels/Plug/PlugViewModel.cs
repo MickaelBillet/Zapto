@@ -37,7 +37,7 @@ namespace Zapto.Component.Common.ViewModels
             try
             {
                 res = await this.SignalRService.StartAsync(model.LocationId,
-					(plugStatus) =>
+					async (plugStatus) =>
 					{
 						if (model?.Id == plugStatus.PlugId)
 						{
@@ -45,6 +45,7 @@ namespace Zapto.Component.Common.ViewModels
 							model.WorkingDuration = plugStatus.WorkingDuration;
 							model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
 							this.OnRefresh(new EventArgs());
+							await Task.CompletedTask;
 						}
 					},
 					null,

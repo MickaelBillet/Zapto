@@ -58,7 +58,7 @@ namespace Zapto.Component.Common.ViewModels
                 res = await this.SignalRService.StartAsync(model.LocationId,
                                                                 null,
                                                                 null,
-                                                                (sensorStatus) =>
+                                                                async (sensorStatus) =>
                                                                 {
                                                                     if (sensorStatus.SensorId == model.Id)
                                                                     {
@@ -66,6 +66,7 @@ namespace Zapto.Component.Common.ViewModels
                                                                         {
                                                                             model.HasLeak = (sensorStatus.LeakDetected != null) ? (int)sensorStatus.LeakDetected : 0;
                                                                             this.OnRefresh(new EventArgs());
+                                                                            await Task.CompletedTask;
                                                                         }
                                                                     }
                                                                 },

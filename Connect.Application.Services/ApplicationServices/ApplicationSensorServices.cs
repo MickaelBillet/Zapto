@@ -11,7 +11,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Connect.Application.Services
@@ -315,6 +314,11 @@ namespace Connect.Application.Services
             }
 
             remove.ForEach(async item => await supervisorOperatingData.DeleteOperationData(item, roomId));
+        }
+
+        public async Task<bool?> Leak(string? sensorId, int leakStatus)
+        {
+            return (this.SensorService != null) ? await this.SensorService.Leak(sensorId, leakStatus.ToString()) : null;
         }
         #endregion
     }

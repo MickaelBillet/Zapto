@@ -35,7 +35,7 @@ namespace Zapto.Component.Common.ViewModels
 
 				if ((model.Id != null) && (model.Location != null))
 				{
-					models = (await this.ApplicationRoomServices.GetRoomsAsync(model.Id))?.Select((room) => new RoomModel()
+					models = (await this.ApplicationRoomServices.GetRooms(model.Id))?.Select((room) => new RoomModel()
 					{
 						Name = this.Localizer[room.Name],
 						LocationName = model.Location,

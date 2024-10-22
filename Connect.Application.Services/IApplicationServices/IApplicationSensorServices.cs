@@ -10,5 +10,6 @@ namespace Connect.Application
 		Task NotifySensorLeak(string locationId, Room room);
 		Task ReadData(SensorData? sensorData);
 		Task ReadEvent(SensorEvent? sensorEvent);
+        Task<bool?> Leak(string? sensorId, int leakStatus);
     }
 }

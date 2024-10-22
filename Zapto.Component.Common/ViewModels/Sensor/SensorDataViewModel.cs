@@ -42,11 +42,12 @@ namespace Zapto.Component.Common.ViewModels
                 res = await this.SignalRService.StartAsync(model.LocationId,
                         null,
                         null,
-                        (sensorStatus) =>
+                        async (sensorStatus) =>
                         {
                             if (sensorStatus.SensorId == model.Id)
                             {
                                 this.OnRefresh(new EventArgs());
+                                await Task.CompletedTask;
                             }
                         },
                         null);

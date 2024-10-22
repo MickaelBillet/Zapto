@@ -47,13 +47,14 @@ namespace Zapto.Component.Common.ViewModels
             {
                 res = await this.SignalRService.StartAsync(model.LocationId,
 				null,
-				(roomStatus) =>
+				async (roomStatus) =>
 				{
 					if (model?.Id == roomStatus.RoomId)
 					{
 						model.Humidity = (roomStatus.Humidity != null) ? roomStatus.Humidity.Value.ToString("00") : null;
 						model.Temperature = (roomStatus.Temperature != null) ? roomStatus.Temperature.Value.ToString("00.0") : null;
 						this.OnRefresh(new EventArgs());
+						await Task.CompletedTask;
 					}
 				},
 				null,

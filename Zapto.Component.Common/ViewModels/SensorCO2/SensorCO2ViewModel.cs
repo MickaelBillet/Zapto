@@ -36,7 +36,7 @@ namespace Zapto.Component.Common.ViewModels
 
                 if (this.ApplicationSensorServices != null)
                 {
-                    model = (await this.ApplicationSensorServices.GetSensorsAsync())?.Select((sensor) => new SensorCO2Model()
+                    model = (await this.ApplicationSensorServices.GetSensors())?.Select((sensor) => new SensorCO2Model()
                     {
                         Id = sensor.Id,
                         CO2 = sensor.CO2,
