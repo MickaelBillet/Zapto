@@ -1,20 +1,25 @@
-﻿namespace Connect.Model
+﻿using System.Text.Json.Serialization;
+
+namespace Connect.Model
 {
     public struct SensorStatus
     {
         #region Property
         public static string Name = "SensorStatus";
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public double? Temperature
         {
             get; set;
         }
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public double? Pressure
         {
             get; set;
         }
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         public double? Humidity
         {
             get; set;
