@@ -15,18 +15,21 @@ namespace Connect.Model
             get; set;
         }
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         [JsonPropertyName("Temp")]
         public float Temperature
         {
             get; set;
         }
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         [JsonPropertyName("Pres")]
         public float Pressure
         {
             get; set;
         }
 
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
         [JsonPropertyName("Humi")]
         public float Humidity
         {
