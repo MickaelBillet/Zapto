@@ -19,6 +19,7 @@ namespace Connect.Data.Mappers
                 Pressure = model.Pressure,
                 Temperature = model.Temperature,
                 Type = model.Type,
+                StatusSensors = model.StatusSensors
             };
             return entity;
         }
@@ -36,6 +37,7 @@ namespace Connect.Data.Mappers
                 Type = entity.Type,
                 Temperature = entity.Temperature,
                 Description = entity.Description,
+                StatusSensors = entity.StatusSensors
             };
             return model;
         }
