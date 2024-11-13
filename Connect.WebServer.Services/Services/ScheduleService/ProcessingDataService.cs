@@ -74,16 +74,19 @@ namespace Connect.WebServer.Services
 
             foreach (Sensor sensor in sensors)
             {
-                if (sensor.Date + new TimeSpan(0, period, 0) < Clock.Now)
+                if ((sensor.Type & DeviceType.Sensor_Water_Leak) != DeviceType.Sensor_Water_Leak)
                 {
-                    sensor.IsRunning = RunningStatus.UnHealthy;
-                }
-                else
-                {
-                    sensor.IsRunning = RunningStatus.Healthy;
-                }
+                    if (sensor.Date + new TimeSpan(0, period, 0) < Clock.Now)
+                    {
+                        sensor.IsRunning = RunningStatus.UnHealthy;
+                    }
+                    else
+                    {
+                        sensor.IsRunning = RunningStatus.Healthy;
+                    }
 
-                await supervisorSensor.UpdateSensor(sensor);
+                    await supervisorSensor.UpdateSensor(sensor);
+                }
             }
         }
 
