@@ -1,4 +1,5 @@
-﻿using Connect.Model;
+﻿using Connect.Data.Mappers;
+using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
@@ -104,6 +105,8 @@ namespace Connect.Data.Supervisors
                 room.NotificationsList = (await this.CacheNotificationService.GetAll((notification) => notification.RoomId == room.Id)).ToList();
             }
             room.SetStatusSensors();
+
+            await this.CacheRoomService?.Set(room.Id, room);
         }
         #endregion
     }
