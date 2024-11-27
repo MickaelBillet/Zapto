@@ -58,7 +58,7 @@ namespace Connect.Application.Services
 
                 if (res > 0)
                 {
-                    Log.Warning("Notify Sensor : " + sensor.IpAddress);
+                    Log.Information("Notify Sensor : " + sensor.IpAddress);
                 }
                 else
                 {

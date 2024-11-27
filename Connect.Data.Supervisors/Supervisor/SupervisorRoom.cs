@@ -90,8 +90,9 @@ namespace Connect.Data.Supervisors
             return room;
         }
 
-        private async Task SetRoomDetails(Room room)
+        private async Task<ResultCode> SetRoomDetails(Room room)
         {
+            ResultCode resultCode = ResultCode.Ok;
             IEnumerable<SensorEntity> sensorEntities = await this.SensorRepository.GetCollectionAsync((sensor) => sensor.RoomId == room.Id);
             if (sensorEntities != null)
             {
@@ -117,6 +118,10 @@ namespace Connect.Data.Supervisors
             }
 
             room.SetStatusSensors();
+
+            resultCode = (await this.RoomRepository.UpdateAsync(RoomMapper.Map(room)) > 0) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
+
+            return resultCode;
         }
 
         private async Task SetConnectedObjectDetails(ConnectedObject connectedObject)

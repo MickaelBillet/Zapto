@@ -53,7 +53,7 @@ namespace Framework.Infrastructure.Services
                         {
                             if (messageManager.OnConnected(webSocket))
                             {
-                                Log.Error("Arduino connected");
+                                Log.Information("Arduino connected");
                             }
 
                             var buffer = new byte[1024 * 4];
@@ -66,7 +66,7 @@ namespace Framework.Infrastructure.Services
                                 }
                             }
 
-                            Log.Error("Arduino connected");
+                            Log.Information("Arduino connected");
                             await messageManager.OnDisconnected(webSocket);
                         }
                         catch (Exception ex)
