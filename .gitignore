@@ -158,3 +158,5 @@
 /Framework.Common.Services/bin/Debug/net8.0
 /Framework.Core.Utils/bin/Debug/net8.0
 /Framework.Core.Utils/obj
+/Zapto.Web.Dashboard/bin/Debug/net9.0
+/Zapto.Web.Test/bin/Debug/net9.0
