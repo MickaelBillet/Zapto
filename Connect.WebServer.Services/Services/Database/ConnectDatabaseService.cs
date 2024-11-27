@@ -211,7 +211,7 @@ namespace Connect.WebServer.Services
                 Name = ConnectConstants.Type_F007th,
                 Channel = "6",
                 WorkingDuration = 0,
-                Parameter = this.Configuration["SensorPeriod"] ?? "120000",
+                Parameter = this.Configuration!["SensorPeriod"] ?? "120000",
                 OffSetHumidity = -10,
                 OffSetTemperature = 0,
                 IpAddress = ConnectConstants.ArduinoServer,
