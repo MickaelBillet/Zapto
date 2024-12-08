@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Framework.Data.Services\Framework.Data.Services.csproj" />
     <ProjectReference Include="..\WeatherZapto.Domain\WeatherZapto.Domain.csproj" />
   </ItemGroup>

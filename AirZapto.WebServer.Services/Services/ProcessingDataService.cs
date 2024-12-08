@@ -48,7 +48,7 @@ namespace AirZapto.WebServer.Services
 
         private async Task ProcessSensorStatus(IServiceScope scope)
         {
-            ISupervisorCacheSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
+            ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             (ResultCode result, IEnumerable<Sensor>? sensors) result = await supervisor.GetSensorsAsync();
 
             //30 minutes

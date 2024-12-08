@@ -7,6 +7,6 @@ namespace Framework.Infrastructure.Services
 	{
         Task<bool> GetTokenAsync(string url, string username, string password, string client_id, string client_secret);
         Task<bool> RefreshAccessToken();
-        Token Token { get; }
+        Token? Token { get; }
     }
 }

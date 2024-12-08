@@ -3,9 +3,9 @@ using Connect.Model;
 using Framework.Core.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Connect.WebApi.Controllers
@@ -15,83 +15,20 @@ namespace Connect.WebApi.Controllers
     public class ConditionsController : Controller
     {
         #region Property
-
         ISupervisorCondition SupervisorCondition { get; }
-
         #endregion
 
         #region Constructor
-
-        public ConditionsController(IServiceProvider serviceProvider)
-        {
-            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorCondition>();
+        public ConditionsController(IServiceProvider serviceProvider, IConfiguration configuration)
+        {            
+            this.SupervisorCondition = serviceProvider.GetRequiredService<ISupervisorFactoryCondition>().CreateSupervisor(int.Parse(configuration["Cache"]!));
         }
-
         #endregion
 
         #region Method
 
-        // GET connect/conditions
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<Condition>? conditions;
-
-            try
-            {
-                conditions = await this.SupervisorCondition.GetConditions();
-
-                if (conditions != null)
-                {
-                    return StatusCode(200, conditions);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // GET connect/conditions/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            Condition? condition;
-
-            try
-            {
-                condition = await this.SupervisorCondition.GetCondition(id);
-
-                if (condition != null)
-                {
-                    return StatusCode(200, condition);
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new CustomErrorResponse
-                {
-                    Message = ex.Message,
-                    Description = string.Empty,
-                    Code = 500,
-                });
-            }
-        }
-
-        // POST connect/conditions
+        //ConnectConstants.RestUrlConditions
+        //POST connect/conditions
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Condition condition)
         {
@@ -134,7 +71,8 @@ namespace Connect.WebApi.Controllers
             }
         }
 
-        // PUT connect/conditions/5
+        //ConnectConstants.RestUrlConditionsId
+        //PUT connect/conditions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]Condition condition)
         {
@@ -197,6 +135,7 @@ namespace Connect.WebApi.Controllers
             }
         }
 
+        //ConnectConstants.RestUrlConditionsId
         // DELETE connect/conditions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(String id)

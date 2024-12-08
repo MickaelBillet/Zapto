@@ -1,10 +1,11 @@
 ﻿using Connect.Data;
 using Connect.Model;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class RecordingDataService : CronScheduledService
     {
@@ -35,9 +36,10 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorOperatingData>();
-                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorRoom>();
-                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorConnectedObject>();
+                IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                ISupervisorOperatingData supervisorOperatingData = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryOperatingData>().CreateSupervisor();
+                ISupervisorRoom supervisorRoom = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
+                ISupervisorConnectedObject supervisorConnectedObject = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryConnectedObject>().CreateSupervisor(byte.Parse(configuration["Cache"]!));
 
                 await AddOperatingDataForRoom(supervisorRoom, supervisorOperatingData);
                 await AddOperatingDataForConnectedObject(supervisorConnectedObject, supervisorOperatingData);

@@ -36,10 +36,12 @@
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <Debugger>Xamarin</Debugger>
     <MandroidI18n />
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+    <AndroidLinkTool>r8</AndroidLinkTool>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -88,22 +90,22 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="akavache">
-      <Version>9.1.20</Version>
+      <Version>10.1.6</Version>
     </PackageReference>
     <PackageReference Include="akavache.core">
-      <Version>9.1.20</Version>
+      <Version>10.1.6</Version>
     </PackageReference>
     <PackageReference Include="akavache.sqlite3">
-      <Version>9.1.20</Version>
+      <Version>10.1.6</Version>
     </PackageReference>
     <PackageReference Include="Plugin.PushNotification">
       <Version>3.6.23</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp">
-      <Version>2.88.7</Version>
+      <Version>2.88.8</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
-      <Version>2.88.7</Version>
+      <Version>2.88.8</Version>
     </PackageReference>
     <PackageReference Include="System.Security.Permissions">
       <Version>8.0.0</Version>
@@ -134,7 +136,7 @@
     <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client">
-      <Version>8.0.1</Version>
+      <Version>8.0.10</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.7.7</Version>
@@ -515,13 +517,13 @@
       <Project>{5c03e8e8-7ff5-4f91-94e6-ec39864b1a64}</Project>
       <Name>Connect.Mobile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj">
+      <Project>{DDAB2760-CE8D-43A3-907F-64A8D6C0DB8D}</Project>
+      <Name>Framework.Common.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
       <Project>{c4014012-0a4f-4d28-a318-f416facc29f1}</Project>
       <Name>Framework.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Framework.Infrastructure.Services\Framework.Infrastructure.Services.csproj">
-      <Project>{ed530eeb-142f-47c5-8ec6-d36b7d456b33}</Project>
-      <Name>Framework.Infrastructure.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

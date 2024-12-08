@@ -8,18 +8,18 @@ namespace Framework.Infrastructure.Services
     public class HttpClientService : IHttpClientService
 	{
 		#region Properties
-		private IHttpClientFactory ClientFactory { get; }
+		private IHttpClientFactory? ClientFactory { get; }
 		#endregion
 
 		#region Constructor
 		public HttpClientService(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
-			this.ClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+			this.ClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 		}
 		#endregion
 
 		#region Methods
-		public HttpClient GetClient(string name)
+		public HttpClient? GetClient(string name)
 		{
 			return this.ClientFactory?.CreateClient(name);
 		}

@@ -1,8 +1,6 @@
 ﻿using AirZapto.Data.Services;
 using Framework.Core.Base;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -10,11 +8,12 @@ namespace AirZapto.Data.Database
 {
     public sealed class AirZaptoDatabaseService : DatabaseService
     {
-        #region Services
-        #endregion
-
         #region Constructor
-        public AirZaptoDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
+        public AirZaptoDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
+        {
+        }
+
+        public AirZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         #endregion
@@ -23,25 +22,28 @@ namespace AirZapto.Data.Database
         protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
-            using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+            if (this.ServiceScopeFactory != null)
             {
-                ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorVersion>();
-                Version dbVersion = await supervisor.GetVersionAsync();
-                Log.Information($"dbVersion : {dbVersion}");
-
-                if (this.Configuration != null)
+                using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    Version softwareVersion = new Version(this.Configuration["Version"] ?? "0.0.0");
-                    Log.Information($"softwareVersion : {softwareVersion}");
-                    if (softwareVersion > dbVersion)
+                    ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor();
+                    Version dbVersion = await supervisor.GetVersionAsync();
+                    Log.Information($"dbVersion : {dbVersion}");
+
+                    if (this.Configuration != null)
                     {
+                        Version softwareVersion = new Version(this.Configuration["Version"] ?? "0.0.0");
+                        Log.Information($"softwareVersion : {softwareVersion}");
+                        if (softwareVersion > dbVersion)
+                        {
+                        }
+                        ResultCode result = await supervisor.UpdateVersionAsync(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
+                        if (result == ResultCode.ItemNotFound)
+                        {
+                            result = await supervisor.AddVersionAsync();
+                        }
+                        res = (result == ResultCode.Ok) ? true : false;
                     }
-                    ResultCode result = await supervisor.UpdateVersionAsync(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
-                    if (result == ResultCode.ItemNotFound)
-                    {
-                        result = await supervisor.AddVersionAsync();
-                    }
-                    res = (result == ResultCode.Ok) ? true : false;
                 }
             }
             return res;
@@ -49,13 +51,15 @@ namespace AirZapto.Data.Database
 
         protected override async Task FeedDataAsync()
         {
-            using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+            if (this.ServiceScopeFactory != null)
             {
-                ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorVersion>();
-                await supervisor.AddVersionAsync();
+                using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
+                {
+                    ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorVersion>();
+                    await supervisor.AddVersionAsync();
+                }
             }
         }
-
         #endregion
     }
 }

@@ -77,7 +77,7 @@ namespace Connect.WebServer.Services
             {
                 using (IServiceScope scope = this.ServiceProvider.CreateScope())
                 {
-                    ISupervisorClientApps supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorClientApps>();
+                    ISupervisorClientApps supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryClientApp>().CreateSupervisor();
                     IEnumerable<ClientApp>? clientApps = await supervisor.GetClientApps();
                     if (clientApps != null)
                     {

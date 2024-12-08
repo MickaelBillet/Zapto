@@ -28,21 +28,17 @@ namespace Connect.WebServer
         #region Property
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
-
         #endregion
 
         #region Constructor
-
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             this.Configuration = configuration;
             this.Environment = env;
         }
-
         #endregion
 
         #region Method
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -120,7 +116,7 @@ namespace Connect.WebServer
                     policy.RequireClaim("user_realm_roles", "user", "administrator");
                 });
             });
-            services.AddServices();
+            services.AddServices(this.Configuration);
             services.AddOptions();
             services.AddControllers();
             services.AddSwaggerGen(options =>
@@ -149,14 +145,16 @@ namespace Connect.WebServer
             });
             services.AddSignalR();
             services.AddSingleton<HostedServiceHealthCheck>();
+
+            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, "ConnectionStringConnect", "ServerTypeConnect");
             services.AddHealthChecks()
                     //Memory
                     .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })
                     //Sqlite
-                    .AddSqlite($"Data Source = {this.Configuration["DataBasePath"]}",
-                                                                failureStatus: HealthStatus.Unhealthy,
-                                                                tags: new string[] { "system" },
-                                                                name: "Sqlite")
+                    .AddSqlite(connectionString: connectionString,
+                                failureStatus: HealthStatus.Unhealthy,
+                                tags: new string[] { "system" },
+                                name: serverName)
                     //Arduino server
                     .AddCheck<HostedServiceHealthCheck>("Server Iot Connection",
                                                                 failureStatus: HealthStatus.Unhealthy,
@@ -199,30 +197,42 @@ namespace Connect.WebServer
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseRouting();
+            app.UseCors();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            WebSocketOptions webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(40),
+            };
+            app.UseWebSockets(webSocketOptions);
+
             // Patch path base with forwarded path
             app.Use(async (context, next) =>
 			{
                 if (context.Request.Headers != null)
                 {
-                    string? forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
-					if (string.IsNullOrEmpty(forwardedPath) == false)
-					{
-                        if (forwardedPath.Equals(ConnectConstants.Application_Prefix))
+                    if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws"))
+                    {
+                        //await WebSocketHelper.Echo(context);
+                        await WebSocketHelper.Process(app.ApplicationServices, context);
+                    }
+                    else
+                    {
+                        string? forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
+                        if (string.IsNullOrEmpty(forwardedPath) == false)
                         {
-                            Log.Information(context.Request.PathBase);
-                            Log.Information(context.Request.Path);
+                            if (forwardedPath.Equals(ConnectConstants.Application_Prefix))
+                            {
+                                Log.Information(context.Request.PathBase);
+                                Log.Information(context.Request.Path);
+                            }
                         }
-					}
+                    }
 				}
 
-				await next();
+                await next();
 			});			
-
-            app.UseRouting();
-            app.UseCors();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseWebSockets();
             app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseEndpoints(endpoints =>
             {
@@ -235,7 +245,6 @@ namespace Connect.WebServer
                 endpoints.MapHub<ConnectHub>(WebConstants.SignalR_Prefix);
                 endpoints.MapControllers();
             });
-
             app.Run(async context =>
             {
                 string error = "Bad Request" + " : " + context.Request.Scheme + " - " + context.Request.Method + " - " + context.Request.Path;

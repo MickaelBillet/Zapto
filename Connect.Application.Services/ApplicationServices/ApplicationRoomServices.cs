@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationRoomServices : IApplicationRoomServices
+    internal sealed class ApplicationRoomServices : IApplicationRoomServices
 	{
 		#region Services
 		private IRoomService? RoomService { get; }
@@ -35,12 +35,12 @@ namespace Connect.Application.Services
 			return this.RoomService?.GetRoom(roomId, true);
 		}
 
-		public async Task<IEnumerable<Room>?> GetRoomsAsync(string? locationId)
+		public async Task<IEnumerable<Room>?> GetRooms(string? locationId)
 		{
 			return (this.RoomService != null) ? (await this.RoomService.GetRooms(locationId)) : null;
 		}
 
-        public async Task SendDataToClientAsync(string locationId, Room room)
+        public async Task SendDataToClient(string locationId, Room room)
         {
 			if (this.SignalRConnectService != null)
 			{
@@ -105,7 +105,7 @@ namespace Connect.Application.Services
                             await this.AlertService.SendAlertAsync(locationId,
                                                                         room.Name,
                                                                         $"Avertissement Humidité de {room.Humidity?.ToString("D")}%" +
-                                                                        $" (Inférieure à {notification.Value}%) pour  {room.Name}");
+                                                                        $" (Inférieure à {notification.Value}%) pour {room.Name}");
 
                         }
                         else

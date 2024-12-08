@@ -1,36 +1,22 @@
-﻿using Connect.Application;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
     public interface ISelectDateViewModel : IBaseViewModel
     {
-        Task<DateTime?> GetRoomMaxDate(string roomId);
-        Task<DateTime?> GetRoomMinDate(string roomId);
     }
 
     public class SelectDateViewModel : BaseViewModel, ISelectDateViewModel
     {
         #region Properties
-        private IApplicationOperationDataService ApplicationOperationDataService { get; }
+        private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
         #endregion
 
         #region Constructor
         public SelectDateViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.ApplicationOperationDataService = serviceProvider.GetRequiredService<IApplicationOperationDataService>();
-        }
-        #endregion
-
-        #region Methods
-        public async Task<DateTime?> GetRoomMaxDate(string roomId)
-        {
-            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMaxDate(roomId) : null;
-        }
-
-        public async Task<DateTime?> GetRoomMinDate(string roomId)
-        {
-            return (this.ApplicationOperationDataService != null) ? await this.ApplicationOperationDataService.GetRoomMinDate(roomId) : null;
+            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
         #endregion
     }

@@ -39,11 +39,11 @@ namespace Zapto.Component.Services
 
         #region Method
 
-        public async Task<bool> StartAsync(string locationId, 
-                                            Action<PlugStatus>? actionPlug, 
-                                            Action<RoomStatus>? actionRoom, 
-                                            Action<SensorStatus>? actionSensor, 
-                                            Action<NotificationStatus>? actionNotification)
+        public async Task<bool> StartAsync(string locationId,
+                                            Func<PlugStatus, Task>? actionPlug,
+                                            Func<RoomStatus, Task>? actionRoom,
+                                            Func<SensorStatus, Task>? actionSensor,
+                                            Func<NotificationStatus, Task>? actionNotification)
         {              
             try
             {
@@ -133,7 +133,9 @@ namespace Zapto.Component.Services
             }
         }
 
-        private void ProcessReceive(Action<PlugStatus>? actionPlug, Action<RoomStatus>? actionRoom, Action<SensorStatus>? actionSensor)
+        private void ProcessReceive(Func<PlugStatus, Task>? actionPlug,
+                                    Func<RoomStatus, Task>? actionRoom,
+                                    Func<SensorStatus, Task>? actionSensor)
         {
             this.HubConnection?.On<PlugStatus>(PlugStatus.Name, (PlugStatus status) =>
             {

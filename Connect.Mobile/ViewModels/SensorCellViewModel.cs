@@ -81,7 +81,7 @@ namespace Connect.Mobile.ViewModel
                 {
                     Notification notification = (item as Notification).Clone<Notification>();
 
-                    if (await this.ApplicationNotificationServices.AddUpdateNotificationAsync(this.ConnectedObject, notification) == false)
+                    if (await this.ApplicationNotificationServices.AddUpdateNotification(this.ConnectedObject, notification) == false)
                     {
                         this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                     }

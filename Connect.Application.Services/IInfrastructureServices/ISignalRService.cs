@@ -8,6 +8,10 @@ namespace Connect.Application.Infrastructure
     {
         static string Group { get; set; } = string.Empty;
         void Dispose();
-        Task<bool> StartAsync(string locationId, Action<PlugStatus>? actionPlug, Action<RoomStatus>? actionRoom, Action<SensorStatus>? actionSensor, Action<NotificationStatus>? actionNotification);
+        Task<bool> StartAsync(string locationId, 
+                                Func<PlugStatus, Task>? actionPlug, 
+                                Func<RoomStatus, Task>? actionRoom, 
+                                Func<SensorStatus, Task>? actionSensor, 
+                                Func<NotificationStatus, Task>? actionNotification);
     }
 }

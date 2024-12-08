@@ -5,6 +5,6 @@ namespace Connect.Application
 {
     public interface IApplicationServerIotServices
 	{
-		Task<SystemStatus?> ReceiveStatusAsync();
-	}
+        Task ReadStatus(SystemStatus? status);
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class DailyService : CronScheduledService
     {
@@ -24,7 +24,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
         public DailyService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
+                ISupervisorPlug supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
                 IEnumerable<Plug> plugs = await supervisor.GetPlugs();
 
                 //Reset the WorkingDuration daily

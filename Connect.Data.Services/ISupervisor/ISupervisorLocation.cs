@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Data
 {
-    public interface ISupervisorLocation
+    public interface ISupervisorLocation : ISupervisor
     {
         Task<ResultCode> AddLocation(Location location);
         Task<IEnumerable<Location>> GetLocations();

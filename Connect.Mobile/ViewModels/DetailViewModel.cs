@@ -58,25 +58,21 @@ namespace Connect.Mobile.ViewModel
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Initializes the async.
-        /// </summary>
-        /// <returns>The async.</returns>
-        /// <param name="item">Item.</param>
-        public override void Initialize(object item, Func<object, Task> validateCallback = null, Func<object, Task> cancelCallback = null)
+        public override void Initialize(object item, 
+                                        Func<object, Task> validateCallback = null, 
+                                        Func<object, Task> cancelCallback = null)
         {
             try
             {
                 if (item != null)
                 {
                     this.Room = item as Room;
-
                     this.RefreshData();
+                    base.Initialize(item, validateCallback, cancelCallback);
 
                     this.SignalRService.StartAsync(
                         App.LocationId,
-                        (plugStatus) =>
+                        async (plugStatus) =>
                         {
                             ConnectedObject obj = this.Room.ConnectedObjectsList.FirstOrDefault<ConnectedObject>((ConnectedObject arg) => arg.Plug?.Id == plugStatus.PlugId);
                             if (obj?.Plug != null)
@@ -87,24 +83,21 @@ namespace Connect.Mobile.ViewModel
                                 obj.Plug.Mode = plugStatus.Mode;
                                 obj.Plug.OnOff = plugStatus.OnOff;
                             }
-
-                            this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
+                            await this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
                         },
-                        (roomStatus) =>
+                        async (roomStatus) =>
                         {
                             if (this.Room.Id == roomStatus.RoomId)
                             {
                                 this.Room.Temperature = roomStatus.Temperature;
                                 this.Room.Humidity = roomStatus.Humidity;
                                 this.Room.Pressure = roomStatus.Pressure;
-
-                                this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
+                                await this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
                             }
                         },
-                        (sensorStatus) =>
+                        async (sensorStatus) =>
                         {
                             ConnectedObject obj = this.Room.ConnectedObjectsList.FirstOrDefault<ConnectedObject>((ConnectedObject arg) => arg.Sensor?.Id == sensorStatus.SensorId);
-
                             if (obj?.Sensor != null)
                             {
                                 obj.Sensor.Temperature = sensorStatus.Temperature;
@@ -112,12 +105,9 @@ namespace Connect.Mobile.ViewModel
                                 obj.Sensor.Humidity = sensorStatus.Humidity;
                                 obj.Sensor.IsRunning = (byte)sensorStatus.IsRunning;
                             }
-
-                            this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
+                            await this.CacheService.InsertObject<Room>("room" + this.Room.Id, this.Room);
                         },
-                        null);
-
-                    base.Initialize(item, validateCallback, cancelCallback);
+                        null).FireAndForgetSafeAsync();
                 }
             }
             finally
@@ -159,7 +149,7 @@ namespace Connect.Mobile.ViewModel
                 {
                     Notification notification = (item as Notification).Clone<Notification>();
 
-                    if (await this.ApplicationNotificationServices.AddUpdateNotificationAsync(this.Room, notification) == false)
+                    if (await this.ApplicationNotificationServices.AddUpdateNotification(this.Room, notification) == false)
                     {
                         this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                     }

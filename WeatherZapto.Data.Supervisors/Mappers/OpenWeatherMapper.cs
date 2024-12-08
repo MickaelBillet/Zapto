@@ -16,11 +16,11 @@ namespace WeatherZapto.Data.Mappers
                 WindSpeed = model.WindSpeed,
                 WeatherText = model.WeatherText,
                 WindDirection = model.WindDirection,
-                Temperature = model.Temperature,
+                Temperature = double.Parse(model.Temperature),
                 Latitude = model.Latitude,
                 Location = model.Location,
                 Longitude = model.Longitude,
-                TimeStamp = model.TimeSpam,
+                TimeStamp = model.TimeSpam.Value,
             };
         }
 
@@ -31,7 +31,7 @@ namespace WeatherZapto.Data.Mappers
                 Icon = entity.Icon,
                 Id = entity.Id,
                 WeatherText = entity.WeatherText,
-                Temperature= entity.Temperature,
+                Temperature= entity.Temperature.ToString(),
                 WindDirection = entity.WindDirection,
                 WindSpeed = entity.WindSpeed,
                 Latitude = entity.Latitude,

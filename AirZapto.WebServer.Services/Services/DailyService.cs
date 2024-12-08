@@ -33,7 +33,7 @@ namespace AirZapto.WebServer.Services
 
         public override async Task ProcessInScope(IServiceScope scope)
         {
-            ISupervisorSensorData supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorSensorData>();
+            ISupervisorSensorData supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();
             ResultCode result = await supervisor.DeleteSensorDataAsync(new TimeSpan(48,0,0));
             if (result != ResultCode.Ok)
             {

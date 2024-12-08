@@ -107,7 +107,7 @@ namespace Connect.Mobile.ViewModel
         {
             this.LoadingTask = new NotifyTaskCompletion(Task.Run(async () =>
             {
-                this.NotificationProvider.NotificationsList = await this.ApplicationNotificationServices.GetNotificationsAsync(this.NotificationProvider);
+                this.NotificationProvider.NotificationsList = await this.ApplicationNotificationServices.GetNotifications(this.NotificationProvider);
             }));
         }
 
@@ -152,7 +152,7 @@ namespace Connect.Mobile.ViewModel
 
                         this.Notification.IsEnabled = !this.Notification.IsEnabled;
 
-                        if (await this.ApplicationNotificationServices.AddUpdateNotificationAsync(this.NotificationProvider, this.Notification) == false)
+                        if (await this.ApplicationNotificationServices.AddUpdateNotification(this.NotificationProvider, this.Notification) == false)
                         {
                             this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                         }
@@ -217,7 +217,7 @@ namespace Connect.Mobile.ViewModel
                 {
                     if (parameter != null)
                     {
-                        if (await this.ApplicationNotificationServices.DeleteNotificationAsync(this.NotificationProvider, parameter as Notification) == false)
+                        if (await this.ApplicationNotificationServices.DeleteNotification(this.NotificationProvider, parameter as Notification) == false)
                         {
                             this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                         }
@@ -317,7 +317,7 @@ namespace Connect.Mobile.ViewModel
                             {
                                 try
                                 {
-                                    if (await this.ApplicationNotificationServices.DeleteNotificationsAsync(this.NotificationProvider) == false)
+                                    if (await this.ApplicationNotificationServices.DeleteNotifications(this.NotificationProvider) == false)
                                     {
                                         this.HandleError(Model.ErrorType.ErrorSoftware, AppResources.ErrorNotification);
                                     }

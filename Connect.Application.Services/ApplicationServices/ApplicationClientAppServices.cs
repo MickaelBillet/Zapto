@@ -6,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationClientAppServices : IApplicationClientAppServices
+    internal sealed class ApplicationClientAppServices : IApplicationClientAppServices
     {
         #region Services
         public IClientAppService? ClientAppService { get; }
         #endregion
 
         #region Constructor
-
         public ApplicationClientAppServices(IServiceProvider serviceProvider)
         {
             this.ClientAppService = serviceProvider.GetService<IClientAppService>();
         }
-
         #endregion
 
         #region Methods

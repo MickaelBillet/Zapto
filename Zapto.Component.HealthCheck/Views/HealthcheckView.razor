@@ -1,12 +1,13 @@
 ﻿@inject IHealthCheckViewModel ViewModel
 @inject IStringLocalizer<Resource> Localizer
 
-<div class="d-flex align-center gap-4">
-    <MudText Typo="Typo.h5" Color="Color.Primary">@Localizer["Healthcheck"]</MudText>
-    <MudIconButton Icon="@Icons.Material.Outlined.Sync" Color="Color.Primary" Class="ml-4" Size="Size.Medium" OnClick="@(async () => await this.Synchronize())"></MudIconButton>
-</div>
+<Loading IsLoading="@this.IsLoading">
+    <div class="d-flex align-center gap-4">
+        <MudText Typo="Typo.h5" Color="Color.Primary">@Localizer["Healthcheck"]</MudText>
+        <MudIconButton Icon="@Icons.Material.Outlined.Sync" Color="Color.Primary" Class="ml-4" Size="Size.Medium" OnClick="@(async () => await this.Synchronize())"></MudIconButton>
+    </div>
 
-<div class="mx-auto mt-2">
+    <div class="mx-auto mt-2">
         @if (this.Model != null)
         {
             <MudExpansionPanels>
@@ -42,15 +43,14 @@
                 }
             </MudExpansionPanels>
         }
-        else
-        {
-            <MudProgressCircular Color="Color.Default" Class="ml-6" Indeterminate="true" />
-        }
-</div>
+    </div>
+</Loading>
 
 @code
 {
     public List<HealthCheckModel>? Model { get; set; }
+
+    public bool IsLoading { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,7 +64,8 @@
     {
         if ((this.ViewModel != null) && (this.Model == null))
         {
-            this.Model = await this.ViewModel.GetModelList();
+            await this.Synchronize();
+            this.IsLoading = this.ViewModel.IsLoading;
         }
     }
 
@@ -73,7 +74,7 @@
         this.ViewModel?.Dispose();
     }
 
-    public async Task Synchronize()
+    private async Task Synchronize()
     {
         this.Model = await this.ViewModel.GetModelList();
     }

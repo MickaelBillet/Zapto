@@ -1,9 +1,11 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Infrastructure.Services;
 using MailKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 using IMailService = Framework.Infrastructure.Services.IMailService;
@@ -15,9 +17,8 @@ namespace Connect.WebApi.Controllers
     public class MailController : Controller
 	{
         #region Property
-
         private IMailService MailService { get; }
-
+        private ISecretService SecretService { get; }
         #endregion
 
         #region Constructor
@@ -25,6 +26,7 @@ namespace Connect.WebApi.Controllers
         public MailController(IServiceProvider serviceProvider)
         {
             this.MailService = serviceProvider.GetRequiredService<IMailService>();
+            this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
         }
 
         #endregion
@@ -32,12 +34,13 @@ namespace Connect.WebApi.Controllers
         #region Methods
 
         [HttpPost("send")]
-        public async Task<IActionResult> SendMail([FromForm] MailRequest request)
+        public async Task<IActionResult> SendMail([FromForm] MailRequest mailRequest)
         {
             try
             {
-                await this.MailService.SendEmailAsync(request, MailSent);
-
+                string password = this.SecretService.GetSecret("MailPassword");
+                string address = this.SecretService.GetSecret("MailAddress");
+                await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address); 
                 return Ok();
             }
             catch (Exception ex)
@@ -53,6 +56,7 @@ namespace Connect.WebApi.Controllers
 
         private void MailSent(object? sender, MessageSentEventArgs arg)
         {
+            Log.Information("Mail Sent");
         }
 
         #endregion

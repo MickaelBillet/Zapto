@@ -5,6 +5,6 @@ namespace Framework.Data.Abstractions
 {
     public interface IDataContextFactory
     {
-        public (IDbConnection? connection, IDataContext? context)? CreateDbContext(string? connectionString, ServerType server);
+        public (IDbConnection? connection, IDataContext? context)? CreateDbContext(string? connectionString, ServerType? server);
     }
 }

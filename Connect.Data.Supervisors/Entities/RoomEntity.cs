@@ -15,5 +15,6 @@ namespace Connect.Data.Entities
         public double? Temperature { get; set; }
         public double? Pressure { get; set; }
         public int DeviceType { get; set; }
+        public byte StatusSensors { get; set; }
     }
 }

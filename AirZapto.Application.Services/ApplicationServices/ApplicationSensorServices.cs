@@ -13,46 +13,41 @@ namespace AirZapto.Application.Services
     internal class ApplicationSensorServices : IApplicationSensorServices
 	{
 		#region Services
-
 		private ISensorService? SensorService { get; }
-
-		private IWSMessageManager? NotificationsMessageHandler { get; }
-
+		private IWSMessageManager? WSMessageManager { get; }
 		#endregion
 
 		#region Constructor
-
 		public ApplicationSensorServices(IServiceProvider serviceProvider)
 		{
 			this.SensorService = serviceProvider.GetService<ISensorService>();
-			this.NotificationsMessageHandler = serviceProvider.GetService<IWSMessageManager>();
+			this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
 		}
-
 		#endregion
 
 		#region Methods
 
-		public async Task<IEnumerable<Sensor>?> GetSensorsAsync()
+		public async Task<IEnumerable<Sensor>?> GetSensors()
 		{
 			return (this.SensorService != null) ? await this.SensorService.GetSensors() : null;
 		}
 
-		public async Task<Sensor?> GetSensorsAsync(string idSocket)
+		public async Task<Sensor?> GetSensors(string idSocket)
 		{
 			return (this.SensorService != null) ? await this.SensorService.GetSensor(idSocket) : null;
 		}
 
-		public async Task<bool?> RestartAsync(Sensor sensor)
+		public async Task<bool?> Restart(Sensor sensor)
 		{
 			return (this.SensorService != null) ? await this.SensorService.RestartSensor(sensor) : null;
 		}
 
-		public async Task<bool?> CalibrationAsync(Sensor sensor)
+		public async Task<bool?> Calibration(Sensor sensor)
 		{
 			return (this.SensorService != null) ? await this.SensorService.CalibrationSensor(sensor) : null;
 		}
 
-		public async Task<bool> SendCommandAsync(Sensor sensor, int cmd)
+		public async Task<bool> SendCommand(Sensor sensor, int cmd)
 		{
 			bool isConnected = false;
 
@@ -66,7 +61,7 @@ namespace AirZapto.Application.Services
 					Period = sensor.Period,
 				});
 
-                isConnected = (this.NotificationsMessageHandler != null) ? await this.NotificationsMessageHandler.SendMessageAsync(sensor.IdSocket, json) : false;
+                isConnected = (this.WSMessageManager != null) ? await this.WSMessageManager.SendMessageAsync(sensor.IdSocket, json) : false;
 			}
 
 			return isConnected;

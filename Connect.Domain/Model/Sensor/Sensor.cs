@@ -12,7 +12,7 @@ namespace Connect.Model
         private string channel = string.Empty;
         private int leakDetected = 0;
         private string parameter = string.Empty;
-        private int isRunning = RunningStatus.Healthy;
+        private byte isRunning = RunningStatus.Healthy;
 
         #region Property
 
@@ -42,11 +42,11 @@ namespace Connect.Model
             set { SetProperty<double?>(ref humidity, value); }
         }
 
-        public int IsRunning
+        public byte IsRunning
         {
             get { return isRunning; }
 
-            set { SetProperty<int>(ref isRunning, value); }
+            set { SetProperty<byte>(ref isRunning, value); }
         }
 
         public double? Temperature
@@ -97,7 +97,7 @@ namespace Connect.Model
             this.Date = Clock.Now;
         }       
 
-        public (string? data, int port) GetSensorConfiguration()
+        public string? SerializeSensorConfiguration()
         {
             SensorConfiguration configuration = new SensorConfiguration()
             {
@@ -106,9 +106,8 @@ namespace Connect.Model
                 Parameter = this.Parameter,
             };
 
-            string? json = JsonSerializer.Serialize(configuration);
-            int port = ConnectConstants.PortConnectionData;
-            return (json, port);
+            string? json = JsonSerializer.Serialize<SensorConfiguration>(configuration);
+            return json;
         }
 
         #endregion

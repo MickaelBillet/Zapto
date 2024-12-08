@@ -5,14 +5,13 @@ using AirZapto.Data.Services.Repositories;
 using Framework.Core.Base;
 using Framework.Core.Domain;
 using Framework.Data.Abstractions;
-using Microsoft.Extensions.Configuration;
 
 namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorLogs : Supervisor, ISupervisorLogs
 	{
         #region Constructor
-        public SupervisorLogs(IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, IConfiguration? configuration) : base(contextFactory, repositoryFactory, configuration)
+        public SupervisorLogs(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
         { }
         #endregion
 

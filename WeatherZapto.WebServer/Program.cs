@@ -137,14 +137,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, "ConnectionStringWeather", "ServerTypeWeather");
 builder.Services.AddHealthChecks()
         //Memory
         .AddCheck<MemoryHealthCheck>("Memory",
                                         HealthStatus.Degraded,
                                         new string[] { "system" })
         //PostGreSql
-        .AddNpgSql(builder.Configuration["ConnectionStrings:DefaultConnection"]!,
-                            name: "PostGreSql",
+        .AddNpgSql(connectionString,
+                            name: serverName,
                             failureStatus: HealthStatus.Unhealthy,
                             tags: new string[] { "system" })
         //Log error in DB

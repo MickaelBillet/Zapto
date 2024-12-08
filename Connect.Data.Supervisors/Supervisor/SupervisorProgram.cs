@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorProgram : ISupervisorProgram
+    public sealed class SupervisorProgram : Supervisor, ISupervisorProgram
     {
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
         private readonly Lazy<IRepository<OperationRangeEntity>> _lazyOperationRangeRepository;
@@ -36,12 +36,6 @@ namespace Connect.Data.Supervisors
         public async Task<ResultCode> ProgramExists(string id)
         {
             return (await this.ProgramRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
-        }
-
-        public async Task<IEnumerable<Program>> GetPrograms()
-        {
-            IEnumerable<ProgramEntity> entities = await this.ProgramRepository.GetCollectionAsync();
-            return entities.Select(item => ProgramMapper.Map(item));
         }
 
         public async Task<Program> GetProgram(string id)
@@ -75,6 +69,33 @@ namespace Connect.Data.Supervisors
             int res = await this.ProgramRepository.InsertAsync(ProgramMapper.Map(program));
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
+        }
+
+        public async Task<IEnumerable<Program>> GetPrograms()
+        {
+            List<Program> programs = (await this.ProgramRepository.GetCollectionAsync()).Select((arg) => ProgramMapper.Map(arg)).ToList();
+            if (programs != null)
+            {
+                programs.ForEach(async program => 
+                {
+                    IEnumerable<OperationRangeEntity> entities = await this.OperationRangeRepository.GetCollectionAsync((arg) => (arg.ProgramId == program.Id));
+                    if (entities != null)
+                    {
+                        List<OperationRange> operationRanges = entities.Select((arg) => OperationRangeMapper.Map(arg)).ToList();
+                        operationRanges.ForEach(async operationRange =>
+                        {                            
+                            ConditionEntity condition = await this.ConditionRepository.GetAsync((arg) => arg.OperationRangetId == operationRange.Id);
+                            if (condition != null)
+                            {
+                                operationRange.Condition = ConditionMapper.Map(condition);
+                            }
+                        });
+
+                        program.OperationRangeList = new ObservableCollection<OperationRange>(operationRanges);
+                    }
+                });
+            }
+            return programs;
         }
         #endregion
     }

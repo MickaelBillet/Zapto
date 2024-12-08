@@ -42,26 +42,26 @@ namespace Connect.WebApi.Middleware
 				}
 				else
 				{
-			        HttpResponse response = context.Response;
-					int statusCode = (int)HttpStatusCode.Forbidden;
-					string message = "Error";
-					string description = "Unauthorized Request";
+			  //      HttpResponse response = context.Response;
+					//int statusCode = (int)HttpStatusCode.Forbidden;
+					//string message = "Error";
+					//string description = "Unauthorized Request";
 
-					JsonSerializerOptions options = new JsonSerializerOptions()
-					{
-						PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-						WriteIndented = true,
-					};
+					//JsonSerializerOptions options = new JsonSerializerOptions()
+					//{
+					//	PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+					//	WriteIndented = true,
+					//};
 
-					response.ContentType = "application/json";
-					response.StatusCode = statusCode;
-					response.Headers.Append("exception", "messageException");
+					//response.ContentType = "application/json";
+					//response.StatusCode = statusCode;
+					//response.Headers.Append("exception", "messageException");
 
-					await response.WriteAsync(JsonSerializer.Serialize<CustomErrorResponse>(new CustomErrorResponse
-					{
-						Message = message,
-						Description = description
-					}));
+					//await response.WriteAsync(JsonSerializer.Serialize<CustomErrorResponse>(new CustomErrorResponse
+					//{
+					//	Message = message,
+					//	Description = description
+					//}));
 				}
 			}
             catch (Exception ex)

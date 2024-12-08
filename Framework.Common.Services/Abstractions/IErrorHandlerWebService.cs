@@ -12,6 +12,6 @@ namespace Framework.Infrastructure.Services
 
 	public class WebServiceMessage
 	{
-		public string Error { get; set; }
+		public string? Error { get; set; }
 	}
 }

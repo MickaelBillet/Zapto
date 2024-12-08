@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 
 namespace Connect.Data
 {
-    public interface ISupervisorSensor
+    public interface ISupervisorSensor : ISupervisor
     {
-        Task<ResultCode> SensorExists(string id);
         Task<IEnumerable<Sensor>> GetSensors();
         Task<Sensor> GetSensor(string id);
-        Task<IEnumerable<Sensor>> GetSensors(string roomId);
         Task<Sensor> GetSensor(string? type, string? channel);
         Task<ResultCode> AddSensor(Sensor sensor);
         Task<(ResultCode, Sensor)> UpdateSensor(Sensor sensor);
-        Task<ResultCode> DeleteSensor(Sensor sensor);
     }
 }

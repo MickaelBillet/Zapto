@@ -1,5 +1,4 @@
-﻿using AirZapto.Data.Services;
-using AirZapto.Data.Supervisors;
+﻿using AirZapto.Data.Supervisors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AirZapto.Data
@@ -8,12 +7,10 @@ namespace AirZapto.Data
 	{
 		public static void AddSupervisors(this IServiceCollection services)
 		{
-			services.AddTransient<ISupervisorLogs, SupervisorLogs>();
-            services.AddTransient<ISupervisorSensor, SupervisorSensor>();
-            services.AddTransient<ISupervisorSensorData, SupervisorSensorData>();
-            services.AddTransient<ISupervisorVersion, SupervisorVersion>();
-
-            services.AddTransient<ISupervisorCacheSensor, SupervisorCacheSensor>();
+			services.AddTransient<ISupervisorFactoryLogs, SupervisorFactoryLogs>();
+            services.AddTransient<ISupervisorFactorySensor, SupervisorFactorySensor>();
+            services.AddTransient<ISupervisorFactorySensorData, SupervisorFactorySensorData>();
+            services.AddTransient<ISupervisorFactoryVersion, SupervisorFactoryVersion>();
         }
     }
 }

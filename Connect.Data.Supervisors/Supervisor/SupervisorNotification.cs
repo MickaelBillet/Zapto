@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorNotification : ISupervisorNotification
+    public sealed class SupervisorNotification : Supervisor, ISupervisorNotification
     {
         private readonly Lazy<IRepository<NotificationEntity>> _lazyNotificationRepository;
 
@@ -30,8 +30,7 @@ namespace Connect.Data.Supervisors
 
         public async Task<IEnumerable<Notification>> GetNotifications()
         {
-            IEnumerable<NotificationEntity> entities = await this.NotificationRepository.GetCollectionAsync();
-            return entities.Select(item => NotificationMapper.Map(item));
+            return (await this.NotificationRepository.GetCollectionAsync()).Select((arg) => NotificationMapper.Map(arg));
         }
 
         public async Task<Notification> GetNotification(string id)

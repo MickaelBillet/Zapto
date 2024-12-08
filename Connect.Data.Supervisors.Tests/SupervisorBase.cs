@@ -1,8 +1,7 @@
-﻿using Connect.Data.Database;
-using Connect.Data.Repository;
+﻿using Connect.Data.Repository;
 using Connect.WebServer.Services;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
+using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,21 +30,19 @@ namespace Connect.Data.Supervisors.Tests
                 configurationBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     {"ConnectionStrings:DefaultConnection", $"Data Source=.\\connectDb.db3;"},
-                    {"ConnectionStrings:ServerType", "Sqlite"}
+                    {"ConnectionStrings:ServerType", "Sqlite"},
+                    {"Cache",  "0"}
                 });
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
-                services.AddSupervisor();
-
-                services.AddSingleton<IDatabaseService, ConnectDatabaseService>();
+                services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
-                services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddSupervisors();
                 services.AddSingleton<CacheSignal>();
                 services.AddMemoryCache();
-
             })
            .Build();
         }

@@ -39,7 +39,7 @@ namespace AirZapto.WebServer.Services
 
             try
             {
-                ISupervisorCacheSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorCacheSensor>();
+                ISupervisorSensor supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
                 IApplicationSensorServices applicationSensorServices = scope.ServiceProvider.GetRequiredService<IApplicationSensorServices>();
                 (ResultCode code, IEnumerable<Sensor>? sensors) result = await supervisor.GetSensorsAsync();
                 bool isConnected = false;
@@ -49,7 +49,7 @@ namespace AirZapto.WebServer.Services
                     List<Sensor> sensors = result.sensors.ToList();
                     foreach (Sensor sensor in sensors)
                     {
-                        isConnected = await applicationSensorServices.SendCommandAsync(sensor, Command.Connection);
+                        isConnected = await applicationSensorServices.SendCommand(sensor, Command.Connection);
                         if (isConnected == false)
                         {
                             sensor.Mode = SensorMode.Initial;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Mobile.Droid.Services
 {
-    class FileHelper : IFileHelper
+    public class FileHelper : IFileHelper
     {
         public Task<bool> ExistsAsync(string filename)
         {

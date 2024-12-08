@@ -27,10 +27,10 @@
     public string RoomId { get; set; } = string.Empty;
 
     [Parameter]
-    public DateTime? StartDate { get; set; } = DateTime.Today;
+    public DateTime? StartDate { get; set; }
 
     [Parameter]
-    public DateTime? EndDate { get; set; } = DateTime.Today;
+    public DateTime? EndDate { get; set; }
 
     [Parameter]
     public DateTime? MaxDate { get; set; }
@@ -52,12 +52,13 @@
 
     public void Dispose()
     {
+        this.ViewModel?.Dispose();
     }
     public async Task SelectDatesClick()
     {
-        this.IsClicked = true;
         await this.StartDateChanged.InvokeAsync(this.StartDate);
         await this.EndDateChanged.InvokeAsync(this.EndDate);
+        this.IsClicked = true;
         await this.IsClickedChanged.InvokeAsync(this.IsClicked);
     }
 }

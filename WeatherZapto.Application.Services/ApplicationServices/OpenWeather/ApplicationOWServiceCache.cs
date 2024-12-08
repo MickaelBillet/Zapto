@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Reflection;
 using WeatherZapto.Data;
 using WeatherZapto.Model;
 
@@ -32,7 +33,7 @@ namespace WeatherZapto.Application.Services
         #endregion
 
         #region Methods
-        public async Task<ZaptoAirPollution> GetCurrentAirPollution(string APIKey, string locationName, string longitude, string latitude)
+        public async Task<ZaptoAirPollution> GetCurrentAirPollution(string locationName, string longitude, string latitude)
         {
             ZaptoAirPollution zaptoAirPollution = null;
             if (this.CacheSignal != null && this.Cache != null)
@@ -46,7 +47,7 @@ namespace WeatherZapto.Application.Services
                     }
                     else
                     {
-                        zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(APIKey, locationName, longitude, latitude);
+                        zaptoAirPollution = await this.ApplicationOWService.GetCurrentAirPollution(locationName, longitude, latitude);
                         if (zaptoAirPollution != null)
                         {
                             await this.SupervisorCall.AddCallOpenWeather();
@@ -62,7 +63,7 @@ namespace WeatherZapto.Application.Services
             return zaptoAirPollution;
         }
 
-        public async Task<ZaptoWeather> GetCurrentWeather(string APIKey, string locationName, string longitude, string latitude, string language)
+        public async Task<ZaptoWeather> GetCurrentWeather(string locationName, string longitude, string latitude, string language)
         {
             ZaptoWeather zaptoWeather = null;
             if (this.CacheSignal != null && this.Cache != null)
@@ -76,7 +77,7 @@ namespace WeatherZapto.Application.Services
                     }
                     else
                     {
-                        zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(APIKey, locationName, longitude, latitude, language);
+                        zaptoWeather = await this.ApplicationOWService.GetCurrentWeather(locationName, longitude, latitude, language);
                         if (zaptoWeather != null)
                         {
                             await this.SupervisorCall.AddCallOpenWeather();

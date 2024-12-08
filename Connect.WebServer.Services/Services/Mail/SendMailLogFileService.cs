@@ -1,5 +1,7 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Connect.WebServer.Services
@@ -8,12 +10,14 @@ namespace Connect.WebServer.Services
     {
         #region Services
         private IMailService MailService { get; }
+        private ISecretService SecretService { get; }
         #endregion
 
         #region Constructor
-        public SendMailLogFileService(IMailService mailService)
+        public SendMailLogFileService(IServiceProvider serviceProvider)
         {
-            this.MailService = mailService;
+            this.MailService = serviceProvider.GetRequiredService<IMailService>();
+            this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
         }
         #endregion
 
@@ -34,8 +38,9 @@ namespace Connect.WebServer.Services
                         Subject = "Logs Connect " + Clock.Now,
                         ToEmail = "mickael.billet@gmail.com",
                     };
-
-                    await this.MailService.SendEmailAsync(mailRequest, MailSent);
+                    string password = this.SecretService.GetSecret("MailPassword");
+                    string address = this.SecretService.GetSecret("MailAddress");
+                    await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using AirZapto.Model;
 using Framework.Core.Base;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AirZapto.Data.Supervisors.Tests
 {
@@ -17,7 +18,7 @@ namespace AirZapto.Data.Supervisors.Tests
             await this.Initialyse();
 
             //Act
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(new Sensor()
             {
                 Humidity = 10.5f,
@@ -57,7 +58,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Act
             IEnumerable<Sensor>? sensors = null;
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(sensor);
 
             if (code == ResultCode.Ok) 
@@ -78,7 +79,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Act
             IEnumerable<Sensor>? sensors = null;
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(new Sensor()
             {
                 Humidity = 10.5f,
@@ -100,18 +101,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Assert
             Assert.True(code == ResultCode.Ok);
-
-            Sensor? sensor = null;
-            foreach (Sensor item in sensors!)
-            {
-                (code, sensor) = await supervisor.GetSensorAsync(item.Id);
-                if ((code == ResultCode.Ok) && sensor != null)
-                {
-                    break;
-                }
-            }
-
-            Assert.True(sensor != null);
+            Assert.True(sensors != null && sensors.Any() == true);
         }
 
         [Fact]
@@ -121,7 +111,7 @@ namespace AirZapto.Data.Supervisors.Tests
             await this.Initialyse();
 
             //Act
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(new Sensor()
             {
                 Humidity = 10.5f,
@@ -164,7 +154,7 @@ namespace AirZapto.Data.Supervisors.Tests
 
             //Act
             IEnumerable<Sensor>? sensors = null;
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(sensor);
 
             if (code == ResultCode.Ok)
@@ -207,7 +197,7 @@ namespace AirZapto.Data.Supervisors.Tests
             };
 
             //Act
-            ISupervisorSensor supervisor = new SupervisorSensor(this.HostApplication.Services);
+            ISupervisorSensor supervisor = this.HostApplication.Services.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
             ResultCode code = await supervisor.AddUpdateSensorAsync(sensor);
             if (code == ResultCode.Ok)
             {

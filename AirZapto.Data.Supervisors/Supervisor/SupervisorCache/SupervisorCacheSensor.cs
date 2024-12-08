@@ -1,12 +1,12 @@
-﻿using AirZapto.Data.Services;
+﻿using AirZapto.Data.Services.Repositories;
 using AirZapto.Model;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AirZapto.Data.Supervisors
 {
-    public sealed class SupervisorCacheSensor : ISupervisorCacheSensor
+    public sealed class SupervisorCacheSensor : ISupervisorSensor
     {
         #region Services
         private ISupervisorSensor Supervisor { get; }
@@ -14,24 +14,32 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorCacheSensor(IServiceProvider serviceProvider)
+        public SupervisorCacheSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, ICacheZaptoService<Sensor> cacheZapto)
         {
-            this.Supervisor = serviceProvider.GetRequiredService<ISupervisorSensor>();
-            this.CacheService = serviceProvider.GetRequiredService<ICacheZaptoService<Sensor>>();
+            this.Supervisor = new SupervisorSensor(session, contextFactory, repositoryFactory);
+            this.CacheService = cacheZapto;
         }
         #endregion
 
         #region Methods
         public async Task<ResultCode> AddUpdateSensorAsync(Sensor sensor)
         {
-            await this.CacheService.Set(sensor.IdSocket, sensor);
-            return await this.Supervisor.AddUpdateSensorAsync(sensor);
+            ResultCode code = await this.Supervisor.AddUpdateSensorAsync(sensor);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Set(sensor.IdSocket, sensor);
+            }
+            return code;
         }
 
         public async Task<ResultCode> UpdateSensorAsync(Sensor sensor)
         {
-            await this.CacheService.Set(sensor.IdSocket, sensor);
-            return await this.Supervisor.UpdateSensorAsync(sensor);
+            ResultCode code = await this.Supervisor.UpdateSensorAsync(sensor);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Set(sensor.IdSocket, sensor);
+            }
+            return code; 
         }
 
         public async Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket)
@@ -51,8 +59,12 @@ namespace AirZapto.Data.Supervisors
 
         public async Task<ResultCode> DeleteSensorAsync(string idSocket)
         {
-            await this.CacheService.Delete(idSocket);
-            return await this.Supervisor.DeleteSensorAsync(idSocket);
+            ResultCode code = await this.Supervisor.DeleteSensorAsync(idSocket);
+            if (code == ResultCode.Ok)
+            {
+                await this.CacheService.Delete(idSocket);
+            }
+            return code;
         }
 
         public async Task<(ResultCode, IEnumerable<Sensor>?)> GetSensorsAsync()

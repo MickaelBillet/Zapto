@@ -1,6 +1,6 @@
 ﻿namespace Zapto.Component.Common.Models
 {
-    public class RoomChartModel : BaseModel
+    public sealed record RoomChartModel : BaseModel
     {
         public IEnumerable<decimal?> TemperaturesIN { get; set; } = Enumerable.Empty<decimal?>();
         public IEnumerable<decimal?> TemperaturesOUT { get; set; } = Enumerable.Empty<decimal?>();

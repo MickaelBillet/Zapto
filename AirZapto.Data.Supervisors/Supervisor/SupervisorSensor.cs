@@ -1,7 +1,9 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Mappers;
+using AirZapto.Data.Services.Repositories;
 using AirZapto.Model;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 
 namespace AirZapto.Data.Supervisors
 {
@@ -12,7 +14,7 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorSensor(IServiceProvider serviceProvider) : base(serviceProvider)
+        public SupervisorSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
         {
 
         }
@@ -55,27 +57,6 @@ namespace AirZapto.Data.Supervisors
 			}
 
 			return result;
-		}
-
-		public async Task<(ResultCode, Sensor?)> GetSensorAsync(string id)
-		{
-			ResultCode result = ResultCode.ItemNotFound;
-			Sensor? sensor = null;
-            if (this.Repository != null)
-            {
-                SensorEntity? entity = await this.Repository.GetSensorAsync(id);
-                sensor = (entity != null) ? SensorMapper.Map(entity) : null;
-                if (sensor != null)
-                {
-                    result = ResultCode.Ok;
-                }
-                else
-                {
-                    result = ResultCode.ItemNotFound;
-                }
-            }
-
-            return (result, sensor);
 		}
 
 		public async Task<(ResultCode, Sensor?)> GetSensorFromIdSocketAsync(string idSocket)

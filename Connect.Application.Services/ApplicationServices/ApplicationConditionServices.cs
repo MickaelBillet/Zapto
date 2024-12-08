@@ -6,30 +6,24 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationConditionServices : IApplicationConditionServices
+    internal sealed class ApplicationConditionServices : IApplicationConditionServices
 	{
-		#region Properties
-
-		private IConditionService? ConditionService { get; }
-
+        #region Services
+        private IConditionService? ConditionService { get; }
 		#endregion
 
 		#region Constructor
-
 		public ApplicationConditionServices(IServiceProvider serviceProvider)
 		{
 			this.ConditionService = serviceProvider.GetService<IConditionService>();
 		}
-
 		#endregion
 
 		#region Methods
-
 		public async Task<bool?> UpdateCondition(Condition condition)
 		{
 			return (this.ConditionService != null) ? await this.ConditionService.UpdateConditionAsync(condition) : null;
 		}
-
 		#endregion
 	}
 }

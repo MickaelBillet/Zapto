@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorLocation : ISupervisorLocation
+    public sealed class SupervisorLocation : Supervisor, ISupervisorLocation
     {
         private readonly Lazy<IRepository<LocationEntity>> _lazyLocationRepository;
         private readonly Lazy<IRepository<RoomEntity>> _lazyRoomRepository;
@@ -58,7 +58,6 @@ namespace Connect.Data.Supervisors
                     location.RoomsList = new ObservableCollection<Room>(roomEntities.Select(item => RoomMapper.Map(item)));
                 }
             }
-
             return location;
         }
 
@@ -69,7 +68,6 @@ namespace Connect.Data.Supervisors
             ResultCode result = (res > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
             return result;
         }
-
         #endregion
     }
 }

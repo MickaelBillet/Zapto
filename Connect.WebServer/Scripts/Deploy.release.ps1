@@ -16,16 +16,18 @@ if($LASTEXITCODE -eq 0)
         # Success
         Write-Output "Compil Success"
         Write-Output "Publish Progress..."
-        $result = dotnet publish ..\Connect.WebServer.csproj -c Release /p:PublishProfile=..\Properties\PublishProfiles\FolderProfile.pubxml;
+        $result = dotnet publish ..\Connect.WebServer.csproj -c Release --runtime linux-arm64 --self-contained
 
         if($LASTEXITCODE -eq 0)
         {
             # Success
             Write-Output "Publish Success"
-            cd ..\bin\Release\net7.0\linux-arm;
-            $Cmd = "pscp -l pi -pw 280452mb -batch * 192.168.1.13:/home/pi/Desktop/connect" 
+            cd ..\bin\Release\net8.0\linux-arm64;
+            $Cmd = "pscp -l zapto -pw 280452Mb -batch * 192.168.1.30:/home/pi/Desktop/connect" 
             Invoke-Expression "& $( $Cmd )";
             cd ..\..\..\..
+
+            ssh zapto@192.168.1.30 /home/pi/Desktop/Rpi_Services/zapto.sh
         }
         else
         {

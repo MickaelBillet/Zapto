@@ -1,5 +1,6 @@
 ﻿using MimeKit;
 using System.IO;
+#nullable disable
 
 namespace Framework.Infrastructure.Services
 {

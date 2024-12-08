@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -12,18 +12,18 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class MainViewModel : BaseViewModel, IMainViewModel
 	{
 		#region Properties
-        private IStorageService StorageService { get; }
+        private IZaptoLocalStorageService StorageService { get; }
 		#endregion
 
 		#region Constructor
 		public MainViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-            this.StorageService = serviceProvider.GetRequiredService<IStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
 		}
         #endregion
 
         #region  Methods
-        public override async Task InitializeAsync(string? parameter)
+        public override async Task InitializeAsync(object? parameter)
         {
             const string defaultCulture = "en-US";
 
@@ -32,7 +32,7 @@ namespace Zapto.Component.Common.ViewModels
 
             if (result == null)
             {
-                await this.StorageService.SetItemAsync("culture", defaultCulture);
+                await this.StorageService.SetItemAsync<string>("culture", defaultCulture);
             }
 
             CultureInfo.DefaultThreadCurrentCulture = culture;

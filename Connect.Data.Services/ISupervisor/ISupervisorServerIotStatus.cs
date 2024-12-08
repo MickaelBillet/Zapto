@@ -1,5 +1,6 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
+using System.Threading.Tasks;
 
 namespace Connect.Data
 {

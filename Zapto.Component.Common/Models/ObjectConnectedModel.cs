@@ -1,8 +1,6 @@
-﻿using Connect.Model;
-
-namespace Zapto.Component.Common.Models
+﻿namespace Zapto.Component.Common.Models
 {
-	public abstract class ObjectConnectedModel : BaseModel
+    public abstract record ObjectConnectedModel : BaseModel
 	{		
 		public string? Name { get; set; }
 		public string LocationId { get; set; } = string.Empty;

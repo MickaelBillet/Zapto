@@ -23,20 +23,20 @@ namespace Framework.Infrastructure.Services
 
         public MailService(IServiceProvider serviceProvider)
         {
-            MailSettings = serviceProvider.GetRequiredService<IOptions<MailSettings>>().Value;
+            this.MailSettings = serviceProvider.GetRequiredService<IOptions<MailSettings>>().Value;
         }
 
         #endregion
 
         #region Methods
-        public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent)
+        public async Task<bool> SendEmailAsync(MailRequest mailRequest, EventHandler<MessageSentEventArgs> smtp_sent, string mailPassword, string mailAddress)
         {
             MimeMessage email = new MimeMessage
             {
-                Sender = MailboxAddress.Parse(MailSettings.Mail)
+                Sender = MailboxAddress.Parse(mailAddress)
             };
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-            email.From.Add(MailboxAddress.Parse(MailSettings.Mail));
+            email.From.Add(MailboxAddress.Parse(mailAddress));
             email.Subject = mailRequest.Subject;
             BodyBuilder builder = new BodyBuilder();
             bool isSent = false;
@@ -70,7 +70,7 @@ namespace Framework.Infrastructure.Services
                     {
                         if (this.MailSettings.SecureSocketOptions != null)
                         {
-                            Task connectTask = smtp.ConnectAsync(MailSettings.Host, MailSettings.Port, SetOption(MailSettings.SecureSocketOptions), token);
+                            Task connectTask = smtp.ConnectAsync(this.MailSettings.Host, this.MailSettings.Port, SetOption(this.MailSettings.SecureSocketOptions), token);
                             Task completetdTask = await Task.WhenAny(connectTask, Task.Delay(5000));
                             if (completetdTask != connectTask)
                             {
@@ -81,9 +81,9 @@ namespace Framework.Infrastructure.Services
 
                     if (smtp.IsConnected)
                     {
-                        if (string.IsNullOrEmpty(MailSettings.Login) == false && string.IsNullOrEmpty(MailSettings.Password) == false)
+                        if (string.IsNullOrEmpty(mailAddress) == false && string.IsNullOrEmpty(mailPassword) == false)
                         {
-                            await smtp.AuthenticateAsync(MailSettings.Login, MailSettings.Password, token);
+                            await smtp.AuthenticateAsync(mailAddress, mailPassword, token);
                         }
                         await smtp.SendAsync(email, token);
                         isSent = true;

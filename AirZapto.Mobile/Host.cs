@@ -116,20 +116,18 @@ namespace AirZapto.Mobile
 			ILogger logger = new LoggerConfiguration()// Set default log level limit to Debug				
 			.WriteTo.Logger(config => config
 							.MinimumLevel.Error()
-							.WriteTo.Email(new EmailConnectionInfo
-							{
-								MailServer = "smtp.gmail.com",
-								FromEmail = "mickaconnect.zapto@gmail.com",
-								ToEmail = "mickaconnect.zapto@gmail.com",
-								EmailSubject = "Fatal error",
-								NetworkCredentials = new NetworkCredential
+							.WriteTo.Email(
+								host:"smtp.gmail.com",
+								from:"mickaconnect.zapto@gmail.com",
+								to:"mickaconnect.zapto@gmail.com",
+								subject:"Fatal error",
+								credentials: new NetworkCredential
 								{
 									UserName = "mickaconnect.zapto@gmail.com",
 									Password = "beauTemps?08"
 								},
-								EnableSsl = true,
-								Port = 465,
-							}))
+								port:465
+							))
 			.CreateLogger();
 
 			services.AddSingleton<ILogger>(logger);

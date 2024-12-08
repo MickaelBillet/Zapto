@@ -6,12 +6,12 @@ namespace Connect.WebServer.Services
     {
         public async Task AddToLocation(string locationId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, locationId);
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, locationId);
         }
 
         public async Task RemoveFromLocation(string locationId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, locationId);
+            await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, locationId);
         }
 
         public Task ThrowException()

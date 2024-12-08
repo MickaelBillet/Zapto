@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IAirPollutionViewModel : IBaseViewModel
     {
-        Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude);
+        //Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude);
         Task<AirPollutionModel?> GetAirPollutionModel(LocationModel location);
         Task<AirPollutionModel?> GetAirPollutionModel();
         void OpenDetails(AirPollutionModel model);
@@ -63,30 +63,6 @@ namespace Zapto.Component.Common.ViewModels
             }
             return model;
         }
-        public async Task<AirPollutionModel?> GetAirPollutionModel(string location, string longitude, string latitude)
-        {
-            AirPollutionModel? model = null;
-            try
-            {
-                this.IsLoading = true;
-
-                ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location, longitude, latitude);
-                if (zaptoAirPollution != null)
-                {
-                    model = this.Map(zaptoAirPollution);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Debug($"{ClassHelper.GetCallerClassAndMethodName()} - {ex.ToString()}");
-                this.NavigationService.ShowMessage("AirPollution Service Exception", ZaptoSeverity.Error);
-            }
-            finally
-            {
-                this.IsLoading = false;
-            }
-            return model;
-        }
         public async Task<AirPollutionModel?> GetAirPollutionModel(LocationModel location)
         {
             AirPollutionModel? model = null;
@@ -96,7 +72,7 @@ namespace Zapto.Component.Common.ViewModels
                 {
                     this.IsLoading = true;
 
-                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location.Longitude.ToString(), location.Latitude.ToString());
+                    ZaptoAirPollution zaptoAirPollution = await ApplicationAirPollutionService.GetCurrentAirPollution(location.Location, location.Longitude.ToString(), location.Latitude.ToString());
                     if (zaptoAirPollution != null)
                     {
                         model = this.Map(zaptoAirPollution);

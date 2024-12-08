@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Connect.Application.Services
 {
-    internal class ApplicationConnectedObjectServices : IApplicationConnectedObjectServices
+    internal sealed class ApplicationConnectedObjectServices : IApplicationConnectedObjectServices
     {
         #region Services
 		private IAlertService? AlertService { get; }
@@ -26,7 +26,7 @@ namespace Connect.Application.Services
         #endregion
 
         #region Methods
-        public async Task SendDataToClientAsync(string locationId, ConnectedObject @object)
+        public async Task SendDataToClient(string locationId, ConnectedObject @object)
         {
             if ((this.SignalRConnectService != null) && (@object.Sensor != null))
             {

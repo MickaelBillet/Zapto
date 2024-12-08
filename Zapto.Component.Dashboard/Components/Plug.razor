@@ -2,12 +2,12 @@
 @inject IPlugViewModel? ViewModel
 @implements IDisposable
 
-<MudPaper Class="mb-4 mx-2" Elevation="0" Style="@($"background:{Colors.Grey.Lighten4}")">
+<MudPaper Class="mb-4 mx-2" Elevation="0" Style="@($"background:{Colors.Gray.Lighten4}")">
     <MudContainer Fixed="true">    
         <MudGrid Spacing="0" Justify="Justify.Center" >
             <MudItem xs=6 sm=6 md=6 Class="my-5">
                 <MudText Align="Align.Center" Class="mx-2">@this.Model?.Name</MudText>
-                <MudPaper Square="true" Style="@($"background:{Colors.Grey.Lighten4};")" Class="d-flex justify-content-center mt-2" Elevation="0">
+                <MudPaper Square="true" Style="@($"background:{Colors.Gray.Lighten4};")" Class="d-flex justify-content-center mt-2" Elevation="0">
                     <img height="25" class="ml-0 my-0" src="@this.Model?.FileNameTypeImage"/>
                     <img height="25" class="ml-5 my-0" src="@this.Model?.FileNameStatusImage"/>
                 </MudPaper>
@@ -64,7 +64,7 @@
         bool? res = null;
         if ((this.Model != null) && (this.ViewModel != null))
         {
-            res = await this.ViewModel.SendCommandAsync(this.Model?.Command, this.Model?.Id);
+            res = await this.ViewModel.SendCommandAsync(this.Model);
         }
     }
 

@@ -6,10 +6,10 @@ namespace Connect.Application
     public interface IApplicationSensorServices
 	{
 		Task<int?> Notify(Sensor sensor);
-		Task<SensorData?> ReceiveDataAsync();
-		Task<SensorEvent?> ReceiveEventAsync();
-		Task SendEventToClientAsync(string locationId, Sensor sensor);
-		Task<bool?> Leak(string? sensorId, int leakStatus);
+		Task SendEventToClient(string locationId, Sensor sensor);
 		Task NotifySensorLeak(string locationId, Room room);
+		Task ReadData(SensorData? sensorData);
+		Task ReadEvent(SensorEvent? sensorEvent);
+        Task<bool?> Leak(string? sensorId, int leakStatus);
     }
 }

@@ -8,7 +8,7 @@ namespace Zapto.Component.Common.ViewModels
     public interface IRoomViewModel : IBaseViewModel
 	{
 		public Task<bool> ReceiveStatusAsync(RoomModel model);
-		public void OpenChart(string roomId, string roomName, string location);
+		public void OpenChart(RoomModel model);
     }
 
     public class RoomViewModel : BaseViewModel, IRoomViewModel
@@ -25,15 +25,19 @@ namespace Zapto.Component.Common.ViewModels
 		#endregion
 
 		#region Methods
-
-		public override async Task InitializeAsync(string? parameter)
+		public override async Task InitializeAsync(object? parameter)
 		{
 			await base.InitializeAsync(parameter);
 		}
 
-		public void OpenChart(string roomId, string roomName, string location)
+		public void OpenChart(RoomModel model)
 		{
-			this.NavigationService.NavigateTo($"/roomchartlist/{location}/{roomId}/{roomName}");
+			if ((string.IsNullOrEmpty(model.Id) == false) 
+				&& (string.IsNullOrEmpty(model.Name) == false) 
+				&& (string.IsNullOrEmpty(model.LocationName) == false))
+			{
+				this.NavigationService.NavigateTo($"/roomchartlist/{model.LocationName}/{model.Id}/{model.Name}");
+			}
 		}
 
 		public async Task<bool> ReceiveStatusAsync(RoomModel model)
@@ -43,13 +47,14 @@ namespace Zapto.Component.Common.ViewModels
             {
                 res = await this.SignalRService.StartAsync(model.LocationId,
 				null,
-				(roomStatus) =>
+				async (roomStatus) =>
 				{
 					if (model?.Id == roomStatus.RoomId)
 					{
 						model.Humidity = (roomStatus.Humidity != null) ? roomStatus.Humidity.Value.ToString("00") : null;
 						model.Temperature = (roomStatus.Temperature != null) ? roomStatus.Temperature.Value.ToString("00.0") : null;
 						this.OnRefresh(new EventArgs());
+						await Task.CompletedTask;
 					}
 				},
 				null,
@@ -61,7 +66,6 @@ namespace Zapto.Component.Common.ViewModels
                 throw new Exception("SignalR Exception");
             }
 			return res;
-
         }
 
 		public override void Dispose()

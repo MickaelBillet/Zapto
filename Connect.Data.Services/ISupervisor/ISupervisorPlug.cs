@@ -1,11 +1,12 @@
 ﻿using Connect.Model;
 using Framework.Core.Base;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Connect.Data
 {
-    public interface ISupervisorPlug
+    public interface ISupervisorPlug : ISupervisor
     {
-        Task<ResultCode> PlugExists(string id);
         Task<IEnumerable<Plug>> GetPlugs();
         Task<Plug> GetPlug(string address, string unit);
         Task<Plug> GetPlug(string id);

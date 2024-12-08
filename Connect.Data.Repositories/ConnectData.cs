@@ -9,11 +9,17 @@ namespace Connect.Data.Repository
 {
     public static class ConnectData
 	{
-		public static void AddRepositories(this IServiceCollection services)
+		public static void AddRepositories(this IServiceCollection services, string connectionStringKey, string serverTypeKey)
 		{
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataContextFactory, DataContextFactory>();
-            services.AddTransient<IDalSession, DalSession>();
+            services.AddTransient<IDalSession, DalSession>(provider => new DalSession(provider, connectionStringKey, serverTypeKey));
+        }
+        public static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddTransient<IRepositoryFactory, RepositoryFactory>();
+            services.AddTransient<IDataContextFactory, DataContextFactory>();
+            services.AddTransient<IDalSession, DalSession>(provider => new DalSession(provider));
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-  "BackEndUrl": "192.168.1.47", //PC Houilles 192.168.1.47  //Novacor 192.168.1.75
+  "BackEndUrl": "192.168.1.117", //PC Houilles 192.168.1.117  //Novacor 192.168.1.75
   "PortHttp": 5000,
   "PortHttps": 5000,
   "ProtocolController": "http",
@@ -10,7 +10,7 @@
   "Password": "connect",
   "Keycloak": {
     "realm": "Zapto",
-    "Authority": "http://192.168.1.29:7000/auth/realms/zapto",
+    "Authority": "http://192.168.1.13:7000/auth/realms/zapto",
     "client_id": "ZaptoOIDC",
     "client_secret": "9beff704-8e30-41e6-8b93-21f4c1c608f6",
     "token_endpoint_url": "/protocol/openid-connect/token"

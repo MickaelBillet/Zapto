@@ -77,24 +77,31 @@
                         <RowDefinition Height="20"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Text="{Binding Name}" 
-                            Style="{StaticResource NormalLabelStyle}" 
-                            FontAttributes="None"
-                            FontSize="18"
-                            Grid.Column="0"
-                            Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            VerticalOptions="CenterAndExpand"/>
+                    <Label Text="{Binding Name}"
+                           Style="{StaticResource NormalLabelStyle}"
+                           FontAttributes="None"
+                           FontSize="18"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.ColumnSpan="2"
+                           VerticalOptions="CenterAndExpand" />
 
-                    <Label
-                        Text="{Binding Sensor.Name}"
-                        Style="{StaticResource NormalLabelStyle}"
-                        FontAttributes="Bold"
-                        FontSize="14"
-                        Grid.Column="0"
-                        Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        VerticalOptions="StartAndExpand" />
+                    <StackLayout Orientation="Horizontal"
+                                 Grid.Column="0"
+                                 Grid.Row="1"
+                                 Grid.ColumnSpan="2">
+                        <Label Text="{Binding Sensor.Name}"
+                               Style="{StaticResource NormalLabelStyle}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                        <Ellipse Fill="{Binding Sensor.IsRunning, Converter={StaticResource StatusSensorConverter}}"
+                                 Margin="0"
+                                 WidthRequest="15"
+                                 HorizontalOptions="Start"
+                                 VerticalOptions="Center"
+                                 HeightRequest="15"></Ellipse>
+                    </StackLayout>
 
                     <StackLayout
                         Grid.Column="2"
@@ -187,10 +194,8 @@
                         Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalOptions="StartAndExpand">
-                        <Image
-                            Source="alert_gray.png"
-                            IsVisible="{Binding NotificationsList.Count, Converter={StaticResource LengthToIsVisibleConverter}}"></Image>
-
+                        <Image Source="alert_gray.png"
+                               IsVisible="{Binding NotificationsList.Count, Converter={StaticResource LengthToIsVisibleConverter}}"></Image>
                     </StackLayout>
 
                 </Grid>

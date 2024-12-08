@@ -29,7 +29,7 @@ namespace AirZapto.Application.Services
 
 		#region Methods
 
-		public async Task<IEnumerable<AirZaptoData>?> GetSensorDataAsync(string? sensorId, int duration)
+		public async Task<IEnumerable<AirZaptoData>?> GetSensorData(string? sensorId, int duration)
 		{
 			try
 			{

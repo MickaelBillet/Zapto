@@ -1,5 +1,8 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Data.Abstractions;
+using Framework.Infrastructure.Abstractions;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,41 +15,46 @@ namespace Framework.Data.Services
 		private bool _disposed = false;
 
 		#region Properties
-		protected IDataContextFactory DataContextFactory { get; }
-        protected IServiceScopeFactory ServiceScopeFactory { get; set; }
-        protected IConfiguration Configuration { get; }
+		protected IDataContextFactory? DataContextFactory { get; }
+        protected IServiceScopeFactory? ServiceScopeFactory { get; }
+		protected ISecretService? SecretService { get; }
+        protected IConfiguration? Configuration { get; }
+		protected ConnectionType ConnectionType { get; }
         private bool IsInitialized { get; set; }
 		#endregion
 
 		#region Constructor
-		public DatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
+		public DatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey)
 		{
-			this.DataContextFactory = dataContextFactory;
-            this.ServiceScopeFactory = serviceScopeFactory;
-            this.Configuration = configuration;
+			this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
+			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
+			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService, connectionStringKey, serverTypeKey); 
 		}
+        public DatabaseService(IServiceProvider serviceProvider)
+        {
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration);
+        }
         #endregion
 
         #region Methods
 
         public async Task ConfigureDatabase()
-        {
-            ConnectionType connectionType = new()
+        {		
+            if (this.DatabaseExist(this.ConnectionType) == false)
             {
-                ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
-            };
-
-            if (this.DatabaseExist(connectionType) == false)
-            {
-                bool isCreated = this.CreateDatabase(connectionType);
+                bool isCreated = this.CreateDatabase(this.ConnectionType);
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync();
                 }
             }
 
-            if (this.DatabaseExist(connectionType) == true)
+            if (this.DatabaseExist(this.ConnectionType) == true)
             {
                 bool isUpgraded = await this.UpgradeDatabaseAsync();
                 await this.InitializeDataAsync();
@@ -66,16 +74,9 @@ namespace Framework.Data.Services
         public bool DropDatabase()
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
-                ConnectionType connectionType = new()
-                {
-                    ConnectionString = this.Configuration["ConnectionStrings:DefaultConnection"],
-                    ServerType = ConnectionType.GetServerType(this.Configuration["ConnectionStrings:ServerType"])
-                };
-
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
+                using (IDataContext? context = this.DataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType)?.context)
 				{
 					if ((context != null) && (context.DataBaseExists() == true))
 					{
@@ -83,14 +84,12 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 
         protected bool CreateDatabase(ConnectionType connectionType)
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
                 using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
@@ -101,14 +100,12 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 
         protected bool DatabaseExist(ConnectionType connectionType)
 		{
 			bool res = false;
-
 			if (this.DataContextFactory != null)
 			{
                 using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
@@ -119,7 +116,6 @@ namespace Framework.Data.Services
 					}
 				}
 			}
-
 			return res;
 		}
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using Zapto.Component.Common.IServices;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
     {
 		#region Properties
-        private IStorageService StorageService { get; set; }
+        private IZaptoLocalStorageService StorageService { get; set; }
 
         public CultureInfo[]? Cultures { get; private set; }
 
@@ -35,12 +35,12 @@ namespace Zapto.Component.Common.ViewModels
         #region Constructor
         public ChooseLanguageViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.StorageService = serviceProvider.GetRequiredService<IStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
         }
 		#endregion
 
 		#region Methods
-		public override async Task InitializeAsync(string? parameter)
+		public override async Task InitializeAsync(object? parameter)
         {
             await Task.Run(() =>
             {

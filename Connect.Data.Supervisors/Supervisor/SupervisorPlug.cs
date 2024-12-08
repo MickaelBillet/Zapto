@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorPlug : ISupervisorPlug
+    public sealed class SupervisorPlug : Supervisor, ISupervisorPlug
     {
         private readonly Lazy<IPlugRepository> _lazyPlugRepository;
         private readonly Lazy<IRepository<ConfigurationEntity>> _lazyConfigurationRepository;
@@ -46,7 +46,6 @@ namespace Connect.Data.Supervisors
             return (await this.PlugRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        //Don't cache this Method
         public async Task<IEnumerable<Plug>> GetPlugs()
         {
             List<Plug> plugs = null;
@@ -65,18 +64,16 @@ namespace Connect.Data.Supervisors
                         IEnumerable<OperationRangeEntity> operationRangeEntities = await this.OperationRangeRepository.GetCollectionAsync((arg) => arg.ProgramId == plug.ProgramId);
                         if (operationRangeEntities != null)
                         {
-                            IEnumerable<OperationRange> operationRanges = operationRangeEntities.Select(item => OperationRangeMapper.Map(item));
+                            List<OperationRange> operationRanges = operationRangeEntities.Select(item => OperationRangeMapper.Map(item)).ToList();
                             foreach (OperationRange operationRange in operationRanges)
                             {
                                 operationRange.Condition = ConditionMapper.Map(await this.ConditionRepository.GetAsync((arg) => arg.Id == operationRange.ConditionId));
                             }
-
                             plug.Program.OperationRangeList = new ObservableCollection<OperationRange>(operationRanges);
                         }
                     }
                 }
             }
-
             return plugs;
         }
 
@@ -96,12 +93,11 @@ namespace Connect.Data.Supervisors
                     IEnumerable<OperationRangeEntity> operationRangeEntities = await this.OperationRangeRepository.GetCollectionAsync((arg) => arg.ProgramId == plug.ProgramId);
                     if (operationRangeEntities != null)
                     {
-                        IEnumerable<OperationRange> operationRanges = operationRangeEntities.Select(item => OperationRangeMapper.Map(item));
+                        List<OperationRange> operationRanges = operationRangeEntities.Select(item => OperationRangeMapper.Map(item)).ToList();
                         foreach (OperationRange operationRange in operationRanges)
                         {
                             operationRange.Condition = ConditionMapper.Map(await this.ConditionRepository.GetAsync((arg) => arg.Id == operationRange.ConditionId));
                         }
-
                         plug.Program.OperationRangeList = new ObservableCollection<OperationRange>(operationRanges);
                     }
                 }
@@ -134,14 +130,12 @@ namespace Connect.Data.Supervisors
         public async Task<Plug> GetPlug(string address, string unit)
         {
             Plug plug = null;
-
             Configuration config = ConfigurationMapper.Map(await this.ConfigurationRepository.GetAsync(arg => ((arg.Address == address) && (arg.Unit == unit))));
             if (config != null)
             {
                 //Test if the item exists - the configuration is unique for a plug
                 plug = PlugMapper.Map(await this.PlugRepository.GetAsync(arg => ((arg.ConfigurationId == config.Id))));                
             }
-
             return plug;
         }
 

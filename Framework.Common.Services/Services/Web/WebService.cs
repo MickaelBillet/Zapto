@@ -19,7 +19,7 @@ namespace Framework.Infrastructure.Services
         private IErrorHandlerWebService ErrorHandlerService { get; }
         private IHttpClientService HttpClientService { get; }
         private IInternetService InternetService { get; }
-        private IAuthenticationWebService AuthenticationWebService { get; }
+        private IAuthenticationWebService? AuthenticationWebService { get; }
         public string HttpClientName { get;}
         #endregion
 
@@ -47,45 +47,47 @@ namespace Framework.Infrastructure.Services
         /// <returns>The async.</returns>
         /// <param name="url">URL.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public async Task<IEnumerable<T>> GetCollectionAsync<T>(string url, JsonSerializerOptions options, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<IEnumerable<T>?> GetCollectionAsync<T>(string url, JsonSerializerOptions options, CancellationToken cancellationToken = default, int attempt = 1)
         {
-            IEnumerable<T> items = null;
+            IEnumerable<T>? items = null;
 
            if (this.InternetService?.IsConnectedToInternet() != false)
             {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-                }
-
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{client.BaseAddress}{url}"))
-                {
-                    //Do not wait until all data is in memory before deserializing -> HttpCompletionOption.ResponseHeadersRead
-                    using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
                     {
-                        //GET
-                        if (response != null)
-                        {
-                            if (response.IsSuccessStatusCode == true)
-                            {
-                                Stream stream = await response.Content.ReadAsStreamAsync();
-                                items = await this.SystemTextJsonContentSerializer.DeserializeAsync<IEnumerable<T>>(stream, options);
-                            }
-                            else
-                            {
-                                bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}", attempt);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
 
-                                if (!hasError)
+                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{client.BaseAddress}{url}"))
+                    {
+                        //Do not wait until all data is in memory before deserializing -> HttpCompletionOption.ResponseHeadersRead
+                        using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                        {
+                            //GET
+                            if (response != null)
+                            {
+                                if (response.IsSuccessStatusCode == true)
                                 {
-                                    items = await this.GetCollectionAsync<T>(url, options, cancellationToken, attempt: 2);
+                                    Stream stream = await response.Content.ReadAsStreamAsync();
+                                    items = await this.SystemTextJsonContentSerializer.DeserializeAsync<IEnumerable<T>>(stream, options);
+                                }
+                                else
+                                {
+                                    bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}", attempt);
+
+                                    if (!hasError)
+                                    {
+                                        items = await this.GetCollectionAsync<T>(url, options, cancellationToken, attempt: 2);
+                                    }
                                 }
                             }
-                        }
-                        else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
-                        {
-                            this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
+                            {
+                                this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            }
                         }
                     }
                 }
@@ -108,47 +110,49 @@ namespace Framework.Infrastructure.Services
         /// <param name="cancellationToken"></param>
         /// <param name="attempt"></param>
         /// <returns></returns>
-        public async Task<bool?> HeadAsync<T>(string url, string id, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<bool?> HeadAsync<T>(string url, string? id, CancellationToken cancellationToken = default, int attempt = 1)
         {
             bool? res = null;
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-                }
-
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, $"{client.BaseAddress}{url}" + id))
-                {
-                    //HEAD
-                    using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
                     {
-                        if (response != null)
-                        {                            
-                            if (response.IsSuccessStatusCode == true)
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
+
+                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, $"{client.BaseAddress}{url}" + id))
+                    {
+                        //HEAD
+                        using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                        {
+                            if (response != null)
                             {
-                                res = true;
-                            }
-                            else
-                            {
-                                bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
-                                if (hasError == false)
+                                if (response.IsSuccessStatusCode == true)
                                 {
-                                    res = await this.HeadAsync<T>(url, id, cancellationToken, attempt: 2);
+                                    res = true;
                                 }
                                 else
-								{
-                                    res = false;
-								}
+                                {
+                                    bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
+                                    if (hasError == false)
+                                    {
+                                        res = await this.HeadAsync<T>(url, id, cancellationToken, attempt: 2);
+                                    }
+                                    else
+                                    {
+                                        res = false;
+                                    }
+                                }
                             }
-                        }
-                        else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
-                        {
-                            res = false;
-                            this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
+                            {
+                                res = false;
+                                this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            }
                         }
                     }
                 }
@@ -168,47 +172,49 @@ namespace Framework.Infrastructure.Services
         /// <param name="url">URL.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async Task<T> GetAsync<T>(string url, string id, JsonSerializerOptions options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
+		public async Task<T> GetAsync<T>(string url, string? id, JsonSerializerOptions? options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
         {
             T item = default;
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-                }
-
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format($"{client.BaseAddress}{url}", id)))
-                {
-                    //Do not wait until all data is in memory before deserializing -> HttpCompletionOption.ResponseHeadersRead
-                    using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
                     {
-                        if (response != null)
-                        {
-                            if (response.IsSuccessStatusCode == true)
-                            {
-                                Stream stream = await response.Content.ReadAsStreamAsync();
-                                item = await this.SystemTextJsonContentSerializer.DeserializeAsync<T>(stream, options);
-                            }
-                            else
-                            {
-                                bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
 
-                                if (hasError == false)
+                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, string.Format($"{client.BaseAddress}{url}", id)))
+                    {
+                        //Do not wait until all data is in memory before deserializing -> HttpCompletionOption.ResponseHeadersRead
+                        using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken), cancellationToken).ConfigureAwait(false))
+                        {
+                            if (response != null)
+                            {
+                                if (response.IsSuccessStatusCode == true)
                                 {
-                                    item = await this.GetAsync<T>(url, id, options, cancellationToken, attempt: 2);
+                                    Stream stream = await response.Content.ReadAsStreamAsync();
+                                    item = await this.SystemTextJsonContentSerializer.DeserializeAsync<T>(stream, options);
+                                }
+                                else
+                                {
+                                    bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
+
+                                    if (hasError == false)
+                                    {
+                                        item = await this.GetAsync<T>(url, id, options, cancellationToken, attempt: 2);
+                                    }
                                 }
                             }
-                        }
-                        else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
-                        {
-                            this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
+                            {
+                                this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                            }
                         }
                     }
-                }                
+                }
             }
 			else
 			{
@@ -231,54 +237,56 @@ namespace Framework.Infrastructure.Services
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null)) 
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-                }
-
-                MemoryStream memoryStream = await this.SystemTextJsonContentSerializer.SerializeWithStreamAsync<T>(t);
-
-                //Prepares the message of the call webservice
-                using (StreamContent requestContent = new StreamContent(memoryStream))
-                {
-                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{client.BaseAddress}{url}"))
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
                     {
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        request.Content = requestContent;
-                        requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
 
-                        //POST
-                        using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
+                    MemoryStream memoryStream = await this.SystemTextJsonContentSerializer.SerializeWithStreamAsync<T>(t);
+
+                    //Prepares the message of the call webservice
+                    using (StreamContent requestContent = new StreamContent(memoryStream))
+                    {
+                        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{client.BaseAddress}{url}"))
                         {
-                            if (response != null)
-                            {
-                                using (Stream stream = await response.Content.ReadAsStreamAsync())
-                                {
-                                    if (response.IsSuccessStatusCode == true)
-                                    {
-                                        res = true;
-                                    }
-                                    else
-                                    {
-                                        bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}", attempt);
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Content = requestContent;
+                            requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                                        if (!hasError)
+                            //POST
+                            using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
+                            {
+                                if (response != null)
+                                {
+                                    using (Stream stream = await response.Content.ReadAsStreamAsync())
+                                    {
+                                        if (response.IsSuccessStatusCode == true)
                                         {
-                                            res = await this.PostAsync<T>(url, t, cancellationToken, attempt: 2);
+                                            res = true;
                                         }
                                         else
                                         {
-                                            res = false;
+                                            bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}", attempt);
+
+                                            if (!hasError)
+                                            {
+                                                res = await this.PostAsync<T>(url, t, cancellationToken, attempt: 2);
+                                            }
+                                            else
+                                            {
+                                                res = false;
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
-                            {
-                                res = false;
-                                this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                                else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
+                                {
+                                    res = false;
+                                    this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                                }
                             }
                         }
                     }
@@ -300,32 +308,102 @@ namespace Framework.Infrastructure.Services
         /// <param name="t">T.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public async Task<bool?> PutAsync<T>(string url, T t, string id, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<bool?> PutAsync<T>(string url, T t, string? id, CancellationToken cancellationToken = default, int attempt = 1)
         {
             bool? res = null;
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
+
+                    MemoryStream memoryStream = await this.SystemTextJsonContentSerializer.SerializeWithStreamAsync<T>(t);
+
+                    //Prepares the message of the call webservice
+                    using (StreamContent requestContent = new StreamContent(memoryStream))
+                    {
+                        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, string.Format($"{client.BaseAddress}{url}", id)))
+                        {
+                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            request.Content = requestContent;
+                            requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                            //PUT
+                            using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
+                            {
+                                if (response != null)
+                                {
+                                    using (Stream stream = await response.Content.ReadAsStreamAsync())
+                                    {
+                                        if (response.IsSuccessStatusCode == true)
+                                        {
+                                            res = true;
+                                        }
+                                        else
+                                        {
+                                            bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
+
+                                            if (!hasError)
+                                            {
+                                                res = await this.PutAsync<T>(url, t, id, cancellationToken, attempt: 2);
+                                            }
+                                            else
+                                            {
+                                                res = false;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
+                                {
+                                    res = false;
+                                    this.ErrorHandlerService.HandleError("HttpResponseFailure");
+                                }
+                            }
+                        }
+                    }
                 }
+            }
+			else
+			{
+				this.ErrorHandlerService.HandleInternetError();
+			}
 
-                MemoryStream memoryStream = await this.SystemTextJsonContentSerializer.SerializeWithStreamAsync<T>(t);
+			return res;
+		}
 
-                //Prepares the message of the call webservice
-                using (StreamContent requestContent = new StreamContent(memoryStream))
+        /// <summary>
+        /// Deletes the async.
+        /// </summary>
+        /// <returns>The async.</returns>
+        /// <param name="url">URL.</param>
+        /// <param name="id">Identifier.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+		public async Task<bool?> DeleteAsync<T>(string url, string? id, CancellationToken cancellationToken = default, int attempt = 1)
+        {
+            bool? res = null;
+
+            if (this.InternetService?.IsConnectedToInternet() != false)
+            {
+                HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, string.Format($"{client.BaseAddress}{url}", id)))
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
+
+                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, string.Format($"{client.BaseAddress}{url}", id)))
                     {
                         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        request.Content = requestContent;
-                        requestContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                        //PUT
-                        using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
+                        //DELETE
+                        using (HttpResponseMessage? response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
                         {
                             if (response != null)
                             {
@@ -341,7 +419,7 @@ namespace Framework.Infrastructure.Services
 
                                         if (!hasError)
                                         {
-                                            res = await this.PutAsync<T>(url, t, id, cancellationToken, attempt: 2);
+                                            res = await this.DeleteAsync<T>(url, id, cancellationToken, attempt: 2);
                                         }
                                         else
                                         {
@@ -367,86 +445,22 @@ namespace Framework.Infrastructure.Services
 			return res;
 		}
 
-        /// <summary>
-        /// Deletes the async.
-        /// </summary>
-        /// <returns>The async.</returns>
-        /// <param name="url">URL.</param>
-        /// <param name="id">Identifier.</param>
-        /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async Task<bool?> DeleteAsync<T>(string url, string id, CancellationToken cancellationToken = default, int attempt = 1)
+        public async Task<Stream?> GetImageStreamAsync(string url)
         {
-            bool? res = null;
-
-            if (this.InternetService?.IsConnectedToInternet() != false)
-            {
-                HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
-                {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-                }
-
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, string.Format($"{client.BaseAddress}{url}", id)))
-                {
-                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    //DELETE
-                    using (HttpResponseMessage response = await this.QueryCurrencyServiceWithRetryPolicy(() => client.SendAsync(request, cancellationToken), cancellationToken).ConfigureAwait(false))
-                    {
-                        if (response != null)
-                        {
-                            using (Stream stream = await response.Content.ReadAsStreamAsync())
-                            {
-                                if (response.IsSuccessStatusCode == true)
-                                {
-                                    res = true;
-                                }
-                                else
-                                {
-                                    bool hasError = await this.ErrorHandlerService.HandleErrorAsync(response, $"{client.BaseAddress}{url}" + id, attempt);
-
-                                    if (!hasError)
-                                    {
-                                        res = await this.DeleteAsync<T>(url, id, cancellationToken, attempt: 2);
-                                    }
-                                    else
-                                    {
-                                        res = false;
-                                    }
-                                }
-                            }
-                        }
-                        else if ((response == null) && (cancellationToken.IsCancellationRequested == false))
-                        {
-                            res = false;
-                            this.ErrorHandlerService.HandleError("HttpResponseFailure");
-                        }
-                    }
-                }
-            }
-			else
-			{
-				this.ErrorHandlerService.HandleInternetError();
-			}
-
-			return res;
-		}
-
-        public async Task<Stream> GetImageStreamAsync(string url)
-        {
-			Stream res = null;
+			Stream? res = null;
 
 			if (this.InternetService?.IsConnectedToInternet() != false)
 			{
-				HttpClient client = this.HttpClientService.GetClient(this.HttpClientName);
-
-                if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+				HttpClient? client = this.HttpClientService.GetClient(this.HttpClientName);
+                if (client != null)
                 {
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
-				}
+                    if ((this.AuthenticationWebService != null) && (this.AuthenticationWebService.Token != null))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.AuthenticationWebService?.Token.access_token);
+                    }
 
-                res = await client.GetStreamAsync(url);									
+                    res = await client.GetStreamAsync(url);
+                }
 			}
 			else
 			{
@@ -456,11 +470,11 @@ namespace Framework.Infrastructure.Services
 			return res;
 		}
 
-		private async Task<HttpResponseMessage> QueryCurrencyServiceWithRetryPolicy(Func<Task<HttpResponseMessage>> action, CancellationToken token)
+		private async Task<HttpResponseMessage?> QueryCurrencyServiceWithRetryPolicy(Func<Task<HttpResponseMessage>> action, CancellationToken token)
 		{
 			int numberOfTimesToRetry = 7;
 			int retryMultiple = 2;
-			HttpResponseMessage response = null;
+			HttpResponseMessage? response = null;
 
 			try
 			{

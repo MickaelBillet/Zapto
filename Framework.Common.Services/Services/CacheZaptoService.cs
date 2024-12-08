@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace Framework.Common.Services
 {
     public sealed class CacheZaptoService<T> : ICacheZaptoService<T> where T : class
@@ -24,7 +26,6 @@ namespace Framework.Common.Services
         #endregion
 
         #region Methods
-
         public async Task<(ResultCode, T)> GetOrCreate(string key, Func<string, Task<(ResultCode, T)>> createItem)
         {
             T cacheEntry = null;
@@ -111,7 +112,6 @@ namespace Framework.Common.Services
             }
             return cacheEntry;
         }
-
         public async Task<ResultCode> Delete(string key) 
         {
             ResultCode code = ResultCode.CouldNotDeleteItem;

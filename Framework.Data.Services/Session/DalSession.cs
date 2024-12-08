@@ -1,6 +1,10 @@
-﻿using Framework.Core.Base;
+﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Framework.Data.Abstractions;
+using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Data;
 
 namespace Framework.Data.Session
@@ -27,15 +31,14 @@ namespace Framework.Data.Session
         #endregion
 
         #region Constructor
-
-        public DalSession(IDataContextFactory dataContextFactory, IConfiguration configuration)
+        public DalSession(IServiceProvider serviceProvider, 
+                            string connectionStringKey, 
+                            string serverTypeKey)
         {
-            this.ConnectionType = new ConnectionType()
-            {
-                ConnectionString = configuration["ConnectionStrings:DefaultConnection"],
-                ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"]),
-            };
-
+            ISecretService secretService = serviceProvider.GetRequiredService<ISecretService>();
+            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {
                 (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
@@ -47,10 +50,42 @@ namespace Framework.Data.Session
             }
         }
 
+        public DalSession(ISecretService secretService,
+                            IDataContextFactory dataContextFactory, 
+                            IConfiguration configuration,
+                            string connectionStringKey,
+                            string serverTypeKey)
+        {
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
+            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
+            {
+                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
+                if (obj != null)
+                {
+                    this.Connection = obj?.connection;
+                    this.DataContext = obj?.context;
+                }
+            }
+        }
+
+        public DalSession(IServiceProvider serviceProvider)
+        {
+            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ConnectionType = ConnectionString.GetConnectionType(configuration);
+            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
+            {
+                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
+                if (obj != null)
+                {
+                    this.Connection = obj?.connection;
+                    this.DataContext = obj?.context;
+                }
+            }
+        }
         #endregion
 
         #region Methods
-
         public bool OpenConnection()
         {
             bool res = false;
@@ -73,7 +108,6 @@ namespace Framework.Data.Session
         public void Dispose()
         {
             this.Connection?.Close();
-
             this.DataContext?.Dispose();
             this.Connection?.Dispose();
         }

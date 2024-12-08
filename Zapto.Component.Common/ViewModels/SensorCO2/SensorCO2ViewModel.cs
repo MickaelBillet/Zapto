@@ -25,11 +25,6 @@ namespace Zapto.Component.Common.ViewModels
         #endregion
 
         #region Methods
-
-        public override async Task InitializeAsync(string? parameter)
-        {
-            await base.InitializeAsync(parameter);
-        }
         public async Task<(SensorCO2Model? model, bool hasError)> GetSensorCO2Model(string sensorName)
         {
             SensorCO2Model? model = null;
@@ -41,7 +36,7 @@ namespace Zapto.Component.Common.ViewModels
 
                 if (this.ApplicationSensorServices != null)
                 {
-                    model = (await this.ApplicationSensorServices.GetSensorsAsync())?.Select((sensor) => new SensorCO2Model()
+                    model = (await this.ApplicationSensorServices.GetSensors())?.Select((sensor) => new SensorCO2Model()
                     {
                         Id = sensor.Id,
                         CO2 = sensor.CO2,

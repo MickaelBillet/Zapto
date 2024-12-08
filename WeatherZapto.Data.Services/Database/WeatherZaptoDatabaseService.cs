@@ -1,7 +1,5 @@
 ﻿using Framework.Core.Base;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -9,17 +7,16 @@ namespace WeatherZapto.Data.Services
 {
     public sealed class WeatherZaptoDatabaseService : DatabaseService
     {
-        #region Properties
-        #endregion
-
         #region Constructor
-        public WeatherZaptoDatabaseService(IDataContextFactory dataContextFactory, IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(dataContextFactory, serviceScopeFactory, configuration)
+        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider, string connectionStringKey, string serverTypeKey) : base(serviceProvider, connectionStringKey, serverTypeKey)
+        {
+        }
+        public WeatherZaptoDatabaseService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         #endregion
 
         #region Methods
-
         protected override async Task<bool> UpgradeDatabaseAsync()
         {
             bool res = true;
@@ -54,7 +51,6 @@ namespace WeatherZapto.Data.Services
                 await scope.ServiceProvider.GetRequiredService<ISupervisorVersion>().AddVersion();
             }
         }
-
         #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace AirZapto.Data.DataContext
 {
     public class DataContextFactory : IDataContextFactory
     {
-        public (IDbConnection?, IDataContext?)? CreateDbContext(string? connectionString, ServerType server)
+        public (IDbConnection?, IDataContext?)? CreateDbContext(string? connectionString, ServerType? server)
         {
             IDbConnection? connection = null;
             IDataContext? context = null;

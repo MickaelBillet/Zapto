@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorCondition : ISupervisorCondition
+    public sealed class SupervisorCondition : Supervisor, ISupervisorCondition
     {
         private readonly Lazy<IRepository<ConditionEntity>> _lazyConditionRepository;
 
@@ -28,16 +28,15 @@ namespace Connect.Data.Supervisors
             return (await this.ConditionRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
 
-        public async Task<IEnumerable<Condition>> GetConditions()
-        {
-            IEnumerable<ConditionEntity> entities = await this.ConditionRepository.GetCollectionAsync();
-            return entities.Select(item => ConditionMapper.Map(item));
-        }
-
         public async Task<Condition> GetCondition(string id)
         {
             ConditionEntity entity = await this.ConditionRepository.GetAsync(id);
             return ConditionMapper.Map(entity);
+        }
+
+        public async Task<IEnumerable<Condition>> GetConditions()
+        {
+            return (await this.ConditionRepository.GetCollectionAsync()).Select((arg) => ConditionMapper.Map(arg));
         }
 
         public async Task<ResultCode> AddCondition(Condition condition)

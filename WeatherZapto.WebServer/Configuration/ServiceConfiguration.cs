@@ -1,5 +1,5 @@
-﻿using Framework.Data.Abstractions;
-using Framework.Data.Services;
+﻿using Framework.Data.Services;
+using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
 using WeatherZapto.Data;
@@ -14,10 +14,11 @@ namespace WeatherZapto.WebServer.Configuration
 	{
 		public static void AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
+            services.AddSecretService(configuration);
             services.AddTransient<IHttpClientService, HttpClientService>((service) => new HttpClientService(service, configuration));
             services.AddTransient<IInternetService, InternetServiceWeb>();
             services.AddOpenWeatherWebServices(configuration, "OpenWeather");
-            services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>();
+            services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider, "ConnectionStringWeather", "ServerTypeWeather"));
             services.AddSingleton<IHostedService, HomeAirPollutionAcquisitionService>();
             services.AddSingleton<IHostedService, HomeWeatherAcquisitionService>();
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
@@ -25,7 +26,7 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddApplicationWeaterZaptoServices();
             services.AddSingleton<CacheSignal>();
             services.AddSupervisor();
-            services.AddRepositories();
+            services.AddRepositories("ConnectionStringWeather", "ServerTypeWeather");
             services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebService>();
         }
     }

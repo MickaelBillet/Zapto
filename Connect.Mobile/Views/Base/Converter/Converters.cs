@@ -1,9 +1,11 @@
 ﻿using Connect.Mobile.Resources;
 using Connect.Model;
+using Framework.Core.Base;
 using System;
 using System.Globalization;
 using System.Text;
 using Xamarin.Forms;
+using static Xamarin.Essentials.Permissions;
 using Condition = Connect.Model.Condition;
 
 namespace Connect.Mobile.Converters
@@ -289,6 +291,34 @@ namespace Connect.Mobile.Converters
             }
 
             return opacity;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StatusSensorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Color color = (Color)Xamarin.Forms.Application.Current.Resources["NoneColor"];
+            byte status = (byte)value;
+
+            if (status == RunningStatus.Healthy)
+            {
+                color = (Color)Xamarin.Forms.Application.Current.Resources["RunningColor"];
+            }
+            else if (status == RunningStatus.UnHealthy)
+            {
+                color = (Color)Xamarin.Forms.Application.Current.Resources["AlertColor"];
+            }
+            else
+            {
+                color = (Color)Xamarin.Forms.Application.Current.Resources["WarningColor"];
+            }
+            return color;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

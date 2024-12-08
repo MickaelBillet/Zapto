@@ -1,8 +1,8 @@
 ﻿using AirZapto.Data.Database;
 using AirZapto.Data.Services;
 using AirZapto.WebServer.Services;
-using Framework.Data.Abstractions;
 using Framework.Data.Services;
+using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,12 +30,12 @@ namespace AirZapto.Data.Supervisors.Tests
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
-
-                services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>();
+                services.AddSingleton<IDatabaseService, AirZaptoDatabaseService>(provider => new AirZaptoDatabaseService(provider));
                 services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddSupervisors();
             })
             .Build();
         }

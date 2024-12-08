@@ -10,7 +10,7 @@ namespace Zapto.Component.Common.ViewModels
 {
     public interface IPlugViewModel : IBaseViewModel
 	{
-		Task<bool?> SendCommandAsync(int? command, string? id);
+		Task<bool?> SendCommandAsync(PlugModel model);
         Task<bool> ReceiveStatusAsync(PlugModel model);
     }
 
@@ -37,7 +37,7 @@ namespace Zapto.Component.Common.ViewModels
             try
             {
                 res = await this.SignalRService.StartAsync(model.LocationId,
-					(plugStatus) =>
+					async (plugStatus) =>
 					{
 						if (model?.Id == plugStatus.PlugId)
 						{
@@ -45,6 +45,7 @@ namespace Zapto.Component.Common.ViewModels
 							model.WorkingDuration = plugStatus.WorkingDuration;
 							model.Command = Plug.GetCommand(plugStatus.OnOff, plugStatus.Mode);
 							this.OnRefresh(new EventArgs());
+							await Task.CompletedTask;
 						}
 					},
 					null,
@@ -59,34 +60,34 @@ namespace Zapto.Component.Common.ViewModels
             return res;
         }
 
-        public async Task <bool?> SendCommandAsync(int? command, string? id)
+        public async Task <bool?> SendCommandAsync(PlugModel model)
 		{
 			bool? res = null;
 			try
 			{
-				if (command == 1)
+				if (model.Command == CommandType.Off)
 				{
 					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
 					{
-						Id = id,
+						Id = model.Id,
 						OnOff = Status.OFF,
 						Mode = Mode.Manual,
 					});
 				}
-				else if (command == 2)
+				else if (model.Command == CommandType.Manual)
 				{
 					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
 					{
-						Id = id,
+						Id = model.Id,
 						OnOff = Status.ON,
 						Mode = Mode.Manual,
 					});
 				}
-				else if (command == 3)
+				else if (model.Command == CommandType.Programing)
 				{
 					res = await this.ApplicationPlugServices.ChangeMode(new Plug()
 					{
-						Id = id,
+						Id = model.Id,
 						OnOff = Status.ON,
 						Mode = Mode.Programing,
 					});

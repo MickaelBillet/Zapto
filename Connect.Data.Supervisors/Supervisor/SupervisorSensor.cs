@@ -7,7 +7,7 @@ using Framework.Data.Abstractions;
 
 namespace Connect.Data.Supervisors
 {
-    public sealed class SupervisorSensor : ISupervisorSensor
+    public sealed class SupervisorSensor : Supervisor, ISupervisorSensor
     {
         private readonly Lazy<IRepository<SensorEntity>> _lazySensorRepository;
 
@@ -31,12 +31,6 @@ namespace Connect.Data.Supervisors
         public async Task<IEnumerable<Sensor>> GetSensors()
         {
             IEnumerable<SensorEntity> entities = await this.SensorRepository.GetCollectionAsync();
-            return entities.Select(item => SensorMapper.Map(item));
-        }
-
-        public async Task<IEnumerable<Sensor>> GetSensors(string roomId)
-        {
-            IEnumerable<SensorEntity> entities = await this.SensorRepository.GetCollectionAsync((sensor) => sensor.RoomId == roomId);
             return entities.Select(item => SensorMapper.Map(item));
         }
 
@@ -74,11 +68,6 @@ namespace Connect.Data.Supervisors
             }
 
             return (result, sensor);
-        }
-
-        public async Task<ResultCode> DeleteSensor(Sensor sensor)
-        {
-            return (await this.SensorRepository.DeleteAsync(SensorMapper.Map(sensor)) > 0) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
         }
 
         #endregion

@@ -3,7 +3,6 @@ using AirZapto.Data.Services;
 using AirZapto.Model;
 using Framework.Core.Base;
 using Framework.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Net.WebSockets;
@@ -15,17 +14,16 @@ namespace AirZapto.WebServer.Services
     public class SensorMessageManager : WebSocketHandler, IWSMessageManager
     {
 		#region Properties
-		private ISupervisorCacheSensor SupervisorSensor { get;}
+		private ISupervisorSensor SupervisorSensor { get;}
 		private ISupervisorSensorData SupervisorSensorData { get;}
         #endregion
 
         #region Constructor
-        public SensorMessageManager(WebSockerService webSocketConnectionManager, IServiceProvider serviceProvider, IConfiguration configuration) : base(webSocketConnectionManager)
+        public SensorMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorCacheSensor>();
-			this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorSensorData>();		
+            this.SupervisorSensor = serviceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor();
+            this.SupervisorSensorData = serviceProvider.GetRequiredService<ISupervisorFactorySensorData>().CreateSupervisor();		
 		}
-
 		#endregion
 
 		#region Methods
@@ -38,12 +36,13 @@ namespace AirZapto.WebServer.Services
 				{
                     await this.SupervisorSensor.DeleteSensorAsync(idSocket);
                 }
-            }
 
-            return await base.OnDisconnected(socket);
+                return await base.OnDisconnected(socket);
+            }
+			return false;
         }
 
-        public override async Task HandleErrorAsync(WebSocket socket)
+        public override async Task HandleErrorAsync(WebSocket? socket)
 		{
 			if (socket != null)
 			{
@@ -78,7 +77,7 @@ namespace AirZapto.WebServer.Services
 				{
 					Log.Information(received);
 
-					MessageArduino message = MessageArduino.Deserialize(received);
+					MessageArduino message = MessageArduino.Deserialize(buffer, result.Count);
 					if (message != null)
 					{
 						if ((message.Header == SensorMode.Measure) || (message.Header == SensorMode.Startup))

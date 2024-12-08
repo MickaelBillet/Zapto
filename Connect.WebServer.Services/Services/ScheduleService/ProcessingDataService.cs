@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace Connect.WebServer.Services.Services.ScheduleService
+namespace Connect.WebServer.Services
 {
     public class ProcessingDataService : ScheduledService
     {
@@ -22,7 +22,7 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
         public ProcessingDataService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, Convert.ToInt32(configuration["ProcessingDataPeriod"]))
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         #endregion
@@ -39,8 +39,8 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             try
             {
-                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorPlug>();
-                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorSensor>();
+                ISupervisorPlug supervisorPlug = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryPlug>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
+                ISupervisorSensor supervisorSensor = scope.ServiceProvider.GetRequiredService<ISupervisorFactorySensor>().CreateSupervisor(int.Parse(this.Configuration["Cache"]!));
                 ISendCommandService sendCommandService = scope.ServiceProvider.GetRequiredService<ISendCommandService>();
 
                 await ProcessPlugStatus(supervisorPlug, sendCommandService);
@@ -74,16 +74,19 @@ namespace Connect.WebServer.Services.Services.ScheduleService
 
             foreach (Sensor sensor in sensors)
             {
-                if (sensor.Date + new TimeSpan(0, period, 0) < Clock.Now)
+                if ((sensor.Type & DeviceType.Sensor_Water_Leak) != DeviceType.Sensor_Water_Leak)
                 {
-                    sensor.IsRunning = RunningStatus.UnHealthy;
-                }
-                else
-                {
-                    sensor.IsRunning = RunningStatus.Healthy;
-                }
+                    if (sensor.Date + new TimeSpan(0, period, 0) < Clock.Now)
+                    {
+                        sensor.IsRunning = RunningStatus.UnHealthy;
+                    }
+                    else
+                    {
+                        sensor.IsRunning = RunningStatus.Healthy;
+                    }
 
-                await supervisorSensor.UpdateSensor(sensor);
+                    await supervisorSensor.UpdateSensor(sensor);
+                }
             }
         }
 

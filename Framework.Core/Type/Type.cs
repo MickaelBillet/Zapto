@@ -31,4 +31,11 @@
         public const byte Warning = 3;
         public const byte Error = 4;
     }
+
+    public struct SecretType
+    {
+        public const byte None = 0;
+        public const byte VarEnv = 1;
+        public const byte KeyVault = 2;
+    }
 }
