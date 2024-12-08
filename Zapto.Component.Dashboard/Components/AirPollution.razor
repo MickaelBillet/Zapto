@@ -37,6 +37,10 @@
             {
                 <MudText Align="Align.Center" Typo="Typo.h5" Class="mr-4" Color="Color.Error">@Localizer["Very Poor"]</MudText>
             }
+            else
+            {
+                <MudText Typo="Typo.h5" Color="Color.Error" Class="mx-4">@this.Localizer["Error"]</MudText>
+            }
         }
         else if ((this.Model == null) && (this.HasError == true))
         {
@@ -66,7 +70,7 @@
     {
         if ((this.ViewModel != null) && (this.Model == null))
         {
-            this.Model = await this.ViewModel.GetAirPollutionModel();
+            (this.Model, this.HasError) = await this.ViewModel.GetAirPollutionModel();
             if (this.Model != null)
             {
                 this.ViewModel.Refresh += RefreshView;

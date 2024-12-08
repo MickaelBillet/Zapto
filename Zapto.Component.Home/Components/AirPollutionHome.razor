@@ -82,6 +82,7 @@
     public LocationModel Location { get; set; } = null;
 
     private AirPollutionModel Model { get; set; } = null;    
+    private bool HasError { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,7 +96,7 @@
     {
         if ((this.ViewModel != null) && (this.Location != null) && (this.Location.Location != null))
         {
-            this.Model = await this.ViewModel.GetAirPollutionModel(this.Location);
+            (this.Model, this.HasError) = await this.ViewModel.GetAirPollutionModel(this.Location);
             if (this.Model != null)
             {
                 this.ViewModel.Refresh += RefreshView;

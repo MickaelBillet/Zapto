@@ -44,6 +44,11 @@ namespace Zapto.Component.Common.ViewModels
                         Mode = sensor.Mode,
                         IsRunning = sensor.IsRunning,
                     })?.FirstOrDefault((arg) => (arg.Description != null) ? arg.Description.Equals(sensorName, StringComparison.Ordinal) : false);
+
+                    if  (model == null)
+                    {
+                        hasError = true;
+                    }
                 }
             }
             catch (Exception ex)
