@@ -1,9 +1,12 @@
 ﻿using AirZapto.Data.Database;
 using AirZapto.Data.Services;
+using AirZapto.Model;
 using AirZapto.WebServer.Services;
+using Framework.Common.Services;
 using Framework.Data.Services;
 using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
+using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,6 +38,8 @@ namespace AirZapto.Data.Supervisors.Tests
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
+                services.AddTransient<ICacheZaptoService<Sensor>, CacheZaptoService<Sensor>>();
+                services.AddSingleton<CacheSignal>();
                 services.AddSupervisors();
             })
             .Build();
