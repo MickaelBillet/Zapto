@@ -28,7 +28,7 @@ namespace Zapto.Component.Common.ViewModels
 
 #if DEBUG
                     // Load the Current URL
-                    this.NavigationService.NavigateTo("http://localhost:5007/", true);
+                    this.NavigationService.NavigateTo("http://localhost:5207/", true);
 #else
                     this.NavigationService.NavigateTo("https://dashboard.connect-zapto.fr/", true);
 #endif
