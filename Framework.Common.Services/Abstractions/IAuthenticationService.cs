@@ -5,6 +5,6 @@ namespace Framework.Infrastructure.Services
 {
     public interface IAuthenticationService
 	{
-        Task<ZaptoUser> GetAuthenticatedUser();
+        Task<ZaptoUser?> GetAuthenticatedUser();
     }
 }

@@ -41,7 +41,7 @@ namespace Zapto.Component.Common.ViewModels
 
 			try
 			{
-				ZaptoUser user = await this.AuthenticationService.GetAuthenticatedUser();
+				ZaptoUser? user = await this.AuthenticationService.GetAuthenticatedUser();
 				if (user != null)
 				{
 					string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
