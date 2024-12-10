@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System.Globalization;
 using Zapto.Component.Common.Services;
 
@@ -28,6 +29,8 @@ namespace Zapto.Component.Common.ViewModels
             const string defaultCulture = "en-US";
 
             var result = await this.StorageService.GetItemAsync<string>("culture");
+            Log.Debug($"Culture : {result}");
+
             var culture = CultureInfo.GetCultureInfo(result ?? defaultCulture);
 
             if (result == null)
