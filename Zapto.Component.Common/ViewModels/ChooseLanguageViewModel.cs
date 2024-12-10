@@ -25,7 +25,13 @@ namespace Zapto.Component.Common.ViewModels
                 if (CultureInfo.CurrentCulture != value)
                 {
                     this.StorageService.SetItemAsync<string>("culture", value.Name);
-                    this.NavigationService.NavigateTo(this.NavigationService.GetUri(), true);
+
+#if DEBUG
+                    // Load the Current URL
+                    this.NavigationService.NavigateTo("http://localhost:5007/", true);
+#else
+                    this.NavigationService.NavigateTo("https://dashboard.connect-zapto.fr/", true);
+#endif
                 }
             }
         }
