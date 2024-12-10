@@ -12,13 +12,13 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class MainViewModel : BaseViewModel, IMainViewModel
 	{
 		#region Properties
-        private IZaptoLocalStorageService StorageService { get; }
+        private IZaptoStorageService StorageService { get; }
 		#endregion
 
 		#region Constructor
 		public MainViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
 		{
-            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
 		}
         #endregion
 
