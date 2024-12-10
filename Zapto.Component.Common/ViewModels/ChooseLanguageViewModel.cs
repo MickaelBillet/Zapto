@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
     {
 		#region Properties
-        private IZaptoLocalStorageService StorageService { get; set; }
+        private IZaptoStorageService StorageService { get; set; }
 
         public CultureInfo[]? Cultures { get; private set; }
 
@@ -41,7 +41,7 @@ namespace Zapto.Component.Common.ViewModels
         #region Constructor
         public ChooseLanguageViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
         }
 		#endregion
 

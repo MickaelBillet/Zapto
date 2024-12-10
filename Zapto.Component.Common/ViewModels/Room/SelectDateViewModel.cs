@@ -10,13 +10,13 @@ namespace Zapto.Component.Common.ViewModels
     public class SelectDateViewModel : BaseViewModel, ISelectDateViewModel
     {
         #region Properties
-        private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
+        private IZaptoStorageService ZaptoLocalStorageService { get; }
         #endregion
 
         #region Constructor
         public SelectDateViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
         }
         #endregion
     }

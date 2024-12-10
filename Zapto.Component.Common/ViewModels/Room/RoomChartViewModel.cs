@@ -22,7 +22,7 @@ namespace Zapto.Component.Common.ViewModels
         #region Properties
         private IApplicationOperationDataService ApplicationOperationDataService { get; }
         private IApplicationTemperatureService ApplicationTemperatureService { get; }
-        private IZaptoLocalStorageService ZaptoLocalStorageService { get; }
+        private IZaptoStorageService ZaptoLocalStorageService { get; }
         private string? Location { get; set; }
         private string Culture { get; set; } = string.Empty;
         #endregion
@@ -32,7 +32,7 @@ namespace Zapto.Component.Common.ViewModels
         {
             this.ApplicationOperationDataService = serviceProvider.GetRequiredService<IApplicationOperationDataService>();
             this.ApplicationTemperatureService = serviceProvider.GetRequiredService<IApplicationTemperatureService>();
-            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.ZaptoLocalStorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
         }
         #endregion
 

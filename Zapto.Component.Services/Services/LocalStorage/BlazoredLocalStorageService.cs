@@ -4,7 +4,7 @@ using ILocalStorageService = Blazored.LocalStorage.ILocalStorageService;
 
 namespace Zapto.Component.Services
 {
-    public class BlazoredLocalStorageService : IZaptoLocalStorageService
+    public class BlazoredLocalStorageService : IZaptoStorageService
     {
         #region Properties
         private ILocalStorageService? LocalStorageService { get; }

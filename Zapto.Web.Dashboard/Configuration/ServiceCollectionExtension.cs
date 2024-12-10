@@ -59,7 +59,7 @@ namespace Zapto.Web.Dashboard.Configuration
 			services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebServiceZapto>();			
 			services.AddTransient<IImageService, ImageService>((service) => new ImageService(service, configuration, "OpenWeather"));
 			services.AddScoped<DataService>();
-			services.AddScoped<IZaptoLocalStorageService, BlazoredLocalStorageService>();
+			services.AddScoped<IZaptoStorageService, BlazoredSessionStorageService>();
         }
     }
 }
