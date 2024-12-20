@@ -172,9 +172,9 @@ namespace Framework.Infrastructure.Services
         /// <param name="url">URL.</param>
         /// <param name="id">Identifier.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-		public async Task<T?> GetAsync<T>(string url, string? id, JsonSerializerOptions? options, CancellationToken cancellationToken = default, int attempt = 1) where T : class
+		public async Task<T> GetAsync<T>(string url, string? id, JsonSerializerOptions? options, CancellationToken cancellationToken = default, int attempt = 1) where T : new()
         {
-            T? item = null;
+            T item = default!;
 
             if (this.InternetService?.IsConnectedToInternet() != false)
             {
@@ -216,13 +216,13 @@ namespace Framework.Infrastructure.Services
                     }
                 }
             }
-			else
-			{
-				this.ErrorHandlerService.HandleInternetError();
-			}
+            else
+            {
+                this.ErrorHandlerService.HandleInternetError();
+            }
 
-			return item;
-		}
+            return item;
+        }
 
         /// <summary>
         /// Posts the async.
