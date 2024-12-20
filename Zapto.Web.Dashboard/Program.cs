@@ -108,7 +108,6 @@ builder.Services.AddAuthorizationCore(policies =>
 });
 builder.Services.AddOptions();
 builder.Services.AddLocalization();
-builder.Services.AddMudServices();
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddViewModels();
 builder.Services.AddMudServices(config =>
