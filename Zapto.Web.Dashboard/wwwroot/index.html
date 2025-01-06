@@ -38,6 +38,13 @@
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="_content/PSC.Blazor.Components.Chartjs/lib/Chart.js/chart.js"></script>
     <script src="_content/PSC.Blazor.Components.Chartjs/Chart.js"></script>
+
+    <script>
+        window.blazorCulture = {
+            get: () => window.localStorage['BlazorCulture'],
+            set: (value) => window.localStorage['BlazorCulture'] = value
+        };
+    </script>
 </body>
 
 </html>

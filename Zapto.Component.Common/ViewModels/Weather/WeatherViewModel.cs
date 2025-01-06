@@ -5,8 +5,8 @@ using Serilog;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
-using Zapto.Component.Common.Services;
 using Zapto.Component.Common.Models;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -44,7 +44,7 @@ namespace Zapto.Component.Common.ViewModels
 				ZaptoUser? user = await this.AuthenticationService.GetAuthenticatedUser();
 				if (user != null)
 				{
-					string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+					string? culture = await this.LocalStorageService.GetItemAsync<string>("blazorCulture");
                     Log.Debug($"Culture : {culture}");
 
 					if (string.IsNullOrEmpty(culture) == false)
@@ -100,7 +100,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if ((location != null) && (location.Latitude != null) && (location.Longitude != null))
                 {
-                    string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                    string? culture = await this.LocalStorageService.GetItemAsync<string>("blazorCulture");
                     Log.Debug($"Culture : {culture}");
 
                     if (string.IsNullOrEmpty(culture) == false)

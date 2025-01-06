@@ -1,6 +1,5 @@
 ﻿using Microsoft.JSInterop;
 using Zapto.Component.Common.Services;
-using Zapto.Component.Services.JsInterop;
 
 namespace Zapto.Component.Services
 {
@@ -13,20 +12,14 @@ namespace Zapto.Component.Services
         #endregion
 
         #region Methods
-        public async Task<T?> GetItemAsync<T>(IJSRuntime jsRuntime, string key) 
+        public async Task<T?> GetItemAsync<T>(IJSRuntime jSRuntime, string key) where T : class
         {
-            await using (LocalStorageAccessorJsInterop jsInterop = new LocalStorageAccessorJsInterop(jsRuntime))
-            {
-                return await jsInterop.GetValueAsync<T>(key);
-            }
+            return await jSRuntime.InvokeAsync<T>($"{key}.get");
         }
 
-        public async Task SetItemAsync<T>(IJSRuntime jsRuntime, string key, T value)
+        public async Task SetItemAsync<T>(IJSRuntime jSRuntime, string key, T value)
         {
-            await using (LocalStorageAccessorJsInterop jsInterop = new LocalStorageAccessorJsInterop(jsRuntime))
-            {
-                await jsInterop.SetValueAsync<T>(key, value);
-            }
+            await jSRuntime.InvokeVoidAsync($"{key}.set", value);
         }
         #endregion
     }
