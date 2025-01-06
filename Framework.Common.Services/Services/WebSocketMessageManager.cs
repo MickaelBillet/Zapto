@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Net.WebSockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Framework.Infrastructure.Services

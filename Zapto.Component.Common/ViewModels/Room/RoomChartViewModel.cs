@@ -41,7 +41,8 @@ namespace Zapto.Component.Common.ViewModels
         {
             const string defaultCulture = "en-US";
             this.Location = parameter as string;
-            this.Culture = await this.ZaptoLocalStorageService.GetItemAsync<string>("culture") ?? defaultCulture;
+            this.Culture = await this.ZaptoLocalStorageService.GetItemAsync<string>("blazorCulture") ?? defaultCulture;
+            Log.Debug($"Culture : {this.Culture}");
         }
 
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
