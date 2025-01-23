@@ -2,6 +2,7 @@
 using Connect.Data.DataContext;
 using Connect.Data.Repositories;
 using Connect.Data.Supervisors;
+using Connect.Model;
 using Framework.Common.Services;
 using Framework.Core.Domain;
 using Framework.Data.Session;
@@ -46,7 +47,7 @@ namespace Connect.WebServer.Services
                     secretService = new KeyVaultService(this.Configuration);
                 }
 
-                ISupervisorLog supervisor = new SupervisorLog(new DalSession(secretService!, new DataContextFactory(), this.Configuration, "ConnectionStringConnect", "ServerTypeConnect"), new RepositoryFactory());
+                ISupervisorLog supervisor = new SupervisorLog(new DalSession(secretService!, new DataContextFactory(), this.Configuration, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey), new RepositoryFactory());
 
                 //Why I don't have the warning CS4014 
                 supervisor.AddLog(new Logs()

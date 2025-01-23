@@ -20,13 +20,13 @@ namespace Connect.Server.Configuration
 		{
             services.AddSecretService(configuration);
             services.AddMailService();
-            services.AddRepositories("ConnectionStringConnect", "ServerTypeConnect");
+            services.AddRepositories(ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
             services.AddApplicationConnectServices();
             services.AddConnectWebServices();
             services.AddCacheServices();
             services.AddSupervisors();
             services.AddSingleton<CacheSignal>();
-            services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider, "ConnectionStringConnect", "ServerTypeConnect"));
+            services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey));
             services.AddTransient<ISignalRConnectService, SignalRConnectService>();
             services.AddTransient<ISendMailAlertService, SendMailAlertService>();
             services.AddSingleton<IHostedService, RecordingDataService>();

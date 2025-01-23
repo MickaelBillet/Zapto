@@ -64,5 +64,8 @@
 
         public const string SignalR_AddToLocation = "AddToLocation";
         public const string SignalR_RemoveFromLocation = "RemoveFromLocation";
+
+        public const string ConnectionStringConnectKey = "ConnectionStringConnect";
+        public const string ServerTypeConnectKey = "ServerTypeConnect";
     }
 }

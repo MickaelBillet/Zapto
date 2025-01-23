@@ -146,7 +146,7 @@ namespace Connect.WebServer
             services.AddSignalR();
             services.AddSingleton<HostedServiceHealthCheck>();
 
-            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, "ConnectionStringConnect", "ServerTypeConnect");
+            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
             services.AddHealthChecks()
                     //Memory
                     .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })
