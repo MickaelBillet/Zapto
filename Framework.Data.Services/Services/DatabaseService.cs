@@ -30,7 +30,7 @@ namespace Framework.Data.Services
             this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
 			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
-			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService, connectionStringKey, serverTypeKey); 
+			this.ConnectionType = ConnectionString.GetConnectionType(this.SecretService, connectionStringKey, serverTypeKey); 
 		}
         public DatabaseService(IServiceProvider serviceProvider)
         {
@@ -76,29 +76,30 @@ namespace Framework.Data.Services
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType)?.context)
+				this.DataContextFactory.UseContext(context =>
 				{
-					if ((context != null) && (context.DataBaseExists() == true))
+					if ((context != null) && (context?.dataContext?.DataBaseExists() == true))
 					{
-						res = context.DropDatabase();
-					}
-				}
+						bool? result = context?.dataContext?.DropDatabase();
+                        res = result.HasValue ? result.Value : false;
+                    }
+				});
 			}
 			return res;
 		}
 
-        protected bool CreateDatabase(ConnectionType connectionType)
+        protected bool CreateDatabase()
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
-                {
-                    if (context != null)
-                    {
-                        res = context.CreateDataBase();
+				this.DataContextFactory.UseContext(context =>
+				{
+					if (context != null)
+					{
+						res = context.CreateDataBase();
 					}
-				}
+				});
 			}
 			return res;
 		}

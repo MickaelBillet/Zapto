@@ -21,8 +21,7 @@ namespace Framework.Infrastructure.Services
             return (connectionString, serverName);
         }
 
-        public static ConnectionType GetConnectionType(IConfiguration configuration, 
-                                                        ISecretService secretService, 
+        public static ConnectionType GetConnectionType(ISecretService secretService, 
                                                         string connectionStringKey, 
                                                         string serverTypeKey)
         {

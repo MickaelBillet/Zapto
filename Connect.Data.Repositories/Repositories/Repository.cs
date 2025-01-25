@@ -13,7 +13,6 @@ namespace Connect.Data.Repositories
 		#region Properties
 		protected ConnectContext? DataContext { get; } = null;
 		protected DbSet<T>? Table { get; } = null;
-        protected IDbConnection? DbConnection { get; } = null;
 		#endregion
 
 		#region Constructor
@@ -21,7 +20,6 @@ namespace Connect.Data.Repositories
 		{
 			this.DataContext = session.DataContext as ConnectContext;
 			this.Table = this.DataContext?.Set<T>();
-            this.DbConnection = session.Connection;
 		}
         #endregion
 
