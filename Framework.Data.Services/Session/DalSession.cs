@@ -5,7 +5,6 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Data;
 
 namespace Framework.Data.Session
 {
@@ -39,7 +38,7 @@ namespace Framework.Data.Session
                 {
                     if (context != null)
                     {
-                        this.DataContext = context?.dataContext;
+                        this.DataContext = context;
                     }
                 });
             }
@@ -53,11 +52,13 @@ namespace Framework.Data.Session
             this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {
-                IDataContext? context = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                if (context != null)
+                dataContextFactory.UseContext(context =>
                 {
-                    this.DataContext = context;
-                }
+                    if (context != null)
+                    {
+                        this.DataContext = context;
+                    }
+                });
             }
         }
 
@@ -68,23 +69,22 @@ namespace Framework.Data.Session
             this.ConnectionType = ConnectionString.GetConnectionType(configuration);
             if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
             {
-                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                if (obj != null)
+                dataContextFactory.UseContext(context =>
                 {
-                    this.DataContext = obj?.context;
-                }
+                    if (context != null)
+                    {
+                        this.DataContext = context;
+                    }
+                });
             }
         }
         #endregion
 
         #region Methods
-
-
         public void Dispose()
         {
             this.DataContext?.Dispose();
         }
-
         #endregion
     }
 }

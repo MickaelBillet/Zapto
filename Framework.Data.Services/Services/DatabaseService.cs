@@ -42,12 +42,11 @@ namespace Framework.Data.Services
         #endregion
 
         #region Methods
-
         public async Task ConfigureDatabase()
         {		
             if (this.DatabaseExist(this.ConnectionType) == false)
             {
-                bool isCreated = this.CreateDatabase(this.ConnectionType);
+                bool isCreated = this.CreateDatabase();
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync();
@@ -78,9 +77,9 @@ namespace Framework.Data.Services
 			{
 				this.DataContextFactory.UseContext(context =>
 				{
-					if ((context != null) && (context?.dataContext?.DataBaseExists() == true))
+					if ((context != null) && (context?.DataBaseExists() == true))
 					{
-						bool? result = context?.dataContext?.DropDatabase();
+						bool? result = context?.DropDatabase();
                         res = result.HasValue ? result.Value : false;
                     }
 				});
@@ -109,14 +108,14 @@ namespace Framework.Data.Services
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
+                this.DataContextFactory.UseContext(context =>
                 {
-					if (context != null)
-					{
-						res = context.DataBaseExists();
-					}
-				}
-			}
+                    if (context != null)
+                    {
+                        res = context.DataBaseExists();
+                    }
+                });
+            }
 			return res;
 		}
 

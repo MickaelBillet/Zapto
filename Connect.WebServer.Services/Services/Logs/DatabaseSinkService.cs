@@ -36,16 +36,7 @@ namespace Connect.WebServer.Services
         {
             if ((this.Configuration != null) && (logEvent.Level >= this.Level))
             {
-                ISecretService? secretService = null;
-
-                if (byte.Parse(this.Configuration["Secret"]!) == 1)
-                {
-                    secretService = new VarEnvService();
-                }
-                else if (byte.Parse(this.Configuration["Secret"]!) == 2)
-                {
-                    secretService = new KeyVaultService(this.Configuration);
-                }
+                ISecretService? secretService = ConnectionString.GetSecretService(this.Configuration);
 
                 ISupervisorLog supervisor = new SupervisorLog(new DalSession(secretService!, 
                                                                                 new DataContextFactory(secretService!, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey), 

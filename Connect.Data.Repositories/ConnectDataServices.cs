@@ -18,7 +18,7 @@ namespace Connect.Data.Repository
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
-            services.AddTransient<IDataContextFactory, DataContextFactory>(provider => new DataContextFactory(provider, connectionStringKey, serverTypeKey));
+            services.AddTransient<IDataContextFactory, DataContextFactory>(provider => new DataContextFactory(provider));
             services.AddTransient<IDalSession, DalSession>(provider => new DalSession(provider));
         }
     }

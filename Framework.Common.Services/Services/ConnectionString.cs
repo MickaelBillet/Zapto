@@ -6,7 +6,7 @@ namespace Framework.Infrastructure.Services
 {
     public static class ConnectionString
     {
-        public static (string connectionString, string serverName) GetConnectionString(IConfiguration configuration, 
+        public static (string connectionString, string serverName) GetConnectionString(IConfiguration configuration,
                                                                                         string connectionStringKey, 
                                                                                         string serverTypeKey)
         {
@@ -20,7 +20,6 @@ namespace Framework.Infrastructure.Services
             }
             return (connectionString, serverName);
         }
-
         public static ConnectionType GetConnectionType(ISecretService secretService, 
                                                         string connectionStringKey, 
                                                         string serverTypeKey)
@@ -41,7 +40,7 @@ namespace Framework.Infrastructure.Services
             };
             return connectionType;
         }
-        private static ISecretService? GetSecretService(IConfiguration configuration)
+        public static ISecretService? GetSecretService(IConfiguration configuration)
         {
             ISecretService? service = null;
             if (byte.Parse(configuration["Secret"]) == 1)
