@@ -161,3 +161,17 @@
 /Zapto.Web.Dashboard/bin/Debug/net9.0
 /Zapto.Web.Test/bin/Debug/net9.0
 /Framework.Core.Utils/.vs/Framework.Core.Utils
+/Zapto.Data.Supervisors/obj
+/Zapto.Data.Supervisors/bin/Debug/net9.0
+/ZaptoCompany.Data.Repositories/bin/Debug/net9.0
+/ZaptoCompany.Data.Repositories/obj
+/ZaptoCompany.Data.Services/bin/Debug/net9.0
+/ZaptoCompany.Data.Services/obj
+/ZaptoCompany.Domain/obj
+/ZaptoCompany.Domain/bin/Debug/net9.0
+/ZaptoCompany.WebAPI/.vs/ProjectEvaluation
+/ZaptoCompany.WebAPI/.vs/ZaptoCompany.WebAPI
+/ZaptoCompany.WebAPI/bin/Debug/net9.0
+/ZaptoCompany.WebAPI/obj
+/ZaptoCompany.WebAPI.Services/obj
+/ZaptoCompany.WebAPI.Services/bin/Debug/net9.0
