@@ -12,7 +12,6 @@ namespace WeatherZapto.Data.Repositories
 		#region Properties
 		protected WeatherZaptoContext? DataContext { get; } = null;
 		protected DbSet<T>? Table { get; } = null;
-        protected IDbConnection? DbConnection { get; } = null;
         #endregion
 
         #region Constructor
@@ -20,7 +19,6 @@ namespace WeatherZapto.Data.Repositories
 		{
             this.DataContext = session.DataContext as WeatherZaptoContext;
             this.Table = this.DataContext?.Set<T>();
-            this.DbConnection = session.Connection;
         }
         #endregion
 

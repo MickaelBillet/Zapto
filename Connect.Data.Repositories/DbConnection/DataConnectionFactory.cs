@@ -1,5 +1,6 @@
 ﻿using Framework.Common.Services;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using MySqlConnector;
