@@ -10,5 +10,8 @@
 		public static readonly string RestUrlHealthCheck = @"health";
 
         public static readonly string Application_Prefix = @"/AirZapto";
+
+        public const string ConnectionStringAirZaptotKey = "ConnectionStringAirZapto";
+        public const string ServerTypeAirZaptoKey = "ServerTypeAirZapto";
     }
 }

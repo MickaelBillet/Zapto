@@ -1,32 +1,26 @@
 ﻿using AirZapto.Data.DataContext;
-using AirZapto.Data.Services.Repositories;
+using Framework.Data.Abstractions;
 
 namespace AirZapto.Data.Repositories
 {
-    public partial class Repository : IRepository
+    public abstract class Repository
 	{
 		#region Properties
-
-		private AirZaptoContext? DataContext { get; }
-
+		protected AirZaptoContext? DataContext { get; set; }
 		#endregion
 
 		#region Constructor
-
-		public Repository(AirZaptoContext? dataContext)
+		public Repository(IDalSession session)
 		{
-			this.DataContext = dataContext as AirZaptoContext;
-		}
-
+            this.DataContext = session.DataContext as AirZaptoContext;
+        }
         #endregion
 
         #region Methods
-
         public void Dispose()
 		{
 			this.DataContext?.Dispose();
 		}
-
 		#endregion
 	}
 }

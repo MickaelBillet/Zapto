@@ -1,17 +1,22 @@
-﻿using AirZapto.Data.Entities;
+﻿using AirZapto.Data.DataContext;
+using AirZapto.Data.Entities;
 using AirZapto.Data.Services.Repositories;
+using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AirZapto.Data.Repositories
 {
-    public partial class Repository : IRepository
+    public class VersionRepository : Repository, IVersionRepository
 	{
-		#region Methods
+        #region Constructor
+        public VersionRepository(IDalSession session) : base(session)
+        { }
+        #endregion
 
-
-		public async Task<VersionEntity?> GetVersionAsync()
+        #region Methods
+        public async Task<VersionEntity?> GetVersionAsync()
 		{
 			VersionEntity? versionEntity = null;
 			if (this.DataContext != null)

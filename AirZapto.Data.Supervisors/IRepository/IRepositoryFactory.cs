@@ -3,7 +3,10 @@
 namespace AirZapto.Data.Services.Repositories
 {
     public interface IRepositoryFactory
-	{
-        public Lazy<IRepository>? CreateRepository(IDalSession session, IDataContextFactory contextFactory);
+    {
+        Lazy<ILogsRepository>? CreateLogsRepository(IDalSession session);
+        Lazy<ISensorDataRepository>? CreateSensorDataRepository(IDalSession session);
+        Lazy<ISensorRepository>? CreateSensorRepository(IDalSession session);
+        Lazy<IVersionRepository>? CreateVersionRepository(IDalSession session);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Services.Repositories;
 using Framework.Core.Base;
+using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,15 @@ using System.Threading.Tasks;
 
 namespace AirZapto.Data.Repositories
 {
-    public partial class Repository : IRepository
+    public class SensorDataRepository : Repository, ISensorDataRepository
 	{
-		#region Methods
+        #region Constructor
+        public SensorDataRepository(IDalSession session) : base(session)
+        { }
+        #endregion
 
-		public async Task<bool> AddSensorDataAsync(SensorDataEntity entity)
+        #region Methods
+        public async Task<bool> AddSensorDataAsync(SensorDataEntity entity)
 		{
 			bool res = false;
 			if (this.DataContext != null)

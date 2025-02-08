@@ -10,9 +10,17 @@ namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorLogs : Supervisor, ISupervisorLogs
 	{
+        private readonly Lazy<ILogsRepository>? _lazyLogsRepository;
+
+        #region Properties
+        private ILogsRepository LogsRepository => _lazyLogsRepository!.Value;
+        #endregion
+
         #region Constructor
-        public SupervisorLogs(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
-        { }
+        public SupervisorLogs(IDalSession session, IRepositoryFactory repositoryFactory) : base()
+        {
+            _lazyLogsRepository = repositoryFactory.CreateLogsRepository(session);
+        }
         #endregion
 
         #region Methods
@@ -21,7 +29,7 @@ namespace AirZapto.Data.Supervisors
 			ResultCode result = ResultCode.CouldNotCreateItem;
             logs.Id = string.IsNullOrEmpty(logs.Id) ? Guid.NewGuid().ToString() : logs.Id;
             LogsEntity entity = LogsMapper.Map(logs);
-            result = (this.Repository != null) && (this.Repository.AddLogs(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+            result = (this.LogsRepository != null) && (this.LogsRepository.AddLogs(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
 			return result;
 		}
 
@@ -29,9 +37,9 @@ namespace AirZapto.Data.Supervisors
 		{
 			ResultCode result = ResultCode.ItemNotFound;
             IEnumerable<Logs>? logs = null;
-            if (this.Repository != null)
+            if (this.LogsRepository != null)
             {
-                IEnumerable<LogsEntity>? entities = await this.Repository.GetAllLogsAsync();
+                IEnumerable<LogsEntity>? entities = await this.LogsRepository.GetAllLogsAsync();
                 logs = (entities != null) ? entities.Select((item) => LogsMapper.Map(item)) : null;
                 result = ((logs != null) && (logs.Count() > 0)) ? ResultCode.Ok : ResultCode.ItemNotFound;
             }
@@ -41,9 +49,9 @@ namespace AirZapto.Data.Supervisors
         public ResultCode LogsExist(string id)
         {
             ResultCode result = ResultCode.ItemNotFound;
-            if (this.Repository != null)
+            if (this.LogsRepository != null)
             {
-                result = (this.Repository.LogsExists(id) == true) ? ResultCode.Ok : ResultCode.ItemNotFound;
+                result = (this.LogsRepository.LogsExists(id) == true) ? ResultCode.Ok : ResultCode.ItemNotFound;
             }
             return (result);
         }
@@ -52,9 +60,9 @@ namespace AirZapto.Data.Supervisors
         {
             ResultCode result = ResultCode.ItemNotFound;
             IEnumerable<Logs>? logs = null;
-            if (this.Repository != null)
+            if (this.LogsRepository != null)
             {
-                IEnumerable<LogsEntity>? entities = (await this.Repository.GetAllLogsAsync())?.Where(arg => (Clock.Now <= arg.CreationDateTime.AddHours(24f)));
+                IEnumerable<LogsEntity>? entities = (await this.LogsRepository.GetAllLogsAsync())?.Where(arg => (Clock.Now <= arg.CreationDateTime.AddHours(24f)));
                 logs = (entities != null) ? entities.Select((item) => LogsMapper.Map(item)) : null;
                 result = ((logs != null) && (logs.Count() > 0)) ? ResultCode.Ok : ResultCode.ItemNotFound;
             }

@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using AirZapto.Data.Entities;
+using AirZapto.Data.Services.Repositories;
+using Framework.Data.Abstractions;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AirZapto.Data.Entities;
-using AirZapto.Data.Services.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Polly.Utilities;
 
 namespace AirZapto.Data.Repositories
 {
-    public partial class Repository : IRepository
+    public class LogsRepository : Repository, ILogsRepository
 	{
-		#region Methods
+        #region Constructor
+        public LogsRepository(IDalSession session) : base(session)
+        { }
+        #endregion
 
-		public LogsEntity? GetLogs(string id)
+        #region Methods
+        public LogsEntity? GetLogs(string id)
 		{
 			LogsEntity? entity = null;
 

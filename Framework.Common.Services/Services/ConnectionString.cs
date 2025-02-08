@@ -12,7 +12,7 @@ namespace Framework.Infrastructure.Services
         {
             string connectionString = string.Empty;
             string serverName = string.Empty;
-            ISecretService? secretService = GetSecretService(configuration);
+            ISecretService? secretService = SecretService.GetSecretService(configuration);
             if (secretService != null)
             {
                 connectionString = secretService.GetSecret(connectionStringKey);
@@ -39,19 +39,6 @@ namespace Framework.Infrastructure.Services
                 ServerType = ConnectionType.GetServerType(configuration["ConnectionStrings:ServerType"])
             };
             return connectionType;
-        }
-        public static ISecretService? GetSecretService(IConfiguration configuration)
-        {
-            ISecretService? service = null;
-            if (byte.Parse(configuration["Secret"]) == 1)
-            {
-                service = new VarEnvService();
-            }
-            else if (byte.Parse(configuration["Secret"]) == 2)
-            {
-                service = new KeyVaultService(configuration);
-            }
-            return service;
         }
     }
 }

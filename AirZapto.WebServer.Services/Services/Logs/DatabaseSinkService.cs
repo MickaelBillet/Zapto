@@ -36,19 +36,12 @@ namespace AirZapto.WebServer.Services
         {
             if ((this.Configuration != null) && (logEvent.Level >= this.Level))
             {
-                ISecretService? secretService = null;
+                ISecretService? secretService = SecretService.GetSecretService(this.Configuration);
 
-                if (byte.Parse(this.Configuration["Secret"]!) == 1)
-                {
-                    secretService = new VarEnvService();
-                }
-                else if (byte.Parse(this.Configuration["Secret"]!) == 2)
-                {
-                    secretService = new KeyVaultService(this.Configuration);
-                }
-
-                ISupervisorLogs supervisor = new SupervisorLogs(new DalSession(secretService!, new DataContextFactory(), this.Configuration, "ConnectionStringAirZapto", "ServerTypeAirZapto"), 
-                                                                new DataContextFactory(), 
+                ISupervisorLogs supervisor = new SupervisorLogs(new DalSession(secretService!, 
+                                                                                new DataContextFactory(secretService!, AirZaptoConstants.ConnectionStringAirZaptotKey, AirZaptoConstants.ServerTypeAirZaptoKey),
+                                                                                AirZaptoConstants.ConnectionStringAirZaptotKey,
+                                                                                AirZaptoConstants.ServerTypeAirZaptoKey),
                                                                 new RepositoryFactory());
                 supervisor.AddLogs(new Logs()
                 {

@@ -9,14 +9,16 @@ namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorSensor : Supervisor, ISupervisorSensor
 	{
-        #region Services
+        private readonly Lazy<ISensorRepository>? _lazySensorRepository;
 
+        #region Properties
+        private ISensorRepository SensorDataRepository => _lazySensorRepository!.Value;
         #endregion
 
         #region Constructor
-        public SupervisorSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
+        public SupervisorSensor(IDalSession session, IRepositoryFactory repositoryFactory) : base()
         {
-
+            _lazySensorRepository = repositoryFactory.CreateSensorRepository(session);
         }
         #endregion
 
@@ -24,10 +26,10 @@ namespace AirZapto.Data.Supervisors
         public async Task<ResultCode> UpdateSensorAsync(Sensor sensor)
 		{
 			ResultCode result = ResultCode.CouldNotUpdateItem;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
 				SensorEntity entity = SensorMapper.Map(sensor);
-				result = (await this.Repository.UpdateSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
+				result = (await this.SensorDataRepository.UpdateSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
 			}
 			return result;
 		}
@@ -35,23 +37,23 @@ namespace AirZapto.Data.Supervisors
 		public async Task<ResultCode> AddUpdateSensorAsync(Sensor sensor)
 		{
 			ResultCode result = ResultCode.CouldNotCreateItem;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
 				if (sensor.IdSocket != null)
 				{ 
-					SensorEntity? entity = await this.Repository.GetSensorAsync(sensor.Channel, sensor.Name);
+					SensorEntity? entity = await this.SensorDataRepository.GetSensorAsync(sensor.Channel, sensor.Name);
 					if (entity != null)
 					{
 						sensor.Id = entity.Id;
                         entity = SensorMapper.Map(sensor);
-                        result = (await this.Repository.UpdateSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
+                        result = (await this.SensorDataRepository.UpdateSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotUpdateItem;
 					}
 					else
 					{
 						sensor.Id = string.IsNullOrEmpty(sensor.Id) ? Guid.NewGuid().ToString() : sensor.Id;
 						sensor.Date = Clock.Now;
                         entity = SensorMapper.Map(sensor);
-						result = (await this.Repository.AddSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+						result = (await this.SensorDataRepository.AddSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
 					}
 				}
 			}
@@ -63,9 +65,9 @@ namespace AirZapto.Data.Supervisors
 		{
 			ResultCode result = ResultCode.ItemNotFound;
 			Sensor? sensor = null;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
-				SensorEntity? entity = await this.Repository.GetSensorFromIdSocketAsync(idSocket);
+				SensorEntity? entity = await this.SensorDataRepository.GetSensorFromIdSocketAsync(idSocket);
 				sensor = (entity != null) ? SensorMapper.Map(entity) : null;
 				result = (sensor != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
 			}
@@ -76,12 +78,12 @@ namespace AirZapto.Data.Supervisors
 		public async Task<ResultCode> DeleteSensorAsync(string idSocket)
 		{
 			ResultCode result = ResultCode.CouldNotDeleteItem;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
-				SensorEntity? entity = await this.Repository.GetSensorFromIdSocketAsync(idSocket);
+				SensorEntity? entity = await this.SensorDataRepository.GetSensorFromIdSocketAsync(idSocket);
 				if (entity != null)
 				{
-					result = (await this.Repository.DeleteSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
+					result = (await this.SensorDataRepository.DeleteSensorAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
 				}
 				else
 				{
@@ -96,9 +98,9 @@ namespace AirZapto.Data.Supervisors
         {
             ResultCode result = ResultCode.ItemNotFound;
             IEnumerable<Sensor>? sensors = null;
-            if (this.Repository != null)
+            if (this.SensorDataRepository != null)
             {
-                IEnumerable<SensorEntity>? entities = await this.Repository.GetAllSensorsAsync();
+                IEnumerable<SensorEntity>? entities = await this.SensorDataRepository.GetAllSensorsAsync();
                 sensors = (entities != null) ? entities.Select((item) => SensorMapper.Map(item)) : null;
                 if ((sensors != null) && (sensors.Any()))
                 {

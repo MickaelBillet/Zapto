@@ -10,14 +10,12 @@ namespace AirZapto.Data.Supervisors
         #region Services
         private IDalSession? Session { get; }
         private IRepositoryFactory? RepositoryFactory { get; }
-        private IDataContextFactory? ContextFactory { get; }
         #endregion
 
         #region Constructor
         public SupervisorFactoryLogs(IServiceProvider serviceProvider)
         {
             this.Session = serviceProvider.GetService<IDalSession>();
-            this.ContextFactory = serviceProvider.GetService<IDataContextFactory>();
             this.RepositoryFactory = serviceProvider.GetService<IRepositoryFactory>();
         }
         #endregion
@@ -25,7 +23,7 @@ namespace AirZapto.Data.Supervisors
         #region Methods
         public ISupervisorLogs CreateSupervisor()
         {
-            return new SupervisorLogs(this.Session!, this.ContextFactory!, this.RepositoryFactory!);
+            return new SupervisorLogs(this.Session!, this.RepositoryFactory!);
         }
         #endregion
     }

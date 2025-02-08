@@ -10,18 +10,26 @@ namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorSensorData : Supervisor, ISupervisorSensorData
 	{
+        private readonly Lazy<ISensorDataRepository>? _lazySensorDataRepository;
+
+        #region Properties
+        private ISensorDataRepository SensorDataRepository => _lazySensorDataRepository!.Value;
+        #endregion
+
         #region Constructor
-        public SupervisorSensorData(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
-        { }
+        public SupervisorSensorData(IDalSession session, IRepositoryFactory repositoryFactory) : base()
+        {
+            _lazySensorDataRepository = repositoryFactory.CreateSensorDataRepository(session);
+        }
         #endregion
 
         #region Methods
         public async Task<ResultCode> DeleteSensorDataAsync(TimeSpan span)
 		{
 			ResultCode result = ResultCode.CouldNotDeleteItem;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
-				result = (await this.Repository.DeleteSensorDataAsync(span) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
+				result = (await this.SensorDataRepository.DeleteSensorDataAsync(span) == true) ? ResultCode.Ok : ResultCode.CouldNotDeleteItem;
 			}
 
 			return result;
@@ -30,12 +38,12 @@ namespace AirZapto.Data.Supervisors
 		public async Task<ResultCode> AddSensorDataAsync(AirZaptoData data)
 		{
 			ResultCode result = ResultCode.Ok;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
 				data.Id = string.IsNullOrEmpty(data.Id) ? Guid.NewGuid().ToString() : data.Id;
 				data.Date = Clock.Now;
                 SensorDataEntity entity = SensorDataMapper.Map(data);
-				result = (await this.Repository.AddSensorDataAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+				result = (await this.SensorDataRepository.AddSensorDataAsync(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
 			}
 
 			return result;
@@ -44,9 +52,9 @@ namespace AirZapto.Data.Supervisors
         public async Task<DateTime?> GetTimeLastSensorDataAsync(string sensorId)
         {
             DateTime? dateTime= null;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
-				dateTime = await this.Repository.GetTimeLastSensorData(sensorId);
+				dateTime = await this.SensorDataRepository.GetTimeLastSensorData(sensorId);
 			}
 
             return dateTime;
@@ -56,9 +64,9 @@ namespace AirZapto.Data.Supervisors
 		{
 			ResultCode result = ResultCode.ItemNotFound;
 			IEnumerable<AirZaptoData>? data = null;
-			if (this.Repository != null)
+			if (this.SensorDataRepository != null)
 			{
-				List<SensorDataEntity>? entities = (await this.Repository.GetSensorDataAsync(sensorId, minutes))?.ToList();
+				List<SensorDataEntity>? entities = (await this.SensorDataRepository.GetSensorDataAsync(sensorId, minutes))?.ToList();
 				IEnumerable<SensorDataEntity>? output = null;
 				if (entities != null)
 				{

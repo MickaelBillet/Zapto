@@ -3,16 +3,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using AirZapto.Data.Entities;
 using AirZapto.Data.Services.Repositories;
+using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirZapto.Data.Repositories
 {
-    public partial class Repository : IRepository
+    public class SensorRepository : Repository, ISensorRepository
 	{
-		#region Methods
+        #region Constructor
+        public SensorRepository(IDalSession session) : base(session)
+        { }
+        #endregion
 
-
-		public async Task<SensorEntity?> GetSensorAsync(string id)
+        #region Methods
+        public async Task<SensorEntity?> GetSensorAsync(string id)
 		{
 			SensorEntity? sensorEntity = null;
 			if (this.DataContext != null)
@@ -117,7 +121,6 @@ namespace AirZapto.Data.Repositories
 
 			return res;
 		}
-
 		#endregion
 	}
 }

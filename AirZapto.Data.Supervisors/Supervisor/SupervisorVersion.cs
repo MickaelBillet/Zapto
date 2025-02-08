@@ -8,19 +8,27 @@ namespace AirZapto.Data.Supervisors
 {
     public sealed class SupervisorVersion : Supervisor, ISupervisorVersion
     {
+        private readonly Lazy<IVersionRepository>? _lazyVersionRepository;
+
+        #region Properties
+        private IVersionRepository VersionRepository => _lazyVersionRepository!.Value;
+        #endregion
+
         #region Constructor
-        public SupervisorVersion(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory) : base(session, contextFactory, repositoryFactory)
-        { }
+        public SupervisorVersion(IDalSession session, IRepositoryFactory repositoryFactory) : base()
+        {
+            _lazyVersionRepository = repositoryFactory.CreateVersionRepository(session);
+        }
         #endregion
 
         #region Methods
         public async Task<Version> GetVersionAsync()
         {
             VersionEntity? entity = null;
-            if (this.Repository != null)
+            if (this.VersionRepository != null)
             {
 
-                entity = await this.Repository.GetVersionAsync();
+                entity = await this.VersionRepository.GetVersionAsync();
             }
             return (entity != null) ? new Version(entity.Major, entity.Minor, entity.Build) : new Version(0,0,0);
         }
@@ -28,12 +36,12 @@ namespace AirZapto.Data.Supervisors
         public async Task<ResultCode> AddVersionAsync()
         {
             ResultCode result = ResultCode.CouldNotCreateItem;
-            if (this.Repository != null)
+            if (this.VersionRepository != null)
             {
-                VersionEntity? entity = await this.Repository.GetVersionAsync();
+                VersionEntity? entity = await this.VersionRepository.GetVersionAsync();
                 if (entity == null)
                 {
-                    bool res = await this.Repository.AddVersionAsync(new VersionEntity()
+                    bool res = await this.VersionRepository.AddVersionAsync(new VersionEntity()
                     {
                         Id = Guid.NewGuid().ToString(),
                         CreationDateTime = Clock.Now,
@@ -56,12 +64,12 @@ namespace AirZapto.Data.Supervisors
         public async Task<ResultCode> UpdateVersionAsync(int major, int minor, int build)
         {
             ResultCode result = ResultCode.CouldNotUpdateItem;
-            if (this.Repository != null)
+            if (this.VersionRepository != null)
             {
-                VersionEntity? entity = await this.Repository.GetVersionAsync();
+                VersionEntity? entity = await this.VersionRepository.GetVersionAsync();
                 if (entity != null)
                 {
-                    bool res = await this.Repository.UpdateVersionAsync(new VersionEntity()
+                    bool res = await this.VersionRepository.UpdateVersionAsync(new VersionEntity()
                     {
                         Id = entity.Id,
                         CreationDateTime = Clock.Now,
