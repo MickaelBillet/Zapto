@@ -42,14 +42,14 @@ namespace Framework.Data.Services
         #endregion
 
         #region Methods
-        public async Task ConfigureDatabase()
+        public async Task ConfigureDatabase(int major, int minor, int build)
         {		
             if (this.DatabaseExist(this.ConnectionType) == false)
             {
                 bool isCreated = this.CreateDatabase();
                 if (isCreated == true)
                 {
-                    await this.FeedDataAsync();
+                    await this.FeedDataAsync(major, minor, build);
                 }
             }
 
@@ -124,7 +124,7 @@ namespace Framework.Data.Services
 			return this.IsInitialized;
 		}
 
-        protected virtual async Task FeedDataAsync()
+        protected virtual async Task FeedDataAsync(int major, int minor, int build)
 		{
 			await Task.FromResult(0);
 		}

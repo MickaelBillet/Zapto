@@ -11,6 +11,7 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Connect.Server.Configuration
 {
@@ -33,7 +34,9 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, SensorConnectionService>();
-            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+
+            Version softwareVersion = new Version(configuration["Version"] ?? "0.0.0");
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>((provider) => new CreateDatabaseStartupTask(provider, softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build));
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddSingleton<IFirebaseService, FirebaseService>((provider) => new FirebaseService(provider, "./connect-notification-9314f-firebase-adminsdk-m70fo-6cfc9a1076.json"));
             services.AddInMemoryEventServices();
