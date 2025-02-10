@@ -31,7 +31,7 @@ namespace Connect.Data.Supervisors.Tests
                 {
                     {"ConnectionStrings:DefaultConnection", $"Data Source=.\\connectDb.db3;"},
                     {"ConnectionStrings:ServerType", "Sqlite"},
-                    {"Cache",  "0"}
+                    {"Cache", "0"}
                 });
             }).ConfigureServices((context, services) =>
             {

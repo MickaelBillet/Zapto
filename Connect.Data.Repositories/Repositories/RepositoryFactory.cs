@@ -9,20 +9,20 @@ namespace Connect.Data.Repositories
     {
 		public Lazy<IRepository<T>>? CreateRepository<T>(IDalSession session) where T : ItemEntity
         {
-			return (session != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(session)) : null;
+			return (session?.DataContextFactory != null) ? new Lazy<IRepository<T>>(() => new Repository<T>(session.DataContextFactory)) : null;
 		}
         public Lazy<IRoomRepository>? CreateRoomRepository(IDalSession session)
         {
-            return (session != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(session)) : null;
+            return (session?.DataContextFactory != null) ? new Lazy<IRoomRepository>(() => new RoomRepository(session.DataContextFactory)) : null;
         }
         public Lazy<IServerIotStatusRepository>? CreateServerIotStatusRepository(IDalSession session) 
         {
             Lazy<IServerIotStatusRepository>? serverIotStatusRepository = null;
-            if (session != null)
+            if (session?.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    serverIotStatusRepository = new Lazy<IServerIotStatusRepository>(() => new ServerIotStatusRepositorySqlite(session));
+                    serverIotStatusRepository = new Lazy<IServerIotStatusRepository>(() => new ServerIotStatusRepositorySqlite(session.DataContextFactory));
                 }
             }
             return serverIotStatusRepository;
@@ -30,11 +30,11 @@ namespace Connect.Data.Repositories
         public Lazy<IPlugRepository>? CreatePlugRepository(IDalSession session)
         {
             Lazy<IPlugRepository>? plugRepository = null;
-            if (session != null)
+            if (session?.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    plugRepository = new Lazy<IPlugRepository>(() => new PlugRepositorySqlite(session));
+                    plugRepository = new Lazy<IPlugRepository>(() => new PlugRepositorySqlite(session.DataContextFactory));
                 }
             }
             return plugRepository;

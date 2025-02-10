@@ -44,16 +44,16 @@ namespace Framework.Data.Services
         #region Methods
         public async Task ConfigureDatabase(int major, int minor, int build)
         {		
-            if (this.DatabaseExist(this.ConnectionType) == false)
+            if ((await this.DatabaseExistAsync(this.ConnectionType)) == false)
             {
-                bool isCreated = this.CreateDatabase();
+                bool isCreated = await this.CreateDatabaseAsync();
                 if (isCreated == true)
                 {
                     await this.FeedDataAsync(major, minor, build);
                 }
             }
 
-            if (this.DatabaseExist(this.ConnectionType) == true)
+            if ((await this.DatabaseExistAsync(this.ConnectionType)) == true)
             {
                 bool isUpgraded = await this.UpgradeDatabaseAsync();
                 await this.InitializeDataAsync();
@@ -70,16 +70,16 @@ namespace Framework.Data.Services
             return await Task.FromResult<bool>(true);
         }
 
-        public bool DropDatabase()
+        public async Task<bool> DropDatabaseAsync()
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-				this.DataContextFactory.UseContext(context =>
+				await this.DataContextFactory.UseContext(async context =>
 				{
-					if ((context != null) && (context?.DataBaseExists() == true))
+					if ((context != null) && ((await context.DataBaseExistsAsync()) == true))
 					{
-						bool? result = context?.DropDatabase();
+						bool? result = await context.DataBaseExistsAsync();
                         res = result.HasValue ? result.Value : false;
                     }
 				});
@@ -87,32 +87,32 @@ namespace Framework.Data.Services
 			return res;
 		}
 
-        protected bool CreateDatabase()
+        protected async Task <bool> CreateDatabaseAsync()
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-				this.DataContextFactory.UseContext(context =>
+				await this.DataContextFactory.UseContext(async context =>
 				{
 					if (context != null)
 					{
-						res = context.CreateDataBase();
+						res = await context.CreateDataBaseAsync();
 					}
 				});
 			}
 			return res;
 		}
 
-        protected bool DatabaseExist(ConnectionType connectionType)
+        protected async Task<bool> DatabaseExistAsync(ConnectionType connectionType)
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                this.DataContextFactory.UseContext(context =>
+                await this.DataContextFactory.UseContext(async context =>
                 {
                     if (context != null)
                     {
-                        res = context.DataBaseExists();
+                        res = await context.DataBaseExistsAsync();
                     }
                 });
             }

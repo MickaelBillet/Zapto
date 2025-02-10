@@ -7,7 +7,7 @@ namespace Connect.Data.Repositories
     public abstract class PlugRepository : Repository<PlugEntity>, IPlugRepository
     {
         #region Constructor
-        public PlugRepository(IDalSession session) : base(session) { }
+        public PlugRepository(IDataContextFactory dataContextFactory) : base(dataContextFactory) { }
         #endregion
 
         #region Methods

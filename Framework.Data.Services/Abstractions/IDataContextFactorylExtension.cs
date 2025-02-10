@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Framework.Data.Abstractions
 {
     public static class IDataContextFactorylExtension
     {
-        public static void UseContext(this IDataContextFactory pool, Action<IDataContext?> action) 
+        public static async Task UseContext(this IDataContextFactory pool, Func<IDataContext?, Task> action) 
         {
             var context = pool.GetContext();
             try
             {
-                action(context);
+                await action(context);
             }
             finally
             {

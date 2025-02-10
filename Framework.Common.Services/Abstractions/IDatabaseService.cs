@@ -7,6 +7,6 @@ namespace Framework.Infrastructure.Abstractions
 	{
 		Task ConfigureDatabase(int major, int minor, int build);
         public bool DatabaseIsInitialized();
-        public bool DropDatabase();
+        public Task<bool> DropDatabaseAsync();
     }
 }

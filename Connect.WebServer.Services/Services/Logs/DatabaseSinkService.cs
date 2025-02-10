@@ -17,7 +17,7 @@ namespace Connect.WebServer.Services
     {
         #region Properties
         private LogEventLevel Level { get; } = LogEventLevel.Error;
-        private IConfiguration? Configuration { get; }
+        private ISupervisorLog? Supervisor { get; }
         #endregion
 
         #region Constructor
@@ -26,26 +26,25 @@ namespace Connect.WebServer.Services
             if (configuration != null)
             {
                 this.Level = SeverityToLevel(configuration["Serilog.MinimumLevel"]);
-                this.Configuration = configuration;
-            }
+
+                ISecretService? secretService = SecretService.GetSecretService(configuration);
+
+                this.Supervisor = new SupervisorLog(new DalSession(secretService!,
+                                                                    new DataContextFactory(secretService!, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey),
+                                                                    ConnectConstants.ConnectionStringConnectKey,
+                                                                    ConnectConstants.ServerTypeConnectKey),
+                                                    new RepositoryFactory());
+            }            
         }
         #endregion
 
         #region Methods
         public void Emit(LogEvent logEvent)
         {
-            if ((this.Configuration != null) && (logEvent.Level >= this.Level))
+            if ((this.Supervisor != null) && (logEvent.Level >= this.Level))
             {
-                ISecretService? secretService = SecretService.GetSecretService(this.Configuration);
-
-                ISupervisorLog supervisor = new SupervisorLog(new DalSession(secretService!, 
-                                                                                new DataContextFactory(secretService!, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey), 
-                                                                                ConnectConstants.ConnectionStringConnectKey, 
-                                                                                ConnectConstants.ServerTypeConnectKey), 
-                                                                new RepositoryFactory());
-
                 //Why I don't have the warning CS4014 
-                supervisor.AddLog(new Logs()
+                this.Supervisor.AddLog(new Logs()
                 {
                     Date = logEvent.Timestamp.DateTime,
                     Level = LevelToSeverity(logEvent),

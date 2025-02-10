@@ -12,14 +12,14 @@ namespace Framework.Data.Session
     {
         #region Properties
 
-        public IDataContext? DataContext
+        public IDataContextFactory? DataContextFactory
         {
-            get; private set;
+            get; 
         }
 
         public ConnectionType? ConnectionType 
         { 
-            get; private set; 
+            get; 
         }
 
         #endregion
@@ -30,18 +30,8 @@ namespace Framework.Data.Session
                             string serverTypeKey)
         {
             ISecretService secretService = serviceProvider.GetRequiredService<ISecretService>();
-            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                dataContextFactory.UseContext(context =>
-                {
-                    if (context != null)
-                    {
-                        this.DataContext = context;
-                    }
-                });
-            }
         }
 
         public DalSession(ISecretService secretService,
@@ -49,41 +39,21 @@ namespace Framework.Data.Session
                             string connectionStringKey,
                             string serverTypeKey)
         {
+            this.DataContextFactory = dataContextFactory;
             this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                dataContextFactory.UseContext(context =>
-                {
-                    if (context != null)
-                    {
-                        this.DataContext = context;
-                    }
-                });
-            }
         }
 
         public DalSession(IServiceProvider serviceProvider)
         {
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.ConnectionType = ConnectionString.GetConnectionType(configuration);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                dataContextFactory.UseContext(context =>
-                {
-                    if (context != null)
-                    {
-                        this.DataContext = context;
-                    }
-                });
-            }
         }
         #endregion
 
         #region Methods
         public void Dispose()
         {
-            this.DataContext?.Dispose();
         }
         #endregion
     }

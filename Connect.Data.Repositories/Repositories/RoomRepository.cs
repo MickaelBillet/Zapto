@@ -8,7 +8,7 @@ namespace Connect.Data.Repositories
     public class RoomRepository : Repository<RoomEntity>, IRoomRepository
     {
         #region Constructor
-        public RoomRepository(IDalSession session) : base(session) 
+        public RoomRepository(IDataContextFactory dataContextFactory) : base(dataContextFactory) 
         { }
         #endregion
 
@@ -16,10 +16,14 @@ namespace Connect.Data.Repositories
         public async Task<RoomEntity?> GetFromPlugIdAsync(string plugId)
         {
             RoomEntity? entity = null;
-            if (this.DataContext != null)
+            await this.DataContextFactory.UseContext(async (context) =>
             {
-                entity = await this.DataContext.RoomEntities.FromSql<RoomEntity>($"SELECT * FROM room INNER JOIN connectedObject ON connectedObject.RoomId = room.Id INNER JOIN plug ON connectedobject.Id == plug.ConnectedObjectId WHERE plug.Id = {plugId}").AsNoTracking().FirstOrDefaultAsync<RoomEntity>();
-            }
+                DbSet<RoomEntity>? table = context?.Set<RoomEntity>();
+                if (table != null)
+                {
+                    entity = await table.FromSql<RoomEntity>($"SELECT * FROM room INNER JOIN connectedObject ON connectedObject.RoomId = room.Id INNER JOIN plug ON connectedobject.Id == plug.ConnectedObjectId WHERE plug.Id = {plugId}").AsNoTracking().FirstOrDefaultAsync<RoomEntity>();
+                }
+            });
             return entity;
         }
         #endregion

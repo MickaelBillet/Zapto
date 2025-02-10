@@ -1,5 +1,4 @@
-﻿using Framework.Data.Abstractions;
-using Framework.Infrastructure.Abstractions;
+﻿using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,7 +22,7 @@ namespace Framework.Data.Services
         #region Methods
         public async Task Execute()
         {
-            await Task.Run(() => this.DatabaseService.DropDatabase());
+            await this.DatabaseService.DropDatabaseAsync();
         }
         #endregion
     }

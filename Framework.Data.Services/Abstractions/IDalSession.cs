@@ -5,7 +5,7 @@ namespace Framework.Data.Abstractions
 {
     public interface IDalSession : IDisposable
     {
-        public IDataContext? DataContext { get; }
+        public IDataContextFactory? DataContextFactory { get; }
         public ConnectionType? ConnectionType { get; }
     }
 }

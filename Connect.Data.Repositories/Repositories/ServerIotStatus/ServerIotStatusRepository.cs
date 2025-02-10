@@ -7,7 +7,7 @@ namespace Connect.Data.Repositories
     public abstract class ServerIotStatusRepository : Repository<ServerIotStatusEntity>, IServerIotStatusRepository
     {
         #region Constructor
-        public ServerIotStatusRepository(IDalSession session) : base(session) { }
+        public ServerIotStatusRepository(IDataContextFactory dataContextFactory) : base(dataContextFactory) { }
         #endregion
 
         #region Methods

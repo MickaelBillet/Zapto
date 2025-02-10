@@ -30,7 +30,6 @@ namespace Connect.Data.Supervisors
         {
             return (await this.OperatingDataRepository.GetAsync(id) != null) ? ResultCode.Ok : ResultCode.ItemNotFound;
         }
-
         public async Task<ResultCode> DeleteOperationData(DateTime dateTime, string roomId)
         {
             ResultCode result = ResultCode.ItemNotFound;
@@ -51,7 +50,6 @@ namespace Connect.Data.Supervisors
 
             return result;
         }
-
         public async Task<ResultCode> AddOperatingData(OperatingData data)
         {
             ResultCode result = ResultCode.CouldNotCreateItem;
@@ -68,7 +66,6 @@ namespace Connect.Data.Supervisors
 
             return result;
         }
-
         public async Task<IEnumerable<OperatingData>> GetRoomOperatingDataOfDay(string roomId, DateTime day)
         {
             IEnumerable<OperatingDataEntity> entities =  await this.OperatingDataRepository.GetCollectionAsync((data) => data.CreationDateTime.Day == day.Day
@@ -78,19 +75,16 @@ namespace Connect.Data.Supervisors
                                                                                                                     && data.ConnectedObjectId == null);
             return entities.Select(item => OperatingDataMapper.Map(item));
         }
-
         public async Task<string> GetRoomHeatingDurationOfDay(string roomId , DateTime day)
         {
             double duration = await this.GetWorkingDuration(roomId, day, ParameterType.Temperature);
             return (duration/60).ToString("F0");
         }
-
         public async Task<string> GetRoomVentilationDurationOfDay(string roomId, DateTime day)
         {
             double duration = await this.GetWorkingDuration(roomId, day, ParameterType.Humidity);
             return (duration / 60).ToString("F0");
         }
-
         private async Task<double> GetWorkingDuration(string roomId, DateTime day, short conditionType)
         {
             double duration = 0;
@@ -112,13 +106,11 @@ namespace Connect.Data.Supervisors
 
             return duration;
         }
-
         public async Task<DateTime?> GetRoomMaxDate(string roomId)
         {
             long ticks = (await this.OperatingDataRepository.GetCollectionAsync((data) => data.RoomId == roomId)).Max<OperatingDataEntity>((data) => data.CreationDateTime.Ticks);
             return new DateTime(ticks);
         }
-
         public async Task<DateTime?> GetRoomMinDate(string roomId)
         {
             long ticks = (await this.OperatingDataRepository.GetCollectionAsync((data) => data.RoomId == roomId)).Min<OperatingDataEntity>((data) => data.CreationDateTime.Ticks);
