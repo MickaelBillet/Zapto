@@ -5,7 +5,7 @@ namespace WeatherZapto.Model.Healthcheck
     public class Entries
     {
         public Memory? Memory { get; set; }
-        public PostGreSql? PostGreSql { get; set; }
+        public PostGreSQL? PostGreSQL { get; set; }
         [JsonPropertyName("Error System")]
         public ErrorSystem? ErrorSystem { get; set; }
         [JsonPropertyName("OpenWeather Calls")]

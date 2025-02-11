@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace WeatherZapto.Model.Healthcheck
 {
-    public class PostGreSql
+    public class PostGreSQL
     {
         public Data? Data { get; set; }
         public object? Description { get; set; }

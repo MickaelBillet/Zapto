@@ -20,8 +20,8 @@ namespace AirZapto.Application.Services
 		#region Constructor
 		public ApplicationSensorServices(IServiceProvider serviceProvider)
 		{
-			this.SensorService = serviceProvider.GetRequiredService<ISensorService>();
-			this.WSMessageManager = serviceProvider.GetRequiredService<IWSMessageManager>();
+			this.SensorService = serviceProvider.GetService<ISensorService>();
+			this.WSMessageManager = serviceProvider.GetService<IWSMessageManager>();
 		}
 		#endregion
 
