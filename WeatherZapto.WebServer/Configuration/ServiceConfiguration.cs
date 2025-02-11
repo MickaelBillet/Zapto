@@ -18,15 +18,16 @@ namespace WeatherZapto.WebServer.Configuration
             services.AddTransient<IHttpClientService, HttpClientService>((service) => new HttpClientService(service, configuration));
             services.AddTransient<IInternetService, InternetServiceWeb>();
             services.AddOpenWeatherWebServices(configuration, "OpenWeather");
-            services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider, "ConnectionStringWeather", "ServerTypeWeather"));
+            services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider, WeatherZaptoConstants.ConnectionStringWeatherZaptotKey, WeatherZaptoConstants.ServerTypeWeatherZaptoKey));
             services.AddSingleton<IHostedService, HomeAirPollutionAcquisitionService>();
             services.AddSingleton<IHostedService, HomeWeatherAcquisitionService>();
-            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+            Version softwareVersion = new Version(configuration["Version"] ?? "0.0.0");
+            services.AddTransient<IStartupTask, CreateDatabaseStartupTask>((provider) => new CreateDatabaseStartupTask(provider, softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build));
             services.AddTransient<IStartupTask, LoggerStartupTask>();
             services.AddApplicationWeaterZaptoServices();
             services.AddSingleton<CacheSignal>();
             services.AddSupervisor();
-            services.AddRepositories("ConnectionStringWeather", "ServerTypeWeather");
+            services.AddRepositories(WeatherZaptoConstants.ConnectionStringWeatherZaptotKey, WeatherZaptoConstants.ServerTypeWeatherZaptoKey);
             services.AddTransient<IErrorHandlerWebService, ErrorHandlerWebService>();
         }
     }

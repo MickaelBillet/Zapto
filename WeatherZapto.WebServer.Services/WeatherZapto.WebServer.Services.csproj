@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WeatherZapto.Application.Services\WeatherZapto.Application.Services.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Data.Repositories\WeatherZapto.Data.Repositories.csproj" />
+    <ProjectReference Include="..\WeatherZapto.Data.Supervisors\WeatherZapto.Data.Supervisors.csproj" />
   </ItemGroup>
 
 </Project>

@@ -26,7 +26,6 @@ namespace Connect.WebServer.Services
             if (configuration != null)
             {
                 this.Level = SeverityToLevel(configuration["Serilog.MinimumLevel"]);
-
                 ISecretService? secretService = SecretService.GetSecretService(configuration);
 
                 this.Supervisor = new SupervisorLog(new DalSession(secretService!,

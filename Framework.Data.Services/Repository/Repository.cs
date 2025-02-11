@@ -1,11 +1,15 @@
 ﻿using Framework.Core.Data;
 using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-namespace Connect.Data.Repositories
+namespace Framework.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : ItemEntity
     {

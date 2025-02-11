@@ -137,7 +137,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, "ConnectionStringWeather", "ServerTypeWeather");
+(string connectionString, string serverName) = ConnectionString.GetConnectionString(builder.Configuration, 
+                                                                                    WeatherZaptoConstants.ConnectionStringWeatherZaptotKey,
+                                                                                    WeatherZaptoConstants.ServerTypeWeatherZaptoKey);
 builder.Services.AddHealthChecks()
         //Memory
         .AddCheck<MemoryHealthCheck>("Memory",

@@ -45,7 +45,7 @@ namespace WeatherZapto.Data.Supervisors.Tests
             {
                 services.AddRepositories();
                 services.AddSingleton<IDatabaseService, WeatherZaptoDatabaseService>(provider => new WeatherZaptoDatabaseService(provider));
-                services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+                services.AddTransient<IStartupTask, CreateDatabaseStartupTask>((provider) => new CreateDatabaseStartupTask(provider, 1, 1, 0));
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddTransient<ISupervisorVersion, SupervisorVersion>();
