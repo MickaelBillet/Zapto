@@ -38,10 +38,10 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.13.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.13" />
     <PackageReference Include="MudBlazor" Version="7.16.0" />
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="PSC.Blazor.Components.Chartjs" Version="8.0.8" />
