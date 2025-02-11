@@ -6,7 +6,7 @@ namespace AirZapto.Data.Services
 	{
         #region Version
         Task<Version> GetVersionAsync();
-        Task<ResultCode> AddVersionAsync();
+        Task<ResultCode> AddVersionAsync(int major, int minor, int build);
         Task<ResultCode> UpdateVersionAsync(int major, int minor, int build);
         #endregion
     }

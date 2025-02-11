@@ -13,48 +13,53 @@ namespace AirZapto.Data.Repositories
     public class SensorDataRepository : Repository, ISensorDataRepository
 	{
         #region Constructor
-        public SensorDataRepository(IDalSession session) : base(session)
-        { }
+        public SensorDataRepository(IDataContextFactory dataContextFactory) : base(dataContextFactory) { }
         #endregion
 
         #region Methods
         public async Task<bool> AddSensorDataAsync(SensorDataEntity entity)
 		{
 			bool res = false;
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-				await this.DataContext.SensorDataEntities.AddAsync(entity);
-				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;
-			}
+				if (context != null)
+				{
+					await context.Set<SensorDataEntity>().AddAsync(entity);
+					res = (await context.SaveChangesAsync() > 0) ? true : false;
+				}
+			});
 			return res;
 		}
 
 		public async Task<bool> DeleteSensorDataAsync(TimeSpan span)
 		{
             bool res = false;
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-				var query = await (from s in this.DataContext.SensorDataEntities
-								   where ((Clock.Now - span) > s.CreationDateTime)
-								   select s).ToListAsync();
-
-				foreach (var entity in query)
+				if (context != null)
 				{
-                    //Search the entity in the local context 
-                    var existingEntity = this.DataContext.SensorDataEntities.Local.FirstOrDefault(e => e.Id == entity.Id);
-                    if (existingEntity != null)
-                    {
-                        //Detach the entity from the context
-                        this.DataContext.Entry(existingEntity).State = EntityState.Detached;
-                    }
+					var query = await (from s in context.Set<SensorDataEntity>()
+									   where ((Clock.Now - span) > s.CreationDateTime)
+									   select s).ToListAsync();
 
-                    //Rattach
-                    this.DataContext.Entry(entity).State = EntityState.Unchanged;
-                }
+					foreach (var entity in query)
+					{
+						//Search the entity in the local context 
+						var existingEntity = context.Set<SensorDataEntity>().Local.FirstOrDefault(e => e.Id == entity.Id);
+						if (existingEntity != null)
+						{
+							//Detach the entity from the context
+							context.Entry(existingEntity).State = EntityState.Detached;
+						}
 
-                this.DataContext.SensorDataEntities.RemoveRange(query);
-				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;
-			}
+						//Rattach
+						context.Entry(entity).State = EntityState.Unchanged;
+					}
+
+					context.Set<SensorDataEntity>().RemoveRange(query);
+					res = (await context.SaveChangesAsync() > 0) ? true : false;
+				}
+			});
 			return res;
 		}
 
@@ -62,26 +67,30 @@ namespace AirZapto.Data.Repositories
 		{
 			TimeSpan span = new TimeSpan(0, minutes, 0);
 			IEnumerable<SensorDataEntity>? entities = null;
-
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-				entities = await (from s in this.DataContext.SensorDataEntities
-								  where ((s.SensorId == sensorId) && (Clock.Now - span) <= s.CreationDateTime)
-								  select s).AsNoTracking().ToListAsync();
-			}
-
+				if (context != null)
+				{
+					entities = await (from s in context.Set<SensorDataEntity>()
+									  where ((s.SensorId == sensorId) && (Clock.Now - span) <= s.CreationDateTime)
+									  select s).AsNoTracking().ToListAsync();
+				}
+			});
 			return entities;
 		}
 
 		public async Task<DateTime?> GetTimeLastSensorData(string sensorId)
 		{
 			DateTime? timestamp = null;
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-				timestamp = await (from s in this.DataContext.SensorDataEntities
-							  where (s.SensorId == sensorId)
-							  select s.CreationDateTime).MaxAsync();
-			}
+				if (context != null)
+				{
+					timestamp = await (from s in context.Set<SensorDataEntity>()
+                                       where (s.SensorId == sensorId)
+									   select s.CreationDateTime).MaxAsync();
+				}
+			});
 			return timestamp;
 		}
 

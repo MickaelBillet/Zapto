@@ -29,10 +29,9 @@ namespace AirZapto.Data.Supervisors
 			ResultCode result = ResultCode.CouldNotCreateItem;
             logs.Id = string.IsNullOrEmpty(logs.Id) ? Guid.NewGuid().ToString() : logs.Id;
             LogsEntity entity = LogsMapper.Map(logs);
-            result = (this.LogsRepository != null) && (this.LogsRepository.AddLogs(entity) == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+            result = ((this.LogsRepository != null) && (this.LogsRepository.AddLogs(entity) == true)) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
 			return result;
 		}
-
 		public async Task<(ResultCode, IEnumerable<Logs>?)> GetLogsAsync()
 		{
 			ResultCode result = ResultCode.ItemNotFound;
@@ -45,7 +44,6 @@ namespace AirZapto.Data.Supervisors
             }
 			return (result, logs);
 		}
-
         public ResultCode LogsExist(string id)
         {
             ResultCode result = ResultCode.ItemNotFound;
@@ -55,7 +53,6 @@ namespace AirZapto.Data.Supervisors
             }
             return (result);
         }
-
         public async Task<(ResultCode, IEnumerable<Logs>?)> GetLogsInf24HAsync()
         {
             ResultCode result = ResultCode.ItemNotFound;

@@ -33,7 +33,7 @@ namespace AirZapto.Data.Supervisors
             return (entity != null) ? new Version(entity.Major, entity.Minor, entity.Build) : new Version(0,0,0);
         }
 
-        public async Task<ResultCode> AddVersionAsync()
+        public async Task<ResultCode> AddVersionAsync(int major, int minor, int build)
         {
             ResultCode result = ResultCode.CouldNotCreateItem;
             if (this.VersionRepository != null)
@@ -45,9 +45,9 @@ namespace AirZapto.Data.Supervisors
                     {
                         Id = Guid.NewGuid().ToString(),
                         CreationDateTime = Clock.Now,
-                        Major = 0,
-                        Minor = 0,
-                        Build = 0,
+                        Major = major,
+                        Minor = minor,
+                        Build = build,
                     }); ;
 
                     result = (res == true) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;

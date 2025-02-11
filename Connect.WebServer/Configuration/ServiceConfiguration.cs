@@ -1,8 +1,8 @@
 ﻿using Connect.Application;
 using Connect.Application.Infrastructure;
-using Connect.Data.Repository;
 using Connect.Data.Supervisors;
 using Connect.Model;
+using Connect.Data;
 using Connect.WebServer.Services;
 using Framework.Common.Services;
 using Framework.Data.Services;

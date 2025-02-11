@@ -5,7 +5,7 @@ using Framework.Data.Abstractions;
 using Framework.Data.Session;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Connect.Data.Repository
+namespace Connect.Data
 {
     public static class ConnectDataServices
 	{

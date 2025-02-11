@@ -40,7 +40,7 @@ namespace AirZapto.Data.Database
                         ResultCode result = await supervisor.UpdateVersionAsync(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
                         if (result == ResultCode.ItemNotFound)
                         {
-                            result = await supervisor.AddVersionAsync();
+                            result = await supervisor.AddVersionAsync(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
                         }
                         res = (result == ResultCode.Ok) ? true : false;
                     }
@@ -49,14 +49,14 @@ namespace AirZapto.Data.Database
             return res;
         }
 
-        protected override async Task FeedDataAsync()
+        protected override async Task FeedDataAsync(int major, int minor, int build)
         {
             if (this.ServiceScopeFactory != null)
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
                     ISupervisorVersion supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor();
-                    await supervisor.AddVersionAsync();
+                    await supervisor.AddVersionAsync(major, minor, build);
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace AirZapto.Application.Services
 
 		public ApplicationSensorDataServices(IServiceProvider serviceProvider)
 		{
-			this.SensorDataService = serviceProvider.GetService<ISensorDataService>();
+			this.SensorDataService = serviceProvider.GetRequiredService<ISensorDataService>();
 		}
 
 		#endregion

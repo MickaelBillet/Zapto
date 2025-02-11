@@ -1,5 +1,4 @@
-﻿using AirZapto.Data.DataContext;
-using AirZapto.Data.Entities;
+﻿using AirZapto.Data.Entities;
 using AirZapto.Data.Services.Repositories;
 using Framework.Data.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +10,21 @@ namespace AirZapto.Data.Repositories
     public class VersionRepository : Repository, IVersionRepository
 	{
         #region Constructor
-        public VersionRepository(IDalSession session) : base(session)
-        { }
+        public VersionRepository(IDataContextFactory dataContextFactory) : base(dataContextFactory) { }
         #endregion
 
         #region Methods
         public async Task<VersionEntity?> GetVersionAsync()
 		{
 			VersionEntity? versionEntity = null;
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-                versionEntity = await (from version in this.DataContext.VersionEntities
-										select version).AsNoTracking().FirstOrDefaultAsync();
-			}
+				if (context != null)
+				{
+					versionEntity = await (from version in context.Set<VersionEntity>()
+										   select version).AsNoTracking().FirstOrDefaultAsync();
+				}
+			});
 
 			return versionEntity;
 		}
@@ -31,12 +32,14 @@ namespace AirZapto.Data.Repositories
 		public async Task<bool> AddVersionAsync(VersionEntity entity)
 		{
 			bool res = false;
-
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-				await this.DataContext.VersionEntities.AddAsync(entity);
-				res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;
-			}
+                if (context != null)
+                {
+					await context.Set<VersionEntity>().AddAsync(entity);
+					res = (await context.SaveChangesAsync() > 0) ? true : false;
+				}
+			});
 
 			return res;
 		}
@@ -44,12 +47,14 @@ namespace AirZapto.Data.Repositories
 		public async Task<bool> UpdateVersionAsync(VersionEntity entity)
 		{
 			bool res = false;
-
-			if (this.DataContext != null)
+			await this.DataContextFactory.UseContext(async (context) =>
 			{
-                this.DataContext.DetachLocal<VersionEntity>(entity, entity.Id);
-                res = (await this.DataContext.SaveChangesAsync() > 0) ? true : false;
-			}
+				if (context != null)
+				{
+					context.DetachLocal<VersionEntity>(entity, entity.Id);
+					res = (await context.SaveChangesAsync() > 0) ? true : false;
+				}
+			});
 
 			return res;
 		}

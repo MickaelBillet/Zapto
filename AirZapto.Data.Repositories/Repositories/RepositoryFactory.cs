@@ -10,11 +10,11 @@ namespace AirZapto.Data.Repositories
         public Lazy<ISensorRepository>? CreateSensorRepository(IDalSession session)
         {
             Lazy<ISensorRepository>? repository = null;
-            if (session != null)
+            if (session.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    repository = new Lazy<ISensorRepository>(() => new SensorRepository(session));
+                    repository = new Lazy<ISensorRepository>(() => new SensorRepository(session.DataContextFactory));
                 }
             }
             return repository;
@@ -23,11 +23,11 @@ namespace AirZapto.Data.Repositories
         public Lazy<ISensorDataRepository>? CreateSensorDataRepository(IDalSession session)
         {
             Lazy<ISensorDataRepository>? repository = null;
-            if (session != null)
+            if (session.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    repository = new Lazy<ISensorDataRepository>(() => new SensorDataRepository(session));
+                    repository = new Lazy<ISensorDataRepository>(() => new SensorDataRepository(session.DataContextFactory));
                 }
             }
             return repository;
@@ -36,11 +36,11 @@ namespace AirZapto.Data.Repositories
         public Lazy<IVersionRepository>? CreateVersionRepository(IDalSession session)
         {
             Lazy<IVersionRepository>? repository = null;
-            if (session != null)
+            if (session.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    repository = new Lazy<IVersionRepository>(() => new VersionRepository(session));
+                    repository = new Lazy<IVersionRepository>(() => new VersionRepository(session.DataContextFactory));
                 }
             }
             return repository;
@@ -49,11 +49,11 @@ namespace AirZapto.Data.Repositories
         public Lazy<ILogsRepository>? CreateLogsRepository(IDalSession session)
         {
             Lazy<ILogsRepository>? repository = null;
-            if (session != null)
+            if (session.DataContextFactory != null)
             {
                 if (session.ConnectionType?.ServerType == ServerType.SqlLite)
                 {
-                    repository = new Lazy<ILogsRepository>(() => new LogsRepository(session));
+                    repository = new Lazy<ILogsRepository>(() => new LogsRepository(session.DataContextFactory));
                 }
             }
             return repository;

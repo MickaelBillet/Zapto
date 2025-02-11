@@ -1,5 +1,4 @@
-﻿using AirZapto.Data;
-using AirZapto.Data.DataContext;
+﻿using AirZapto.Data.DataContext;
 using AirZapto.Data.Repositories;
 using AirZapto.Data.Services;
 using AirZapto.Data.Supervisors;
@@ -17,7 +16,7 @@ namespace AirZapto.WebServer.Services
     {
         #region Properties
         private LogEventLevel Level { get; } = LogEventLevel.Error;
-        private IConfiguration? Configuration { get; }
+        private ISupervisorLogs? Supervisor { get; }
         #endregion
 
         #region Constructor
@@ -25,8 +24,14 @@ namespace AirZapto.WebServer.Services
         {
             if (configuration != null)
             {
-                this.Configuration = configuration;
                 this.Level = SeverityToLevel(configuration["Serilog.MinimumLevel"]);
+                ISecretService? secretService = SecretService.GetSecretService(configuration);
+
+                this.Supervisor = new SupervisorLogs(new DalSession(secretService!,
+                                                                    new DataContextFactory(secretService!, AirZaptoConstants.ConnectionStringAirZaptotKey, AirZaptoConstants.ServerTypeAirZaptoKey),
+                                                                    AirZaptoConstants.ConnectionStringAirZaptotKey,
+                                                                    AirZaptoConstants.ServerTypeAirZaptoKey),
+                                                        new RepositoryFactory());
             }
         }
         #endregion
@@ -34,16 +39,9 @@ namespace AirZapto.WebServer.Services
         #region Methods
         public void Emit(LogEvent logEvent)
         {
-            if ((this.Configuration != null) && (logEvent.Level >= this.Level))
-            {
-                ISecretService? secretService = SecretService.GetSecretService(this.Configuration);
-
-                ISupervisorLogs supervisor = new SupervisorLogs(new DalSession(secretService!, 
-                                                                                new DataContextFactory(secretService!, AirZaptoConstants.ConnectionStringAirZaptotKey, AirZaptoConstants.ServerTypeAirZaptoKey),
-                                                                                AirZaptoConstants.ConnectionStringAirZaptotKey,
-                                                                                AirZaptoConstants.ServerTypeAirZaptoKey),
-                                                                new RepositoryFactory());
-                supervisor.AddLogs(new Logs()
+            if ((this.Supervisor != null) && (logEvent.Level >= this.Level))
+            {                
+                this.Supervisor.AddLogs(new Logs()
                 {
                     Date = logEvent.Timestamp.DateTime,
                     Level = LevelToSeverity(logEvent),
