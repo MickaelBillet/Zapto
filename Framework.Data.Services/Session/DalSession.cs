@@ -5,7 +5,6 @@ using Framework.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Data;
 
 namespace Framework.Data.Session
 {
@@ -13,19 +12,14 @@ namespace Framework.Data.Session
     {
         #region Properties
 
-        public IDbConnection? Connection
+        public IDataContextFactory? DataContextFactory
         {
-            get; private set;
-        }
-
-        public IDataContext? DataContext
-        {
-            get; private set;
+            get; 
         }
 
         public ConnectionType? ConnectionType 
         { 
-            get; private set; 
+            get; 
         }
 
         #endregion
@@ -36,82 +30,31 @@ namespace Framework.Data.Session
                             string serverTypeKey)
         {
             ISecretService secretService = serviceProvider.GetRequiredService<ISecretService>();
-            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
-            IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                if (obj != null)
-                {
-                    this.Connection = obj?.connection;
-                    this.DataContext = obj?.context;
-                }
-            }
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
         }
 
         public DalSession(ISecretService secretService,
                             IDataContextFactory dataContextFactory, 
-                            IConfiguration configuration,
                             string connectionStringKey,
                             string serverTypeKey)
         {
-            this.ConnectionType = ConnectionString.GetConnectionType(configuration, secretService, connectionStringKey, serverTypeKey);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                if (obj != null)
-                {
-                    this.Connection = obj?.connection;
-                    this.DataContext = obj?.context;
-                }
-            }
+            this.DataContextFactory = dataContextFactory;
+            this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
         }
 
         public DalSession(IServiceProvider serviceProvider)
         {
             IConfiguration configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            IDataContextFactory dataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
+            this.DataContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.ConnectionType = ConnectionString.GetConnectionType(configuration);
-            if (string.IsNullOrEmpty(this.ConnectionType?.ConnectionString) == false)
-            {
-                (IDbConnection? connection, IDataContext? context)? obj = dataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType);
-                if (obj != null)
-                {
-                    this.Connection = obj?.connection;
-                    this.DataContext = obj?.context;
-                }
-            }
         }
         #endregion
 
         #region Methods
-        public bool OpenConnection()
-        {
-            bool res = false;
-
-            this.Connection?.Open();
-
-            if (this.Connection?.State == ConnectionState.Open)
-            {
-                res = true;
-            }
-
-            return res;
-        }
-
-        public void CloseConnection()
-        {
-            this.Connection?.Close();
-        }
-
         public void Dispose()
         {
-            this.Connection?.Close();
-            this.DataContext?.Dispose();
-            this.Connection?.Dispose();
         }
-
         #endregion
     }
 }

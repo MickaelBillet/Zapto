@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Framework.Common.Services;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Configuration;
 

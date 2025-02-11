@@ -119,11 +119,11 @@ namespace Zapto.Component.Common.ViewModels
             });
             weatherZapto.Items?.Add(new HealthcheckItemModel
             {
-                Name = healthCheckWeatherZapto?.Entries?.PostGreSql?.GetType().Name,
-                Description = healthCheckWeatherZapto?.Entries?.PostGreSql?.Description?.ToString(),
-                Status = healthCheckWeatherZapto?.Entries?.PostGreSql?.Status,
-                Exception = healthCheckWeatherZapto?.Entries?.PostGreSql?.Exception?.ToString(),
-                Tags = healthCheckWeatherZapto?.Entries?.PostGreSql?.Tags?.Aggregate((workingSentence, next) => workingSentence + " " + next),
+                Name = healthCheckWeatherZapto?.Entries?.PostGreSQL?.GetType().Name,
+                Description = healthCheckWeatherZapto?.Entries?.PostGreSQL?.Description?.ToString(),
+                Status = healthCheckWeatherZapto?.Entries?.PostGreSQL?.Status,
+                Exception = healthCheckWeatherZapto?.Entries?.PostGreSQL?.Exception?.ToString(),
+                Tags = healthCheckWeatherZapto?.Entries?.PostGreSQL?.Tags?.Aggregate((workingSentence, next) => workingSentence + " " + next),
             });
             weatherZapto.Items?.Add(new HealthcheckItemModel
             {

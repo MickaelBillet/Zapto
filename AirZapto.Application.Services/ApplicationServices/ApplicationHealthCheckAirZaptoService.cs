@@ -15,7 +15,7 @@ namespace AirZapto.Application.Services
         #region Constructor
         public ApplicationHealthCheckAirZaptoService(IServiceProvider serviceProvider)
         {
-            this.HealthCheckService = serviceProvider.GetRequiredService<IHealthCheckAirZaptoService>();
+            this.HealthCheckService = serviceProvider.GetService<IHealthCheckAirZaptoService>();
         }
         #endregion
 

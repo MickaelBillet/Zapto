@@ -13,7 +13,7 @@ namespace Zapto.Component.Common.ViewModels
 	public sealed class ChooseLanguageViewModel : BaseViewModel, IChooseLanguageViewModel
     {
 		#region Properties
-        private IZaptoLocalStorageService StorageService { get; set; }
+        private IZaptoStorageService StorageService { get; set; }
 
         public CultureInfo[]? Cultures { get; private set; }
 
@@ -24,8 +24,26 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if (CultureInfo.CurrentCulture != value)
                 {
-                    this.StorageService.SetItemAsync<string>("culture", value.Name);
-                    this.NavigationService.NavigateTo(this.NavigationService.GetUri(), true);
+                    Task.Run(async () =>
+                    {
+                        const string defaultCulture = "en-US";
+                        await this.StorageService.SetItemAsync<string>("blazorCulture", value.Name);
+                        var result = await this.StorageService.GetItemAsync<string>("blazorCulture");
+                        var culture = CultureInfo.GetCultureInfo(result ?? defaultCulture);
+                        if (result == null)
+                        {
+                            await this.StorageService.SetItemAsync<string>("blazorCulture", defaultCulture);
+                        }
+
+                        CultureInfo.DefaultThreadCurrentCulture = culture;
+                        CultureInfo.DefaultThreadCurrentUICulture = culture;
+#if DEBUG
+                        // Load the Current URL
+                        this.NavigationService.NavigateTo("http://localhost:5207/", true);
+#else
+                    this.NavigationService.NavigateTo("https://dashboard.connect-zapto.fr/", true);
+#endif
+                    });
                 }
             }
         }
@@ -35,7 +53,7 @@ namespace Zapto.Component.Common.ViewModels
         #region Constructor
         public ChooseLanguageViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            this.StorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.StorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
         }
 		#endregion
 

@@ -12,7 +12,6 @@ namespace AirZapto.Data.Supervisors
         #region Services
         private IDalSession Session { get; }
         private IRepositoryFactory RepositoryFactory { get; }
-        private IDataContextFactory ContextFactory { get; }
         private IConfiguration Configuration { get; }
         private ICacheZaptoService<Sensor> CacheService { get; }
         #endregion
@@ -21,7 +20,6 @@ namespace AirZapto.Data.Supervisors
         public SupervisorFactorySensor(IServiceProvider serviceProvider)
         {
             this.Session = serviceProvider.GetRequiredService<IDalSession>();
-            this.ContextFactory = serviceProvider.GetRequiredService<IDataContextFactory>();
             this.RepositoryFactory = serviceProvider.GetRequiredService<IRepositoryFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
             this.CacheService = serviceProvider.GetRequiredService<ICacheZaptoService<Sensor>>();
@@ -35,11 +33,11 @@ namespace AirZapto.Data.Supervisors
 
             if ((int.TryParse(this.Configuration["Cache"], out int cache) == true) && (cache == 1))
             {
-                supervisor = new SupervisorCacheSensor(this.Session, this.ContextFactory, this.RepositoryFactory, this.CacheService);
+                supervisor = new SupervisorCacheSensor(this.Session, this.RepositoryFactory, this.CacheService);
             }
             else
             {
-                supervisor = new SupervisorSensor(this.Session, this.ContextFactory, this.RepositoryFactory);
+                supervisor = new SupervisorSensor(this.Session, this.RepositoryFactory);
             }
             return supervisor;
         }

@@ -14,9 +14,9 @@ namespace AirZapto.Data.Supervisors
         #endregion
 
         #region Constructor
-        public SupervisorCacheSensor(IDalSession session, IDataContextFactory contextFactory, IRepositoryFactory repositoryFactory, ICacheZaptoService<Sensor> cacheZapto)
+        public SupervisorCacheSensor(IDalSession session, IRepositoryFactory repositoryFactory, ICacheZaptoService<Sensor> cacheZapto)
         {
-            this.Supervisor = new SupervisorSensor(session, contextFactory, repositoryFactory);
+            this.Supervisor = new SupervisorSensor(session, repositoryFactory);
             this.CacheService = cacheZapto;
         }
         #endregion

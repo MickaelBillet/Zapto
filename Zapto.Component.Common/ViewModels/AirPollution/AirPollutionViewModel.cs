@@ -41,7 +41,7 @@ namespace Zapto.Component.Common.ViewModels
 
             try
             {
-                ZaptoUser user = await AuthenticationService.GetAuthenticatedUser();
+                ZaptoUser? user = await AuthenticationService.GetAuthenticatedUser();
                 if (user != null)
                 {
                     this.IsLoading = true;

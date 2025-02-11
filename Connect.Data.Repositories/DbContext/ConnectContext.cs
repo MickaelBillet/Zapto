@@ -73,19 +73,19 @@ namespace Connect.Data.DataContext
 
 		}
 
-		public bool DropDatabase()
+		public async Task<bool> DropDatabaseAsync()
 		{
-			return this.Database.EnsureDeleted();
+			return await this.Database.EnsureDeletedAsync();
 		}
 
-		public bool CreateDataBase()
+		public async Task<bool> CreateDataBaseAsync()
 		{
-			return this.Database.EnsureCreated();
+			return await this.Database.EnsureCreatedAsync();
 		}
 
-		public bool DataBaseExists()
+		public async Task<bool> DataBaseExistsAsync()
 		{
-			return this.Database.CanConnect();
+			return await this.Database.CanConnectAsync();
 		}
 
 		public override void Dispose()

@@ -1,5 +1,4 @@
 using AirZapto;
-using Blazored.LocalStorage;
 using Connect.Model;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -26,11 +25,6 @@ Log.Debug("Hello, Zapto !");
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-
-builder.Services.AddBlazoredLocalStorage(config =>
-{
-    config.JsonSerializerOptions.WriteIndented = true;
-});
 
 builder.Services.AddHttpClient("ConnectClient", client =>
 {
@@ -107,8 +101,6 @@ builder.Services.AddAuthorizationCore(policies =>
     });
 });
 builder.Services.AddOptions();
-builder.Services.AddLocalization();
-builder.Services.AddMudServices();
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddViewModels();
 builder.Services.AddMudServices(config =>
@@ -122,4 +114,8 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
-await builder.Build().RunAsync();
+builder.Services.AddLocalization();
+
+var host = builder.Build();
+await host.SetDefaultUICulture();
+await host.RunAsync();

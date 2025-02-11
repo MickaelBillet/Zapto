@@ -1,0 +1,6 @@
+@ZaptoCompany.WebAPI_HostAddress = http://localhost:32776
+
+GET {{ZaptoCompany.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

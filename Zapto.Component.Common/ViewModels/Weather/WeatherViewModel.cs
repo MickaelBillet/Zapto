@@ -5,8 +5,8 @@ using Serilog;
 using System.Globalization;
 using WeatherZapto.Application;
 using WeatherZapto.Model;
-using Zapto.Component.Common.Services;
 using Zapto.Component.Common.Models;
+using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Common.ViewModels
 {
@@ -21,7 +21,7 @@ namespace Zapto.Component.Common.ViewModels
 		#region Properties
 		private IApplicationWeatherService ApplicationWeatherService { get; }
 		private IApplicationOWService ApplicationOWService { get; }
-        private IZaptoLocalStorageService LocalStorageService { get; }
+        private IZaptoStorageService LocalStorageService { get; }
         #endregion
 
         #region Constructor
@@ -29,7 +29,7 @@ namespace Zapto.Component.Common.ViewModels
 		{
 			this.ApplicationWeatherService = serviceProvider.GetRequiredService<IApplicationWeatherService>();
 			this.ApplicationOWService = serviceProvider.GetRequiredService<IApplicationOWService>();
-            this.LocalStorageService = serviceProvider.GetRequiredService<IZaptoLocalStorageService>();
+            this.LocalStorageService = serviceProvider.GetRequiredService<IZaptoStorageService>();
         }
         #endregion
 
@@ -41,10 +41,10 @@ namespace Zapto.Component.Common.ViewModels
 
 			try
 			{
-				ZaptoUser user = await this.AuthenticationService.GetAuthenticatedUser();
+				ZaptoUser? user = await this.AuthenticationService.GetAuthenticatedUser();
 				if (user != null)
 				{
-					string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+					string? culture = await this.LocalStorageService.GetItemAsync<string>("blazorCulture");
                     Log.Debug($"Culture : {culture}");
 
 					if (string.IsNullOrEmpty(culture) == false)
@@ -100,7 +100,7 @@ namespace Zapto.Component.Common.ViewModels
             {
                 if ((location != null) && (location.Latitude != null) && (location.Longitude != null))
                 {
-                    string? culture = await this.LocalStorageService.GetItemAsync<string>("culture");
+                    string? culture = await this.LocalStorageService.GetItemAsync<string>("blazorCulture");
                     Log.Debug($"Culture : {culture}");
 
                     if (string.IsNullOrEmpty(culture) == false)

@@ -44,7 +44,7 @@ namespace WeatherZapto.Data.Services
             return res;
         }
 
-        protected override async Task FeedDataAsync()
+        protected override async Task FeedDataAsync(int major, int minor, int build)
         {
             using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
             {

@@ -30,7 +30,7 @@ namespace Framework.Data.Services
             this.ServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             this.Configuration = serviceProvider.GetRequiredService<IConfiguration>();
 			this.SecretService = serviceProvider.GetRequiredService<ISecretService>();
-			this.ConnectionType = ConnectionString.GetConnectionType(this.Configuration, this.SecretService, connectionStringKey, serverTypeKey); 
+			this.ConnectionType = ConnectionString.GetConnectionType(this.SecretService, connectionStringKey, serverTypeKey); 
 		}
         public DatabaseService(IServiceProvider serviceProvider)
         {
@@ -42,19 +42,18 @@ namespace Framework.Data.Services
         #endregion
 
         #region Methods
-
-        public async Task ConfigureDatabase()
+        public async Task ConfigureDatabase(int major, int minor, int build)
         {		
-            if (this.DatabaseExist(this.ConnectionType) == false)
+            if ((await this.DatabaseExistAsync(this.ConnectionType)) == false)
             {
-                bool isCreated = this.CreateDatabase(this.ConnectionType);
+                bool isCreated = await this.CreateDatabaseAsync();
                 if (isCreated == true)
                 {
-                    await this.FeedDataAsync();
+                    await this.FeedDataAsync(major, minor, build);
                 }
             }
 
-            if (this.DatabaseExist(this.ConnectionType) == true)
+            if ((await this.DatabaseExistAsync(this.ConnectionType)) == true)
             {
                 bool isUpgraded = await this.UpgradeDatabaseAsync();
                 await this.InitializeDataAsync();
@@ -71,51 +70,52 @@ namespace Framework.Data.Services
             return await Task.FromResult<bool>(true);
         }
 
-        public bool DropDatabase()
+        public async Task<bool> DropDatabaseAsync()
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(this.ConnectionType.ConnectionString, this.ConnectionType.ServerType)?.context)
+				await this.DataContextFactory.UseContext(async context =>
 				{
-					if ((context != null) && (context.DataBaseExists() == true))
+					if ((context != null) && ((await context.DataBaseExistsAsync()) == true))
 					{
-						res = context.DropDatabase();
-					}
-				}
+						bool? result = await context.DataBaseExistsAsync();
+                        res = result.HasValue ? result.Value : false;
+                    }
+				});
 			}
 			return res;
 		}
 
-        protected bool CreateDatabase(ConnectionType connectionType)
+        protected async Task <bool> CreateDatabaseAsync()
 		{
 			bool res = false;
 			if (this.DataContextFactory != null)
 			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
+				await this.DataContextFactory.UseContext(async context =>
+				{
+					if (context != null)
+					{
+						res = await context.CreateDataBaseAsync();
+					}
+				});
+			}
+			return res;
+		}
+
+        protected async Task<bool> DatabaseExistAsync(ConnectionType connectionType)
+		{
+			bool res = false;
+			if (this.DataContextFactory != null)
+			{
+                await this.DataContextFactory.UseContext(async context =>
                 {
                     if (context != null)
                     {
-                        res = context.CreateDataBase();
-					}
-				}
-			}
-			return res;
-		}
-
-        protected bool DatabaseExist(ConnectionType connectionType)
-		{
-			bool res = false;
-			if (this.DataContextFactory != null)
-			{
-                using (IDataContext? context = this.DataContextFactory.CreateDbContext(connectionType.ConnectionString, connectionType.ServerType)?.context)
-                {
-					if (context != null)
-					{
-						res = context.DataBaseExists();
-					}
-				}
-			}
+                        res = await context.DataBaseExistsAsync();
+                    }
+                });
+            }
 			return res;
 		}
 
@@ -124,7 +124,7 @@ namespace Framework.Data.Services
 			return this.IsInitialized;
 		}
 
-        protected virtual async Task FeedDataAsync()
+        protected virtual async Task FeedDataAsync(int major, int minor, int build)
 		{
 			await Task.FromResult(0);
 		}

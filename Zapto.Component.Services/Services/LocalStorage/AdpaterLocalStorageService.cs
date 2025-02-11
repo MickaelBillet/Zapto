@@ -3,7 +3,7 @@ using Zapto.Component.Common.Services;
 
 namespace Zapto.Component.Services
 {
-    public class AdpaterLocalStorageService : IZaptoLocalStorageService
+    public class AdpaterLocalStorageService : IZaptoStorageService
     {
         #region Service
         private ILocalStorageService StorageService { get; }

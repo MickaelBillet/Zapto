@@ -23,5 +23,8 @@
         public const string UrlTemperaturesDay = @"temperature?location={0}&date={1}";
 
         public const string Application_Prefix = @"/WeatherZapto";
+
+        public const string ConnectionStringWeatherZaptotKey = "ConnectionStringWeather";
+        public const string ServerTypeWeatherZaptoKey = "ServerTypeWeather";
     }
 }

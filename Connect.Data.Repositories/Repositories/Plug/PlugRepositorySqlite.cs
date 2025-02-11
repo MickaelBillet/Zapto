@@ -6,7 +6,7 @@ namespace Connect.Data.Repositories
     public class PlugRepositorySqlite : PlugRepository
     {
         #region Constructor
-        public PlugRepositorySqlite(IDalSession session) : base(session)
+        public PlugRepositorySqlite(IDataContextFactory dataContextFactory) : base(dataContextFactory)
         { }
         #endregion
 
@@ -16,24 +16,26 @@ namespace Connect.Data.Repositories
             int res = -1;
             try
             {
-                string sql = $"ALTER TABLE Plug " +
-                                $"ADD COLUMN LastCommandDateTime DATETIME";
-
-                if (this.DataContext != null)
+                await this.DataContextFactory.UseContext(async (context) =>
                 {
-                    res = await this.DataContext.ExecuteNonQueryAsync(sql);
-                }
+                    string sql = $"ALTER TABLE Plug " +
+                                    $"ADD COLUMN LastCommandDateTime DATETIME";
 
-                if (res == 0)
-                {
-                    sql = $"ALTER TABLE Plug " +
-                                    $"ADD COLUMN LastCommandSent INTEGER DEFAULT 0";
-
-                    if (this.DataContext != null)
+                    if (context != null)
                     {
-                        res = await this.DataContext.ExecuteNonQueryAsync(sql);
+                        res = await context.ExecuteNonQueryAsync(sql);
+                        if (res == 0)
+                        {
+                            sql = $"ALTER TABLE Plug " +
+                                            $"ADD COLUMN LastCommandSent INTEGER DEFAULT 0";
+
+                            if (context != null)
+                            {
+                                res = await context.ExecuteNonQueryAsync(sql);
+                            }
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

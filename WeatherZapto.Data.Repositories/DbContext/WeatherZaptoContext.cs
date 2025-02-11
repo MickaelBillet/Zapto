@@ -59,22 +59,22 @@ namespace WeatherZapto.Data.DataContext
 
 		}
 
-		public bool DropDatabase()
-		{
-			return this.Database.EnsureDeleted();
-		}
+        public async Task<bool> DropDatabaseAsync()
+        {
+            return await this.Database.EnsureDeletedAsync();
+        }
 
-		public bool CreateDataBase()
-		{
-			return this.Database.EnsureCreated();
-		}
+        public async Task<bool> CreateDataBaseAsync()
+        {
+            return await this.Database.EnsureCreatedAsync();
+        }
 
-		public bool DataBaseExists()
-		{
-			return this.Database.CanConnect();
-		}
+        public async Task<bool> DataBaseExistsAsync()
+        {
+            return await this.Database.CanConnectAsync();
+        }
 
-		public override void Dispose()
+        public override void Dispose()
 		{
 			if (this.Transaction != null)
 				this.Transaction.Dispose();

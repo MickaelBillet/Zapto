@@ -16,8 +16,8 @@ namespace Connect.Data.Supervisors
         public SupervisorFactoryConfiguration(IServiceProvider serviceProvider) 
         {
             this.ServiceProvider = serviceProvider;
-            this.Session = ServiceProvider.GetService<IDalSession>();
-            this.RepositoryFactory = ServiceProvider.GetService<IRepositoryFactory>();
+            this.Session = ServiceProvider.GetRequiredService<IDalSession>();
+            this.RepositoryFactory = ServiceProvider.GetRequiredService<IRepositoryFactory>();
         }
         #endregion
 

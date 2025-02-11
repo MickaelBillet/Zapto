@@ -64,10 +64,11 @@ namespace Connect.WebServer.Services
                                 ResultCode code = await supervisorPlug.Upgrade1_1();
                             }
                         }
+
                         ResultCode result = await supervisor.UpdateVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
                         if (result == ResultCode.ItemNotFound)
                         {
-                            result = await supervisor.AddVersion();
+                            result = await supervisor.AddVersion(softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build);
                         }
                         res = (result == ResultCode.Ok) ? true : false;
                     }
@@ -75,7 +76,7 @@ namespace Connect.WebServer.Services
             }
             return res;
         }
-        protected override async Task FeedDataAsync()
+        protected override async Task FeedDataAsync(int major, int minor, int build)
         {
             #region Location
 
@@ -137,7 +138,7 @@ namespace Connect.WebServer.Services
 
             #region Configuration
 
-            Model.Configuration configA1 = new Model.Configuration()
+            Configuration configA1 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -147,7 +148,7 @@ namespace Connect.WebServer.Services
                 Unit = "0"
             };
 
-            Model.Configuration configA2 = new Model.Configuration()
+            Configuration configA2 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -157,7 +158,7 @@ namespace Connect.WebServer.Services
                 Unit = "1"
             };
 
-            Model.Configuration configA3 = new Model.Configuration()
+            Configuration configA3 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -167,7 +168,7 @@ namespace Connect.WebServer.Services
                 Unit = "2"
             };
 
-            Model.Configuration configA4 = new Model.Configuration()
+            Configuration configA4 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -177,7 +178,7 @@ namespace Connect.WebServer.Services
                 Unit = "3"
             };
 
-            Model.Configuration configB1 = new Model.Configuration()
+            Configuration configB1 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -187,7 +188,7 @@ namespace Connect.WebServer.Services
                 Unit = "4"
             };
 
-            Model.Configuration configD1 = new Model.Configuration()
+            Configuration configD1 = new Configuration()
             {
                 Id = Guid.NewGuid().ToString(),
                 ProtocolType = ConnectConstants.PROTOCOL_TYPE,
@@ -467,7 +468,7 @@ namespace Connect.WebServer.Services
 
             #region Program
 
-            Model.Program program1 = new Model.Program()
+            Program program1 = new Program()
             {
                 Id = Guid.NewGuid().ToString(),
                 ConnectedObjectId = plug1.Id,
@@ -475,7 +476,7 @@ namespace Connect.WebServer.Services
 
             plug1.ProgramId = program1.Id;
 
-            Model.Program program2 = new Model.Program()
+            Program program2 = new Program()
             {
                 Id = Guid.NewGuid().ToString(),
                 ConnectedObjectId = plug2.Id,
@@ -483,7 +484,7 @@ namespace Connect.WebServer.Services
 
             plug2.ProgramId = program2.Id;
 
-            Model.Program programA1 = new Model.Program()
+            Program programA1 = new Program()
             {
                 Id = Guid.NewGuid().ToString(),
                 ConnectedObjectId = plugA1.Id,
@@ -491,7 +492,7 @@ namespace Connect.WebServer.Services
 
             plugA1.ProgramId = programA1.Id;
 
-            Model.Program programA2 = new Model.Program()
+            Program programA2 = new Program()
             {
                 Id = Guid.NewGuid().ToString(),
                 ConnectedObjectId = plugA2.Id,
@@ -557,7 +558,7 @@ namespace Connect.WebServer.Services
             {
                 using (IServiceScope scope = this.ServiceScopeFactory.CreateScope())
                 {
-                    await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor().AddVersion();
+                    await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryVersion>().CreateSupervisor().AddVersion(major, minor, build);
                     await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryLocation>().CreateSupervisor(CacheType.None).AddLocation(location);
                     await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(livingRoom);
                     await scope.ServiceProvider.GetRequiredService<ISupervisorFactoryRoom>().CreateSupervisor(CacheType.None).AddRoom(bathRoom);

@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
-      - Zapto
+      - zapto
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-      - Zapto
+      - zapto
 
 jobs:
   build_and_deploy_job:

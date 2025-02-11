@@ -1,5 +1,4 @@
-﻿using Connect.Data.Repository;
-using Connect.WebServer.Services;
+﻿using Connect.WebServer.Services;
 using Framework.Data.Services;
 using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
@@ -31,13 +30,13 @@ namespace Connect.Data.Supervisors.Tests
                 {
                     {"ConnectionStrings:DefaultConnection", $"Data Source=.\\connectDb.db3;"},
                     {"ConnectionStrings:ServerType", "Sqlite"},
-                    {"Cache",  "0"}
+                    {"Cache", "0"}
                 });
             }).ConfigureServices((context, services) =>
             {
                 services.AddRepositories();
                 services.AddSingleton<IDatabaseService, ConnectDatabaseService>(provider => new ConnectDatabaseService(provider));
-                services.AddTransient<IStartupTask, CreateDatabaseStartupTask>();
+                services.AddTransient<IStartupTask, CreateDatabaseStartupTask>((provider) => new CreateDatabaseStartupTask(provider, 1, 1, 0));
                 services.AddTransient<ICleanTask, DropDatabaseStartupTask>();
                 services.AddTransient<IStartupTask, LoggerStartupTask>();
                 services.AddSupervisors();

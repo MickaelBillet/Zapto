@@ -148,7 +148,7 @@ namespace AirZapto.WebServer
                 });
             });
 
-            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, "ConnectionStringAirZapto", "ServerTypeAirZapto");
+            (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, AirZaptoConstants.ConnectionStringAirZaptotKey, AirZaptoConstants.ServerTypeAirZaptoKey);
             services.AddHealthChecks()
                     //Memory
                     .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })

@@ -7,7 +7,7 @@ namespace Connect.Data
     public interface ISupervisorVersion
     {
         Task<Version> GetVersion();
-        Task<ResultCode> AddVersion();
+        Task<ResultCode> AddVersion(int major, int minor, int build);
         Task<ResultCode> UpdateVersion(int major, int minor, int build);
     }
 }

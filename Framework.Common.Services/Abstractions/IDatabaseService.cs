@@ -5,8 +5,8 @@ namespace Framework.Infrastructure.Abstractions
 {
     public interface IDatabaseService : IDisposable
 	{
-		Task ConfigureDatabase();
+		Task ConfigureDatabase(int major, int minor, int build);
         public bool DatabaseIsInitialized();
-        public bool DropDatabase();
+        public Task<bool> DropDatabaseAsync();
     }
 }

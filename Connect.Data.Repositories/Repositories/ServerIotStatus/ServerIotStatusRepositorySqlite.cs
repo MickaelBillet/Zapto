@@ -6,7 +6,7 @@ namespace Connect.Data.Repositories
     public class ServerIotStatusRepositorySqlite : ServerIotStatusRepository
     {
         #region Constructor
-        public ServerIotStatusRepositorySqlite(IDalSession session) : base(session)
+        public ServerIotStatusRepositorySqlite(IDataContextFactory dataContextFactory) : base(dataContextFactory)
         { }
         #endregion
 
@@ -16,16 +16,19 @@ namespace Connect.Data.Repositories
             int res = -1;
             try
             {
-                string sql = $"CREATE TABLE ServerIotStatus " +
+                await this.DataContextFactory.UseContext(async (context) =>
+                {
+                    string sql = $"CREATE TABLE ServerIotStatus " +
                                 $"(ConnectionDate DATETIME, " +
                                 $"IpAddress BLOB, " +
                                 $"Id BLOB, " +
                                 $"CreationDateTime DATETIME);";
 
-                if (this.DataContext != null)
-                {
-                    res = await this.DataContext.ExecuteNonQueryAsync(sql);
-                }
+                    if (context != null)
+                    {
+                        res = await context.ExecuteNonQueryAsync(sql);
+                    }
+                });
             }
             catch (Exception ex)
             {

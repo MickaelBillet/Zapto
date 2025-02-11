@@ -1,6 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Framework.Common.Services;
+using Framework.Core.Domain;
+using Framework.Data.Session;
+using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Serilog.Core;
 using Serilog.Events;
+using WeatherZapto.Data;
+using WeatherZapto.Data.DataContext;
+using WeatherZapto.Data.Repositories;
+using WeatherZapto.Data.Supervisors;
 
 namespace WeatherZapto.WebServer.Services
 {
@@ -8,7 +16,7 @@ namespace WeatherZapto.WebServer.Services
     {
         #region Properties
         private LogEventLevel Level { get; } = LogEventLevel.Error;
-        private IConfiguration Configuration { get; }
+        private ISupervisorLogs Supervisor { get; }
         #endregion
 
         #region Constructor
@@ -17,7 +25,13 @@ namespace WeatherZapto.WebServer.Services
             if (configuration != null)
             {
                 this.Level = SeverityToLevel(configuration["Serilog.MinimumLevel"]);
-                this.Configuration = configuration;
+                ISecretService secretService = SecretService.GetSecretService(configuration);
+
+                this.Supervisor = new SupervisorLogs(new DalSession(secretService!,
+                                                                    new DataContextFactory(secretService!, WeatherZaptoConstants.ConnectionStringWeatherZaptotKey, WeatherZaptoConstants.ServerTypeWeatherZaptoKey),
+                                                                    WeatherZaptoConstants.ConnectionStringWeatherZaptotKey,
+                                                                    WeatherZaptoConstants.ServerTypeWeatherZaptoKey),
+                                                    new RepositoryFactory());
             }
         }
         #endregion
@@ -25,7 +39,17 @@ namespace WeatherZapto.WebServer.Services
         #region Methods
         public void Emit(LogEvent logEvent)
         {
-            
+            if ((this.Supervisor != null) && (logEvent.Level >= this.Level))
+            {
+                //Why I don't have the warning CS4014 
+                this.Supervisor.AddLog(new Logs()
+                {
+                    Date = logEvent.Timestamp.DateTime,
+                    Level = LevelToSeverity(logEvent),
+                    Exception = logEvent.Exception?.Message,
+                    RenderedMessage = logEvent.RenderMessage(),
+                });
+            }
         }
 
         static string LevelToSeverity(LogEvent logEvent)

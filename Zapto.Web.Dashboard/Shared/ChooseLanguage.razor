@@ -3,12 +3,6 @@
  
 @if (this.ViewModel.Cultures != null)
 {
-    @*<select class="form-control mr-2" @bind="this.ViewModel.SelectedCulture">
-        @foreach (var culture in this.ViewModel.Cultures)
-        {
-            <option value="@culture">@culture.DisplayName</option>
-        }
-    </select>*@
     <div style="width:120px">
         <MudSelect Class="my-5" @bind-Value="@this.ViewModel.SelectedCulture" Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" Dense="true" Variant="Variant.Outlined">
             @foreach (var culture in this.ViewModel.Cultures)
