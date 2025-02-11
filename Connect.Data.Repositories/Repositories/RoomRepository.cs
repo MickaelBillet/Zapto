@@ -1,6 +1,7 @@
 ﻿using Connect.Data.Entities;
 using Connect.Data.Services.Repositories;
 using Framework.Data.Abstractions;
+using Framework.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Connect.Data.Repositories
