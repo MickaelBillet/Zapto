@@ -14,8 +14,5 @@ namespace Connect.Data.Entities
         public int Order { get; set; }
         public int Mode { get; set; }
         public int ConditionType { get; set; }
-        [Column("LastCommandSent")]
-        public int CommandReceived { get; set; } = 0;
-        public DateTime? LastCommandDateTime { get; set; } = null;
     }
 }
