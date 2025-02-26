@@ -21,18 +21,18 @@ namespace Connect.WebServer.Services
         #region Constructor
         public FirebaseService(IServiceProvider serviceProvider, string fileConfigName)
         {
-            if (FirebaseService.FirebaseApp == null)
+            if (FirebaseApp == null)
             {
                 //The Admin SDK also provides a credential which allows you to authenticate with a Google OAuth2 refresh token
-                FirebaseService.FirebaseApp = FirebaseApp.Create(new AppOptions()
+                FirebaseApp = FirebaseApp.Create(new AppOptions()
                 {
                     Credential = GoogleCredential.FromFile(fileConfigName),
                 });
             }
 
-            this.ServiceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
 
-            Log.Information(FirebaseService.FirebaseApp.Name); // "[DEFAULT]"
+            Log.Information(FirebaseApp.Name); // "[DEFAULT]"
         }
         #endregion
 
@@ -75,7 +75,7 @@ namespace Connect.WebServer.Services
 
             try
             {
-                using (IServiceScope scope = this.ServiceProvider.CreateScope())
+                using (IServiceScope scope = ServiceProvider.CreateScope())
                 {
                     ISupervisorClientApps supervisor = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryClientApp>().CreateSupervisor();
                     IEnumerable<ClientApp>? clientApps = await supervisor.GetClientApps();
@@ -85,7 +85,7 @@ namespace Connect.WebServer.Services
                         {
                             if (clientApp.LocationId == locationId)
                             {
-                                string id = await this.SendNotificationAsync(title, body, clientApp.Token);
+                                string id = await SendNotificationAsync(title, body, clientApp.Token);
                                 if (string.IsNullOrEmpty(id))
                                 {
                                     Log.Information($"Impossible de notifier : {locationId}({title}");

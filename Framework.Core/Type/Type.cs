@@ -34,8 +34,13 @@
 
     public struct SecretType
     {
-        public const byte None = 0;
-        public const byte VarEnv = 1;
-        public const byte KeyVault = 2;
+        public const string VarEnv = "VarEnv";
+        public const string KeyVault = "KeyVault";
+    }
+
+    public struct CommunicationType
+    {
+        public const string WebSocket = "WebSocket";
+        public const string Serial = "Serial";
     }
 }

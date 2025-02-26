@@ -1,4 +1,5 @@
-﻿using Framework.Core.InMemoryEventBus.Registration;
+﻿using Connect.WebServer.Helpers;
+using Framework.Core.InMemoryEventBus.Registration;
 using Framework.Infrastructure.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,7 @@ namespace Connect.WebServer
                     await task.Execute();
                 }
                 await host.Services.StartConsumers();
+                host.Services.StartSerialCommunicationReception();
                 await host.RunAsync();
             }
             catch (Exception ex)

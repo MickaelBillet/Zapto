@@ -35,6 +35,19 @@ namespace Framework.Core.Base
             return messageArduino;
         }
 
+        public static MessageArduino Deserialize(string received)
+        {
+            string[] delimiter = { "Hdr:", "-Pld:" };
+
+            MessageArduino messageArduino = new MessageArduino()
+            {
+                Header = short.Parse(received.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[0]),
+                Payload = received.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)[1],
+            };
+
+            return messageArduino;
+        }
+
         public static string Serialize(MessageArduino msg)
 		{
             return $"Hdr:{msg.Header}-Pld:{msg.Payload}";

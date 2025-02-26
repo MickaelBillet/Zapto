@@ -9,12 +9,10 @@ namespace Connect.WebServer.Services
 {
     public static class ConnectWebServerServices
     {
-        public static void AddConnectWebServices(this IServiceCollection services)
+        public static void AddConnectServices(this IServiceCollection services, string communicationType)
         {
-            services.AddSingleton<IWebSocketService, WebSocketService> ();
             services.AddScoped<ISendCommandService, SendCommandService>();   
-            services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
-            services.AddScoped<ISendMessageToArduinoService, SendMessageToArduinoService>();
+            services.AddScoped<ISendMessageToArduinoService, SendMessageToArduinoService>((provider) => new SendMessageToArduinoService(provider, communicationType));
         }
 
         public static void AddInMemoryEventServices(this IServiceCollection services)

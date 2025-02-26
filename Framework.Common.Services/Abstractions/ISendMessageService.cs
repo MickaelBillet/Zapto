@@ -2,7 +2,7 @@
 
 namespace Framework.Common.Services
 {
-    public interface ISendMessageToArduinoService
+    public interface ISendMessageService
     {
         Task<bool> SendMessageAsync(string message);
     }

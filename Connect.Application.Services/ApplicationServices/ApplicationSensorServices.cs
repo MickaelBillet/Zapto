@@ -44,19 +44,19 @@ namespace Connect.Application.Services
         /// Send the sensor configuration to the arduino server
         /// </summary>
         /// <returns></returns>
-        public async Task<int?> Notify(Sensor sensor)
+        public async Task<bool> Notify(Sensor sensor)
         {
-            int? res = 0;
+            bool res = false;
             string? data = sensor.SerializeSensorConfiguration();
             if ((this.SendMessageToArduino != null) && (string.IsNullOrEmpty(data) == false))
             {
-                res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(new MessageArduino()
+                res = await this.SendMessageToArduino.SendMessageAsync(MessageArduino.Serialize(new MessageArduino()
                 {
                     Header = ConnectConstants.SensorConfig,
                     Payload = data
                 }));
 
-                if (res > 0)
+                if (res == true)
                 {
                     Log.Information("Notify Sensor : " + sensor.IpAddress);
                 }

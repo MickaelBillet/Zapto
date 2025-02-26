@@ -48,7 +48,7 @@ namespace Connect.WebServer.Services
                 if (plug.Order != previousOrder)
                 {
                     //Send Command to Arduino
-                    if (await this.ApplicationPlugServices.SendCommand(plug) <= 0)
+                    if (await this.ApplicationPlugServices.SendCommand(plug) == false)
                     {
                         //If we cannot send the command to the Arduino, we keep the previous value
                         plug.Order = previousOrder;

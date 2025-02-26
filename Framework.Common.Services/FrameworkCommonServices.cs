@@ -1,4 +1,5 @@
 ﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,26 +22,39 @@ namespace Framework.Infrastructure.Services
 			services.AddTransient<IJsonFileService, JsonFileService>();
 		}
 
-		public static void AddUdpService(this IServiceCollection services)
+		public static void AddUdpCommunicationService(this IServiceCollection services)
 		{
 			services.AddTransient<IUdpCommunicationService, UdpCommunicationService>();
 		}
 
-		public static void AddThreadSynchronizationService(this IServiceCollection services)
+        public static void AddThreadSynchronizationService(this IServiceCollection services)
 		{
 			services.AddTransient<IThreadSynchronizationService, ThreadSynchronizationService>();
 		}
 
-		public static void AddSecretService(this IServiceCollection services, IConfiguration configuration)
+		public static void AddSecretService(this IServiceCollection services, IConfiguration configuration, string secret)
 		{
-			if (byte.Parse(configuration["Secret"]) == 1)
+			if (secret == SecretType.VarEnv)
 			{
 				services.AddTransient<ISecretService, VarEnvService>();
 			}
-			else if (byte.Parse(configuration["Secret"]) == 2)
+			else if (secret == SecretType.KeyVault)
 			{
 				services.AddTransient<ISecretService, KeyVaultService>((provider) => new KeyVaultService(configuration));
 			}
 		}
-	}
+
+		public static void AddCommunicationService(this IServiceCollection services, string communicationType, string portName, int baudRate)
+        {
+            if (communicationType == CommunicationType.WebSocket)
+            {
+                services.AddScoped<IWSMessageManager, WebSocketMessageManager>();
+                services.AddSingleton<IWebSocketService, WebSocketService>();
+            }
+            else if (communicationType == CommunicationType.Serial)
+            {
+                services.AddScoped<ISerialCommunicationService, SerialCommunicationService>((provider) => new SerialCommunicationService(provider, portName, baudRate));
+            }
+        }
+    }
 }

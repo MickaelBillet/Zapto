@@ -1,7 +1,7 @@
 using Connect.Model;
 using Connect.Server.Configuration;
-using Connect.Server.Helpers;
 using Connect.WebApi.Middleware;
+using Connect.WebServer.Helpers;
 using Connect.WebServer.Services;
 using Framework.Infrastructure.Services;
 using HealthChecks.UI.Client;
@@ -201,11 +201,11 @@ namespace Connect.WebServer
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
-            WebSocketOptions webSocketOptions = new WebSocketOptions()
+
+            app.UseWebSockets(new WebSocketOptions()
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(40),
-            };
-            app.UseWebSockets(webSocketOptions);
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+            });
 
             // Patch path base with forwarded path
             app.Use(async (context, next) =>
@@ -215,7 +215,7 @@ namespace Connect.WebServer
                     if ((context.Request.Headers["Upgrade"] == "websocket") && (context.Request.Path == "/ws"))
                     {
                         //await WebSocketHelper.Echo(context);
-                        await WebSocketHelper.Process(app.ApplicationServices, context);
+                        await app.WebSocketReception(context);
                     }
                     else
                     {

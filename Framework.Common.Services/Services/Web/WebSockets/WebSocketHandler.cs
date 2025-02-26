@@ -31,7 +31,7 @@ namespace Framework.Infrastructure.Services
             return await this.WebSocketConnectionManager.RemoveSocket(this.WebSocketConnectionManager.GetId(socket));
         }
 
-        public async Task<bool> SendMessageAsync(WebSocket socket, string message)
+        private async Task<bool> SendMessageAsync(WebSocket socket, string message)
         {
             if (socket == null || socket.State != WebSocketState.Open)
                 return false;
@@ -49,16 +49,16 @@ namespace Framework.Infrastructure.Services
         {
             return await this.SendMessageAsync(this.WebSocketConnectionManager.GetSocketById(socketId), message);
         }
-        public async Task<int> SendMessageToAllAsync(string message)
+        public async Task<bool> SendMessageAsync(string message)
         {
-            int res = 0;
+            bool res = false;
             foreach (var pair in this.WebSocketConnectionManager.GetAll())
             {
                 if (pair.Value.State == WebSocketState.Open)
                 {
                     if (await this.SendMessageAsync(pair.Value, message) == true)
                     {
-                        res++;
+                        res = true;
                     }
                 }
             }

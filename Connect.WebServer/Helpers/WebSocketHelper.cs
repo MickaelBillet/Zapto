@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Framework.Infrastructure.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
@@ -6,9 +8,9 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Framework.Infrastructure.Services
+namespace Connect.WebServer.Helpers
 {
-    public class WebSocketHelper
+    public static class WebSocketHelper
     {
         public static async Task Echo(HttpContext context)
         {
@@ -40,12 +42,12 @@ namespace Framework.Infrastructure.Services
             }
         }
 
-        public static async Task Process(IServiceProvider serviceProvider, HttpContext context)
+        public static async Task WebSocketReception(this IApplicationBuilder builder, HttpContext context)
         {
-            using (IServiceScope scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (IServiceScope scope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {            
-                IWSMessageManager messageManager = scope.ServiceProvider.GetRequiredService<IWSMessageManager>();
-                if (context.WebSockets.IsWebSocketRequest == true)
+                IWSMessageManager? messageManager = scope.ServiceProvider.GetRequiredService<IWSMessageManager>();
+                if ((messageManager != null) && (context.WebSockets.IsWebSocketRequest == true))
                 {
                     using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
                     {

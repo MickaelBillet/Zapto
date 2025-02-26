@@ -70,10 +70,10 @@ namespace Connect.Application.Services
         /// <summary>
         /// Send the plug command to the iot server
         /// </summary>
-        public async Task<int> SendCommand(Plug plug)
+        public async Task<bool> SendCommand(Plug plug)
 		{
 			string? command = null;
-			int res = -1;
+			bool res = false;
 
 			if (this.SendMessageToArduino != null)
 			{
@@ -89,7 +89,7 @@ namespace Connect.Application.Services
 				string? json = plug.SerializePlugCommand(command);
 				if (string.IsNullOrEmpty(json) == false)
 				{
-					res = await this.SendMessageToArduino.Send(MessageArduino.Serialize(new MessageArduino()
+					res = await this.SendMessageToArduino.SendMessageAsync(MessageArduino.Serialize(new MessageArduino()
                     {
                         Header = ConnectConstants.PlugCommand,
                         Payload = json

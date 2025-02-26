@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Framework.Core.Base;
 
 namespace Connect.Server.Configuration
 {
@@ -19,11 +20,12 @@ namespace Connect.Server.Configuration
 	{
 		public static void AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
-            services.AddSecretService(configuration);
+            services.AddSecretService(configuration, configuration["Secret"] ?? SecretType.VarEnv);
             services.AddMailService();
             services.AddRepositories(ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
             services.AddApplicationConnectServices();
-            services.AddConnectWebServices();
+            services.AddCommunicationService(configuration["CommunicationType"] ?? CommunicationType.WebSocket, "/dev/serial0", 9600);
+            services.AddConnectServices(configuration["CommunicationType"] ?? CommunicationType.WebSocket);
             services.AddCacheServices();
             services.AddSupervisors();
             services.AddSingleton<CacheSignal>();

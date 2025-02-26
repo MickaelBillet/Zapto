@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 
-namespace Connect.Server.Helpers
+namespace Connect.WebServer.Helpers
 {
     public class AddRequiredHeaderParameter : IOperationFilter
     {

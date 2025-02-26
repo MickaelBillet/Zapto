@@ -1,4 +1,5 @@
 ﻿using Framework.Common.Services;
+using Framework.Core.Base;
 using Microsoft.Extensions.Configuration;
 
 namespace Framework.Infrastructure.Services
@@ -8,11 +9,11 @@ namespace Framework.Infrastructure.Services
         public static ISecretService? GetSecretService(IConfiguration configuration)
         {
             ISecretService? service = null;
-            if (byte.Parse(configuration["Secret"]) == 1)
+            if (configuration["Secret"] == SecretType.VarEnv)
             {
                 service = new VarEnvService();
             }
-            else if (byte.Parse(configuration["Secret"]) == 2)
+            else if (configuration["Secret"] == SecretType.KeyVault)
             {
                 service = new KeyVaultService(configuration);
             }
