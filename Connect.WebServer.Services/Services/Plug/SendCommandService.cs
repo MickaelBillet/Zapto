@@ -45,19 +45,13 @@ namespace Connect.WebServer.Services
                 plug.UpdateOrder(room.Humidity, room.Temperature);
 
                 //We send the command to the Arduino when the order changes or when the last command has not been received after one minute
-                if ((plug.Order != previousOrder)
-                    || ((Clock.Now - plug.LastCommandDateTime > new TimeSpan(0, 1, 0)) && (plug.CommandReceived == 0)))
+                if (plug.Order != previousOrder)
                 {
                     //Send Command to Arduino
                     if (await this.ApplicationPlugServices.SendCommand(plug) <= 0)
                     {
                         //If we cannot send the command to the Arduino, we keep the previous value
                         plug.Order = previousOrder;
-                    }
-                    else
-                    {
-                        plug.LastCommandDateTime = Clock.Now;
-                        plug.CommandReceived = 0;
                     }
                 }
 
