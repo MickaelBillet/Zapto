@@ -14,12 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
-    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\AirZapto.Domain\AirZapto.Domain.csproj" />
+    <ProjectReference Include="..\Framework.Common.Services\Framework.Common.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

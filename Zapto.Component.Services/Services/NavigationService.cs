@@ -57,7 +57,10 @@ namespace Zapto.Component.Services
 
         public void ShowMessage(string message, byte severity)
 		{
-			this.Snackbar.Add(message, (Severity)severity);
+			this.Snackbar.Add(message, (Severity)severity, config =>
+			{
+                config.VisibleStateDuration = 10000;
+            });
 		}
 
         public void Dispose()

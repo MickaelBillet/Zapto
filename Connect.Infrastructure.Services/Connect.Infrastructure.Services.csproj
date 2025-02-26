@@ -24,8 +24,11 @@
 
   <ItemGroup>
     <Compile Remove="Base\**" />
+    <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="Base\**" />
+    <EmbeddedResource Remove="Properties\**" />
     <None Remove="Base\**" />
+    <None Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,10 +38,6 @@
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="System.Reactive.Linq" Version="6.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
