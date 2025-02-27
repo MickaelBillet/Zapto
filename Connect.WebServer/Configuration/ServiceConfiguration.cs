@@ -20,7 +20,7 @@ namespace Connect.Server.Configuration
 	{
 		public static void AddServices(this IServiceCollection services, IConfiguration configuration)
 		{
-            services.AddSecretService(configuration, configuration["Secret"] ?? SecretType.VarEnv);
+            services.AddSecretService(configuration);
             services.AddMailService();
             services.AddRepositories(ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
             services.AddApplicationConnectServices();
