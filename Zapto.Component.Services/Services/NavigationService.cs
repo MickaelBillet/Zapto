@@ -59,7 +59,7 @@ namespace Zapto.Component.Services
 		{
 			this.Snackbar.Add(message, (Severity)severity, config =>
 			{
-                config.VisibleStateDuration = 10000;
+                config.VisibleStateDuration = 5000;
             });
 		}
 
