@@ -32,13 +32,13 @@ namespace Framework.Infrastructure.Services
 			services.AddTransient<IThreadSynchronizationService, ThreadSynchronizationService>();
 		}
 
-		public static void AddSecretService(this IServiceCollection services, IConfiguration configuration, string secret)
+		public static void AddSecretService(this IServiceCollection services, IConfiguration configuration)
 		{
-			if (secret == SecretType.VarEnv)
+			if (configuration["Secret"] == SecretType.VarEnv)
 			{
 				services.AddTransient<ISecretService, VarEnvService>();
 			}
-			else if (secret == SecretType.KeyVault)
+			else if (configuration["Secret"] == SecretType.KeyVault)
 			{
 				services.AddTransient<ISecretService, KeyVaultService>((provider) => new KeyVaultService(configuration));
 			}

@@ -1,4 +1,5 @@
-﻿using Framework.Data.Services;
+﻿using Framework.Core.Base;
+using Framework.Data.Services;
 using Framework.Infrastructure.Abstractions;
 using Framework.Infrastructure.Services;
 using WeatherZapto.Application;
