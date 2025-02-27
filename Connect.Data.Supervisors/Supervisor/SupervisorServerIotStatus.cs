@@ -30,9 +30,9 @@ namespace Connect.Data.Supervisors
             return result;
         }
 
-        public async Task<ResultCode> CreateTable()
+        public async Task<ResultCode> CreateTableServerIotStatus()
         {
-            return (await this.ServerIotStatusRepository.CreateTable() > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
+            return (await this.ServerIotStatusRepository.CreateTableServerIotStatus() > 0) ? ResultCode.Ok : ResultCode.CouldNotCreateItem;
         }
         #endregion
     }

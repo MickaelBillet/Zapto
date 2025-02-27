@@ -11,13 +11,15 @@ namespace Framework.Common.Services
     public class SerialCommunicationService : IDisposable, ISerialCommunicationService
     {
         private readonly IEventBusProducerConnect _eventBusProducer;
-        private readonly SerialPort _serialPort;
+        private readonly string _portName;
+        private readonly int _baudRate;
 
         #region Constructor
         public SerialCommunicationService(IServiceProvider serviceProvider, string portName, int baudRate)
         {
             _eventBusProducer = serviceProvider.GetRequiredService<IEventBusProducerConnect>();
-            _serialPort = new SerialPort(portName, baudRate);
+            _portName = portName;
+            _baudRate = baudRate;
         }
         #endregion
 
@@ -29,36 +31,38 @@ namespace Framework.Common.Services
 
             try
             {
-                _serialPort.NewLine = "\n";
-                _serialPort.DataReceived += async (sender, e) =>
+                using (SerialPort serialPort = new SerialPort(_portName, _baudRate))
                 {
-                    SerialPort sp = (SerialPort)sender;
-                    buffer += sp.ReadExisting();
-                    int index = buffer.IndexOf("\n");
-                    while (index != -1)
+                    serialPort.NewLine = "\n";
+                    serialPort.ReadTimeout = 500;
+                    serialPort.DataReceived += async (sender, e) =>
                     {
-                        string completeMessage = buffer.Substring(0, index).Trim();
-                        buffer = buffer.Substring(index + 1);
-                        Console.WriteLine($"Message Arduino: {completeMessage}");
-                        MessageArduino messageArduino = MessageArduino.Deserialize(completeMessage);
-                        await _eventBusProducer.Publish(messageArduino);
-                        index = buffer.IndexOf("\n");
-                    }
-                };
-                _serialPort.Open();
+                        buffer += serialPort.ReadExisting();
+                        int index = buffer.IndexOf("\n");
+                        while (index != -1)
+                        {
+                            string completeMessage = buffer.Substring(0, index).Trim();
+                            buffer = buffer.Substring(index + 1);
+                            Console.WriteLine($"Message Arduino: {completeMessage}");
+                            MessageArduino messageArduino = MessageArduino.Deserialize(completeMessage);
+                            await _eventBusProducer.Publish(messageArduino);
+                            index = buffer.IndexOf("\n");
+                        }
+                    };
+                    serialPort.Open();
+                }
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
                 res = false;
-            }
+            }           
             return res;
         }
 
         public void Dispose()
         {
-            _serialPort.Close();
-            _serialPort.Dispose();
+
         }
 
         public async Task<bool> SendMessageAsync(string message)
@@ -66,22 +70,23 @@ namespace Framework.Common.Services
             bool res = true;
             try
             {
-                _serialPort.NewLine = "\n";
-                _serialPort.Open();
-                if (_serialPort.IsOpen)
+                await Task.Run(() =>
                 {
-                    _serialPort.WriteLine(message);
-                    await Task.Delay(100);
-                }
+                    using (SerialPort serialPort = new SerialPort(_portName, _baudRate))
+                    {
+                        serialPort.NewLine = "\n";
+                        serialPort.Open();
+                        if (serialPort.IsOpen)
+                        {
+                            serialPort.WriteLine(message);
+                        }
+                    }
+                });
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
                 res = false;
-            }
-            finally
-            {
-                _serialPort.Close();
             }
             return res;
         }

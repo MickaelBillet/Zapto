@@ -5,6 +5,6 @@ namespace Connect.Data.Services.Repositories
 {
     public interface IServerIotStatusRepository : IRepository<ServerIotStatusEntity>
     {
-        Task<int> CreateTable();
+        Task<int> CreateTableServerIotStatus();
     }
 }

@@ -12,7 +12,7 @@ namespace Connect.Data.Repositories
         #endregion
 
         #region Methods
-        public abstract Task<int> CreateTable();
+        public abstract Task<int> CreateTableServerIotStatus();
         #endregion
     }
 }

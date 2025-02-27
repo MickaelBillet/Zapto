@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Net.WebSockets;
 using System.Text;
@@ -52,15 +53,27 @@ namespace Framework.Infrastructure.Services
         public async Task<bool> SendMessageAsync(string message)
         {
             bool res = false;
-            foreach (var pair in this.WebSocketConnectionManager.GetAll())
+            try
             {
-                if (pair.Value.State == WebSocketState.Open)
+                foreach (var pair in this.WebSocketConnectionManager.GetAll())
                 {
-                    if (await this.SendMessageAsync(pair.Value, message) == true)
+                    if (pair.Value.State == WebSocketState.Open)
                     {
-                        res = true;
+                        if (await this.SendMessageAsync(pair.Value, message) == true)
+                        {
+                            res = true;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex.Message);
+                res = false;
             }
             return res;
         }

@@ -25,15 +25,22 @@ namespace Connect.WebServer.Services
         #region Methods
         public async Task SendAlertAsync(string locationId, string title, string body)
         {
-            MailRequest mailRequest = new MailRequest()
+            try
             {
-                Subject = $"{locationId} - {title}",
-                Body = $"{body}",
-                ToEmail = "mickael.billet@gmail.com",
-            };
-            string password = this.SecretService.GetSecret("MailPassword");
-            string address = this.SecretService.GetSecret("MailAddress");
-            await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
+                MailRequest mailRequest = new MailRequest()
+                {
+                    Subject = $"{locationId} - {title}",
+                    Body = $"{body}",
+                    ToEmail = "mickael.billet@gmail.com",
+                };
+                string password = this.SecretService.GetSecret("MailPassword");
+                string address = this.SecretService.GetSecret("MailAddress");
+                await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+            }
         }
 
         private void MailSent(object? sender, MessageSentEventArgs e)

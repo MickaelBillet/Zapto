@@ -55,7 +55,7 @@ namespace Connect.WebServer.Services
                             if ((softwareVersion.CompareTo(new Version(0, 0, 0)) > 0) && softwareVersion.CompareTo(new Version(1, 0, 0)) < 0)
                             {
                                 ISupervisorServerIotStatus supervisorServerIotStatus = scope.ServiceProvider.GetRequiredService<ISupervisorFactoryServerIotStatus>().CreateSupervisor();
-                                ResultCode code = await supervisorServerIotStatus.CreateTable();
+                                ResultCode code = await supervisorServerIotStatus.CreateTableServerIotStatus();
                             }
 
                             if (softwareVersion.CompareTo(new Version(1, 0, 0)) > 0)

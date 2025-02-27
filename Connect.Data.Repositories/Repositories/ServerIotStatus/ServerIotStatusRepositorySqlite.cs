@@ -1,5 +1,5 @@
 ﻿using Framework.Data.Abstractions;
-using System.Diagnostics;
+using Serilog;
 
 namespace Connect.Data.Repositories
 {
@@ -11,7 +11,7 @@ namespace Connect.Data.Repositories
         #endregion
 
         #region Methods
-        public override async Task<int> CreateTable()
+        public override async Task<int> CreateTableServerIotStatus()
         {
             int res = -1;
             try
@@ -32,7 +32,7 @@ namespace Connect.Data.Repositories
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Log.Error("CreateTableServerIotStatus : " + ex.Message);
             }
             return res;
         }

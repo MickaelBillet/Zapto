@@ -45,6 +45,8 @@ namespace Connect.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
+
                 return StatusCode(500, new CustomErrorResponse
                 {
                     Message = ex.Message,

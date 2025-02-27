@@ -18,7 +18,14 @@ namespace Connect.WebServer.Services
         public async ValueTask Handle(SystemStatus? message, CancellationToken cancellationToken = default)
         {
             Log.Information("EventHandlerServerStatus.Handle");
-            await this.ApplicationServerIotServices.ReadStatus(message);
+            try
+            {
+                await this.ApplicationServerIotServices.ReadStatus(message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in EventHandlerServerStatus.Handle");
+            }
         }
     }
 }

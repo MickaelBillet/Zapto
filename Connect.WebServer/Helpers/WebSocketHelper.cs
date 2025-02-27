@@ -23,7 +23,6 @@ namespace Connect.WebServer.Helpers
 
                     while (receiveResult.CloseStatus.HasValue == false)
                     {
-
                         await webSocket.SendAsync(
                             new ArraySegment<byte>(buffer, 0, receiveResult.Count),
                             receiveResult.MessageType,

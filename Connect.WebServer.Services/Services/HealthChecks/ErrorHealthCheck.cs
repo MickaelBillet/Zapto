@@ -1,6 +1,7 @@
 ﻿using Connect.Data;
 using Framework.Core.Domain;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
 
 #nullable disable
 
@@ -23,13 +24,20 @@ namespace Connect.WebServer.Services
 		public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
 														CancellationToken cancellationToken = default(CancellationToken))
         {
-			IEnumerable<Logs> logs = await this.Supervisor.GetLogsInf24H();
-			int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
-			int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
-            if (countError + countFatal > 0)
+			try
 			{
-				return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
+				IEnumerable<Logs> logs = await this.Supervisor.GetLogsInf24H();
+				int countError = logs.Where<Logs>(log => log.Level.Contains("Error")).Count<Logs>();
+				int countFatal = logs.Where<Logs>(log => log.Level.Contains("Fatal")).Count<Logs>();
+				if (countError + countFatal > 0)
+				{
+					return (HealthCheckResult.Degraded($"Count Error : {countError} - Count Fatal : {countFatal}"));
+				}
 			}
+			catch (Exception ex)
+			{
+				Log.Error(ex, "Error in ErrorHealthCheck.CheckHealthAsync");
+            }
             return (HealthCheckResult.Healthy("No Error"));
         }
 		#endregion

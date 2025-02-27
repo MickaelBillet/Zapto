@@ -17,8 +17,15 @@ namespace Connect.WebServer.Services
 
         public async ValueTask Handle(SensorData? message, CancellationToken cancellationToken = default)
         {
-            Log.Information("ApplicationSensorServices.Handle");
-            await this.ApplicationSensorServices.ReadData(message);
+            Log.Information("EventHandlerSensorData.Handle");
+            try
+            {
+                await this.ApplicationSensorServices.ReadData(message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in EventHandlerSensorData.Handle");
+            }
         }
     }
 }

@@ -24,24 +24,31 @@ namespace Connect.WebServer.Services
         #region Methods
         public async Task Send(string directoryPath)
         {
-            //Send a mail with a log file
-            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
-            IEnumerable<FileInfo> fileInfos = directoryInfo.GetFiles().OrderByDescending(file => file.LastWriteTime);
-            if (fileInfos?.Count() > 0)
+            try
             {
-                foreach(FileInfo file in fileInfos) 
-                { 
-                    MailRequest mailRequest = new MailRequest()
+                //Send a mail with a log file
+                DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+                IEnumerable<FileInfo> fileInfos = directoryInfo.GetFiles().OrderByDescending(file => file.LastWriteTime);
+                if (fileInfos?.Count() > 0)
+                {
+                    foreach (FileInfo file in fileInfos)
                     {
-                        Attachments = new List<MailAttachment> { new MailAttachment(file.FullName) },
-                        Body = string.Empty,
-                        Subject = "Logs Connect " + Clock.Now,
-                        ToEmail = "mickael.billet@gmail.com",
-                    };
-                    string password = this.SecretService.GetSecret("MailPassword");
-                    string address = this.SecretService.GetSecret("MailAddress");
-                    await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
+                        MailRequest mailRequest = new MailRequest()
+                        {
+                            Attachments = new List<MailAttachment> { new MailAttachment(file.FullName) },
+                            Body = string.Empty,
+                            Subject = "Logs Connect " + Clock.Now,
+                            ToEmail = "mickael.billet@gmail.com",
+                        };
+                        string password = this.SecretService.GetSecret("MailPassword");
+                        string address = this.SecretService.GetSecret("MailAddress");
+                        await this.MailService.SendEmailAsync(mailRequest, MailSent, password, address);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
             }
         }
 

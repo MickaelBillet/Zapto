@@ -4,6 +4,7 @@ using Framework.Core.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
 
 namespace Connect.WebServer.Services
 {
@@ -24,36 +25,44 @@ namespace Connect.WebServer.Services
 		public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
 																CancellationToken cancellationToken = default(CancellationToken))
         {
-			IEnumerable<Sensor> sensors = (await this.Supervisor.GetSensors()).Where(sensor => sensor.Type != DeviceType.Sensor_Water_Leak);
-			string description = string.Empty;
-			int sensorsDownCount = 0;
-			int sensorsUpCount = 0;
+			try
+			{
+				IEnumerable<Sensor> sensors = (await this.Supervisor.GetSensors()).Where(sensor => sensor.Type != DeviceType.Sensor_Water_Leak);
+				string description = string.Empty;
+				int sensorsDownCount = 0;
+				int sensorsUpCount = 0;
 
-            foreach(Sensor sensor in sensors)
-			{				
-				if (sensor.IsRunning == RunningStatus.UnHealthy)
+				foreach (Sensor sensor in sensors)
 				{
-					description = $"{description} {sensor.Name}:{sensor.Channel}";
-					sensorsDownCount++;
+					if (sensor.IsRunning == RunningStatus.UnHealthy)
+					{
+						description = $"{description} {sensor.Name}:{sensor.Channel}";
+						sensorsDownCount++;
+					}
+					else if (sensor.IsRunning == RunningStatus.Healthy)
+					{
+						sensorsUpCount++;
+					}
 				}
-				else if (sensor.IsRunning == RunningStatus.Healthy)
+
+				if (sensors.Count() == sensorsDownCount)
 				{
-					sensorsUpCount++;
+					return HealthCheckResult.Unhealthy("All the sensors are down");
+				}
+				else if (sensors.Count() == sensorsUpCount)
+				{
+					return HealthCheckResult.Healthy("All the sensors are up");
+				}
+				else
+				{
+					return HealthCheckResult.Degraded(description);
 				}
 			}
-
-			if (sensors.Count() == sensorsDownCount)
+			catch (Exception ex)
 			{
-				return HealthCheckResult.Unhealthy("All the sensors are down");
+				Log.Error(ex, "Error in SensorHealthCheck.CheckHealthAsync");
             }
-			else if (sensors.Count() == sensorsUpCount)
-			{
-                return HealthCheckResult.Healthy("All the sensors are up");
-            }
-            else
-			{
-                return HealthCheckResult.Degraded(description);
-            }
+			return HealthCheckResult.Degraded();
         }
 		#endregion
 	}

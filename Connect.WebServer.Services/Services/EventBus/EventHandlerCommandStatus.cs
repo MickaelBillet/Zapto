@@ -18,7 +18,15 @@ namespace Connect.WebServer.Services
         public async ValueTask Handle(CommandStatus? message, CancellationToken cancellationToken = default)
         {
             Log.Information("EventHandlerCommandStatus.Handle");
-            await this.ApplicationPlugServices.ReadStatus(message);
+
+            try
+            {
+                await this.ApplicationPlugServices.ReadStatus(message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in EventHandlerCommandStatus.Handle");
+            }
         }
     }
 }

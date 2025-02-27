@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -62,6 +63,8 @@ namespace Connect.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
+
                 return StatusCode(500, new CustomErrorResponse
                 {
                     Message = ex.Message,
@@ -91,6 +94,8 @@ namespace Connect.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
+
                 return StatusCode(500, new CustomErrorResponse
                 {
                     Message = ex.Message,
@@ -122,6 +127,8 @@ namespace Connect.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
+
                 return StatusCode(500, new CustomErrorResponse
                 {
                     Message = ex.Message,
@@ -167,6 +174,8 @@ namespace Connect.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
+
                 return StatusCode(500, new CustomErrorResponse
                 {
                     Message = ex.Message,
@@ -175,7 +184,6 @@ namespace Connect.WebApi.Controllers
                 });
             }
         }
-
         #endregion
     }
 }
