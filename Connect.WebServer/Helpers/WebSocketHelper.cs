@@ -21,7 +21,6 @@ namespace Framework.Infrastructure.Services
 
                     while (receiveResult.CloseStatus.HasValue == false)
                     {
-
                         await webSocket.SendAsync(
                             new ArraySegment<byte>(buffer, 0, receiveResult.Count),
                             receiveResult.MessageType,
@@ -66,7 +65,7 @@ namespace Framework.Infrastructure.Services
                                 }
                             }
 
-                            Log.Information("Arduino connected");
+                            Log.Information("Arduino disconnected");
                             await messageManager.OnDisconnected(webSocket);
                         }
                         catch (Exception ex)

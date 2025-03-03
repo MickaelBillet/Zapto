@@ -203,7 +203,7 @@ namespace Connect.WebServer
             app.UseAuthorization();
             WebSocketOptions webSocketOptions = new WebSocketOptions()
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(40),
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
             };
             app.UseWebSockets(webSocketOptions);
 
