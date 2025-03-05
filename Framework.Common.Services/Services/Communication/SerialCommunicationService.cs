@@ -1,5 +1,6 @@
 ﻿using Framework.Core.Base;
 using Framework.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
@@ -8,87 +9,63 @@ using System.Threading.Tasks;
 
 namespace Framework.Common.Services
 {
-    public class SerialCommunicationService : IDisposable, ISerialCommunicationService
+    public class SerialCommunicationService : ScheduledService
     {
-        private readonly IEventBusProducerConnect _eventBusProducer;
-        private readonly string _portName;
-        private readonly int _baudRate;
-
         #region Constructor
-        public SerialCommunicationService(IServiceProvider serviceProvider, string portName, int baudRate)
+        public SerialCommunicationService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 1000)
         {
-            _eventBusProducer = serviceProvider.GetRequiredService<IEventBusProducerConnect>();
-            _portName = portName;
-            _baudRate = baudRate;
+            
         }
         #endregion
 
         #region Methods
-        public bool Receive()
+        public override async Task ProcessInScope(IServiceScope scope)
         {
-            bool res = true;
-            string buffer = "";
-
             try
             {
-                using (SerialPort serialPort = new SerialPort(_portName, _baudRate))
+                IEventBusProducerConnect eventBusProducer = scope.ServiceProvider.GetRequiredService<IEventBusProducerConnect>();
+                ISerialPortService serialPortService = scope.ServiceProvider.GetRequiredService<ISerialPortService>();
+                SerialPort serialPort = serialPortService.GetSerialPort();
+
+                if (serialPort != null)
                 {
-                    serialPort.NewLine = "\n";
-                    serialPort.ReadTimeout = 500;
-                    serialPort.DataReceived += async (sender, e) =>
+                    if (serialPort.IsOpen == false)
                     {
-                        buffer += serialPort.ReadExisting();
-                        int index = buffer.IndexOf("\n");
-                        while (index != -1)
+                        serialPort.Open();
+                    }
+
+                    if (serialPort.IsOpen == true)
+                    {
+                        string buffer = "";
+                        while (true)
                         {
-                            string completeMessage = buffer.Substring(0, index).Trim();
-                            buffer = buffer.Substring(index + 1);
-                            Console.WriteLine($"Message Arduino: {completeMessage}");
-                            MessageArduino messageArduino = MessageArduino.Deserialize(completeMessage);
-                            await _eventBusProducer.Publish(messageArduino);
-                            index = buffer.IndexOf("\n");
+                            string data = serialPort.ReadExisting();
+                            if (!string.IsNullOrEmpty(data))
+                            {
+                                buffer += data;
+                                int index = buffer.IndexOf("\n");
+                                while (index != -1)
+                                {
+                                    string completeMessage = buffer.Substring(0, index).Trim();
+                                    buffer = buffer.Substring(index + 1);
+                                    Log.Information($"Reçu d'Arduino: {completeMessage}");
+                                    MessageArduino messageArduino = MessageArduino.Deserialize(completeMessage);
+                                    await eventBusProducer.Publish(messageArduino);
+                                    index = buffer.IndexOf("\n");
+                                }
+                            }
                         }
-                    };
-                    serialPort.Open();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
-                res = false;
-            }           
-            return res;
-        }
-
-        public void Dispose()
-        {
-
-        }
-
-        public async Task<bool> SendMessageAsync(string message)
-        {
-            bool res = true;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    using (SerialPort serialPort = new SerialPort(_portName, _baudRate))
-                    {
-                        serialPort.NewLine = "\n";
-                        serialPort.Open();
-                        if (serialPort.IsOpen)
-                        {
-                            serialPort.WriteLine(message);
-                        }
-                    }
-                });
+                Log.Error(ex, "Erreur lors de l'ouverture du port série.");
             }
-            catch (Exception ex)
+            finally
             {
-                Log.Error(ex.Message);
-                res = false;
+
             }
-            return res;
         }
         #endregion
     }

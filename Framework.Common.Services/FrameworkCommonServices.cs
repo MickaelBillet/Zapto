@@ -2,6 +2,7 @@
 using Framework.Core.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Framework.Infrastructure.Services
 {
@@ -44,7 +45,7 @@ namespace Framework.Infrastructure.Services
 			}
 		}
 
-		public static void AddCommunicationService(this IServiceCollection services, string communicationType, string portName, int baudRate)
+		public static void AddCommunicationService(this IServiceCollection services, string communicationType)
         {
             if (communicationType == CommunicationType.WebSocket)
             {
@@ -53,7 +54,7 @@ namespace Framework.Infrastructure.Services
             }
             else if (communicationType == CommunicationType.Serial)
             {
-                services.AddScoped<ISerialCommunicationService, SerialCommunicationService>((provider) => new SerialCommunicationService(provider, portName, baudRate));
+                services.AddSingleton<IHostedService, SerialCommunicationService>();
             }
         }
     }

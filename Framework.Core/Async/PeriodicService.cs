@@ -7,23 +7,18 @@ namespace Framework.Core.Base
 {
     public abstract class PeriodicService<T> : BackgroundService<T> where T : class
     {
-        #region Properties     
-        
+        #region Properties             
         private int Period { get; }
-
         #endregion
 
         #region Constructor
-
         protected PeriodicService(int period) : base()
         {
             this.Period = period;
         }
-
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Launch the process in a task
         /// </summary>

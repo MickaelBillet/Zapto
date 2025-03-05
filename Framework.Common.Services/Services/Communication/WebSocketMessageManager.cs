@@ -9,12 +9,12 @@ namespace Framework.Infrastructure.Services
 {
     public class WebSocketMessageManager : WebSocketHandler, IWSMessageManager
     {
-        private readonly IEventBusProducerConnect eventBusProducer;
+        private readonly IEventBusProducerConnect _eventBusProducer;
 
         #region Constructor
         public WebSocketMessageManager(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-			eventBusProducer = serviceProvider.GetRequiredService<IEventBusProducerConnect>();
+			_eventBusProducer = serviceProvider.GetRequiredService<IEventBusProducerConnect>();
 		}
         #endregion
 
@@ -44,7 +44,7 @@ namespace Framework.Infrastructure.Services
 					MessageArduino message = MessageArduino.Deserialize(buffer, result.Count);
 					if (message != null)
 					{
-                        await eventBusProducer.Publish(message);                        
+                        await _eventBusProducer.Publish(message);                        
                     }
 				}
 			}

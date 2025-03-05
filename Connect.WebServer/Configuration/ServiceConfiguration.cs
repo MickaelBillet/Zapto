@@ -24,7 +24,7 @@ namespace Connect.Server.Configuration
             services.AddMailService();
             services.AddRepositories(ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
             services.AddApplicationConnectServices();
-            services.AddCommunicationService(configuration["CommunicationType"] ?? CommunicationType.WebSocket, "/dev/serial0", 9600);
+            services.AddCommunicationService(configuration["CommunicationType"] ?? CommunicationType.WebSocket);
             services.AddConnectServices(configuration["CommunicationType"] ?? CommunicationType.WebSocket);
             services.AddCacheServices();
             services.AddSupervisors();
@@ -36,6 +36,8 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, SensorConnectionService>();
+            services.AddSingleton<ISerialPortService, SerialPortService>((provider) => new SerialPortService(115200, "COM6"));
+            services.AddTransient<ISerialCommunicationService, SendSerialCommunicationService>();
 
             Version softwareVersion = new Version(configuration["Version"] ?? "0.0.0");
             services.AddTransient<IStartupTask, CreateDatabaseStartupTask>((provider) => new CreateDatabaseStartupTask(provider, softwareVersion.Major, softwareVersion.Minor, softwareVersion.Build));

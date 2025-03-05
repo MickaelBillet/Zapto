@@ -1,7 +1,6 @@
 ﻿using Framework.Core.Base;
 using Framework.Core.Domain;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog.Events;
 
 namespace Connect.Data.Supervisors.Tests
 {

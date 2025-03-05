@@ -24,7 +24,6 @@ namespace Connect.WebServer.Services
         #endregion
 
         #region Methods 
-
         /// <summary>
         /// Process the data in a scoped service which is launched at the startup of the app
         /// </summary>
