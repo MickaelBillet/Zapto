@@ -25,6 +25,8 @@ namespace Connect.Data.Mappers
                 RoomId = model.RoomId,
                 Type = model.Type,
                 WorkingDuration = model.WorkingDuration,
+                LastCommandDateTime = model.LastCommandDateTime,
+                CommandReceived = model.CommandReceived,
             };
             return entity;
         }
@@ -49,6 +51,8 @@ namespace Connect.Data.Mappers
                 RoomId = entity.RoomId,
                 Type = entity.Type,
                 WorkingDuration = entity.WorkingDuration,
+                LastCommandDateTime = entity.LastCommandDateTime,
+                CommandReceived = entity.CommandReceived,
             };
             return model;
         }

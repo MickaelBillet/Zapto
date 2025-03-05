@@ -26,6 +26,14 @@ namespace Connect.Model
 
         public string ConditionId { get; set; } = string.Empty;
 
+        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
+        public DateTime? LastCommandDateTime { get; set; } = null;
+
+        [Newtonsoft.Json.JsonIgnore]
+        [JsonIgnore]
+        public int CommandReceived { get; set; } = 0;
+
         public Configuration? Configuration
         {
             get { return _configuration; }

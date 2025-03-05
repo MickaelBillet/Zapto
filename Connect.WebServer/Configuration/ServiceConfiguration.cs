@@ -36,7 +36,7 @@ namespace Connect.Server.Configuration
             services.AddSingleton<IHostedService, DailyService>();
             services.AddSingleton<IHostedService, ProcessingDataService>();
             services.AddSingleton<IHostedService, SensorConnectionService>();
-            services.AddSingleton<ISerialPortService, SerialPortService>((provider) => new SerialPortService(115200, "COM6"));
+            services.AddSingleton<ISerialPortService, SerialPortService>((provider) => new SerialPortService(115200, "/dev/serial0"));
             services.AddTransient<ISerialCommunicationService, SendSerialCommunicationService>();
 
             Version softwareVersion = new Version(configuration["Version"] ?? "0.0.0");
