@@ -12,7 +12,7 @@ namespace Framework.Common.Services
     public class SerialCommunicationService : ScheduledService
     {
         #region Constructor
-        public SerialCommunicationService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 1000)
+        public SerialCommunicationService(IServiceScopeFactory serviceScopeFactory, IConfiguration configuration) : base(serviceScopeFactory, 200)
         {
             
         }
