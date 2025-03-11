@@ -6,6 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MySqlConnector;
+using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
 
@@ -76,7 +77,11 @@ namespace Connect.Data.DataContext
                 connection = new SqliteConnection(this.ConnectionType.ConnectionString);
                 context = new ConnectContextSqlite(connection);
             }
-
+            if (this.ConnectionType.ServerType == ServerType.PostgreSQL)
+            {
+                connection = new NpgsqlConnection(this.ConnectionType.ConnectionString);
+                context = new ConnectContextPostGreSQL(connection);
+            }
             return context;
         }
         #endregion

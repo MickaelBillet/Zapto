@@ -1,27 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
+using Npgsql;
 using System.Data;
 
 namespace Connect.Data.DataContext
 {
-    public class ConnectContextMySql : ConnectContext
-	{
-		public ConnectContextMySql(IDbConnection connection) : base(connection)
-		{
-			
-		}
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			optionsBuilder.UseMySql(this.Connection?.ConnectionString, new MySqlServerVersion(new Version(8, 0, 21)));
-		}
-
+    public class ConnectContextPostGreSQL : ConnectContext
+    {
+        public ConnectContextPostGreSQL(IDbConnection connection) : base(connection) { }
+        public ConnectContextPostGreSQL(DbContextOptions options) : base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(this.Connection?.ConnectionString);
+        }
         public override async Task<int> ExecuteNonQueryAsync(string sql)
         {
             int res = -1;
             if (this.Connection != null)
             {
-                using (MySqlConnection? connection = this.Connection as MySqlConnection)
+                using (NpgsqlConnection? connection = this.Connection as NpgsqlConnection)
                 {
                     if (connection != null)
                     {
@@ -29,7 +25,7 @@ namespace Connect.Data.DataContext
 
                         if (connection.State == ConnectionState.Open)
                         {
-                            using (MySqlCommand sqlQuery = new MySqlCommand(sql, connection))
+                            using (NpgsqlCommand sqlQuery = new NpgsqlCommand(sql, connection))
                             {
                                 res = await sqlQuery.ExecuteNonQueryAsync();
                             }

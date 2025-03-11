@@ -22,7 +22,14 @@ namespace Connect.Data.Repositories
                 DbSet<RoomEntity>? table = context?.Set<RoomEntity>();
                 if (table != null)
                 {
-                    entity = await table.FromSql<RoomEntity>($"SELECT * FROM room INNER JOIN connectedObject ON connectedObject.RoomId = room.Id INNER JOIN plug ON connectedobject.Id == plug.ConnectedObjectId WHERE plug.Id = {plugId}").AsNoTracking().FirstOrDefaultAsync<RoomEntity>();
+                    entity = await table.FromSqlInterpolated($@"SELECT r.* 
+                                                                FROM room r
+                                                                INNER JOIN connectedObject co ON co.RoomId = r.Id 
+                                                                INNER JOIN plug p ON co.Id = p.ConnectedObjectId 
+                                                                WHERE p.Id = {plugId}")
+                                                            .AsNoTracking()
+                                                            .FirstOrDefaultAsync();
+                                                                
                 }
             });
             return entity;
