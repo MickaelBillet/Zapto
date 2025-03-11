@@ -27,12 +27,14 @@ namespace Connect.WebServer.Services
             {
                 this.Level = SeverityToLevel(configuration["Serilog.MinimumLevel"]);
                 ISecretService? secretService = SecretService.GetSecretService(configuration);
-
-                this.Supervisor = new SupervisorLog(new DalSession(secretService!,
-                                                                    new DataContextFactory(secretService!, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey),
-                                                                    ConnectConstants.ConnectionStringConnectKey,
-                                                                    ConnectConstants.ServerTypeConnectKey),
-                                                    new RepositoryFactory());
+                if (secretService != null)
+                {
+                    this.Supervisor = new SupervisorLog(new DalSession(secretService,
+                                                                        new DataContextFactory(secretService!, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey),
+                                                                        ConnectConstants.ConnectionStringConnectKey,
+                                                                        ConnectConstants.ServerTypeConnectKey),
+                                                        new RepositoryFactory());
+                }
             }            
         }
         #endregion

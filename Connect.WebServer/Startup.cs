@@ -147,14 +147,11 @@ namespace Connect.WebServer
             services.AddSingleton<HostedServiceHealthCheck>();
 
             (string connectionString, string serverName) = ConnectionString.GetConnectionString(this.Configuration, ConnectConstants.ConnectionStringConnectKey, ConnectConstants.ServerTypeConnectKey);
-            services.AddHealthChecks()
+            var healthChecksBuilder = services.AddHealthChecks()
                     //Memory
-                    .AddCheck<MemoryHealthCheck>("Memory", HealthStatus.Degraded, new string[] { "system" })
-                    //Sqlite
-                    .AddSqlite(connectionString: connectionString,
-                                failureStatus: HealthStatus.Unhealthy,
-                                tags: new string[] { "system" },
-                                name: serverName)
+                    .AddCheck<MemoryHealthCheck>("Memory", 
+                                                    HealthStatus.Degraded, 
+                                                    new string[] { "system" })
                     //Arduino server
                     .AddCheck<HostedServiceHealthCheck>("Server Iot Connection",
                                                                 failureStatus: HealthStatus.Unhealthy,
@@ -172,6 +169,40 @@ namespace Connect.WebServer
                     .AddCheck<SensorHealthCheck>("Sensors Status",
                                                                 failureStatus: HealthStatus.Unhealthy,
                                                                 tags: new[] { "system" });
+
+
+            switch (serverName.ToLower())
+            {
+                case "sqlite":
+                    healthChecksBuilder.AddSqlite(
+                        connectionString: connectionString,
+                        failureStatus: HealthStatus.Unhealthy,
+                        tags: new[] { "system" },
+                        name: serverName
+                    );
+                    break;
+
+                case "postgresql":
+                    healthChecksBuilder.AddNpgSql(
+                        connectionString: connectionString,
+                        failureStatus: HealthStatus.Unhealthy,
+                        tags: new[] { "system" },
+                        name: serverName
+                    );
+                    break;
+
+                case "mysql":
+                    healthChecksBuilder.AddMySql(
+                        connectionString: connectionString,
+                        failureStatus: HealthStatus.Unhealthy,
+                        tags: new[] { "system" },
+                        name: serverName
+                    );
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Server Type not supported : {serverName}");
+            }
 
             services.Configure<HealthCheckPublisherOptions>(options =>
             {

@@ -6,6 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MySqlConnector;
+using Npgsql;
 using System.Collections.Concurrent;
 using System.Data;
 
@@ -14,15 +15,15 @@ namespace Connect.Data.DataContext
     public class DataContextFactory : IDataContextFactory
     {
         private readonly ConcurrentBag<IDataContext?> _pool = new ConcurrentBag<IDataContext?>();
-		private readonly int _maxPoolSize = 32;
+        private readonly int _maxPoolSize = 32;
 
         #region Properties
         protected ConnectionType ConnectionType { get; }
         #endregion
 
         #region Constructor
-        public DataContextFactory(ISecretService secretService, string connectionStringKey, string serverTypeKey) 
-		{
+        public DataContextFactory(ISecretService secretService, string connectionStringKey, string serverTypeKey)
+        {
             this.ConnectionType = ConnectionString.GetConnectionType(secretService, connectionStringKey, serverTypeKey);
         }
         public DataContextFactory(IServiceProvider provider, string connectionStringKey, string serverTypeKey)
@@ -76,7 +77,11 @@ namespace Connect.Data.DataContext
                 connection = new SqliteConnection(this.ConnectionType.ConnectionString);
                 context = new ConnectContextSqlite(connection);
             }
-
+            if (this.ConnectionType.ServerType == ServerType.PostgreSQL)
+            {
+                connection = new NpgsqlConnection(this.ConnectionType.ConnectionString);
+                context = new ConnectContextPostGreSQL(connection);
+            }
             return context;
         }
         #endregion

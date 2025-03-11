@@ -17,7 +17,7 @@ COPY ["Connect.Data.Repositories/Connect.Data.Repositories.csproj", "Connect.Dat
 COPY ["Connect.Data.Supervisors/Connect.Data.Supervisors.csproj", "Connect.Data.Supervisors/"]
 COPY ["Connect.Data.Services/Connect.Data.Services.csproj", "Connect.Data.Services/"]
 COPY ["Framework.Data.Services/Framework.Data.Services.csproj", "Framework.Data.Services/"]
-COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
+#COPY ["Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/Serilog.Sinks.SQLite.csproj", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 RUN dotnet restore "Connect.WebServer/Connect.WebServer.csproj"
 COPY ["Connect.WebServer/*", "Connect.WebServer/"]
 COPY ["Connect.WebServer.Services/*", "Connect.WebServer.Services/"]
@@ -30,7 +30,7 @@ COPY ["Connect.Data.Services/*", "Connect.Data.Services/"]
 COPY ["Connect.Data.Repositories/*", "Connect.Data.Repositories/"]
 COPY ["Connect.Data.Supervisors/*", "Connect.Data.Supervisors/"]
 COPY ["Framework.Data.Services/*", "Framework.Data.Services/"]
-COPY ["Serilog.Sqlite.Sinks/src/*", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
+#COPY ["Serilog.Sqlite.Sinks/src/*", "Serilog.Sqlite.Sinks/src/Serilog.Sinks.SQLite/"]
 WORKDIR "/src/Connect.WebServer"
 RUN dotnet build "Connect.WebServer.csproj" -c Release --runtime linux-arm64 -o /app/build
 
