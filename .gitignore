@@ -178,3 +178,6 @@
 /ZaptoCompany.WebAPI.Services/bin/Debug/net9.0
 /ZaptoCompany.WebAPI/ZaptoCompany.WebAPI.csproj.user
 /Framework.Core.Utils/bin/Release/net8.0
+/TestSerialCommunication/.vs
+/TestSerialCommunication/bin/Debug/net8.0-windows
+/TestSerialCommunication/obj

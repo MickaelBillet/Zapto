@@ -62,6 +62,7 @@ namespace Connect.WebServer.Services
             }
             catch (Exception ex)
             {
+                Log.Error("EventBusProducerConnect.PublishEvent : " + payload);
                 Log.Error("EventBusProducerConnect.PublishEvent : " + ex.Message);
             }
         }
